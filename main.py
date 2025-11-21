@@ -39,21 +39,22 @@ Core gameplay data structures for Zork-like game.
 """
 
 class Room:
-    def __init__(self, id: str, desc_long: str, desc_short: str, exits: Dict[str, str], objects: List['GameObject'] = None, flags: list = None, action: str = None):
-        self.id = id
-        self.desc_long = desc_long
-        self.desc_short = desc_short
-        self.exits = exits  # direction -> room id
-        self.objects = objects if objects else []
-        self.visited = False
-        self.flags = flags if flags else []
-        self.action = action
+    def __init__(self, id: str, desc_long: str, desc_short: str, exits: Optional[Dict[str, str]] = None, objects: Optional[List['GameObject']] = None, flags: Optional[List[str]] = None, action: Optional[str] = None):
+        self.id: str = id
+        self.desc_long: str = desc_long
+        self.desc_short: str = desc_short
+        self.exits: Dict[str, str] = exits if exits else {}
+        self.objects: List[GameObject] = objects if objects else []
+        self.visited: bool = False
+        self.flags: List[str] = flags if flags else []
+        self.action: Optional[str] = action
 
 class GameObject:
-    def __init__(self, name: str, description: str, location: Optional[str] = None):
-        self.name = name
-        self.description = description
-        self.location = location  # room id or 'inventory'
+    def __init__(self, name: str, description: str, location: Optional[str] = None, attributes: Optional[dict] = None):
+        self.name: str = name
+        self.description: str = description
+        self.location: Optional[str] = location  # room id or 'inventory'
+        self.attributes: dict = attributes if attributes else {}
 
 class Player:
     def __init__(self, name: str, current_room: str):
@@ -114,16 +115,6 @@ class Game:
                 print("\nThanks for playing Phork!")
                 break
 
-    def run(self):
-        self.describe()
-        while True:
-            try:
-                command = input("\n> ")
-                self.parse_command(command)
-            except (EOFError, KeyboardInterrupt):
-                print("\nThanks for playing Phork!")
-                break
-
 
 import re
 
@@ -161,21 +152,18 @@ def load_rooms():
     try:
         with open("zork_mtl_source/rooms.mud", "r") as f:
             lines = f.readlines()
-        room_id = None
-        desc_long = None
-        desc_short = None
-        exits = {}
-        objects = []
-        flags = []
-        action = None
+        room_id: Optional[str] = None
+        desc_long: Optional[str] = None
+        desc_short: Optional[str] = None
+        exits: Dict[str, str] = {}
+        objects: List[GameObject] = []
+        flags: List[str] = []
+        action: Optional[str] = None
         for line in lines:
             line = line.strip()
             if line.startswith('<ROOM'):
                 if room_id:
-                    # Room can be extended with flags and action
-                    room = Room(room_id, desc_long or "", desc_short or "", exits, objects)
-                    room.flags = flags
-                    room.action = action
+                    room = Room(room_id, desc_long or "", desc_short or "", exits, objects, flags, action)
                     rooms[room_id] = room
                 parts = line.split('"')
                 room_id = parts[1] if len(parts) > 1 else None
@@ -199,9 +187,7 @@ def load_rooms():
             elif room_id and '<RACTION' in line:
                 action = parse_action(line)
         if room_id:
-            room = Room(room_id, desc_long or "", desc_short or "", exits, objects)
-            room.flags = flags
-            room.action = action
+            room = Room(room_id, desc_long or "", desc_short or "", exits, objects, flags, action)
             rooms[room_id] = room
     except Exception as e:
         print(f"Error loading rooms: {e}. Using fallback rooms.")

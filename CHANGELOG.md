@@ -1,3 +1,17 @@
+## v0.1.6 (2025-11-21)
+- Added map visualization script using networkx and matplotlib (visualize_map.py).
+- Installed required Python packages and set up project virtual environment.
+- Created .gitignore for Python, VS Code, OS, and output files.
+- Successfully displayed Zork map graph with room nodes and labeled exits.
+## v0.1.5 (2025-11-21)
+- Updated map generation logic to scan all .mud files for <DEFINE ROOMNAME ...> blocks and multi-line exit references.
+- Parser now extracts rooms and exits using <GOTO>, <SFIND-ROOM>, <REXITS>, and related tags, handling indirect and multi-line definitions.
+- map.json now contains a large set of room nodes and edges, representing the game world graph.
+- Improved extraction logic for more robust gameplay duplication and future visualization.
+## v0.1.4 (2025-11-21)
+- Integrated object loading from .mud files using the generic parser.
+- Refined type handling for Room and GameObject classes with Optional and type annotations.
+- Improved code structure for future extensibility and error handling.
 ## v0.1.3 (2025-11-21)
 - Added generic .mud file parser to extract tags and properties from any .mud file.
 - Parser supports flexible tag extraction for objects, actions, flags, and more.

@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.log
+*.sqlite3
+*.db
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Jupyter and notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Map and output files
+map.json
+*.png
+*.svg
+
+# Matplotlib font cache
+~/.cache/matplotlib/
+
+# Misc
+*.bak
+*.tmp
+*.swp
