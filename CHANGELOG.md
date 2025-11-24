@@ -1,3 +1,11 @@
+## v0.1.7 (2025-11-24)
+- Deduplicated all room definitions in `main.py`, keeping only the most enriched version for each room.
+- Enriched rooms with missing objects, exits, flags, and actions based on original MUD source.
+- Clarified and improved room descriptions for gameplay fidelity.
+- Added conditional exits and objects to rooms where appropriate.
+- Removed minimal and duplicate room entries.
+- Prepared room data for further enrichment and gameplay logic.
+
 ## v0.1.6 (2025-11-21)
 - Added map visualization script using networkx and matplotlib (visualize_map.py).
 - Installed required Python packages and set up project virtual environment.
