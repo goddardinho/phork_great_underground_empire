@@ -1,3 +1,15 @@
+
+from __future__ import annotations
+
+class GameObject:
+    def __init__(self, name: str, description: str, location: Optional[str] = None, attributes: Optional[dict] = None):
+        self.name: str = name
+        self.description: str = description
+        self.location: Optional[str] = location  # room id or 'inventory'
+        self.attributes: dict = attributes if attributes else {}
+
+
+
 # Generic .mud file parser
 def parse_mud_file(filepath, tag_patterns):
     """
@@ -30,7 +42,6 @@ MIT License
 Inspired by Zork, written from scratch using only original MDL source as reference.
 """
 
-from __future__ import annotations
 import sys
 from typing import List, Dict, Optional, Any
 
@@ -39,22 +50,266 @@ Core gameplay data structures for Zork-like game.
 """
 
 class Room:
-    def __init__(self, id: str, desc_long: str, desc_short: str, exits: Optional[Dict[str, str]] = None, objects: Optional[List['GameObject']] = None, flags: Optional[List[str]] = None, action: Optional[str] = None):
+    def __init__(self, id: str, desc_long: str, desc_short: str, exits: Optional[Dict[str, str]] = None, objects: Optional[List["GameObject"]] = None, flags: Optional[List[str]] = None, action: Optional[str] = None):
         self.id: str = id
         self.desc_long: str = desc_long
         self.desc_short: str = desc_short
         self.exits: Dict[str, str] = exits if exits else {}
-        self.objects: List[GameObject] = objects if objects else []
+        self.objects: List["GameObject"] = objects if objects else []
         self.visited: bool = False
         self.flags: List[str] = flags if flags else []
         self.action: Optional[str] = action
 
-class GameObject:
-    def __init__(self, name: str, description: str, location: Optional[str] = None, attributes: Optional[dict] = None):
-        self.name: str = name
-        self.description: str = description
-        self.location: Optional[str] = location  # room id or 'inventory'
-        self.attributes: dict = attributes if attributes else {}
+# Room definitions extracted from act1.mud
+rooms = [
+    Room(
+        id="EAST-HOUSE",
+        desc_long="You are behind the white house. In one corner of the house there is a small window which is open or slightly ajar.",
+        desc_short="You are behind the white house. In one corner of the house there is a small window which is open or slightly ajar.",
+        exits={"west": "KITCHEN", "south": "LIVING-ROOM"},
+        objects=[]
+    ),
+    Room(
+        id="KITCHEN",
+        desc_long="You are in the kitchen. There is a window here that is open or slightly ajar.",
+        desc_short="You are in the kitchen. There is a window here that is open or slightly ajar.",
+        exits={"east": "EAST-HOUSE", "south": "LIVING-ROOM"},
+        objects=[GameObject("knife", "A sharp kitchen knife."), GameObject("water", "A glass of water.")]
+    ),
+    Room(
+        id="LIVING-ROOM",
+        desc_long="You are in the living room. There is a rug and a trap-door.",
+        desc_short="You are in the living room. There is a rug and a trap-door.",
+        exits={"north": "KITCHEN", "east": "EAST-HOUSE", "down": "CELLAR"},
+        objects=[GameObject("rug", "A large oriental rug."), GameObject("trap-door", "A closed trap-door at your feet."), GameObject("trophy case", "A securely fastened trophy case.")]
+    ),
+    Room(
+        id="CELLAR",
+        desc_long="A dark, damp cellar. The trap door crashes shut, and you hear someone barring it.",
+        desc_short="A dark, damp cellar. The trap door crashes shut, and you hear someone barring it.",
+        exits={"up": "LIVING-ROOM"},
+        objects=[GameObject("barrel", "An old wooden barrel."), GameObject("lamp", "A brass lantern.")]
+    ),
+    Room(
+        id="GLACIER-ROOM",
+        desc_long="A cold room with a glacier. There is a large passageway leading westward. Part of the glacier may be melted.",
+        desc_short="A cold room with a glacier.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="MIRROR-ROOM",
+        desc_long="A room with a large mirror. The mirror may be broken or intact.",
+        desc_short="A room with a large mirror.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="CAROUSEL-ROOM",
+        desc_long="You are in a circular room with passages off in eight directions. Your compass needle spins wildly, and you can't get your bearings.",
+        desc_short="A circular room with many passages.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="TORCH-ROOM",
+        desc_long="A room with a torch. A large piece of rope descends from the railing above, ending some five feet above your head.",
+        desc_short="A room with a torch and rope.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="DOME-ROOM",
+        desc_long="A dome-shaped room. Hanging down from the railing is a rope which ends about ten feet from the floor below.",
+        desc_short="A dome-shaped room with a rope.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="LLD-ROOM",
+        desc_long="The Land of the Dead. The way through the gate is barred by evil spirits, who jeer at your attempts to pass.",
+        desc_short="The Land of the Dead.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="LLD2-ROOM",
+        desc_long="A room in the Land of the Dead. There may be a pole here.",
+        desc_short="A room in the Land of the Dead.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="DAM-ROOM",
+        desc_long="Flood Control Dam #3. There is a control panel here. There is a large metal bolt on the panel. Above the bolt is a small green plastic bubble.",
+        desc_short="Flood Control Dam #3.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="MAINT-ROOM",
+        desc_long="Maintenance room. The water level here may change.",
+        desc_short="Maintenance room.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="CYCLOPS-ROOM",
+        desc_long="This room has an exit on the west side, and a staircase leading up. The cyclops may be sleeping at the foot of the stairs.",
+        desc_short="A room with a cyclops and stairs.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="ECHO-ROOM",
+        desc_long="A room with strange acoustics. The acoustics of the room change subtly.",
+        desc_short="A room with strange acoustics.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="TREASURE-ROOM",
+        desc_long="The thief's hideaway. You hear a scream of anguish as you violate the robber's hideaway. Treasures may suddenly vanish.",
+        desc_short="The thief's hideaway.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="LEAPER",
+        desc_long="A room where you may need to jump. There may be exits and objects to interact with.",
+        desc_short="A room for jumping.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="CAVE2-ROOM",
+        desc_long="A windy cave. Your candles may blow out here.",
+        desc_short="A windy cave.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="CLEARING",
+        desc_long="You are in a clearing, with a forest surrounding you on the west and south. There is a grating here.",
+        desc_short="You are in a clearing, with a forest surrounding you on the west and south. There is a grating here.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="MAZE-11",
+        desc_long="You are in a small room near the maze. There are twisty passages in the immediate vicinity. Above you is a grating.",
+        desc_short="You are in a small room near the maze. There are twisty passages in the immediate vicinity. Above you is a grating.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="GLACIER-ROOM",
+        desc_long="A glacier blocks your way. There is a large passageway leading westward. Part of the glacier may be melted.",
+        desc_short="A glacier blocks your way. There is a large passageway leading westward. Part of the glacier may be melted.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="MIRROR-ROOM",
+        desc_long="A room with a large mirror. The mirror may be broken into many pieces.",
+        desc_short="A room with a large mirror. The mirror may be broken into many pieces.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="CAROUSEL-ROOM",
+        desc_long="You are in a circular room with passages off in eight directions. Your compass needle spins wildly, and you can't get your bearings.",
+        desc_short="You are in a circular room with passages off in eight directions. Your compass needle spins wildly, and you can't get your bearings.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="TORCH-ROOM",
+        desc_long="A room with a torch. A large piece of rope descends from the railing above, ending some five feet above your head.",
+        desc_short="A room with a torch. A large piece of rope descends from the railing above, ending some five feet above your head.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="DOME-ROOM",
+        desc_long="A dome room. Hanging down from the railing is a rope which ends about ten feet from the floor below.",
+        desc_short="A dome room. Hanging down from the railing is a rope which ends about ten feet from the floor below.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="LLD-ROOM",
+        desc_long="The Land of the Dead. The way through the gate is barred by evil spirits, who jeer at your attempts to pass.",
+        desc_short="The Land of the Dead. The way through the gate is barred by evil spirits, who jeer at your attempts to pass.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="LLD2-ROOM",
+        desc_long="Another part of the Land of the Dead. There may be a pole here.",
+        desc_short="Another part of the Land of the Dead. There may be a pole here.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="DAM-ROOM",
+        desc_long="Flood Control Dam #3. There is a control panel here. There is a large metal bolt on the panel. Above the bolt is a small green plastic bubble.",
+        desc_short="Flood Control Dam #3. There is a control panel here. There is a large metal bolt on the panel. Above the bolt is a small green plastic bubble.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="RESERVOIR-SOUTH",
+        desc_long="You are in a long room, to the north of which was formerly a reservoir. There is a western exit, a passageway south, and a steep pathway climbing up along the edge of a cliff.",
+        desc_short="You are in a long room, to the north of which was formerly a reservoir. There is a western exit, a passageway south, and a steep pathway climbing up along the edge of a cliff.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="RESERVOIR",
+        desc_long="You are on what used to be a large reservoir, but which is now a large mud pile. There are 'shores' to the north and south.",
+        desc_short="You are on what used to be a large reservoir, but which is now a large mud pile. There are 'shores' to the north and south.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="RESERVOIR-NORTH",
+        desc_long="You are in a large cavernous room, north of a large reservoir. There is a tunnel leaving the room to the north.",
+        desc_short="You are in a large cavernous room, north of a large reservoir. There is a tunnel leaving the room to the north.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="CYCLOPS-ROOM",
+        desc_long="This room has an exit on the west side, and a staircase leading up. The cyclops may be sleeping blissfully at the foot of the stairs.",
+        desc_short="This room has an exit on the west side, and a staircase leading up. The cyclops may be sleeping blissfully at the foot of the stairs.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="ECHO-ROOM",
+        desc_long="A room with strange acoustics. The acoustics of the room change subtly.",
+        desc_short="A room with strange acoustics. The acoustics of the room change subtly.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="TREASURE-ROOM",
+        desc_long="The robber's hideaway. You hear a scream of anguish as you violate the robber's hideaway. Treasures may be here.",
+        desc_short="The robber's hideaway. You hear a scream of anguish as you violate the robber's hideaway. Treasures may be here.",
+        exits={},
+        objects=[]
+    ),
+    Room(
+        id="CAVE2-ROOM",
+        desc_long="A cave. The cave is very windy at the moment and your candles have blown out.",
+        desc_short="A cave. The cave is very windy at the moment and your candles have blown out.",
+        exits={},
+        objects=[]
+    ),
+]
+
+
 
 class Player:
     def __init__(self, name: str, current_room: str):
@@ -205,8 +460,18 @@ def load_rooms():
         )
     return rooms
 
+
+# Import auto-generated rooms
+try:
+    from rooms import create_rooms
+    auto_rooms = create_rooms()
+except ImportError:
+    auto_rooms = {}
+
 def main():
     game = Game()
-    game.rooms = load_rooms()
-    game.current_room = "West of House"
+    # Use auto-generated rooms if available, else fallback
+    game.rooms = auto_rooms if auto_rooms else load_rooms()
+    # Start in a known room if present, else fallback
+    game.current_room = next(iter(game.rooms.keys()), "West of House")
     game.run()
