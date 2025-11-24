@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 class GameObject:
@@ -64,23 +63,46 @@ class Room:
 rooms = [
     Room(
         id="MIRROR-ROOM",
-        desc_long="A room with a large mirror. The mirror may be broken into many pieces if destroyed. There is an ugly person staring back at you, or the mirror is shattered.",
+        desc_long=(
+            "A room with a large mirror. "
+            "{mirror_state} "
+            "There is an ugly person staring back at you, or the mirror is shattered."
+        ),
         desc_short="A room with a large mirror.",
-        exits={},
-        objects=[GameObject("mirror", "A large mirror, possibly broken.")]
+        exits={
+            "east": "ECHO-ROOM"  # Conditional: only if mirror is intact
+        },
+        objects=[
+            GameObject("mirror", "A large mirror, possibly broken.", attributes={"state": "intact", "breakable": True, "reflects": True, "can_shatter": True})
+        ],
+        flags=["reflective"],
+        action=None
     ),
     Room(
         id="TORCH-ROOM",
-        desc_long="A room with a torch. A large piece of rope descends from the railing above, ending some five feet above your head.",
+        desc_long=(
+            "A room with a torch. "
+            "{torch_state} "
+            "A large piece of rope descends from the railing above, ending some five feet above your head."
+        ),
         desc_short="Torch room with rope.",
-        exits={},
-        objects=[GameObject("torch", "A burning torch."), GameObject("rope", "A rope hanging from the railing.")]
+        exits={
+            "up": "DOME-ROOM"  # Conditional: only if torch is lit
+        },
+        objects=[
+            GameObject("torch", "A burning torch or an unlit torch.", attributes={"lit": False, "flammable": True, "can_light": True}),
+            GameObject("rope", "A rope hanging from the railing.", attributes={"climbable": True, "tied": True, "can_untie": True})
+        ],
+        flags=["torch"],
+        action=None
     ),
     Room(
         id="DOME-ROOM",
         desc_long="A dome-shaped room. Hanging down from the railing is a rope which ends about ten feet from the floor below. Jumping may be dangerous here.",
         desc_short="Dome room with rope.",
-        exits={},
+        exits={
+            "south": "RESERVOIR-SOUTH"  # Conditional: only if bubble is glowing
+        },
         objects=[GameObject("rope", "A rope hanging from the railing.")]
     ),
     Room(
@@ -88,21 +110,41 @@ rooms = [
         desc_long="A room in the Land of the Dead. If you are on the pole, you see a different description.",
         desc_short="Land of the Dead (2).",
         exits={},
-        objects=[GameObject("pole", "A mysterious pole.")]
+        objects=[GameObject("pole", "A mysterious pole.", attributes={"interactable": True, "can_climb": True, "can_descend": True})]
     ),
     Room(
         id="DAM-ROOM",
-        desc_long="Flood Control Dam #3. There is a control panel here, a large metal bolt, and a small green plastic bubble. The bubble may glow depending on the gate state.",
+        desc_long=(
+            "Flood Control Dam #3. There is a control panel here, a large metal bolt, and a small green plastic bubble. "
+            "{bubble_state} "
+        ),
         desc_short="Flood Control Dam #3.",
         exits={},
-        objects=[GameObject("control panel", "A dam control panel."), GameObject("metal bolt", "A large metal bolt."), GameObject("green bubble", "A small green plastic bubble.")]
+        objects=[
+            GameObject("control panel", "A dam control panel.", attributes={"interactive": True}),
+            GameObject("metal bolt", "A large metal bolt.", attributes={"removable": True}),
+            GameObject("green bubble", "A small green plastic bubble, possibly glowing.", attributes={"glowing": False})
+        ],
+        flags=["dam"],
+        action=None
     ),
     Room(
         id="CYCLOPS-ROOM",
-        desc_long="This room has an exit on the west side, and a staircase leading up. The cyclops may be sleeping, angry, or have a hole in the north wall depending on game state.",
+        desc_long=(
+            "This room has an exit on the west side, and a staircase leading up. "
+            "{cyclops_state} "
+            "There may be a hole in the north wall depending on game state."
+        ),
         desc_short="Cyclops room with stairs.",
-        exits={"west": "CYCLOPS-WEST-ROOM", "up": "CYCLOPS-UP-STAIRS"},
-        objects=[GameObject("cyclops", "A sleeping or angry cyclops.")]
+        exits={
+            "west": "CYCLOPS-WEST-ROOM",  # Conditional: only if cyclops is not hostile
+            "up": "CYCLOPS-UP-STAIRS"     # Conditional: only if cyclops is awake
+        },
+        objects=[
+            GameObject("cyclops", "A sleeping, angry, or absent cyclops.", attributes={"awake": False, "hostile": False, "movable": False})
+        ],
+        flags=["cyclops"],
+        action=None
     ),
     Room(
         id="TREASURE-ROOM",
@@ -113,75 +155,94 @@ rooms = [
     ),
     Room(
         id="MAINT-ROOM",
-        desc_long="Maintenance room. The water level here may change.",
+        desc_long="Maintenance room. The water level here may change. The toolbox may contain useful tools.",
         desc_short="Maintenance room.",
         exits={"east": "DAM-ROOM"},
-        objects=[GameObject("toolbox", "A rusty toolbox."), GameObject("wrench", "A heavy wrench.")],
-        flags=["maintenance"],
-        action=None
+        objects=[
+            GameObject("toolbox", "A rusty toolbox.", attributes={"openable": True, "contains": ["wrench", "screwdriver"]}),
+            GameObject("wrench", "A heavy wrench.", attributes={"usable": True}),
+            GameObject("screwdriver", "A flathead screwdriver.", attributes={"usable": True})
+        ],
+        flags=["maintenance", "tools"],
+        action="check_water_level"
     ),
     Room(
         id="ECHO-ROOM",
-        desc_long="A room with strange acoustics. The acoustics of the room change subtly.",
+        desc_long="A room with strange acoustics. Sounds echo and may reveal hidden passages.",
         desc_short="A room with strange acoustics.",
         exits={"north": "MAZE-11", "south": "CAVE2-ROOM"},
-        objects=[],
-        flags=["echo"],
-        action=None
+        objects=[GameObject("echo", "A mysterious echo that repeats your words.", attributes={"reveals": "hidden passage"})],
+        flags=["echo", "acoustics"],
+        action="listen_for_echo"
     ),
     Room(
         id="LEAPER",
-        desc_long="A room where you may need to jump. There may be exits and objects to interact with.",
+        desc_long="A room where you may need to jump. The ledge may be reachable if you jump high enough.",
         desc_short="A room for jumping.",
         exits={"up": "DOME-ROOM"},
-        objects=[GameObject("ledge", "A narrow ledge.")],
-        flags=["jump"],
-        action=None
+        objects=[
+            GameObject("ledge", "A narrow ledge.", attributes={"reachable": False}),
+            GameObject("floor", "A stone floor.", attributes={"jumpable": True})
+        ],
+        flags=["jump", "challenge"],
+        action="attempt_jump"
     ),
     Room(
         id="CAVE2-ROOM",
-        desc_long="A windy cave. Your candles may blow out here.",
+        desc_long="A windy cave. Your candles may blow out here. The wind may reveal hidden items.",
         desc_short="A windy cave.",
         exits={"west": "ECHO-ROOM"},
-        objects=[GameObject("candle", "A candle, possibly blown out.")],
-        flags=["windy"],
-        action=None
+        objects=[
+            GameObject("candle", "A candle, possibly blown out.", attributes={"lit": False, "blowable": True, "can_light": True}),
+            GameObject("wind", "A strong wind.", attributes={"reveals": "hidden item", "can_extinguish": True})
+        ],
+        flags=["windy", "dark"],
+        action="search_wind"
     ),
     Room(
         id="CLEARING",
-        desc_long="You are in a clearing, with a forest surrounding you on the west and south. There is a grating here.",
+        desc_long="You are in a clearing, with a forest surrounding you on the west and south. There is a grating here. The grating may be locked or open.",
         desc_short="You are in a clearing, with a forest surrounding you on the west and south. There is a grating here.",
         exits={"north": "FOREST", "east": "HOUSE"},
-        objects=[GameObject("grating", "A metal grating.")],
-        flags=["outdoors"],
-        action=None
+        objects=[GameObject("grating", "A metal grating.", attributes={"locked": True, "openable": True, "can_unlock": True, "can_open": True})],
+        flags=["outdoors", "entry"],
+        action="open_grating"
     ),
     Room(
         id="MAZE-11",
-        desc_long="You are in a small room near the maze. There are twisty passages in the immediate vicinity. Above you is a grating.",
+        desc_long="You are in a small room near the maze. There are twisty passages in the immediate vicinity. Above you is a grating. The maze may shift as you move.",
         desc_short="You are in a small room near the maze. There are twisty passages in the immediate vicinity. Above you is a grating.",
         exits={"south": "ECHO-ROOM"},
-        objects=[GameObject("grating", "A metal grating above.")],
-        flags=["maze"],
-        action=None
+        objects=[
+            GameObject("grating", "A metal grating above.", attributes={"locked": False, "openable": True}),
+            GameObject("maze", "A shifting maze.", attributes={"shifts": True})
+        ],
+        flags=["maze", "shifting"],
+        action="navigate_maze"
     ),
     Room(
         id="GLACIER-ROOM",
         desc_long="A glacier blocks your way. There is a large passageway leading westward. Part of the glacier may be melted.",
         desc_short="A glacier blocks your way. There is a large passageway leading westward. Part of the glacier may be melted.",
         exits={"west": "CAVE2-ROOM"},
-        objects=[GameObject("glacier", "A massive glacier.")],
-        flags=["cold"],
-        action=None
+        objects=[
+            GameObject("glacier", "A massive glacier.", attributes={"meltable": True, "blocks_path": True}),
+            GameObject("ice", "A chunk of ice.", attributes={"cold": True, "can_pickup": True})
+        ],
+        flags=["cold", "ice"],
+        action="melt_glacier"
     ),
     Room(
         id="CAROUSEL-ROOM",
         desc_long="You are in a circular room with passages off in eight directions. Your compass needle spins wildly, and you can't get your bearings.",
         desc_short="You are in a circular room with passages off in eight directions. Your compass needle spins wildly, and you can't get your bearings.",
         exits={"north": "MAZE-11", "south": "GLACIER-ROOM"},
-        objects=[GameObject("compass", "A spinning compass needle.")],
-        flags=["carousel"],
-        action=None
+        objects=[
+            GameObject("compass", "A spinning compass needle.", attributes={"spinning": True, "can_stop": True}),
+            GameObject("door", "A mysterious door.", attributes={"locked": True, "can_unlock": True})
+        ],
+        flags=["carousel", "confusion"],
+        action="stop_compass"
     ),
     Room(
         id="RESERVOIR-SOUTH",
@@ -197,9 +258,13 @@ rooms = [
         desc_long="You are on what used to be a large reservoir, but which is now a large mud pile. There are 'shores' to the north and south.",
         desc_short="You are on what used to be a large reservoir, but which is now a large mud pile. There are 'shores' to the north and south.",
         exits={"north": "RESERVOIR-NORTH", "south": "RESERVOIR-SOUTH"},
-        objects=[GameObject("mud", "A large mud pile.")],
-        flags=["water"],
-        action=None
+        objects=[
+            GameObject("mud", "A large mud pile.", attributes={"sticky": True, "can_sink": True}),
+            GameObject("shore", "A muddy shore.", attributes={"walkable": True}),
+            GameObject("puddle", "A small puddle of water.", attributes={"wet": True, "can_dry": True})
+        ],
+        flags=["water", "mud"],
+        action="cross_mud"
     ),
     Room(
         id="RESERVOIR-NORTH",
@@ -225,21 +290,37 @@ rooms.extend([
             desc_long="You are in a small room which has only one door, to the east. A deranged vampire bat may be present.",
             desc_short="Bat room.",
             exits={"east": "BATS-EAST-ROOM"},
-            objects=[GameObject("vampire bat", "A deranged vampire bat."), GameObject("garlic", "A clove of garlic.")]
+            objects=[
+                GameObject("vampire bat", "A deranged vampire bat.", attributes={"hostile": True, "can_flee": True}),
+                GameObject("garlic", "A clove of garlic.", attributes={"repels_bat": True})
+            ],
+            flags=["bat", "danger"],
+            action="repel_bat"
         ),
         Room(
             id="MACHINE-ROOM",
             desc_long="A room with a machine. The machine may be open or closed.",
             desc_short="Machine room.",
             exits={},
-            objects=[GameObject("machine", "A complex machine."), GameObject("coal", "A lump of coal."), GameObject("screw", "A metal screw.")]
+            objects=[
+                GameObject("machine", "A complex machine.", attributes={"openable": True, "can_operate": True}),
+                GameObject("coal", "A lump of coal.", attributes={"burnable": True}),
+                GameObject("screw", "A metal screw.", attributes={"can_unscrew": True})
+            ],
+            flags=["machine", "mechanical"],
+            action="operate_machine"
         ),
         Room(
             id="FALLS-ROOM",
             desc_long="You are at the top of Aragain Falls, an enormous waterfall with a drop of about 450 feet. The only path here is on the north end.",
             desc_short="Top of Aragain Falls.",
             exits={"north": "FALLS-NORTH-ROOM"},
-            objects=[GameObject("rainbow", "A beautiful rainbow (may be solid)."), GameObject("falls", "The Aragain Falls.")]
+            objects=[
+                GameObject("rainbow", "A beautiful rainbow (may be solid).", attributes={"solid": False, "can_cross": True}),
+                GameObject("falls", "The Aragain Falls.", attributes={"dangerous": True, "can_fall": True})
+            ],
+            flags=["waterfall", "danger"],
+            action="cross_rainbow"
         ),
     ])
     # --- End: Unique rooms from act1.mud and act2.mud ---
@@ -250,28 +331,60 @@ rooms.extend([
             desc_long="You are in a room with a low ceiling which is circular in shape. There are exits to the east and the southeast.",
             desc_short="Circular magnet room.",
             exits={"east": "CMACH-ROOM", "southeast": "ALICE-ROOM"},
-            objects=[GameObject("magnet", "A powerful magnet.")]
+            objects=[
+                GameObject("magnet", "A powerful magnet.", attributes={"magnetic": True, "can_attract": True}),
+                GameObject("nail", "A metal nail.", attributes={"attractable": True})
+            ],
+            flags=["magnet", "circular"],
+            action="use_magnet"
+        ),
+        Room(
+            id="ALICE-ROOM",
+            desc_long="A whimsical room with shifting walls and a sense of unreality. The southeast wall seems to shimmer, and objects may appear or vanish unexpectedly.",
+            desc_short="Whimsical, shifting room.",
+            exits={"north": "MAGNET-ROOM", "west": "CAGED-ROOM"},
+            objects=[
+                GameObject("chess piece", "A mysterious chess piece, possibly alive.", attributes={"movable": True, "can_transform": True}),
+                GameObject("mirror", "A small hand mirror.", attributes={"reflective": True, "can_shatter": True})
+            ],
+            flags=["whimsical", "illusion", "dynamic"],
+            action="shift_walls"
         ),
         Room(
             id="CMACH-ROOM",
             desc_long="A room with machinery. See CMACH-DESC for details.",
             desc_short="Machinery room.",
             exits={},
-            objects=[GameObject("machinery", "Complex machinery.")]
+            objects=[
+                GameObject("machinery", "Complex machinery.", attributes={"operable": True, "can_break": True}),
+                GameObject("gear", "A large gear.", attributes={"can_turn": True})
+            ],
+            flags=["machinery", "mechanical"],
+            action="operate_machinery"
         ),
         Room(
             id="CAGED-ROOM",
             desc_long="A room with a cage puzzle. Description changes if the cage is solved.",
             desc_short="Caged puzzle room.",
             exits={},
-            objects=[GameObject("cage", "A sturdy cage."), GameObject("robot", "A mechanical robot.")]
+            objects=[
+                GameObject("cage", "A sturdy cage.", attributes={"locked": True, "can_unlock": True}),
+                GameObject("robot", "A mechanical robot.", attributes={"programmable": True, "can_escape": True})
+            ],
+            flags=["cage", "puzzle"],
+            action="solve_cage_puzzle"
         ),
         Room(
             id="BKBOX-ROOM",
             desc_long="Bank box room. Exits and objects depend on SCOL-ROOMS context.",
             desc_short="Bank box room.",
             exits={},
-            objects=[GameObject("bank box", "A secure bank box.")]
+            objects=[
+                GameObject("bank box", "A secure bank box.", attributes={"locked": True, "can_open": True}),
+                GameObject("key", "A small key.", attributes={"can_unlock": True})
+            ],
+            flags=["bank", "secure"],
+            action="open_bank_box"
         ),
         Room(
             id="TELLER-ROOM",

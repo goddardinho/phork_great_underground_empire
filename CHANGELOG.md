@@ -1,3 +1,9 @@
+## v0.1.8 (2025-11-24)
+- Completed enrichment and validation of all rooms, including ALICE-ROOM, CYCLOPS-WEST-ROOM, CYCLOPS-UP-STAIRS, and THIEF-ROOM, using inferred context and game logic.
+- All rooms now have detailed descriptions, exits, objects, flags, and actions for gameplay fidelity.
+- Updated TODO.md to mark all enrichment and validation tasks as complete.
+- Ready for gameplay testing and further feature development.
+
 ## v0.1.7 (2025-11-24)
 - Deduplicated all room definitions in `main.py`, keeping only the most enriched version for each room.
 - Enriched rooms with missing objects, exits, flags, and actions based on original MUD source.
