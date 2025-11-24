@@ -33,3 +33,4 @@ MIT License. See LICENSE file for details.
 ## Credits
 - Inspired by Zork I (Infocom, MIT DM Group)
 - Original MDL source: [historicalsource/zork](https://github.com/historicalsource/zork)
+- GitHub Copilot for doing the majority of the work!

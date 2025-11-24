@@ -1,3 +1,10 @@
+## v0.1.9 (2025-11-24)
+- Automated population of room exits in `main.py` using parsed MUD source data.
+- Validated all room and exit data with a Python-to-source map comparison script; no mismatches found.
+- Removed all stray and duplicate room/object code, ensuring a clean and error-free codebase.
+- Added missing imports and minimal class definitions for `Room` and `GameObject` to support robust parsing and comparison.
+- All enrichment and exit extraction tasks are now fully automated and validated.
+
 ## v0.1.8 (2025-11-24)
 - Completed enrichment and validation of all rooms, including ALICE-ROOM, CYCLOPS-WEST-ROOM, CYCLOPS-UP-STAIRS, and THIEF-ROOM, using inferred context and game logic.
 - All rooms now have detailed descriptions, exits, objects, flags, and actions for gameplay fidelity.
