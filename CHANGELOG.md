@@ -58,7 +58,8 @@
 - Implemented basic parser for rooms.mud to extract room names and descriptions.
 
 ## Planned/Next Steps
-- Expand parser to handle more tags and properties from .mud files.
-- Parse and load objects from other source files.
-- Implement advanced command parsing and action dispatch.
-- Add save/load functionality and more gameplay features.
+- See the Roadmap section in README.md for all planned and future features.
+
+> For current development focus, see TODO.md
+
+# ...existing code...
