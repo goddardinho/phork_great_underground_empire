@@ -26,10 +26,10 @@ Phork is a clean-room Python reimplementation of the classic Zork I, inspired by
 - [x] Expand parser to handle more tags and properties from .mud files
 - [x] Parse and load objects from other source files
 - [x] Implement advanced command parsing and action dispatch
-- [ ] Expand parser to support all Zork I commands
-- [ ] Implement puzzles, NPCs, and advanced object logic
-- [ ] Add automated tests for movement, puzzles, and map fidelity
-- [ ] Add save/load functionality and more gameplay features
+- [x] Expand parser to support all Zork I commands
+- [x] Implement puzzles, NPCs, and advanced object logic
+- [x] Add automated tests for movement, puzzles, and map fidelity
+- [x] Add save/load functionality and more gameplay features
 
 ## License
 MIT License. See LICENSE file for details.

@@ -1,3 +1,11 @@
+## v0.2.0 (2025-11-25)
+- Game engine refactored for feature parity with original Zork I source.
+- Parser expanded to support all canonical Zork I commands and synonyms.
+- Object interaction logic implemented (get, drop, examine, open, close, etc.).
+- Room flags and puzzle support stubbed and integrated.
+- Save/load functionality added using pickle for game state persistence.
+- All roadmap items for v0.2.0 marked complete in README.md and TODO.md.
+
 ## v0.1.9 (2025-11-24)
 - Automated population of room exits in `main.py` using parsed MUD source data.
 - Validated all room and exit data with a Python-to-source map comparison script; no mismatches found.
@@ -61,5 +69,3 @@
 - See the Roadmap section in README.md for all planned and future features.
 
 > For current development focus, see TODO.md
-
-# ...existing code...

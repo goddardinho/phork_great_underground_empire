@@ -2,6 +2,7 @@ from entities import GameObject, Room, Player, Action
 from parsers import parse_exits, parse_objects, parse_flags, parse_action
 from typing import Optional, List, Dict
 import re
+import pickle
 
 def load_rooms():
     import glob
@@ -39,9 +40,63 @@ def load_rooms():
 
 class Game:
     def __init__(self):
-        self.rooms: Dict[str, Room] = load_rooms()
-        self.current_room: Optional[str] = self._get_start_room()
-        self.inventory: List[GameObject] = []
+        self.rooms = load_rooms()
+        self.current_room = self._get_start_room()
+        self.inventory = []
+        self.score = 0
+        self.flags = {}  # e.g., dark, dangerous, locked, etc.
+        self.puzzles = {}  # Track puzzle states by room or puzzle name
+
+    def save_game(self, filename="savegame.pkl"):
+        state = {
+            "rooms": self.rooms,
+            "current_room": self.current_room,
+            "inventory": self.inventory,
+            "score": self.score,
+            "flags": self.flags,
+            "puzzles": self.puzzles
+        }
+        try:
+            with open(filename, "wb") as f:
+                pickle.dump(state, f)
+            print(f"Game saved to {filename}.")
+        except Exception as e:
+            print(f"Error saving game: {e}")
+
+    def load_game(self, filename="savegame.pkl"):
+        try:
+            with open(filename, "rb") as f:
+                state = pickle.load(f)
+            self.rooms = state.get("rooms", self.rooms)
+            self.current_room = state.get("current_room", self.current_room)
+            self.inventory = state.get("inventory", self.inventory)
+            self.score = state.get("score", self.score)
+            self.flags = state.get("flags", self.flags)
+            self.puzzles = state.get("puzzles", self.puzzles)
+            print(f"Game loaded from {filename}.")
+            self.describe_current_room()
+        except Exception as e:
+            print(f"Error loading game: {e}")
+
+    def check_room_flags(self):
+        room = self.rooms.get(self.current_room) if self.current_room and self.current_room in self.rooms else None
+        if not room:
+            return
+        # Example: handle dark rooms
+        if "dark" in room.flags:
+            print("It is pitch dark. You are likely to be eaten by a grue.")
+        # Example: handle locked rooms
+        if "locked" in room.flags:
+            print("The room is locked.")
+        # Add more flag logic as needed
+
+    def check_puzzles(self):
+        # Placeholder for puzzle logic
+        # Example: check if a puzzle in the current room is solved
+        puzzle_key = f"{self.current_room}_puzzle"
+        if self.puzzles.get(puzzle_key):
+            print("You have solved the puzzle in this room!")
+        # Add more puzzle logic as needed
 
     def _get_start_room(self):
         # Canonical starting room is 'WHOUS' (West of House) per MUD source
@@ -64,6 +119,8 @@ class Game:
             return
         room = self.rooms[self.current_room]
         print(f"\n{room.desc_long}\n")
+        self.check_room_flags()
+        self.check_puzzles()
         if room.exits:
             print("Exits:")
             for direction, dest in room.exits.items():
@@ -133,6 +190,7 @@ class Game:
                     self.inventory.append(obj)
                     room.objects.remove(obj)
                     print(f"You take the {obj.name}.")
+                    self.score += 1  # Example: increase score for taking
                 else:
                     print(f"There is no {obj_name} here.")
             else:
@@ -152,6 +210,52 @@ class Game:
                     print("No room loaded.")
             else:
                 print(f"You don't have a {obj_name}.")
+            return True
+        # Object interaction: open/close
+        elif cmd.startswith("open "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to open the {obj_name}.")
+            return True
+        elif cmd.startswith("close "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to close the {obj_name}.")
+            return True
+        # Object interaction: read
+        elif cmd.startswith("read "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to read the {obj_name}.")
+            return True
+        # Object interaction: eat/drink
+        elif any(cmd.startswith(x + " ") for x in ["eat", "drink"]):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to {cmd.split(' ')[0]} the {obj_name}.")
+            return True
+        # Object interaction: wear/remove
+        elif cmd.startswith("wear "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to wear the {obj_name}.")
+            return True
+        elif cmd.startswith("remove "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to remove the {obj_name}.")
+            return True
+        # Object interaction: light/extinguish
+        elif cmd.startswith("light "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to light the {obj_name}.")
+            return True
+        elif cmd.startswith("extinguish "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to extinguish the {obj_name}.")
+            return True
+        # Object interaction: unlock/lock
+        elif cmd.startswith("unlock "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to unlock the {obj_name}.")
+            return True
+        elif cmd.startswith("lock "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to lock the {obj_name}.")
             return True
         # Object interaction: examine/search
         elif any(cmd.startswith(x + " ") for x in ["examine", "search"]):
@@ -173,18 +277,6 @@ class Game:
         elif cmd in ["drop", "put", "throw"]:
             print("Specify what to drop, e.g. 'drop mat'.")
             return True
-        elif cmd in ["open"] or cmd.startswith("open "):
-            print("[Stub] You try to open something.")
-            return True
-        elif cmd in ["close"] or cmd.startswith("close "):
-            print("[Stub] You try to close something.")
-            return True
-        elif cmd in ["read"] or cmd.startswith("read "):
-            print("[Stub] You try to read something.")
-            return True
-        elif cmd in ["eat", "drink"] or any(cmd.startswith(x + " ") for x in ["eat", "drink"]):
-            print("[Stub] You try to eat/drink something.")
-            return True
         elif cmd in ["climb", "jump", "swim"] or any(cmd.startswith(x + " ") for x in ["climb", "jump", "swim"]):
             print("[Stub] You try to climb/jump/swim.")
             return True
@@ -195,16 +287,18 @@ class Game:
             print("[Stub] Help: Available commands are look, go, inventory, get, drop, open, close, read, eat, drink, climb, jump, swim, attack, help, save, restore, restart, score, wait, listen, examine, search, unlock, lock, turn, push, pull, light, extinguish, wear, remove, quit.")
             return True
         elif cmd in ["save"]:
-            print("[Stub] Save feature not implemented.")
+            self.save_game()
             return True
-        elif cmd in ["restore"]:
-            print("[Stub] Restore feature not implemented.")
+        elif cmd in ["restore", "load"]:
+            self.load_game()
             return True
         elif cmd in ["restart"]:
-            print("[Stub] Restart feature not implemented.")
+            print("Restarting game...")
+            self.__init__()
+            self.describe_current_room()
             return True
         elif cmd in ["score"]:
-            print("[Stub] Your score is 0.")
+            print(f"Your score is {self.score}.")
             return True
         elif cmd in ["wait"]:
             print("[Stub] You wait a moment.")
