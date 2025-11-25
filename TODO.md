@@ -8,6 +8,23 @@
 - [x] Add save/load functionality and more gameplay features
 - [x] Implement room flags and puzzles
 - [x] Add custom actions, scripted events, and game state features (score, save/restore, NPCs)
+-- [ ] Gameplay parity
+  - [x] Object-specific actions (e.g., mailbox, leaflet, lantern)
+  - [x] Inventory limits and object weight
+  - Locked doors and keys
+  - Score system for puzzles and treasures
+  - Multi-step puzzles and scripted events
+  - NPCs (thief, troll, cyclops, etc.)
+  - Death and restart logic
+  - Save/load with full game state
+  - Object attributes (edible, readable, wearable, portable, etc.)
+  - Room flags (dangerous, dark, visited, etc.)
+  - Synonyms and flexible parser
+  - Random events (thief, troll, etc.)
+  - Darkness and light mechanics (grue danger) [partially complete, revisit for full parity]
+  - Endgame logic and victory conditions
+- [ ] Room/location parity
+  - Ensure all rooms, locations, and connections match the original Zork I map and source.
 
 ## Completed Tasks (see CHANGELOG.md for details)
 - [x] Enrich all rooms with real data, exits, objects, flags, and actions

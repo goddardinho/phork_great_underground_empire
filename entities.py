@@ -1,14 +1,9 @@
-from typing import Optional, List, Dict
 
-class GameObject:
-    def __init__(self, name: str, description: str, location: Optional[str] = None, attributes: Optional[dict] = None):
-        self.name = name
-        self.description = description
-        self.location = location
-        self.attributes = attributes if attributes else {}
+from typing import Optional, List, Dict
+from objects import GameObject
 
 class Room:
-    def __init__(self, id: str, desc_long: str, desc_short: str, exits: Dict[str, str], objects: List[GameObject], flags: List[str] = [], action: Optional[str] = None):
+    def __init__(self, id: str, desc_long: str, desc_short: str, exits: Dict[str, str], objects: List[GameObject], flags: List[str] = [], action: Optional[str] = None, locked_exits: Optional[Dict[str, bool]] = None):
         self.id = id
         self.desc_long = desc_long
         self.desc_short = desc_short
@@ -16,6 +11,7 @@ class Room:
         self.objects = objects
         self.flags = flags
         self.action = action
+        self.locked_exits = locked_exits if locked_exits is not None else {}
 
 class Player:
     def __init__(self, name: str, current_room: str):
