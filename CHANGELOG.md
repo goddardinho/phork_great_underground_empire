@@ -5,6 +5,12 @@
 - Room flags and puzzle support stubbed and integrated.
 - Save/load functionality added using pickle for game state persistence.
 - All roadmap items for v0.2.0 marked complete in README.md and TODO.md.
+- Inventory weight tracking and canonical carry limit implemented (OSIZE, LOAD_MAX).
+- 'Take all' and 'drop all' commands added.
+- Demo mode for testing all objects and disabling carry limits.
+- Darkness and grue mechanics implemented: warning on first move/action in darkness, grue death on second, matches canonical Zork I behavior.
+- TODO.md and README.md updated for gameplay parity tracking and completed features.
+- Deduplicated TODO.md for clarity.
 
 ## v0.1.9 (2025-11-24)
 - Automated population of room exits in `main.py` using parsed MUD source data.
