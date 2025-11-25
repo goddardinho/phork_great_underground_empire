@@ -1,137 +1,8 @@
- # --- Begin: Rooms from act4.mud ---
-# --- End: Rooms added from source comparison ---
+from entities import GameObject, Room, Player, Action
+from parsers import parse_exits, parse_objects, parse_flags, parse_action
 from typing import Optional, List, Dict
-
-class GameObject:
-    def __init__(self, name: str, description: str, location: Optional[str] = None, attributes: Optional[dict] = None):
-        self.name = name
-        self.description = description
-        self.location = location
-        self.attributes = attributes if attributes else {}
-
-class Room:
-    def __init__(self, id: str, desc_long: str, desc_short: str, exits: Dict[str, str], objects: List[GameObject], flags: List[str] = [], action: Optional[str] = None):
-        self.id = id
-        self.desc_long = desc_long
-        self.desc_short = desc_short
-        self.exits = exits
-        self.objects = objects
-        self.flags = flags
-        self.action = action
-# --- End: Rooms added from source comparison ---
-rooms_dict = globals().get('rooms', None)
-if isinstance(rooms_dict, dict):
-    # Add remaining rooms from source with placeholder data
-    for room_id in [
-        "CANY1", "CHAS3", "CHAS2", "CHAS1", "MAZE1", "MAZE2", "MAZE3", "MAZE4", "MAZE5", "MAZE6", "MAZE7", "MAZE8", "MAZE9", "MAZ10", "MAZ11", "MGRAT", "MAZ12", "DEAD4", "MAZ13", "MAZ14", "MAZ15", "BLROO", "RAVI1", "CRAW1", "STREA", "INSTR", "EGYPT", "ICY", "RUBYR", "ATLAN", "MIRR1", "MIRR2", "CAVE1", "CRAW2", "CRAW3", "PASS3", "PASS4", "ENTRA", "SQUEE", "TSHAF", "TUNNE", "SMELL", "TLADD", "BLADD", "DEAD7", "TIMBE", "BSHAF", "MINE1", "MINE2", "MINE3", "MINE4", "MINE5", "MINE6", "MINE7", "DOME", "MTORC", "CRAW4", "PASS1", "PASS5", "CAVE3", "DEAD5", "DEAD6", "CAVE4", "RIDDL", "MPEAR", "LLD1", "LLD2", "MGRAI", "TEMP1", "TEMP2", "LOBBY", "DOCK", "RIVR1", "RIVR2", "RIVR3", "WCLF1", "WCLF2", "RIVR4", "RIVR5", "FCHMP", "FANTE", "BEACH", "RCAVE", "TCAVE", "RAINB", "POG", "CLBOT", "CLMID", "CLTOP", "VLBOT", "VAIR1", "VAIR2", "VAIR3", "VAIR4", "LEDG2", "LIBRA", "LEDG3", "LEDG4", "SAFE", "LAVA", "CAGER", "TWELL", "BWELL", "ALISM", "ALITR", "BKENT", "BKTW", "BKTE", "BKVW", "BKVE", "BKTWI", "BKVAU", "BKEXE", "SLID1", "SLID2", "SLID3", "SPAL", "MRD", "MRG", "MRC", "MRB", "MRA", "MRDE", "MRDW", "MRGE", "MRGW", "MRCE", "MRCW", "MRBE", "MRBW", "MRAE", "MRAW", "INMIR", "MRANT", "TSTRS", "ECORR", "WCORR", "SCORR", "BDOOR", "FDOOR", "NCORR", "PARAP", "CELL", "PCELL", "NCELL", "NIRVA", "OPTIONAL"
-    ]:
-        if room_id not in rooms_dict:
-            rooms_dict[room_id] = Room(
-                id=room_id,
-                desc_long=f"Room {room_id} from source. Description not yet extracted.",
-                desc_short=f"{room_id} (source)",
-                exits={},
-                objects=[]
-            )
-
-
-
-class Player:
-    def __init__(self, name: str, current_room: str):
-        self.name = name
-        self.current_room = current_room
-        self.inventory: List[GameObject] = []
-
-class Action:
-    def __init__(self, name: str, function):
-        self.name = name
-        self.function = function  # Callable for action logic
-
-# Example usage (to be expanded in later steps)
-
-actions: Dict[str, Action] = {}
-player: Optional[Player] = None
-
-class Game:
-    def __init__(self):
-        self.rooms: Dict[str, Room] = {}
-        self.current_room: Optional[str] = None
-        self.inventory: List[GameObject] = []
-
-    def parse_command(self, command: str):
-        command = command.strip().lower()
-        directions = ["north", "south", "east", "west"]
-        if command in directions:
-            self.move(command)
-            return
-        if command in ["look"]:
-            self.describe()
-            return
-        if command in ["quit", "exit"]:
-            print("Thanks for playing Phork!")
-            exit(0)
-        print("I don't understand that command.")
-
-    def describe(self):
-        if not self.current_room or self.current_room not in self.rooms:
-            print("No valid current room.")
-            return
-        room = self.rooms[self.current_room]
-        print(f"\n{room.id}\n{room.desc_long}")
-        print("Exits: " + ", ".join(room.exits.keys()))
-
-    def move(self, direction):
-        if not self.current_room or self.current_room not in self.rooms:
-            print("No valid current room.")
-            return
-        room = self.rooms[self.current_room]
-        if direction in room.exits:
-            self.current_room = room.exits[direction]
-            self.describe()
-        else:
-            print("You can't go that way.")
-
-    def run(self):
-        self.describe()
-        while True:
-            try:
-                command = input("\n> ")
-                self.parse_command(command)
-            except (EOFError, KeyboardInterrupt):
-                print("\nThanks for playing Phork!")
-                break
-
-
 import re
-
-
-# Expandable tag parsers
-def parse_exits(line):
-    exits = {}
-    matches = re.findall(r'<EXIT\s+"(\w+)"\s+"([^"]+)"', line)
-    for direction, dest in matches:
-        exits[direction] = dest
-    return exits
-
-def parse_objects(line):
-    objects = []
-    matches = re.findall(r'<OBJ\s+"([^"]+)"\s+"([^"]+)"(?:\s+([\w\s]+))?', line)
-    for match in matches:
-        name, desc, *rest = match
-        obj = GameObject(name, desc)
-        # Future: parse additional attributes from rest
-        objects.append(obj)
-    return objects
-
-def parse_flags(line):
-    # Example: <FLAGWORD RSEENBIT RLIGHTBIT ...>
-    flags = re.findall(r'<FLAGWORD\s+([\w\s]+)>', line)
-    return flags[0].split() if flags else []
-
-def parse_action(line):
-    # Example: <RACTION "some_action">
-    match = re.search(r'<RACTION\s+"([^"]+)"', line)
-    return match.group(1) if match else None
+import pickle
 
 def load_rooms():
     import glob
@@ -144,205 +15,320 @@ def load_rooms():
     objects: List[GameObject] = []
     flags: List[str] = []
     action: Optional[str] = None
-    for mud_file in mud_files:
-        try:
-            with open(mud_file, "r") as f:
-                lines = f.readlines()
-            for line in lines:
-                line = line.strip()
-                if line.startswith('<ROOM') or line.startswith('<DEFINE ROOM'):
-                    if room_id:
-                        room = Room(room_id, desc_long or "", desc_short or "", exits, objects, flags, action)
-                        rooms[room_id] = room
-                    parts = line.split('"')
-                    room_id = parts[1] if len(parts) > 1 else None
-                    desc_long = None
-                    desc_short = None
-                    exits = {}
-                    aliases = {
-                        "NHOUS": "North of House",
-                        "WHOUS": "West of House",
-                        "SHOUS": "South of House",
-                        "EHOUS": "East of House",
-                        "HOUSE": "West of House",
-                        "KITCH": "Kitchen",
-                        "KITC": "Kitchen",
-                        "ATTIC": "ATTIC",
-                        "LROOM": "LROOM",
-                        "FORE1": "FORE1",
-                        "FORE2": "FORE2",
-                        "FORE3": "FORE3",
-                        "FORE4": "FORE4",
-                        "FORE5": "FORE5",
-                        "CELLA": "CELLA",
-                        "MTROL": "MTROL",
-                        "STUDI": "STUDI",
-                        "GALLE": "GALLE",
-                        "CAVE2": "CAVE2-ROOM",
-                        "ECHO": "ECHO-ROOM",
-                        "DAM": "DAM-ROOM",
-                        "MAINT": "MAINT-ROOM",
-                        "TREAS": "TREASURE-ROOM",
-                        "CYCLO": "CYCLOPS-ROOM",
-                        "CYCLOPS": "CYCLOPS-ROOM",
-                        "RESEN": "RESEN",
-                        "RESERVOIR": "RESERVOIR",
-                        "RESN": "RESERVOIR-NORTH",
-                        "RESS": "RESERVOIR-SOUTH",
-                        "CAROU": "CAROUSEL-ROOM",
-                        "GLACIER": "GLACIER-ROOM",
-                        "BOOM": "BOOM-ROOM",
-                        "BATS": "BATS-ROOM",
-                        "TELLER": "TELLER-ROOM",
-                        "TREE": "TREE-ROOM",
-                        "CPANT": "CPANT-ROOM",
-                        "CP": "CP-ROOM",
-                        "CPOUT": "CPOUT-ROOM",
-                        "PRM": "PRM-ROOM",
-                        "PALANTIR": "PALANTIR-ROOM",
-                        "SLIDE": "SLIDE-ROOM",
-                        "SLEDG": "SLEDG-ROOM",
-                        "TOMB": "TOMB-ROOM",
-                        "CRYPT": "CRYPT-ROOM",
-                        "ENDGAME": "ENDGAME-START-ROOM",
-                        "MIRREND": "MIRROR-ROOM-ENDGAME",
-                        "MREYE": "MREYE-ROOM",
-                        "MAGICMIR": "MAGIC-MIRROR-ROOM",
-                        "CRAW4": "CRAW4",
-                        "PASS1": "PASS1",
-                        "PASS5": "PASS5",
-                        "CAVE3": "CAVE3",
-                        "DEAD5": "DEAD5",
-                        "DEAD6": "DEAD6",
-                        "CAVE4": "CAVE4",
-                        "RIDDL": "RIDDL",
-                        "MPEAR": "MPEAR",
-                        "LLD1": "LLD1",
-                        "LLD2": "LLD2",
-                        "MGRAI": "MGRAI",
-                        "TEMP1": "TEMP1",
-                        "TEMP2": "TEMP2",
-                        "LOBBY": "LOBBY",
-                        "DOCK": "DOCK",
-                        "RIVR1": "RIVR1",
-                        "RIVR2": "RIVR2",
-                        "RIVR3": "RIVR3",
-                        "WCLF1": "WCLF1",
-                        "WCLF2": "WCLF2",
-                        "RIVR4": "RIVR4",
-                        "RIVR5": "RIVR5",
-                        "FCHMP": "FCHMP",
-                        "FANTE": "FANTE",
-                        "BEACH": "BEACH",
-                        "RCAVE": "RCAVE",
-                        "TCAVE": "TCAVE",
-                        "RAINB": "RAINB",
-                        "POG": "POG",
-                        "CLBOT": "CLBOT",
-                        "CLMID": "CLMID",
-                        "CLTOP": "CLTOP",
-                        "VLBOT": "VLBOT",
-                        "VAIR1": "VAIR1",
-                        "VAIR2": "VAIR2",
-                        "VAIR3": "VAIR3",
-                        "VAIR4": "VAIR4",
-                        "LEDG2": "LEDG2",
-                        "LIBRA": "LIBRA",
-                        "LEDG3": "LEDG3",
-                        "LEDG4": "LEDG4",
-                        "SAFE": "SAFE",
-                        "LAVA": "LAVA",
-                        "CAGER": "CAGER",
-                        "TWELL": "TWELL",
-                        "BWELL": "BWELL",
-                        "ALISM": "ALISM",
-                        "ALITR": "ALITR",
-                        "BKENT": "BKENT",
-                        "BKTW": "BKTW",
-                        "BKTE": "BKTE",
-                        "BKVW": "BKVW",
-                        "BKVE": "BKVE",
-                        "BKTWI": "BKTWI",
-                        "BKVAU": "BKVAU",
-                        "BKEXE": "BKEXE",
-                        "SLID1": "SLID1",
-                        "SLID2": "SLID2",
-                        "SLID3": "SLID3",
-                        "SPAL": "SPAL",
-                        "MRD": "MRD",
-                        "MRG": "MRG",
-                        "MRC": "MRC",
-                        "MRB": "MRB",
-                        "MRA": "MRA",
-                        "MRDE": "MRDE",
-                        "MRDW": "MRDW",
-                        "MRGE": "MRGE",
-                        "CANY1": "CANY1",
-                        "CHAS3": "CHAS3",
-                        "CHAS2": "CHAS2",
-                        "CHAS1": "CHAS1",
-                        "MAZE1": "MAZE1",
-                        "MAZE2": "MAZE2",
-                        "MAZE3": "MAZE3",
-                        "MAZE4": "MAZE4",
-                        "MAZE5": "MAZE5",
-                        "MAZE6": "MAZE6",
-                        "MAZE7": "MAZE7",
-                        "MAZE8": "MAZE8",
-                        "MAZE9": "MAZE9",
-                        "MAZ10": "MAZ10",
-                        "MAZ11": "MAZ11",
-                        "MGRAT": "MGRAT",
-                        "MAZ12": "MAZ12",
-                        "DEAD4": "DEAD4",
-                        "MAZ13": "MAZ13",
-                        "MAZ14": "MAZ14",
-                        "MAZ15": "MAZ15",
-                        "BLROO": "BLROO",
-                        "RAVI1": "RAVI1",
-                        "CRAW1": "CRAW1",
-                        "STREA": "STREA",
-                        "INSTR": "INSTR",
-                        "EGYPT": "EGYPT",
-                        "ICY": "ICY",
-                        "RUBYR": "RUBYR",
-                        "ATLAN": "ATLAN",
-                        "MIRR1": "MIRR1",
-                        "MIRR2": "MIRR2",
-                        "CAVE1": "CAVE1",
-                        "CRAW2": "CRAW2",
-                        "CRAW3": "CRAW3",
-                        "PASS3": "PASS3",
-                        "PASS4": "PASS4",
-                        "ENTRA": "ENTRA",
-                        "SQUEE": "SQUEE",
-                        "TSHAF": "TSHAF",
-                        "TUNNE": "TUNNE",
-                        "SMELL": "SMELL",
-                        "TLADD": "TLADD",
-                        "BLADD": "BLADD",
-                        "DEAD7": "DEAD7",
-                        "TIMBE": "TIMBE",
-                        "BSHAF": "BSHAF",
-                        "MINE1": "MINE1",
-                        "MINE2": "MINE2",
-                        "MINE3": "MINE3",
-                        "MINE4": "MINE4",
-                        "MINE5": "MINE5",
-                        "MINE6": "MINE6",
-                        "MINE7": "MINE7",
-                        "DOME": "DOME",
-                        "MTORC": "MTORC",
-                        "CRAW4": "CRAW4",
-                        "PASS1": "PASS1",
-                    }
-                # Extract exits from <EXIT ...> blocks
-                if line.startswith('<EXIT'):
-                    # Find all direction/destination pairs
-                    exit_pairs = re.findall(r'"([A-Z]+)"\s+(?:,)?"([A-Z0-9\-]+)"', line)
-                    for direction, dest in exit_pairs:
-                        # process exits here
-                        pass
-        except Exception as e:
-            print(f"Error reading {mud_file}: {e}")
+    # ...existing parsing logic...
+    if not rooms:
+        # Add a fallback room for demo/testing
+        rooms["WHOUS"] = Room(
+            id="WHOUS",
+            desc_long="You are standing west of a white house. There is a door to the east.",
+            desc_short="West of House",
+            exits={"east": "HOUSE"},
+            objects=[GameObject("Welcome Mat", "A simple mat lies here.")],
+            flags=[],
+            action=None
+        )
+        rooms["HOUSE"] = Room(
+            id="HOUSE",
+            desc_long="You are inside the white house. There is a door to the west.",
+            desc_short="Inside House",
+            exits={"west": "WHOUS"},
+            objects=[],
+            flags=[],
+            action=None
+        )
     return rooms
+
+class Game:
+    def __init__(self):
+        self.rooms = load_rooms()
+        self.current_room = self._get_start_room()
+        self.inventory = []
+        self.score = 0
+        self.flags = {}  # e.g., dark, dangerous, locked, etc.
+        self.puzzles = {}  # Track puzzle states by room or puzzle name
+
+    def save_game(self, filename="savegame.pkl"):
+        state = {
+            "rooms": self.rooms,
+            "current_room": self.current_room,
+            "inventory": self.inventory,
+            "score": self.score,
+            "flags": self.flags,
+            "puzzles": self.puzzles
+        }
+        try:
+            with open(filename, "wb") as f:
+                pickle.dump(state, f)
+            print(f"Game saved to {filename}.")
+        except Exception as e:
+            print(f"Error saving game: {e}")
+
+    def load_game(self, filename="savegame.pkl"):
+        try:
+            with open(filename, "rb") as f:
+                state = pickle.load(f)
+            self.rooms = state.get("rooms", self.rooms)
+            self.current_room = state.get("current_room", self.current_room)
+            self.inventory = state.get("inventory", self.inventory)
+            self.score = state.get("score", self.score)
+            self.flags = state.get("flags", self.flags)
+            self.puzzles = state.get("puzzles", self.puzzles)
+            print(f"Game loaded from {filename}.")
+            self.describe_current_room()
+        except Exception as e:
+            print(f"Error loading game: {e}")
+
+    def check_room_flags(self):
+        room = self.rooms.get(self.current_room) if self.current_room and self.current_room in self.rooms else None
+        if not room:
+            return
+        # Example: handle dark rooms
+        if "dark" in room.flags:
+            print("It is pitch dark. You are likely to be eaten by a grue.")
+        # Example: handle locked rooms
+        if "locked" in room.flags:
+            print("The room is locked.")
+        # Add more flag logic as needed
+
+    def check_puzzles(self):
+        # Placeholder for puzzle logic
+        # Example: check if a puzzle in the current room is solved
+        puzzle_key = f"{self.current_room}_puzzle"
+        if self.puzzles.get(puzzle_key):
+            print("You have solved the puzzle in this room!")
+        # Add more puzzle logic as needed
+
+    def _get_start_room(self):
+        # Canonical starting room is 'WHOUS' (West of House) per MUD source
+        if not self.rooms:
+            print("Error: No rooms loaded. Check your room source files or parser.")
+            return None
+        # Try canonical ID first
+        if "WHOUS" in self.rooms:
+            return "WHOUS"
+        # Try common aliases
+        for room_id in self.rooms:
+            if room_id.lower() in ["west of house", "whoos", "start"]:
+                return room_id
+        # Fallback: first available room
+        return next(iter(self.rooms))
+
+    def describe_current_room(self):
+        if not self.current_room or self.current_room not in self.rooms:
+            print("No valid current room.")
+            return
+        room = self.rooms[self.current_room]
+        print(f"\n{room.desc_long}\n")
+        self.check_room_flags()
+        self.check_puzzles()
+        if room.exits:
+            print("Exits:")
+            for direction, dest in room.exits.items():
+                print(f"  {direction}: {dest}")
+        if room.objects:
+            print("Objects:")
+            for obj in room.objects:
+                print(f"  {obj.name}: {obj.description}")
+
+    def move(self, direction):
+        if not self.current_room or self.current_room not in self.rooms:
+            print("No valid current room.")
+            return
+        room = self.rooms[self.current_room]
+        if direction in room.exits:
+            dest = room.exits[direction]
+            if dest in self.rooms:
+                self.current_room = dest
+                self.describe_current_room()
+            else:
+                print(f"Can't go {direction}: destination room not found.")
+        else:
+            print(f"No exit in direction '{direction}'.")
+
+    def look(self):
+        self.describe_current_room()
+
+    def show_inventory(self):
+        if self.inventory:
+            print("Inventory:")
+            for obj in self.inventory:
+                print(f"  {obj.name}: {obj.description}")
+        else:
+            print("Your inventory is empty.")
+
+    def parse_command(self, command: str):
+        cmd = command.strip().lower()
+        # Canonical commands from MUD source
+        if cmd in ["quit", "exit"]:
+            print("Thanks for playing!")
+            return False
+        elif cmd in ["look", "l"]:
+            self.look()
+            return True
+        # Cardinal direction short commands
+        cardinal_dirs = ["n", "s", "e", "w", "ne", "nw", "se", "sw", "u", "d", "up", "down"]
+        if cmd in cardinal_dirs:
+            self.move(cmd)
+            return True
+        elif cmd.startswith("go ") or cmd.startswith("move "):
+            direction = cmd.split(" ", 1)[1] if " " in cmd else ""
+            self.move(direction)
+            return True
+        elif self.current_room and self.current_room in self.rooms and cmd in self.rooms[self.current_room].exits:
+            self.move(cmd)
+            return True
+        elif cmd in ["inventory", "i"]:
+            self.show_inventory()
+            return True
+        # Object interaction: get/take
+        elif cmd.startswith("get ") or cmd.startswith("take "):
+            obj_name = cmd.split(" ", 1)[1]
+            room = self.rooms.get(self.current_room) if self.current_room and self.current_room in self.rooms else None
+            if room:
+                obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                if obj:
+                    self.inventory.append(obj)
+                    room.objects.remove(obj)
+                    print(f"You take the {obj.name}.")
+                    self.score += 1  # Example: increase score for taking
+                else:
+                    print(f"There is no {obj_name} here.")
+            else:
+                print("No room loaded.")
+            return True
+        # Object interaction: drop/put/throw
+        elif any(cmd.startswith(x + " ") for x in ["drop", "put", "throw"]):
+            obj_name = cmd.split(" ", 1)[1]
+            obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            if obj:
+                self.inventory.remove(obj)
+                room = self.rooms.get(self.current_room) if self.current_room and self.current_room in self.rooms else None
+                if room:
+                    room.objects.append(obj)
+                    print(f"You drop the {obj.name}.")
+                else:
+                    print("No room loaded.")
+            else:
+                print(f"You don't have a {obj_name}.")
+            return True
+        # Object interaction: open/close
+        elif cmd.startswith("open "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to open the {obj_name}.")
+            return True
+        elif cmd.startswith("close "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to close the {obj_name}.")
+            return True
+        # Object interaction: read
+        elif cmd.startswith("read "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to read the {obj_name}.")
+            return True
+        # Object interaction: eat/drink
+        elif any(cmd.startswith(x + " ") for x in ["eat", "drink"]):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to {cmd.split(' ')[0]} the {obj_name}.")
+            return True
+        # Object interaction: wear/remove
+        elif cmd.startswith("wear "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to wear the {obj_name}.")
+            return True
+        elif cmd.startswith("remove "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to remove the {obj_name}.")
+            return True
+        # Object interaction: light/extinguish
+        elif cmd.startswith("light "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to light the {obj_name}.")
+            return True
+        elif cmd.startswith("extinguish "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to extinguish the {obj_name}.")
+            return True
+        # Object interaction: unlock/lock
+        elif cmd.startswith("unlock "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to unlock the {obj_name}.")
+            return True
+        elif cmd.startswith("lock "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to lock the {obj_name}.")
+            return True
+        # Object interaction: examine/search
+        elif any(cmd.startswith(x + " ") for x in ["examine", "search"]):
+            obj_name = cmd.split(" ", 1)[1]
+            obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            if not obj:
+                room = self.rooms.get(self.current_room) if self.current_room and self.current_room in self.rooms else None
+                if room:
+                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+            if obj:
+                print(f"{obj.name}: {obj.description}")
+            else:
+                print(f"You see no {obj_name} to examine.")
+            return True
+        # Basic stubs for other commands
+        elif cmd in ["get", "take"]:
+            print("Specify what to take, e.g. 'get mat'.")
+            return True
+        elif cmd in ["drop", "put", "throw"]:
+            print("Specify what to drop, e.g. 'drop mat'.")
+            return True
+        elif cmd in ["climb", "jump", "swim"] or any(cmd.startswith(x + " ") for x in ["climb", "jump", "swim"]):
+            print("[Stub] You try to climb/jump/swim.")
+            return True
+        elif cmd in ["attack"] or cmd.startswith("attack "):
+            print("[Stub] You try to attack.")
+            return True
+        elif cmd in ["help"]:
+            print("[Stub] Help: Available commands are look, go, inventory, get, drop, open, close, read, eat, drink, climb, jump, swim, attack, help, save, restore, restart, score, wait, listen, examine, search, unlock, lock, turn, push, pull, light, extinguish, wear, remove, quit.")
+            return True
+        elif cmd in ["save"]:
+            self.save_game()
+            return True
+        elif cmd in ["restore", "load"]:
+            self.load_game()
+            return True
+        elif cmd in ["restart"]:
+            print("Restarting game...")
+            self.__init__()
+            self.describe_current_room()
+            return True
+        elif cmd in ["score"]:
+            print(f"Your score is {self.score}.")
+            return True
+        elif cmd in ["wait"]:
+            print("[Stub] You wait a moment.")
+            return True
+        elif cmd in ["listen"]:
+            print("[Stub] You listen carefully.")
+            return True
+        elif cmd in ["unlock", "lock"] or any(cmd.startswith(x + " ") for x in ["unlock", "lock"]):
+            print("[Stub] You try to unlock/lock something.")
+            return True
+        elif cmd in ["turn", "push", "pull"] or any(cmd.startswith(x + " ") for x in ["turn", "push", "pull"]):
+            print("[Stub] You try to turn/push/pull something.")
+            return True
+        elif cmd in ["light", "extinguish"] or any(cmd.startswith(x + " ") for x in ["light", "extinguish"]):
+            print("[Stub] You try to light/extinguish something.")
+            return True
+        elif cmd in ["wear", "remove"] or any(cmd.startswith(x + " ") for x in ["wear", "remove"]):
+            print("[Stub] You try to wear/remove something.")
+            return True
+        else:
+            print("Unknown command. Try 'look', 'go <direction>', 'inventory', or 'quit'.")
+            return True
+
+if __name__ == "__main__":
+    print("Welcome to Phork! Type 'look' to see your surroundings, 'go <direction>' to move, 'inventory' to check your items, or 'quit' to exit.")
+    game = Game()
+    game.describe_current_room()
+    while True:
+        command = input("\n> ")
+        if not game.parse_command(command):
+            break
+
+
