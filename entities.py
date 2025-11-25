@@ -1,11 +1,12 @@
 from typing import Optional, List, Dict
 
 class GameObject:
-    def __init__(self, name: str, description: str, location: Optional[str] = None, attributes: Optional[dict] = None):
+    def __init__(self, name: str, description: str, location: Optional[str] = None, attributes: Optional[dict] = None, osize: int = 1):
         self.name = name
         self.description = description
         self.location = location
         self.attributes = attributes if attributes else {}
+        self.osize = osize  # Canonical Zork I weight
 
 class Room:
     def __init__(self, id: str, desc_long: str, desc_short: str, exits: Dict[str, str], objects: List[GameObject], flags: List[str] = [], action: Optional[str] = None):
