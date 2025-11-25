@@ -16,13 +16,20 @@
   - Multi-step puzzles and scripted events
   - NPCs (thief, troll, cyclops, etc.)
   - Death and restart logic
-  - Save/load with full game state
+  - Save/load with full game state (including containers, puzzles, flags)
   - Object attributes (edible, readable, wearable, portable, etc.)
   - Room flags (dangerous, dark, visited, etc.)
   - Synonyms and flexible parser
   - Random events (thief, troll, etc.)
   - Darkness and light mechanics (grue danger) [partially complete, revisit for full parity]
   - Endgame logic and victory conditions
+  - Advanced container mechanics (multiple containers, nested containers, inventory interaction)
+  - Object hiding and searching (objects hidden in containers or rooms, requiring 'search' or 'examine')
+  - Environmental hazards (flooding, falling, poison, etc.)
+  - Map expansion (add all canonical rooms, locations, and connections)
+  - Save/restore improvements (multiple slots, autosave)
+  - Treasure list and scoring
+  - Trap rooms and timed events
 - [ ] Room/location parity
   - Ensure all rooms, locations, and connections match the original Zork I map and source.
 

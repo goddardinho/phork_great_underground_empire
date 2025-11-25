@@ -4,11 +4,12 @@ General game object logic for Zork-like engine.
 """
 
 
+
 class GameObject:
     def __init__(self, name, description, location=None, attributes=None, osize=1, portable=True):
         self.name = name
         self.description = description
-        self.location = location
+        self.location = location  # Can be room, container, or 'inventory'
         self.attributes = attributes if attributes else {}
         self.osize = osize  # Canonical Zork I weight
         self.portable = portable
@@ -16,16 +17,19 @@ class GameObject:
     def is_container(self):
         return self.attributes.get("container", False)
 
+
     def add_object(self, obj):
         if self.is_container():
             if "contents" not in self.attributes:
                 self.attributes["contents"] = []
             self.attributes["contents"].append(obj)
+            obj.location = self
 
     def remove_object(self, obj):
         if self.is_container() and "contents" in self.attributes:
             if obj in self.attributes["contents"]:
                 self.attributes["contents"].remove(obj)
+                obj.location = None
 
     def describe(self):
         desc = self.description

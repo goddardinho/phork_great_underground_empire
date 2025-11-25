@@ -1,3 +1,187 @@
+            def find_object(self, name, sources):
+                """Find object by name in a list of sources (room, inventory, containers)."""
+                name = name.lower()
+                for source in sources:
+                    if hasattr(source, 'objects'):
+                        for obj in source.objects:
+                            if obj.name.lower() == name:
+                                return obj
+                            # Search nested containers
+                            if hasattr(obj, 'is_container') and obj.is_container():
+                                found = self.find_object(name, [obj])
+                                if found:
+                                    return found
+                    elif hasattr(source, 'is_container') and source.is_container():
+                        for obj in source.attributes.get('contents', []):
+                            if obj.name.lower() == name:
+                                return obj
+                            if hasattr(obj, 'is_container') and obj.is_container():
+                                found = self.find_object(name, [obj])
+                                if found:
+                                    return found
+                    elif isinstance(source, list):
+                        for obj in source:
+                            if obj.name.lower() == name:
+                                return obj
+                            if hasattr(obj, 'is_container') and obj.is_container():
+                                found = self.find_object(name, [obj])
+                                if found:
+                                    return found
+                return None
+
+            def find_container(self, name, sources):
+                """Find container by name in a list of sources."""
+                name = name.lower()
+                for source in sources:
+                    if hasattr(source, 'objects'):
+                        for obj in source.objects:
+                            if hasattr(obj, 'is_container') and obj.is_container() and obj.name.lower() == name:
+                                return obj
+                            # Search nested containers
+                            if hasattr(obj, 'is_container') and obj.is_container():
+                                found = self.find_container(name, [obj])
+                                if found:
+                                    return found
+                    elif hasattr(source, 'is_container') and source.is_container():
+                        if source.name.lower() == name:
+                            return source
+                        for obj in source.attributes.get('contents', []):
+                            if hasattr(obj, 'is_container') and obj.is_container():
+                                found = self.find_container(name, [obj])
+                                if found:
+                                    return found
+                    elif isinstance(source, list):
+                        for obj in source:
+                            if hasattr(obj, 'is_container') and obj.is_container() and obj.name.lower() == name:
+                                return obj
+                            if hasattr(obj, 'is_container') and obj.is_container():
+                                found = self.find_container(name, [obj])
+                                if found:
+                                    return found
+                return None
+        def find_object(self, name, sources):
+            """Find object by name in a list of sources (room, inventory, containers)."""
+            name = name.lower()
+            for source in sources:
+                if hasattr(source, 'objects'):
+                    for obj in source.objects:
+                        if obj.name.lower() == name:
+                            return obj
+                        # Search nested containers
+                        if hasattr(obj, 'is_container') and obj.is_container():
+                            found = self.find_object(name, [obj])
+                            if found:
+                                return found
+                elif hasattr(source, 'is_container') and source.is_container():
+                    for obj in source.attributes.get('contents', []):
+                        if obj.name.lower() == name:
+                            return obj
+                        if hasattr(obj, 'is_container') and obj.is_container():
+                            found = self.find_object(name, [obj])
+                            if found:
+                                return found
+                elif isinstance(source, list):
+                    for obj in source:
+                        if obj.name.lower() == name:
+                            return obj
+                        if hasattr(obj, 'is_container') and obj.is_container():
+                            found = self.find_object(name, [obj])
+                            if found:
+                                return found
+            return None
+
+        def find_container(self, name, sources):
+            """Find container by name in a list of sources."""
+            name = name.lower()
+            for source in sources:
+                if hasattr(source, 'objects'):
+                    for obj in source.objects:
+                        if hasattr(obj, 'is_container') and obj.is_container() and obj.name.lower() == name:
+                            return obj
+                        # Search nested containers
+                        if hasattr(obj, 'is_container') and obj.is_container():
+                            found = self.find_container(name, [obj])
+                            if found:
+                                return found
+                elif hasattr(source, 'is_container') and source.is_container():
+                    if source.name.lower() == name:
+                        return source
+                    for obj in source.attributes.get('contents', []):
+                        if hasattr(obj, 'is_container') and obj.is_container():
+                            found = self.find_container(name, [obj])
+                            if found:
+                                return found
+                elif isinstance(source, list):
+                    for obj in source:
+                        if hasattr(obj, 'is_container') and obj.is_container() and obj.name.lower() == name:
+                            return obj
+                        if hasattr(obj, 'is_container') and obj.is_container():
+                            found = self.find_container(name, [obj])
+                            if found:
+                                return found
+            return None
+    def find_object(self, name, sources):
+        """Find object by name in a list of sources (room, inventory, containers)."""
+        name = name.lower()
+        for source in sources:
+            if hasattr(source, 'objects'):
+                for obj in source.objects:
+                    if obj.name.lower() == name:
+                        return obj
+                    # Search nested containers
+                    if hasattr(obj, 'is_container') and obj.is_container():
+                        found = self.find_object(name, [obj])
+                        if found:
+                            return found
+            elif hasattr(source, 'is_container') and source.is_container():
+                for obj in source.attributes.get('contents', []):
+                    if obj.name.lower() == name:
+                        return obj
+                    if hasattr(obj, 'is_container') and obj.is_container():
+                        found = self.find_object(name, [obj])
+                        if found:
+                            return found
+            elif isinstance(source, list):
+                for obj in source:
+                    if obj.name.lower() == name:
+                        return obj
+                    if hasattr(obj, 'is_container') and obj.is_container():
+                        found = self.find_object(name, [obj])
+                        if found:
+                            return found
+        return None
+
+    def find_container(self, name, sources):
+        """Find container by name in a list of sources."""
+        name = name.lower()
+        for source in sources:
+            if hasattr(source, 'objects'):
+                for obj in source.objects:
+                    if hasattr(obj, 'is_container') and obj.is_container() and obj.name.lower() == name:
+                        return obj
+                    # Search nested containers
+                    if hasattr(obj, 'is_container') and obj.is_container():
+                        found = self.find_container(name, [obj])
+                        if found:
+                            return found
+            elif hasattr(source, 'is_container') and source.is_container():
+                if source.name.lower() == name:
+                    return source
+                for obj in source.attributes.get('contents', []):
+                    if hasattr(obj, 'is_container') and obj.is_container():
+                        found = self.find_container(name, [obj])
+                        if found:
+                            return found
+            elif isinstance(source, list):
+                for obj in source:
+                    if hasattr(obj, 'is_container') and obj.is_container() and obj.name.lower() == name:
+                        return obj
+                    if hasattr(obj, 'is_container') and obj.is_container():
+                        found = self.find_container(name, [obj])
+                        if found:
+                            return found
+        return None
+
 from entities import Room, Player, Action
 from objects import GameObject
 from containers import Container
@@ -371,6 +555,54 @@ class Game:
 
     def parse_command(self, command: str):
         cmd = command.strip().lower()
+        room = self.rooms.get(self.current_room)
+        # Advanced container commands
+        if cmd.startswith("put ") and " in " in cmd:
+            obj_name, container_name = cmd[4:].split(" in ", 1)
+            obj = self.find_object(obj_name, [self.inventory, room])
+            container = self.find_container(container_name, [self.inventory, room])
+            if not obj:
+                print(f"You don't have a {obj_name} to put.")
+                return True
+            if not container:
+                print(f"There is no {container_name} here.")
+                return True
+            if not container.attributes.get("open", False):
+                print(f"The {container.name} is closed.")
+                return True
+            if obj in self.inventory:
+                self.inventory.remove(obj)
+            elif obj in room.objects:
+                room.objects.remove(obj)
+            msg = container.add_object(obj)
+            print(msg)
+            return True
+        if cmd.startswith("take ") and " from " in cmd:
+            obj_name, container_name = cmd[5:].split(" from ", 1)
+            container = self.find_container(container_name, [self.inventory, room])
+            if not container:
+                print(f"There is no {container_name} here.")
+                return True
+            if not container.attributes.get("open", False):
+                print(f"The {container.name} is closed.")
+                return True
+            obj = self.find_object(obj_name, [container])
+            if not obj:
+                print(f"There is no {obj_name} in the {container.name}.")
+                return True
+            msg = container.remove_object(obj)
+            self.inventory.append(obj)
+            print(msg)
+            return True
+        if cmd.startswith("look in "):
+            container_name = cmd[8:]
+            container = self.find_container(container_name, [self.inventory, room])
+            if not container:
+                print(f"There is no {container_name} here.")
+                return True
+            print(container.look_inside(recursive=True, depth=2))
+            return True
+        # ...existing code...
         # Canonical commands from MUD source
         if cmd in ["quit", "exit"]:
             print("Thanks for playing!")
