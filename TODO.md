@@ -13,7 +13,7 @@
   - [x] Inventory limits and object weight
   - [x] Locked doors and keys
   - [x] Score system for puzzles and treasures
-  - Multi-step puzzles and scripted events
+  - [x] Multi-step puzzles and scripted events
   - NPCs (thief, troll, cyclops, etc.)
   - Death and restart logic
   - Save/load with full game state
