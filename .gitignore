@@ -40,3 +40,4 @@ map.json
 *.bak
 *.tmp
 *.swp
+*.pkl

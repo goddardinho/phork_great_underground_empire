@@ -1,6 +1,7 @@
 # Gameplay Duplication Framework - Todo List
 
 ## Current Development Focus
+
 - See the Roadmap section in README.md for all planned and future features.
 - [x] Expand parser to support all Zork I commands
 - [x] Implement puzzles, NPCs, and advanced object logic
@@ -11,9 +12,9 @@
 -- [ ] Gameplay parity
   - [x] Object-specific actions (e.g., mailbox, leaflet, lantern)
   - [x] Inventory limits and object weight
-  - Locked doors and keys
-  - Score system for puzzles and treasures
-  - Multi-step puzzles and scripted events
+  - [x] Locked doors and keys
+  - [x] Score system for puzzles and treasures
+  - [x] Multi-step puzzles and scripted events
   - NPCs (thief, troll, cyclops, etc.)
   - Death and restart logic
   - Save/load with full game state
@@ -27,6 +28,7 @@
   - Ensure all rooms, locations, and connections match the original Zork I map and source.
 
 ## Completed Tasks (see CHANGELOG.md for details)
+
 - [x] Enrich all rooms with real data, exits, objects, flags, and actions
 - [x] Automate exit population from source
 - [x] Validate room and exit data with map comparison script
@@ -35,4 +37,5 @@
 - [x] Document enrichment logic and mapping for maintainers
 
 ## Reference
+
 - For completed milestones and version history, see CHANGELOG.md
