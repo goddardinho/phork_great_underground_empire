@@ -1,3 +1,5 @@
+# Changelog
+
 ## v0.2.3 (2025-11-26)
 
 - Puzzle and treasure scoring system fully implemented and tested.
