@@ -33,13 +33,13 @@ def load_rooms():
             exits={"east": "HOUSE"},
             objects=[
                 GameObject(
-                    "Welcome Mat", "A simple mat lies here.", attributes={"osize": 1}
+                    "Welcome Mat", "A simple mat lies here.", attributes={"osize": 1, "score_value": 0}
                 ),
                 GameObject(
-                    "Lantern", "A brass lantern, unlit.", attributes={"osize": 2}
+                    "Lantern", "A brass lantern, unlit.", attributes={"osize": 2, "score_value": 0}
                 ),
                 GameObject(
-                    "Sword", "A sharp sword gleams here.", attributes={"osize": 3}
+                    "Sword", "A sharp sword gleams here.", attributes={"osize": 3, "score_value": 0}
                 ),
                 Container(
                     "Mailbox",
@@ -51,22 +51,22 @@ def load_rooms():
                             GameObject(
                                 "Leaflet",
                                 (
-                                    "WELCOME TO ZORK\n\n"
-                                    "ZORK is a game of adventure, danger, and low cunning. In it you will explore some of the most amazing territory ever seen by mortal man. "
+                                    "WELCOME TO PHORK\n\n"
+                                    "PHORK is a game of adventure, danger, and low cunning. In it you will explore some of the most amazing territory ever seen by mortal man. "
                                     "Hardened adventurers have run screaming from the terrors contained within!\n\n"
                                     "No computer should be without one!"
                                 ),
-                                attributes={"osize": 1}
+                                attributes={"osize": 1, "score_value": 0},
                             )
-                        ]
-                    }
+                        ],
+                    },
                 ),
-                GameObject("Key", "A small key.", attributes={"osize": 1}),
+                GameObject("Key", "A small key.", attributes={"osize": 1, "score_value": 0}),
                 GameObject(
-                    "Robot", "A silent robot stands here.", attributes={"osize": 10}
+                    "Robot", "A silent robot stands here.", attributes={"osize": 10, "score_value": 0}
                 ),
                 GameObject(
-                    "Treasure Chest", "A heavy chest, locked.", attributes={"osize": 10}
+                    "Treasure Chest", "A heavy chest, locked.", attributes={"osize": 10, "score_value": 15}
                 ),
             ],
             flags=[],
@@ -80,7 +80,7 @@ def load_rooms():
                 obj.attributes["locked"] = True
             if obj.name.lower() == "mailbox":
                 obj.attributes["locked"] = True
-        # Add locked exit for HOUSE west door (for symmetry)
+            # Add locked exit for HOUSE west door (for symmetry)
             if "HOUSE" in rooms:
                 rooms["HOUSE"].locked_exits = {"west": True}
         rooms["HOUSE"] = Room(
@@ -143,9 +143,13 @@ class Game:
             # Give player all non-container objects from starting room, ignore carry limit
             room = self.rooms.get(self.current_room)
             if room and room.objects:
-                non_containers = [o for o in room.objects if not o.attributes.get("container")]
+                non_containers = [
+                    o for o in room.objects if not o.attributes.get("container")
+                ]
                 self.inventory.extend(non_containers)
-                room.objects = [o for o in room.objects if o.attributes.get("container")]
+                room.objects = [
+                    o for o in room.objects if o.attributes.get("container")
+                ]
             print(
                 "[Demo Mode] All non-container objects have been added to your inventory. Carry limits are disabled."
             )
@@ -218,11 +222,15 @@ class Game:
             exit()
 
     def check_puzzles(self):
-        # Placeholder for puzzle logic
         # Example: check if a puzzle in the current room is solved
         puzzle_key = f"{self.current_room}_puzzle"
         if self.puzzles.get(puzzle_key):
-            print("You have solved the puzzle in this room!")
+            if not self.puzzles.get(f"{puzzle_key}_scored"):
+                self.score += 5  # Award points for solving a puzzle
+                self.puzzles[f"{puzzle_key}_scored"] = True
+                print("You have solved the puzzle in this room! (+5 points)")
+            else:
+                print("You have solved the puzzle in this room!")
         # Add more puzzle logic as needed
 
     def _get_start_room(self):
@@ -256,7 +264,14 @@ class Game:
         visible_objects = []
         for obj in room.objects:
             # Only show demo objects in demo mode
-            demo_object_names = {"welcome mat", "lantern", "sword", "key", "robot", "treasure chest"}
+            demo_object_names = {
+                "welcome mat",
+                "lantern",
+                "sword",
+                "key",
+                "robot",
+                "treasure chest",
+            }
             if not self.demo_mode and obj.name.lower() in demo_object_names:
                 continue
             # Mailbox container logic
@@ -269,7 +284,9 @@ class Game:
                     print(obj.description)
                 if mailbox_open:
                     contents = obj.attributes.get("contents", [])
-                    leaflet_present = any(item.name.lower() == "leaflet" for item in contents)
+                    leaflet_present = any(
+                        item.name.lower() == "leaflet" for item in contents
+                    )
                     if leaflet_present and not self.leaflet_taken:
                         print("There is a leaflet inside the mailbox.")
                 visible_objects.append(obj)
@@ -300,6 +317,7 @@ class Game:
                 print(f"Can't go {direction}: destination room not found.")
         else:
             print(f"No exit in direction '{direction}'.")
+
     def unlock_exit(self, direction):
         room = self.rooms[self.current_room]
         locked_exits = getattr(room, "locked_exits", {})
@@ -380,9 +398,16 @@ class Game:
             return True
         # Cardinal direction short commands
         cardinal_map = {
-            "n": "north", "s": "south", "e": "east", "w": "west",
-            "ne": "northeast", "nw": "northwest", "se": "southeast", "sw": "southwest",
-            "u": "up", "d": "down"
+            "n": "north",
+            "s": "south",
+            "e": "east",
+            "w": "west",
+            "ne": "northeast",
+            "nw": "northwest",
+            "se": "southeast",
+            "sw": "southwest",
+            "u": "up",
+            "d": "down",
         }
         cardinal_dirs = list(cardinal_map.keys()) + ["up", "down"]
         if cmd in cardinal_dirs:
@@ -459,10 +484,22 @@ class Game:
                     # Prevent taking leaflet unless mailbox is open
                     if obj.name.lower() == "leaflet":
                         # Check containers for leaflet
-                        mailbox = next((o for o in room.objects if hasattr(o, "is_container") and o.is_container() and o.name.lower() == "mailbox"), None)
+                        mailbox = next(
+                            (
+                                o
+                                for o in room.objects
+                                if hasattr(o, "is_container")
+                                and o.is_container()
+                                and o.name.lower() == "mailbox"
+                            ),
+                            None,
+                        )
                         if mailbox and mailbox.attributes.get("open", False):
                             contents = mailbox.attributes.get("contents", [])
-                            leaflet_obj = next((o for o in contents if o.name.lower() == "leaflet"), None)
+                            leaflet_obj = next(
+                                (o for o in contents if o.name.lower() == "leaflet"),
+                                None,
+                            )
                             if leaflet_obj:
                                 mailbox.remove_object(leaflet_obj)
                                 self.inventory.append(leaflet_obj)
@@ -492,18 +529,24 @@ class Game:
                     taken_any = True
                 # Also check open containers for takeable objects
                 for obj in room.objects:
-                    if hasattr(obj, "is_container") and obj.is_container() and obj.attributes.get("open", False):
+                    if (
+                        hasattr(obj, "is_container")
+                        and obj.is_container()
+                        and obj.attributes.get("open", False)
+                    ):
                         for item in list(obj.attributes.get("contents", [])):
                             obj_weight = (
                                 item.attributes.get("osize")
-                                if hasattr(item, "attributes") and "osize" in item.attributes
+                                if hasattr(item, "attributes")
+                                and "osize" in item.attributes
                                 else getattr(item, "osize", 1)
                             )
                             if obj_weight == self.BIGFIX:
                                 obj_weight = 0
                             if (
                                 not self.demo_mode
-                                and self.get_inventory_weight() + obj_weight > self.LOAD_MAX
+                                and self.get_inventory_weight() + obj_weight
+                                > self.LOAD_MAX
                             ):
                                 print(
                                     f"You can't carry the {item.name}; it's too heavy or you're overloaded."
@@ -518,14 +561,28 @@ class Game:
                 return True
             if room:
                 # First, check room objects
-                obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                obj = next(
+                    (o for o in room.objects if o.name.lower() == obj_name), None
+                )
                 if obj:
                     # Prevent taking leaflet unless mailbox is open
                     if obj.name.lower() == "leaflet":
-                        mailbox = next((o for o in room.objects if hasattr(o, "is_container") and o.is_container() and o.name.lower() == "mailbox"), None)
+                        mailbox = next(
+                            (
+                                o
+                                for o in room.objects
+                                if hasattr(o, "is_container")
+                                and o.is_container()
+                                and o.name.lower() == "mailbox"
+                            ),
+                            None,
+                        )
                         if mailbox and mailbox.attributes.get("open", False):
                             contents = mailbox.attributes.get("contents", [])
-                            leaflet_obj = next((o for o in contents if o.name.lower() == "leaflet"), None)
+                            leaflet_obj = next(
+                                (o for o in contents if o.name.lower() == "leaflet"),
+                                None,
+                            )
                             if leaflet_obj:
                                 mailbox.remove_object(leaflet_obj)
                                 self.inventory.append(leaflet_obj)
@@ -551,23 +608,40 @@ class Game:
                     self.inventory.append(obj)
                     room.objects.remove(obj)
                     print(f"You take the {obj.name}.")
-                    self.score += 1  # Example: increase score for taking
+                    if obj.name.lower() in ["treasure chest", "treasure", "jewel", "gold", "diamond"]:
+                        self.score += 10  # Award points for treasures
+                        print("You have found a treasure! (+10 points)")
+                    else:
+                        self.score += 1  # Minor score for other items
                     return True
                 # Next, check open containers for the object
                 for container in room.objects:
-                    if hasattr(container, "is_container") and container.is_container() and container.attributes.get("open", False):
-                        item = next((o for o in container.attributes.get("contents", []) if o.name.lower() == obj_name), None)
+                    if (
+                        hasattr(container, "is_container")
+                        and container.is_container()
+                        and container.attributes.get("open", False)
+                    ):
+                        item = next(
+                            (
+                                o
+                                for o in container.attributes.get("contents", [])
+                                if o.name.lower() == obj_name
+                            ),
+                            None,
+                        )
                         if item:
                             obj_weight = (
                                 item.attributes.get("osize")
-                                if hasattr(item, "attributes") and "osize" in item.attributes
+                                if hasattr(item, "attributes")
+                                and "osize" in item.attributes
                                 else getattr(item, "osize", 1)
                             )
                             if obj_weight == self.BIGFIX:
                                 obj_weight = 0
                             if (
                                 not self.demo_mode
-                                and self.get_inventory_weight() + obj_weight > self.LOAD_MAX
+                                and self.get_inventory_weight() + obj_weight
+                                > self.LOAD_MAX
                             ):
                                 print(
                                     f"You cannot carry the {item.name}. Your load is too heavy."
@@ -575,7 +649,9 @@ class Game:
                                 return True
                             container.remove_object(item)
                             self.inventory.append(item)
-                            print(f"You take the {item.name} from the {container.name}.")
+                            print(
+                                f"You take the {item.name} from the {container.name}."
+                            )
                             self.score += 1
                             return True
                 print(f"There is no {obj_name} here.")
@@ -698,14 +774,39 @@ class Game:
             obj_name = cmd.split(" ", 1)[1]
             print(f"[Stub] You try to extinguish the {obj_name}.")
             return True
-        # Object interaction: unlock/lock
+        # Object interaction: unlock/lock exits with smart direction handling
         elif cmd.startswith("unlock "):
-            obj_name = cmd.split(" ", 1)[1]
-            print(f"[Stub] You try to unlock the {obj_name}.")
+            arg = cmd.split(" ", 1)[1]
+            room = self.rooms[self.current_room]
+            locked_exits = getattr(room, "locked_exits", {})
+            locked_doors = [d for d, locked in locked_exits.items() if locked]
+            if arg in locked_exits:
+                self.unlock_exit(arg)
+            elif arg in ["door", "doors"]:
+                if len(locked_doors) == 1:
+                    self.unlock_exit(locked_doors[0])
+                elif len(locked_doors) > 1:
+                    print(f"Which door do you want to unlock? Locked doors: {', '.join(locked_doors)}.")
+                else:
+                    print("There are no locked doors here.")
+            else:
+                print(f"Unknown door or direction '{arg}'.")
             return True
         elif cmd.startswith("lock "):
-            obj_name = cmd.split(" ", 1)[1]
-            print(f"[Stub] You try to lock the {obj_name}.")
+            arg = cmd.split(" ", 1)[1]
+            room = self.rooms[self.current_room]
+            unlocked_doors = [d for d in room.exits if not getattr(room, "locked_exits", {}).get(d, False)]
+            if arg in room.exits:
+                self.lock_exit(arg)
+            elif arg in ["door", "doors"]:
+                if len(unlocked_doors) == 1:
+                    self.lock_exit(unlocked_doors[0])
+                elif len(unlocked_doors) > 1:
+                    print(f"Which door do you want to lock? Unlocked doors: {', '.join(unlocked_doors)}.")
+                else:
+                    print("There are no unlocked doors here.")
+            else:
+                print(f"Unknown door or direction '{arg}'.")
             return True
         # Object interaction: examine/search
         elif any(cmd.startswith(x + " ") for x in ["examine", "search"]):
