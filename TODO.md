@@ -12,7 +12,7 @@
   - [x] Object-specific actions (e.g., mailbox, leaflet, lantern)
   - [x] Inventory limits and object weight
   - [x] Locked doors and keys
-  - Score system for puzzles and treasures
+  - [x] Score system for puzzles and treasures
   - Multi-step puzzles and scripted events
   - NPCs (thief, troll, cyclops, etc.)
   - Death and restart logic

@@ -1,4 +1,5 @@
 from entities import Room, Player, Action
+from puzzles import trigger_puzzle
 from objects import GameObject
 from containers import Container
 from parsers import parse_exits, parse_objects, parse_flags, parse_action
@@ -202,20 +203,14 @@ class Game:
             print(f"Error loading game: {e}")
 
     def check_room_flags(self):
-        room = (
-            self.rooms.get(self.current_room)
-            if self.current_room and self.current_room in self.rooms
-            else None
-        )
+        room = self.rooms.get(self.current_room)
         if not room:
             return
-            if self.check_grue_danger():
-                exit()
         # Example: handle dark rooms
-        if "dark" in room.flags:
+        if "dark" in getattr(room, "flags", []):
             print("It is pitch dark. You are likely to be eaten by a grue.")
         # Example: handle locked rooms
-        if "locked" in room.flags:
+        if "locked" in getattr(room, "flags", []):
             print("The room is locked.")
         # Add more flag logic as needed
         if self.check_grue_danger():
