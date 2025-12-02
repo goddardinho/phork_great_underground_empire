@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2.7 (2025-12-02)
+
+- Added canonical support for missing Zork I actions: 'put <item> in <container>', 'place <item> on <surface>', 'unlock <container> with <key>', 'lock <container>', 'tie <object> to <object>', 'turn <object>', and expanded 'search' for containers/rooms.
+- Implemented snarky/canonical responses for unsupported or invalid targets (e.g., placing objects on NPCs, using non-surface objects).
+- All new actions validated for canonical feedback and gameplay parity.
+- Updated command parser and game logic to match Zork I source behavior for object/NPC interactions and feedback.
+
 ## v0.2.6 (2025-12-02)
 
 - Canonical Zork I death and restart logic implemented: player death triggers canonical message and offers restart, restore, or quit options.

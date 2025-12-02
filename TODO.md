@@ -22,7 +22,7 @@
   - [x] NPCs (thief, troll, cyclops, etc.)
   - [x] Death and restart logic
   - [x] Save/load with full game state
-  - Object attributes (edible, readable, wearable, portable, etc.)
+  - [x] Object attributes (edible, readable, wearable, portable, etc.)
   - Room flags (dangerous, dark, visited, etc.)
   - Synonyms and flexible parser
   - Random events (thief, troll, etc.)

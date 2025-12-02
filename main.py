@@ -542,6 +542,158 @@ class Game:
             self.tick_thief()
         self.maybe_thief_event()
         cmd = command.strip().lower()
+        # Canonical: put <item> in <container>
+        if cmd.startswith("put ") and " in " in cmd:
+            parts = cmd.split(" in ", 1)
+            item_name = parts[0][4:].strip()
+            container_name = parts[1].strip()
+            item = next((o for o in self.inventory if o.name.lower() == item_name), None)
+            room = self.rooms.get(self.current_room)
+            container = None
+            if room:
+                container = next((o for o in room.objects if hasattr(o, "is_container") and o.is_container() and o.name.lower() == container_name), None)
+            if not item:
+                print(f"You don't have a {item_name} to put.")
+                return True
+            if not container:
+                print(f"There is no {container_name} here to put things in.")
+                return True
+            if not container.attributes.get("open", False):
+                print(f"The {container.name} is closed.")
+                return True
+            self.inventory.remove(item)
+            container.attributes.setdefault("contents", []).append(item)
+            print(f"You put the {item.name} in the {container.name}.")
+            return True
+        # Canonical: place <item> on <surface>
+        if cmd.startswith("place ") and " on " in cmd:
+            parts = cmd.split(" on ", 1)
+            item_name = parts[0][6:].strip()
+            surface_name = parts[1].strip()
+            item = next((o for o in self.inventory if o.name.lower() == item_name), None)
+            room = self.rooms.get(self.current_room)
+            surface = None
+            if room:
+                surface = next((o for o in room.objects if o.name.lower() == surface_name and o.attributes.get("surface", False)), None)
+            if not item:
+                print(f"You don't have a {item_name} to place.")
+                return True
+            if not surface:
+                print(f"There is no {surface_name} here to place things on.")
+                return True
+            self.inventory.remove(item)
+            room.objects.append(item)
+            print(f"You place the {item.name} on the {surface.name}.")
+            return True
+        # Canonical: unlock <container> with <key>
+        if cmd.startswith("unlock ") and " with " in cmd:
+            parts = cmd.split(" with ", 1)
+            container_name = parts[0][7:].strip()
+            key_name = parts[1].strip()
+            room = self.rooms.get(self.current_room)
+            container = None
+            if room:
+                container = next((o for o in room.objects if hasattr(o, "is_container") and o.is_container() and o.name.lower() == container_name), None)
+            key = next((o for o in self.inventory if o.name.lower() == key_name), None)
+            if not container:
+                print(f"There is no {container_name} here to unlock.")
+                return True
+            if not key:
+                print(f"You don't have a {key_name} to unlock the {container_name}.")
+                return True
+            if not container.attributes.get("locked", False):
+                print(f"The {container.name} is already unlocked.")
+                return True
+            container.attributes["locked"] = False
+            container.attributes["open"] = True
+            print(f"You unlock the {container.name} with the {key.name}.")
+            return True
+        # Canonical: lock <container>
+        if cmd.startswith("lock "):
+            container_name = cmd[5:].strip()
+            room = self.rooms.get(self.current_room)
+            container = None
+            if room:
+                container = next((o for o in room.objects if hasattr(o, "is_container") and o.is_container() and o.name.lower() == container_name), None)
+            if not container:
+                # Fall back to exit locking
+                pass
+            elif not container.attributes.get("openable", False):
+                print(f"The {container.name} cannot be locked.")
+                return True
+            elif container.attributes.get("locked", False):
+                print(f"The {container.name} is already locked.")
+                return True
+            else:
+                container.attributes["locked"] = True
+                container.attributes["open"] = False
+                print(f"You lock the {container.name}.")
+                return True
+        # Canonical: tie <object> to <object>
+        if cmd.startswith("tie ") and " to " in cmd:
+            parts = cmd.split(" to ", 1)
+            obj1_name = parts[0][4:].strip()
+            obj2_name = parts[1].strip()
+            obj1 = next((o for o in self.inventory if o.name.lower() == obj1_name), None)
+            room = self.rooms.get(self.current_room)
+            obj2 = None
+            if room:
+                obj2 = next((o for o in room.objects if o.name.lower() == obj2_name), None)
+            if not obj1:
+                print(f"You don't have a {obj1_name} to tie.")
+                return True
+            if not obj2:
+                print(f"There is no {obj2_name} here to tie things to.")
+                return True
+            print(f"You tie the {obj1.name} to the {obj2.name}. (Nothing special happens.)")
+            return True
+        # Canonical: turn <object>
+        if cmd.startswith("turn "):
+            obj_name = cmd[5:].strip()
+            room = self.rooms.get(self.current_room)
+            obj = None
+            if room:
+                obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+            if not obj:
+                print(f"There is no {obj_name} here to turn.")
+                return True
+            print(f"You turn the {obj.name}. Nothing happens.")
+            return True
+        # Canonical: search <container> or room
+        if cmd.startswith("search "):
+            obj_name = cmd[7:].strip()
+            room = self.rooms.get(self.current_room)
+            obj = None
+            if room:
+                obj = next((o for o in room.objects if o.name.lower() == obj_name and hasattr(o, "is_container") and o.is_container()), None)
+            if obj:
+                if obj.attributes.get("open", False):
+                    contents = obj.attributes.get("contents", [])
+                    if contents:
+                        print(f"You search the {obj.name} and find:")
+                        for item in contents:
+                            print(f"  {item.name}: {item.description}")
+                    else:
+                        print(f"You search the {obj.name} but find nothing inside.")
+                else:
+                    print(f"The {obj.name} is closed.")
+                return True
+            # If not a container, search the room
+            if obj_name in [room.id.lower(), "room", "area"]:
+                found = False
+                for o in room.objects:
+                    if hasattr(o, "is_container") and o.is_container() and o.attributes.get("open", False):
+                        contents = o.attributes.get("contents", [])
+                        if contents:
+                            print(f"You search the {o.name} and find:")
+                            for item in contents:
+                                print(f"  {item.name}: {item.description}")
+                            found = True
+                if not found:
+                    print("You search the room but find nothing special.")
+                return True
+            print(f"You find nothing special about the {obj_name}.")
+            return True
 
         # Object interaction: push/pull
         if any(cmd.startswith(x + " ") for x in ["push", "pull"]):
