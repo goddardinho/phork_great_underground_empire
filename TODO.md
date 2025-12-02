@@ -1,5 +1,9 @@
 # Gameplay Duplication Framework - Todo List
 
+## Buglist
+
+- [ ] Mailbox can be 'taken' (should not be portable; not in parity with Zork I source)
+
 ## Current Development Focus
 
 - See the Roadmap section in README.md for all planned and future features.
