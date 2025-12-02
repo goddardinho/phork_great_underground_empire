@@ -106,6 +106,26 @@ def load_rooms():
 
 
 class Game:
+    def handle_death(self):
+        print("It appears that that last blow was too much for you. You are dead.")
+        while True:
+            choice = input("Would you like to restart, restore, or quit? ").strip().lower()
+            if choice == "restart":
+                self.restart_game()
+                break
+            elif choice == "restore":
+                self.load_game()
+                break
+            elif choice == "quit":
+                print("Thanks for playing!")
+                exit()
+            else:
+                print("Please type 'restart', 'restore', or 'quit'.")
+
+    def restart_game(self):
+        demo_mode = getattr(self, 'demo_mode', False)
+        self.__init__(demo_mode=demo_mode)
+        print("Game restarted. Good luck!")
 
     BIGFIX = 9999  # Canonical value for uncarryable objects
     LOAD_MAX = 10  # Canonical Zork I carry limit (adjust as needed)
@@ -507,6 +527,9 @@ class Game:
                     from combat import CombatEngine
 
                     print(CombatEngine.combat_round(self.player, npc))
+                    if self.player.is_dead():
+                        self.handle_death()
+                        return True
                 else:
                     print(f"There is no {npc_name} here to attack.")
                 return True
@@ -537,6 +560,10 @@ class Game:
                 else:
                     print(f"There is no {npc_name} here to {action}.")
                 return True
+        # Check for player death after any command
+        if self.player.is_dead():
+            self.handle_death()
+            return True
         # Give <item> <npc>
         if cmd.startswith("give "):
             parts = cmd.split(" ")
