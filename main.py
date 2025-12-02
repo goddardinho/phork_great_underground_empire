@@ -36,17 +36,17 @@ def load_rooms():
                 GameObject(
                     "Welcome Mat",
                     "A simple mat lies here.",
-                    attributes={"osize": 1, "score_value": 0},
+                    attributes={"osize": 1, "score_value": 0, "takeable": True, "portable": True},
                 ),
                 GameObject(
                     "Lantern",
                     "A brass lantern, unlit.",
-                    attributes={"osize": 2, "score_value": 0},
+                    attributes={"osize": 2, "score_value": 0, "lit": False, "takeable": True, "portable": True},
                 ),
                 GameObject(
                     "Sword",
                     "A sharp sword gleams here.",
-                    attributes={"osize": 3, "score_value": 0},
+                    attributes={"osize": 3, "score_value": 0, "weapon": True, "takeable": True, "portable": True},
                 ),
                 Container(
                     "Mailbox",
@@ -54,6 +54,11 @@ def load_rooms():
                     attributes={
                         "osize": 4,
                         "open": False,
+                        "openable": True,
+                        "locked": True,
+                        "container": True,
+                        "takeable": False,
+                        "portable": False,
                         "contents": [
                             GameObject(
                                 "Leaflet",
@@ -63,18 +68,20 @@ def load_rooms():
                                     "Hardened adventurers have run screaming from the terrors contained within!\n\n"
                                     "No computer should be without one!"
                                 ),
-                                attributes={"osize": 1, "score_value": 0},
+                                attributes={"osize": 1, "score_value": 0, "readable": True, "takeable": True, "portable": True},
                             )
                         ],
                     },
                 ),
                 GameObject(
-                    "Key", "A small key.", attributes={"osize": 1, "score_value": 0}
+                    "Key",
+                    "A small key.",
+                    attributes={"osize": 1, "score_value": 0, "takeable": True, "portable": True},
                 ),
                 GameObject(
                     "Treasure Chest",
                     "A heavy chest, locked.",
-                    attributes={"osize": 10, "score_value": 15},
+                    attributes={"osize": 10, "score_value": 15, "locked": True, "openable": True, "container": True, "takeable": False, "portable": False},
                 ),
             ],
             flags=[],
@@ -97,7 +104,18 @@ def load_rooms():
             desc_long="You are inside the white house. There is a door to the west.",
             desc_short="Inside House",
             exits={"west": "WHOUS"},
-            objects=[],
+            objects=[
+                GameObject(
+                    "Painting",
+                    "A beautiful painting hangs on the wall.",
+                    attributes={"osize": 5, "score_value": 10, "takeable": False, "portable": False, "hangable": True},
+                ),
+                GameObject(
+                    "Table",
+                    "A wooden table stands here.",
+                    attributes={"osize": 8, "score_value": 0, "takeable": False, "portable": False, "surface": True},
+                ),
+            ],
             flags=[],
             action=None,
             npcs=[TROLL, CYCLOPS, ROBOT],
