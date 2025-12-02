@@ -404,47 +404,45 @@ class Game:
             print("Exits:")
             for direction, dest in room.exits.items():
                 print(f"  {direction}: {dest}")
-        # Only show objects if not inside a closed container
-        visible_objects = []
+        # Show all visible objects, including containers and their contents if open
+        demo_object_names = {
+            "welcome mat",
+            "lantern",
+            "sword",
+            "key",
+            "robot",
+            "treasure chest",
+        }
+        objects_to_print = []
+        containers_to_print = []
         for obj in room.objects:
-            # Only show demo objects in demo mode
-            demo_object_names = {
-                "welcome mat",
-                "lantern",
-                "sword",
-                "key",
-                "robot",
-                "treasure chest",
-            }
             if not self.demo_mode and obj.name.lower() in demo_object_names:
                 continue
-            # Mailbox container logic
-            if obj.name.lower() == "mailbox" and obj.attributes.get("container"):
-                mailbox_open = obj.attributes.get("open", False)
-                # Only announce open/closed if player has interacted
-                if self.mailbox_open or obj.attributes.get("open_interacted", False):
-                    print(f"Mailbox: {'open' if mailbox_open else 'closed'}.")
-                else:
-                    print(obj.description)
-                if mailbox_open:
-                    contents = obj.attributes.get("contents", [])
-                    leaflet_present = any(
-                        item.name.lower() == "leaflet" for item in contents
-                    )
-                    if leaflet_present and not self.leaflet_taken:
-                        print("There is a leaflet inside the mailbox.")
-                visible_objects.append(obj)
-                continue
-            visible_objects.append(obj)
+            if hasattr(obj, "is_container") and obj.is_container():
+                containers_to_print.append(obj)
+            else:
+                objects_to_print.append(obj)
         # Show NPCs present in the room
         if hasattr(room, "npcs") and room.npcs:
             print("You see:")
             for npc in room.npcs:
                 print(f"  {npc.name}: {npc.description}")
-        if visible_objects:
+        # Print objects and container contents only once
+        if objects_to_print or containers_to_print:
             print("Objects:")
-            for obj in visible_objects:
-                print(f"  {obj.name}: {obj.description}")
+            for obj in objects_to_print:
+                if obj.name.lower() == "leaflet":
+                    print(f"  {obj.name}: There is a small leaflet here.")
+                else:
+                    print(f"  {obj.name}: {obj.description}")
+            for container in containers_to_print:
+                print(f"  {container.name}: {container.description}")
+                if container.attributes.get("open", False):
+                    for item in container.attributes.get("contents", []):
+                        if item.name.lower() == "leaflet":
+                            print(f"    {item.name} (in {container.name}): There is a small leaflet here.")
+                        else:
+                            print(f"    {item.name} (in {container.name}): {item.description}")
 
     def move(self, direction):
         if not self.current_room or self.current_room not in self.rooms:
@@ -544,6 +542,53 @@ class Game:
             self.tick_thief()
         self.maybe_thief_event()
         cmd = command.strip().lower()
+
+        # Object interaction: push/pull
+        if any(cmd.startswith(x + " ") for x in ["push", "pull"]):
+            obj_name = cmd.split(" ", 1)[1]
+            snarky_pushpull = [
+                "Nothing happens.",
+                "You must be joking.",
+                "Pushing and pulling accomplishes nothing.",
+                "That doesn't seem to work.",
+                "You can't {verb} the {name}.",
+            ]
+            verb = cmd.split(' ')[0]
+            print(snarky_pushpull[-1].format(verb=verb, name=obj_name) if verb in ["push", "pull"] else random.choice(snarky_pushpull))
+            return True
+
+        # Object interaction: use
+        if cmd.startswith("use "):
+            obj_name = cmd.split(" ", 1)[1]
+            snarky_use = [
+                "You can't use that here.",
+                "Nothing happens.",
+                "Use the {name}? How?",
+                "You must be joking.",
+            ]
+            print(random.choice(snarky_use).format(name=obj_name))
+            return True
+
+        # Object interaction: hang/place
+        if any(cmd.startswith(x + " ") for x in ["hang", "place"]):
+            obj_name = cmd.split(" ", 1)[1]
+            snarky_hangplace = [
+                "You can't do that.",
+                "There's nowhere to hang the {name}.",
+                "Placing the {name} accomplishes nothing.",
+                "You must be joking.",
+            ]
+            print(random.choice(snarky_hangplace).format(name=obj_name))
+            return True
+
+        # Object interaction: examine (synonym for look)
+        if cmd.startswith("examine "):
+            obj_name = cmd.split(" ", 1)[1]
+            from object_actions import object_action
+            if object_action(self, "look", obj_name):
+                return True
+            print(f"You see nothing special about the {obj_name}.")
+            return True
         # Canonical NPC interactions
         # Modular two-way combat for attack/fight/kill/stab/hit
         combat_actions = ["fight ", "attack ", "kill ", "stab ", "hit "]
@@ -576,8 +621,6 @@ class Game:
             ("hello ", "hello"),
             ("poke ", "poke"),
             ("tie ", "tie"),
-            ("take ", "take"),
-            ("grab ", "grab"),
         ]
         for prefix, action in npc_actions:
             if cmd.startswith(prefix):
@@ -677,19 +720,6 @@ class Game:
             locked_exits = getattr(room, "locked_exits", {})
             if direction in locked_exits and locked_exits[direction]:
                 print(f"The door to {direction} is locked.")
-                return True
-            self.move(direction)
-            return True
-        elif cmd.startswith("go ") or cmd.startswith("move "):
-            direction = cmd.split(" ", 1)[1] if " " in cmd else ""
-            direction = cardinal_map.get(direction, direction)
-            room = self.rooms[self.current_room]
-            locked_exits = getattr(room, "locked_exits", {})
-            if direction in locked_exits and locked_exits[direction]:
-                print(f"The door to {direction} is locked.")
-                return True
-            self.move(direction)
-            return True
         elif (
             self.current_room
             and self.current_room in self.rooms
@@ -812,10 +842,35 @@ class Game:
                     print("You couldn't take anything.")
                 return True
             if room:
-                # First, check room objects
+                # First, check all visible objects (case-insensitive, robust)
+                def normalize(s):
+                    return " ".join(s.lower().split())
+                obj_name_norm = normalize(obj_name)
+                # Gather all objects in room, including all containers (open or closed) and their contents if open
+                all_objs = []
+                for obj in room.objects:
+                    all_objs.append(obj)  # Always include the object itself
+                    if hasattr(obj, "is_container") and obj.is_container():
+                        if obj.attributes.get("open", False):
+                            all_objs.extend(obj.attributes.get("contents", []))
+                print(f"[DEBUG] take/get: obj_name='{obj_name}', normalized='{obj_name_norm}'")
+                print(f"[DEBUG] Objects considered:")
+                for o in all_objs:
+                    print(f"  - {o.name} (normalized: '{normalize(o.name)}', type: {type(o)})")
+                # Try exact match
                 obj = next(
-                    (o for o in room.objects if o.name.lower() == obj_name), None
+                    (o for o in all_objs if normalize(o.name) == obj_name_norm), None
                 )
+                # Try partial match
+                if not obj:
+                    obj = next(
+                        (o for o in all_objs if obj_name_norm in normalize(o.name)), None
+                    )
+                # Try aliases if present
+                if not obj:
+                    obj = next(
+                        (o for o in all_objs if hasattr(o, "aliases") and any(obj_name_norm == normalize(alias) for alias in o.aliases)), None
+                    )
                 if obj:
                     # Prevent taking leaflet unless mailbox is open
                     if obj.name.lower() == "leaflet":
@@ -841,6 +896,18 @@ class Game:
                                 print("You take the leaflet.")
                                 return True
                         print("You can't take the leaflet unless the mailbox is open.")
+                        return True
+                    # Canonical snarky responses for uncarryable objects
+                    if not obj.attributes.get("takeable", True) or not obj.attributes.get("portable", True):
+                        snarky_lines = [
+                            "The {name} is an integral part of the scenery and cannot be taken.",
+                            "You must be joking.",
+                            "That's hardly portable.",
+                            "You can't be serious.",
+                            "You can't take that.",
+                        ]
+                        import random
+                        print(random.choice(snarky_lines).format(name=obj.name))
                         return True
                     obj_weight = (
                         obj.attributes.get("osize")
@@ -1012,7 +1079,38 @@ class Game:
         # Object interaction: eat/drink
         elif any(cmd.startswith(x + " ") for x in ["eat", "drink"]):
             obj_name = cmd.split(" ", 1)[1]
-            print(f"[Stub] You try to {cmd.split(' ')[0]} the {obj_name}.")
+            # Gather all objects in room and inventory
+            room = self.rooms.get(self.current_room)
+            all_objs = []
+            if room:
+                for obj in room.objects:
+                    all_objs.append(obj)
+                    if hasattr(obj, "is_container") and obj.is_container() and obj.attributes.get("open", False):
+                        all_objs.extend(obj.attributes.get("contents", []))
+            all_objs.extend(self.inventory)
+            def normalize(s):
+                return " ".join(s.lower().split())
+            obj_name_norm = normalize(obj_name)
+            obj = next((o for o in all_objs if normalize(o.name) == obj_name_norm), None)
+            if obj:
+                # Canonical snark for non-edible objects
+                if not obj.attributes.get("edible", False):
+                    snarky_eat = [
+                        "I don't think that would be very tasty.",
+                        "You must be joking.",
+                        "Eat the {name}? Really?",
+                        "That's not edible.",
+                        "You can't eat that.",
+                    ]
+                    import random
+                    print(random.choice(snarky_eat).format(name=obj.name))
+                    return True
+                else:
+                    print(f"You eat the {obj.name}.")
+                    self.inventory.remove(obj)
+                    self.score += 1
+                    return True
+            print(f"There is no {obj_name} here to {cmd.split(' ')[0]}.")
             return True
         # Object interaction: wear/remove
         elif cmd.startswith("wear "):
