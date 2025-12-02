@@ -1,5 +1,20 @@
 # Changelog
 
+## v0.2.7 (2025-12-02)
+
+- Added canonical support for missing Zork I actions: 'put <item> in <container>', 'place <item> on <surface>', 'unlock <container> with <key>', 'lock <container>', 'tie <object> to <object>', 'turn <object>', and expanded 'search' for containers/rooms.
+- Implemented snarky/canonical responses for unsupported or invalid targets (e.g., placing objects on NPCs, using non-surface objects).
+- All new actions validated for canonical feedback and gameplay parity.
+- Updated command parser and game logic to match Zork I source behavior for object/NPC interactions and feedback.
+
+## v0.2.6 (2025-12-02)
+
+- Canonical Zork I death and restart logic implemented: player death triggers canonical message and offers restart, restore, or quit options.
+- Game restart resets all state; restore loads a saved game; quit exits cleanly.
+- Save/load system expanded to persist and restore full game state, including player, inventory, rooms, NPCs, puzzles, flags, thief state, demo mode, and all mutable attributes.
+- All gameplay progress, health, and world state are now fully preserved and restored.
+- Ready for robust in-game testing and further feature development.
+
 ## v0.2.5 (2025-12-02)
 
 - Canonical NPCs (Thief, Troll, Cyclops, Grue, Robot) fully implemented with all source-accurate interactions and behaviors.
