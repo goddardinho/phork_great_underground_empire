@@ -26,7 +26,13 @@
 - All changes validated for source parity and canonical Zork I behavior.
 
 ## v0.2.3 (2025-11-26)
+### Gameplay Parity Update (2025-12-02)
 
+- All canonical Zork I NPCs (thief, troll, cyclops, robot, grue) implemented with source-faithful behaviors and interactions.
+- Advanced NPC event triggers added: thief movement/stealing, troll blocking/retreat, cyclops sleep/wrath/food logic, grue danger, robot activation/command.
+- All canonical NPC interactions supported: talk, fight, give, bribe, activate, command.
+- Source scan confirms no missing NPCs or interactions for Zork I parity.
+- TODO.md updated to mark NPCs and advanced event triggers as complete.
 - Puzzle and treasure scoring system fully implemented and tested.
 - Multi-step puzzle/event framework added with registry and stateful handlers.
 - All canonical Zork I puzzles, treasures, and events now award correct score values.

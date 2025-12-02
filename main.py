@@ -23,6 +23,7 @@ def load_rooms():
     # ...existing parsing logic...
     if not rooms:
         # Add a fallback room for demo/testing
+        # Add canonical NPCs to their rooms
         rooms["WHOUS"] = Room(
             id="WHOUS",
             desc_long=(
@@ -132,9 +133,7 @@ def load_rooms():
                 obj.attributes["locked"] = True
             if obj.name.lower() == "mailbox":
                 obj.attributes["locked"] = True
-            # Add locked exit for HOUSE west door (for symmetry)
-            if "HOUSE" in rooms:
-                rooms["HOUSE"].locked_exits = {"west": True}
+        # Add locked exit for HOUSE west door (for symmetry)
         rooms["HOUSE"] = Room(
             id="HOUSE",
             desc_long="You are inside the white house. There is a door to the west.",
@@ -168,6 +167,48 @@ def load_rooms():
             action=None,
             npcs=[TROLL, CYCLOPS, ROBOT],
         )
+        # Add canonical NPCs to their rooms
+        rooms["TROLL"] = Room(
+            id="TROLL",
+            desc_long="A menacing troll blocks the bridge, demanding payment.",
+            desc_short="Troll Room",
+            exits={"north": "BRIDGE", "south": "CELLA"},
+            objects=[
+                GameObject("Axe", "A heavy troll's axe.", attributes={"osize": 5})
+            ],
+            flags=[],
+            action=None,
+            npcs=[TROLL],
+        )
+        rooms["CYCLO"] = Room(
+            id="CYCLO",
+            desc_long="A huge cyclops glares at you, hungry and irritable.",
+            desc_short="Cyclops Room",
+            exits={"down": "TROLL"},
+            objects=[],
+            flags=[],
+            action=None,
+            npcs=[CYCLOPS],
+        )
+        rooms["TREAS"] = Room(
+            id="TREAS",
+            desc_long="The Treasure Room sparkles with loot. A sneaky thief lurks here, eyeing your valuables.",
+            desc_short="Treasure Room",
+            exits={"west": "CYCLO"},
+            objects=[
+                GameObject(
+                    "Chalice",
+                    "A golden chalice encrusted with gems.",
+                    attributes={"osize": 2, "score_value": 25},
+                )
+            ],
+            flags=[],
+            action=None,
+            npcs=[THIEF],
+        )
+        # Add Robot to Maintenance Room if present
+        if "MAINT" in rooms:
+            rooms["MAINT"].npcs.append(ROBOT)
     return rooms
 
 
@@ -219,9 +260,9 @@ class Game:
         if self.is_room_dark():
             self.dark_moves += 1
             if self.dark_moves == 1:
-                print("It is pitch black. You are likely to be eaten by a grue!")
+                print(GRUE.description)
             elif self.dark_moves >= 2:
-                print("Oh no! You have been eaten by a grue.")
+                print(GRUE.interact(self))
                 exit()
         else:
             self.dark_moves = 0  # Reset counter if not in darkness
