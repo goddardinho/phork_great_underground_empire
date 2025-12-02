@@ -1,25 +1,82 @@
 from typing import Any
 
+
 # Canonical NPC base class
 class NPC:
-    def __init__(self, name: str, description: str, state: Optional[dict] = None):
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        state: Optional[dict] = None,
+        max_health: int = 1,
+    ):
         self.name = name
         self.description = description
         self.state = state if state is not None else {}
-    def interact(self, game, action: str = None, item: Any = None) -> str:
+        self.alive = True
+        self.max_health = max_health
+        self.health = max_health
+        self.wounds = 0
+        self.staggered = False
+
+    def is_dead(self):
+        return not self.alive or self.health <= 0
+
+    def is_staggered(self):
+        return self.staggered
+
+    def interact(self, game, action: Optional[str] = None, item: Any = None) -> str:
         return f"You interact with {self.name}."
+
 
 # Canonical NPCs
 class Thief(NPC):
     def __init__(self):
-        super().__init__("Thief", "A sneaky thief lurks here, eyeing your valuables.")
-    def interact(self, game, action: str = None, item: Any = None) -> str:
+        # Canonical Zork: Thief is tough, takes several hits
+        super().__init__(
+            "Thief",
+            "A sneaky thief lurks here, eyeing your valuables. He wields a razor-sharp stiletto and moves with uncanny stealth.",
+            max_health=3,
+        )
+        self.weapon = "stiletto"
+        self.attack_method = "strikes swiftly with his stiletto"
+
+    def interact(self, game, action: Optional[str] = None, item: Any = None) -> str:
+        if not self.alive:
+            return "The thief is dead."
         if action in ("talk", "greet", "hello"):
             return "The thief ignores you."
         elif action in ("fight", "attack", "kill", "stab", "hit"):
-            return "The thief deftly dodges your attack and grins."
+            import random
+
+            # 70% chance to wound, 20% miss, 10% critical (kill)
+            roll = random.random()
+            if roll < 0.1:
+                self.health = 0
+            elif roll < 0.8:
+                self.health -= 1
+            # else: miss
+            if self.health <= 0:
+                self.alive = False
+                room = game.rooms.get(game.current_room)
+                if room and hasattr(room, "npcs") and self in room.npcs:
+                    room.npcs.remove(self)
+                return "You finally defeat the thief! He collapses and vanishes, leaving his treasures behind."
+            elif roll < 0.8:
+                return (
+                    "You wound the thief! He snarls and fights back. (Health: %d)"
+                    % self.health
+                )
+            else:
+                return "You miss! The thief dodges and grins."
         elif action in ("give", "bribe"):
-            if item and item.name.lower() in ("jewel", "diamond", "coin", "gold", "treasure"):
+            if item and item.name.lower() in (
+                "jewel",
+                "diamond",
+                "coin",
+                "gold",
+                "treasure",
+            ):
                 return "The thief snatches the treasure, bows mockingly, and vanishes into the shadows!"
             elif item:
                 return f'The thief glances at the {item.name} and sneers, "Not interested."'
@@ -34,19 +91,49 @@ class Thief(NPC):
         else:
             return "The thief eyes you suspiciously."
 
+
 class Troll(NPC):
     def __init__(self):
-        super().__init__("Troll", "A menacing troll blocks the bridge, demanding payment.")
-    def interact(self, game, action: str = None, item: Any = None) -> str:
+        # Canonical Zork: Troll is tough, takes several hits
+        super().__init__(
+            "Troll",
+            "A menacing troll blocks the bridge, demanding payment. He wields a bloody axe and swings it with brutal force.",
+            max_health=2,
+        )
+        self.weapon = "bloody axe"
+        self.attack_method = "swings his bloody axe at you"
+
+    def interact(self, game, action: Optional[str] = None, item: Any = None) -> str:
+        if not self.alive:
+            return "The troll is dead."
         if action in ("talk", "greet", "hello"):
             return 'The troll grunts, "No talk. Pay toll!"'
         elif action in ("fight", "attack", "kill", "stab", "hit"):
-            return "The troll swings his club at you! You barely dodge."
+            import random
+
+            roll = random.random()
+            if roll < 0.15:
+                self.health = 0
+            elif roll < 0.85:
+                self.health -= 1
+            # else: miss
+            if self.health <= 0:
+                self.alive = False
+                room = game.rooms.get(game.current_room)
+                if room and hasattr(room, "npcs") and self in room.npcs:
+                    room.npcs.remove(self)
+                return "You defeat the troll! He falls to the ground and disappears."
+            elif roll < 0.85:
+                return (
+                    "You wound the troll! He roars in pain. (Health: %d)" % self.health
+                )
+            else:
+                return "You miss! The troll swings his club at you."
         elif action in ("give", "bribe"):
             if item and item.name.lower() in ("coin", "gold", "treasure"):
                 return "The troll snatches the treasure, grins, and steps aside."
             elif item:
-                return f'The troll sniffs the {item.name} and tosses it aside.'
+                return f"The troll sniffs the {item.name} and tosses it aside."
             else:
                 return "The troll looks at your empty hands and growls."
         elif action in ("take", "grab"):
@@ -58,19 +145,56 @@ class Troll(NPC):
         else:
             return "The troll grunts and blocks your way."
 
+
 class Cyclops(NPC):
     def __init__(self):
-        super().__init__("Cyclops", "A huge cyclops glares at you, hungry and irritable.")
-    def interact(self, game, action: str = None, item: Any = None) -> str:
+        # Canonical Zork: Cyclops is very tough
+        super().__init__(
+            "Cyclops",
+            "A huge cyclops glares at you, hungry and irritable. He attacks with his massive fists and throws objects with terrifying strength.",
+            max_health=4,
+        )
+        self.weapon = "fists"
+        self.attack_method = "smashes at you with his fists or hurls objects"
+
+    def interact(self, game, action: Optional[str] = None, item: Any = None) -> str:
+        if not self.alive:
+            return "The cyclops is dead."
         if action in ("talk", "greet", "hello"):
-            return 'The cyclops ignores your words and glares hungrily.'
+            return "The cyclops ignores your words and glares hungrily."
         elif action in ("fight", "attack", "kill", "stab", "hit"):
-            return "The cyclops ignores all injury to his body with a shrug."
+            import random
+
+            roll = random.random()
+            if roll < 0.08:
+                self.health = 0
+            elif roll < 0.88:
+                self.health -= 1
+            # else: miss
+            if self.health <= 0:
+                self.alive = False
+                room = game.rooms.get(game.current_room)
+                if room and hasattr(room, "npcs") and self in room.npcs:
+                    room.npcs.remove(self)
+                return "You slay the cyclops! He crashes to the ground and is no more."
+            elif roll < 0.88:
+                return (
+                    "You wound the cyclops! He bellows in rage. (Health: %d)"
+                    % self.health
+                )
+            else:
+                return "You miss! The cyclops shrugs off your attack."
         elif action in ("give", "bribe"):
-            if item and item.name.lower() in ("food", "meat", "sandwich", "lunch", "garlic"):
+            if item and item.name.lower() in (
+                "food",
+                "meat",
+                "sandwich",
+                "lunch",
+                "garlic",
+            ):
                 return "The cyclops may be hungry, but there is a limit."
             elif item:
-                return f'The cyclops is not so stupid as to eat {item.name}!'
+                return f"The cyclops is not so stupid as to eat {item.name}!"
             else:
                 return "The cyclops looks at your empty hands and snorts."
         elif action in ("take", "grab"):
@@ -82,10 +206,14 @@ class Cyclops(NPC):
         else:
             return "The cyclops snorts and looks hungry."
 
+
 class Grue(NPC):
     def __init__(self):
-        super().__init__("Grue", "It is pitch dark. You are likely to be eaten by a grue.")
-    def interact(self, game, action: str = None, item: Any = None) -> str:
+        super().__init__(
+            "Grue", "It is pitch dark. You are likely to be eaten by a grue."
+        )
+
+    def interact(self, game, action: Optional[str] = None, item: Any = None) -> str:
         if action in ("talk", "greet", "hello"):
             return "It is pitch black. You are likely to be eaten by a grue!"
         elif action in ("fight", "attack", "kill", "stab", "hit"):
@@ -101,17 +229,21 @@ class Grue(NPC):
         else:
             return "You cannot see the grue, but you feel its presence."
 
+
 class Robot(NPC):
     def __init__(self):
         super().__init__("Robot", "A silent robot stands here.")
-    def interact(self, game, action: str = None, item: Any = None) -> str:
+
+    def interact(self, game, action: Optional[str] = None, item: Any = None) -> str:
         if action in ("talk", "greet", "hello"):
             return 'The robot beeps: "Awaiting command."'
         elif action in ("fight", "attack", "kill", "stab", "hit"):
             return "The robot's metal shell is undamaged by your attack."
         elif action in ("give", "bribe"):
             if item:
-                return f'The robot accepts the {item.name} and stores it in a compartment.'
+                return (
+                    f"The robot accepts the {item.name} and stores it in a compartment."
+                )
             else:
                 return "The robot awaits an object."
         elif action in ("take", "grab"):
@@ -119,9 +251,10 @@ class Robot(NPC):
         elif action in ("tie",):
             return "You cannot tie the robot."
         elif action in ("poke",):
-            return 'The robot emits a soft beep.'
+            return "The robot emits a soft beep."
         else:
             return "The robot stands silently, awaiting orders."
+
 
 # NPC singletons for use in rooms
 THIEF = Thief()
@@ -133,8 +266,20 @@ ROBOT = Robot()
 from typing import Optional, List, Dict
 from objects import GameObject
 
+
 class Room:
-    def __init__(self, id: str, desc_long: str, desc_short: str, exits: Dict[str, str], objects: List[GameObject], flags: List[str] = [], action: Optional[str] = None, locked_exits: Optional[Dict[str, bool]] = None, npcs: Optional[list] = None):
+    def __init__(
+        self,
+        id: str,
+        desc_long: str,
+        desc_short: str,
+        exits: Dict[str, str],
+        objects: List[GameObject],
+        flags: List[str] = [],
+        action: Optional[str] = None,
+        locked_exits: Optional[Dict[str, bool]] = None,
+        npcs: Optional[list] = None,
+    ):
         self.id = id
         self.desc_long = desc_long
         self.desc_short = desc_short
@@ -145,11 +290,23 @@ class Room:
         self.locked_exits = locked_exits if locked_exits is not None else {}
         self.npcs = npcs if npcs is not None else []
 
+
 class Player:
     def __init__(self, name: str, current_room: str):
         self.name = name
         self.current_room = current_room
         self.inventory: List[GameObject] = []
+        self.max_health = 3
+        self.health = 3
+        self.wounds = 0
+        self.staggered = False
+
+    def is_dead(self):
+        return self.health <= 0
+
+    def is_staggered(self):
+        return self.staggered
+
 
 class Action:
     def __init__(self, name: str, function):

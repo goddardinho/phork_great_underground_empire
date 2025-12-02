@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.2.5 (2025-12-02)
+
+- Canonical NPCs (Thief, Troll, Cyclops, Grue, Robot) fully implemented with all source-accurate interactions and behaviors.
+- Modular two-way combat system added (`combat.py`), supporting multi-round combat, wounds, stagger, and death for both player and NPCs.
+- NPC classes updated with canonical weapon and attack descriptions (e.g., Troll's bloody axe, Thief's stiletto, Cyclops' fists/throwing).
+- Command parser refactored to route all combat and interaction commands to modular logic.
+- Thief random encounter logic implemented: random movement, appearance, and canonical actions.
+- Source code scanned and validated for all canonical NPCs; no missing NPCs found.
+- All changes validated for source parity and canonical Zork I behavior.
+
 ## v0.2.3 (2025-11-26)
 
 - Puzzle and treasure scoring system fully implemented and tested.

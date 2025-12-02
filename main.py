@@ -139,6 +139,8 @@ class Game:
             self.dark_moves = 0  # Reset counter if not in darkness
 
     def __init__(self, demo_mode=False):
+        import random
+
         self.dark_moves = 0  # Track moves/actions in darkness
         self.mailbox_open = False
         self.leaflet_taken = False
@@ -150,6 +152,19 @@ class Game:
         self.flags = {}  # e.g., dark, dangerous, locked, etc.
         self.puzzles = {}  # Track puzzle states by room or puzzle name
         self.demo_mode = demo_mode
+        self.thief_room = (
+            "WHOUS" if self.demo_mode else None
+        )  # Track Thief's current room
+        self.thief_visible = False  # Is Thief currently visible to player?
+        self.thief_cooldown = 0  # Moves until next possible encounter
+        from entities import Player
+
+        start_room = (
+            self.current_room
+            if isinstance(self.current_room, str) and self.current_room
+            else "WHOUS"
+        )
+        self.player = Player("Adventurer", start_room)
         if self.demo_mode:
             # Always add all canonical NPCs to WHOUS in demo mode, regardless of how it was loaded
             whous = self.rooms.get("WHOUS")
@@ -172,6 +187,66 @@ class Game:
             print(
                 "[Demo Mode] All non-container objects have been added to your inventory. Carry limits are disabled."
             )
+
+    def tick_thief(self):
+        import random
+
+        # Only run if Thief is enabled (demo or canonical rooms)
+        if self.thief_room is None:
+            return
+        # Thief moves randomly between rooms
+        room_ids = list(self.rooms.keys())
+        # Thief should not move to rooms with 'dark' or 'locked' flags
+        valid_rooms = [
+            rid
+            for rid in room_ids
+            if "dark" not in getattr(self.rooms[rid], "flags", [])
+            and "locked" not in getattr(self.rooms[rid], "flags", [])
+        ]
+        if not valid_rooms:
+            valid_rooms = room_ids
+        # Move thief every tick
+        self.thief_room = random.choice(valid_rooms)
+        # Thief may appear in player's room
+        self.thief_visible = (
+            self.thief_room == self.current_room and random.random() < 0.4
+        )
+        # Thief cooldown for next encounter
+        self.thief_cooldown = random.randint(2, 5)
+        # Add/remove thief from room NPCs
+        for rid, room in self.rooms.items():
+            if hasattr(room, "npcs"):
+                if THIEF in room.npcs:
+                    room.npcs.remove(THIEF)
+        if self.thief_visible:
+            room = self.rooms.get(self.current_room)
+            if room and hasattr(room, "npcs") and THIEF not in room.npcs:
+                room.npcs.append(THIEF)
+
+    def maybe_thief_event(self):
+        import random
+
+        # Only run if Thief is visible
+        if not self.thief_visible:
+            return
+        # Canonical random events: steal, attack, vanish
+        event = random.choices(
+            ["steal", "attack", "vanish", "ignore"], weights=[0.5, 0.2, 0.2, 0.1]
+        )[0]
+        if event == "steal" and self.inventory:
+            item = random.choice(self.inventory)
+            self.inventory.remove(item)
+            print(f"The thief snatches your {item.name} and vanishes!")
+            self.thief_visible = False
+            self.thief_room = None
+        elif event == "attack":
+            print("The thief suddenly attacks! You barely dodge his blade.")
+        elif event == "vanish":
+            print("The thief vanishes into the shadows!")
+            self.thief_visible = False
+            self.thief_room = None
+        elif event == "ignore":
+            print("The thief eyes you but does nothing.")
 
     def get_inventory_weight(self):
         if self.demo_mode:
@@ -406,17 +481,40 @@ class Game:
             print("Your inventory is empty.")
 
     def parse_command(self, command: str):
+        # Thief random encounter tick
+        if self.thief_cooldown > 0:
+            self.thief_cooldown -= 1
+        else:
+            self.tick_thief()
+        self.maybe_thief_event()
         cmd = command.strip().lower()
         # Canonical NPC interactions
+        # Modular two-way combat for attack/fight/kill/stab/hit
+        combat_actions = ["fight ", "attack ", "kill ", "stab ", "hit "]
+        for prefix in combat_actions:
+            if cmd.startswith(prefix):
+                npc_name = cmd[len(prefix) :].strip()
+                room = self.rooms.get(self.current_room)
+                npc = next(
+                    (
+                        n
+                        for n in getattr(room, "npcs", [])
+                        if n.name.lower() == npc_name
+                    ),
+                    None,
+                )
+                if npc:
+                    from combat import CombatEngine
+
+                    print(CombatEngine.combat_round(self.player, npc))
+                else:
+                    print(f"There is no {npc_name} here to attack.")
+                return True
+        # Other NPC interactions
         npc_actions = [
             ("talk ", "talk"),
             ("greet ", "greet"),
             ("hello ", "hello"),
-            ("fight ", "fight"),
-            ("attack ", "attack"),
-            ("kill ", "kill"),
-            ("stab ", "stab"),
-            ("hit ", "hit"),
             ("poke ", "poke"),
             ("tie ", "tie"),
             ("take ", "take"),
@@ -424,9 +522,16 @@ class Game:
         ]
         for prefix, action in npc_actions:
             if cmd.startswith(prefix):
-                npc_name = cmd[len(prefix):].strip()
+                npc_name = cmd[len(prefix) :].strip()
                 room = self.rooms.get(self.current_room)
-                npc = next((n for n in getattr(room, "npcs", []) if n.name.lower() == npc_name), None)
+                npc = next(
+                    (
+                        n
+                        for n in getattr(room, "npcs", [])
+                        if n.name.lower() == npc_name
+                    ),
+                    None,
+                )
                 if npc:
                     print(npc.interact(self, action=action))
                 else:
@@ -437,9 +542,18 @@ class Game:
             parts = cmd.split(" ")
             if len(parts) == 3:
                 item_name, npc_name = parts[1], parts[2]
-                item = next((o for o in self.inventory if o.name.lower() == item_name), None)
+                item = next(
+                    (o for o in self.inventory if o.name.lower() == item_name), None
+                )
                 room = self.rooms.get(self.current_room)
-                npc = next((n for n in getattr(room, "npcs", []) if n.name.lower() == npc_name), None)
+                npc = next(
+                    (
+                        n
+                        for n in getattr(room, "npcs", [])
+                        if n.name.lower() == npc_name
+                    ),
+                    None,
+                )
                 if npc and item:
                     print(npc.interact(self, action="give", item=item))
                     self.inventory.remove(item)
@@ -453,9 +567,18 @@ class Game:
             parts = cmd.split(" ")
             if len(parts) == 3:
                 npc_name, item_name = parts[1], parts[2]
-                item = next((o for o in self.inventory if o.name.lower() == item_name), None)
+                item = next(
+                    (o for o in self.inventory if o.name.lower() == item_name), None
+                )
                 room = self.rooms.get(self.current_room)
-                npc = next((n for n in getattr(room, "npcs", []) if n.name.lower() == npc_name), None)
+                npc = next(
+                    (
+                        n
+                        for n in getattr(room, "npcs", [])
+                        if n.name.lower() == npc_name
+                    ),
+                    None,
+                )
                 if npc and item:
                     print(npc.interact(self, action="bribe", item=item))
                     self.inventory.remove(item)

@@ -19,7 +19,7 @@
   - [x] Locked doors and keys
   - [x] Score system for puzzles and treasures
   - [x] Multi-step puzzles and scripted events
-  - NPCs (thief, troll, cyclops, etc.)
+  - [x] NPCs (thief, troll, cyclops, etc.)
   - Death and restart logic
   - Save/load with full game state
   - Object attributes (edible, readable, wearable, portable, etc.)
