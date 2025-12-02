@@ -36,17 +36,34 @@ def load_rooms():
                 GameObject(
                     "Welcome Mat",
                     "A simple mat lies here.",
-                    attributes={"osize": 1, "score_value": 0, "takeable": True, "portable": True},
+                    attributes={
+                        "osize": 1,
+                        "score_value": 0,
+                        "takeable": True,
+                        "portable": True,
+                    },
                 ),
                 GameObject(
                     "Lantern",
                     "A brass lantern, unlit.",
-                    attributes={"osize": 2, "score_value": 0, "lit": False, "takeable": True, "portable": True},
+                    attributes={
+                        "osize": 2,
+                        "score_value": 0,
+                        "lit": False,
+                        "takeable": True,
+                        "portable": True,
+                    },
                 ),
                 GameObject(
                     "Sword",
                     "A sharp sword gleams here.",
-                    attributes={"osize": 3, "score_value": 0, "weapon": True, "takeable": True, "portable": True},
+                    attributes={
+                        "osize": 3,
+                        "score_value": 0,
+                        "weapon": True,
+                        "takeable": True,
+                        "portable": True,
+                    },
                 ),
                 Container(
                     "Mailbox",
@@ -68,7 +85,13 @@ def load_rooms():
                                     "Hardened adventurers have run screaming from the terrors contained within!\n\n"
                                     "No computer should be without one!"
                                 ),
-                                attributes={"osize": 1, "score_value": 0, "readable": True, "takeable": True, "portable": True},
+                                attributes={
+                                    "osize": 1,
+                                    "score_value": 0,
+                                    "readable": True,
+                                    "takeable": True,
+                                    "portable": True,
+                                },
                             )
                         ],
                     },
@@ -76,12 +99,25 @@ def load_rooms():
                 GameObject(
                     "Key",
                     "A small key.",
-                    attributes={"osize": 1, "score_value": 0, "takeable": True, "portable": True},
+                    attributes={
+                        "osize": 1,
+                        "score_value": 0,
+                        "takeable": True,
+                        "portable": True,
+                    },
                 ),
                 GameObject(
                     "Treasure Chest",
                     "A heavy chest, locked.",
-                    attributes={"osize": 10, "score_value": 15, "locked": True, "openable": True, "container": True, "takeable": False, "portable": False},
+                    attributes={
+                        "osize": 10,
+                        "score_value": 15,
+                        "locked": True,
+                        "openable": True,
+                        "container": True,
+                        "takeable": False,
+                        "portable": False,
+                    },
                 ),
             ],
             flags=[],
@@ -108,12 +144,24 @@ def load_rooms():
                 GameObject(
                     "Painting",
                     "A beautiful painting hangs on the wall.",
-                    attributes={"osize": 5, "score_value": 10, "takeable": False, "portable": False, "hangable": True},
+                    attributes={
+                        "osize": 5,
+                        "score_value": 10,
+                        "takeable": False,
+                        "portable": False,
+                        "hangable": True,
+                    },
                 ),
                 GameObject(
                     "Table",
                     "A wooden table stands here.",
-                    attributes={"osize": 8, "score_value": 0, "takeable": False, "portable": False, "surface": True},
+                    attributes={
+                        "osize": 8,
+                        "score_value": 0,
+                        "takeable": False,
+                        "portable": False,
+                        "surface": True,
+                    },
                 ),
             ],
             flags=[],
@@ -127,7 +175,9 @@ class Game:
     def handle_death(self):
         print("It appears that that last blow was too much for you. You are dead.")
         while True:
-            choice = input("Would you like to restart, restore, or quit? ").strip().lower()
+            choice = (
+                input("Would you like to restart, restore, or quit? ").strip().lower()
+            )
             if choice == "restart":
                 self.restart_game()
                 break
@@ -141,7 +191,7 @@ class Game:
                 print("Please type 'restart', 'restore', or 'quit'.")
 
     def restart_game(self):
-        demo_mode = getattr(self, 'demo_mode', False)
+        demo_mode = getattr(self, "demo_mode", False)
         self.__init__(demo_mode=demo_mode)
         print("Game restarted. Good luck!")
 
@@ -440,9 +490,13 @@ class Game:
                 if container.attributes.get("open", False):
                     for item in container.attributes.get("contents", []):
                         if item.name.lower() == "leaflet":
-                            print(f"    {item.name} (in {container.name}): There is a small leaflet here.")
+                            print(
+                                f"    {item.name} (in {container.name}): There is a small leaflet here."
+                            )
                         else:
-                            print(f"    {item.name} (in {container.name}): {item.description}")
+                            print(
+                                f"    {item.name} (in {container.name}): {item.description}"
+                            )
 
     def move(self, direction):
         if not self.current_room or self.current_room not in self.rooms:
@@ -547,11 +601,22 @@ class Game:
             parts = cmd.split(" in ", 1)
             item_name = parts[0][4:].strip()
             container_name = parts[1].strip()
-            item = next((o for o in self.inventory if o.name.lower() == item_name), None)
+            item = next(
+                (o for o in self.inventory if o.name.lower() == item_name), None
+            )
             room = self.rooms.get(self.current_room)
             container = None
             if room:
-                container = next((o for o in room.objects if hasattr(o, "is_container") and o.is_container() and o.name.lower() == container_name), None)
+                container = next(
+                    (
+                        o
+                        for o in room.objects
+                        if hasattr(o, "is_container")
+                        and o.is_container()
+                        and o.name.lower() == container_name
+                    ),
+                    None,
+                )
             if not item:
                 print(f"You don't have a {item_name} to put.")
                 return True
@@ -570,11 +635,21 @@ class Game:
             parts = cmd.split(" on ", 1)
             item_name = parts[0][6:].strip()
             surface_name = parts[1].strip()
-            item = next((o for o in self.inventory if o.name.lower() == item_name), None)
+            item = next(
+                (o for o in self.inventory if o.name.lower() == item_name), None
+            )
             room = self.rooms.get(self.current_room)
             surface = None
             if room:
-                surface = next((o for o in room.objects if o.name.lower() == surface_name and o.attributes.get("surface", False)), None)
+                surface = next(
+                    (
+                        o
+                        for o in room.objects
+                        if o.name.lower() == surface_name
+                        and o.attributes.get("surface", False)
+                    ),
+                    None,
+                )
             if not item:
                 print(f"You don't have a {item_name} to place.")
                 return True
@@ -593,7 +668,16 @@ class Game:
             room = self.rooms.get(self.current_room)
             container = None
             if room:
-                container = next((o for o in room.objects if hasattr(o, "is_container") and o.is_container() and o.name.lower() == container_name), None)
+                container = next(
+                    (
+                        o
+                        for o in room.objects
+                        if hasattr(o, "is_container")
+                        and o.is_container()
+                        and o.name.lower() == container_name
+                    ),
+                    None,
+                )
             key = next((o for o in self.inventory if o.name.lower() == key_name), None)
             if not container:
                 print(f"There is no {container_name} here to unlock.")
@@ -614,7 +698,16 @@ class Game:
             room = self.rooms.get(self.current_room)
             container = None
             if room:
-                container = next((o for o in room.objects if hasattr(o, "is_container") and o.is_container() and o.name.lower() == container_name), None)
+                container = next(
+                    (
+                        o
+                        for o in room.objects
+                        if hasattr(o, "is_container")
+                        and o.is_container()
+                        and o.name.lower() == container_name
+                    ),
+                    None,
+                )
             if not container:
                 # Fall back to exit locking
                 pass
@@ -634,18 +727,24 @@ class Game:
             parts = cmd.split(" to ", 1)
             obj1_name = parts[0][4:].strip()
             obj2_name = parts[1].strip()
-            obj1 = next((o for o in self.inventory if o.name.lower() == obj1_name), None)
+            obj1 = next(
+                (o for o in self.inventory if o.name.lower() == obj1_name), None
+            )
             room = self.rooms.get(self.current_room)
             obj2 = None
             if room:
-                obj2 = next((o for o in room.objects if o.name.lower() == obj2_name), None)
+                obj2 = next(
+                    (o for o in room.objects if o.name.lower() == obj2_name), None
+                )
             if not obj1:
                 print(f"You don't have a {obj1_name} to tie.")
                 return True
             if not obj2:
                 print(f"There is no {obj2_name} here to tie things to.")
                 return True
-            print(f"You tie the {obj1.name} to the {obj2.name}. (Nothing special happens.)")
+            print(
+                f"You tie the {obj1.name} to the {obj2.name}. (Nothing special happens.)"
+            )
             return True
         # Canonical: turn <object>
         if cmd.startswith("turn "):
@@ -653,7 +752,9 @@ class Game:
             room = self.rooms.get(self.current_room)
             obj = None
             if room:
-                obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                obj = next(
+                    (o for o in room.objects if o.name.lower() == obj_name), None
+                )
             if not obj:
                 print(f"There is no {obj_name} here to turn.")
                 return True
@@ -665,7 +766,16 @@ class Game:
             room = self.rooms.get(self.current_room)
             obj = None
             if room:
-                obj = next((o for o in room.objects if o.name.lower() == obj_name and hasattr(o, "is_container") and o.is_container()), None)
+                obj = next(
+                    (
+                        o
+                        for o in room.objects
+                        if o.name.lower() == obj_name
+                        and hasattr(o, "is_container")
+                        and o.is_container()
+                    ),
+                    None,
+                )
             if obj:
                 if obj.attributes.get("open", False):
                     contents = obj.attributes.get("contents", [])
@@ -682,7 +792,11 @@ class Game:
             if obj_name in [room.id.lower(), "room", "area"]:
                 found = False
                 for o in room.objects:
-                    if hasattr(o, "is_container") and o.is_container() and o.attributes.get("open", False):
+                    if (
+                        hasattr(o, "is_container")
+                        and o.is_container()
+                        and o.attributes.get("open", False)
+                    ):
                         contents = o.attributes.get("contents", [])
                         if contents:
                             print(f"You search the {o.name} and find:")
@@ -705,8 +819,12 @@ class Game:
                 "That doesn't seem to work.",
                 "You can't {verb} the {name}.",
             ]
-            verb = cmd.split(' ')[0]
-            print(snarky_pushpull[-1].format(verb=verb, name=obj_name) if verb in ["push", "pull"] else random.choice(snarky_pushpull))
+            verb = cmd.split(" ")[0]
+            print(
+                snarky_pushpull[-1].format(verb=verb, name=obj_name)
+                if verb in ["push", "pull"]
+                else random.choice(snarky_pushpull)
+            )
             return True
 
         # Object interaction: use
@@ -737,6 +855,7 @@ class Game:
         if cmd.startswith("examine "):
             obj_name = cmd.split(" ", 1)[1]
             from object_actions import object_action
+
             if object_action(self, "look", obj_name):
                 return True
             print(f"You see nothing special about the {obj_name}.")
@@ -997,6 +1116,7 @@ class Game:
                 # First, check all visible objects (case-insensitive, robust)
                 def normalize(s):
                     return " ".join(s.lower().split())
+
                 obj_name_norm = normalize(obj_name)
                 # Gather all objects in room, including all containers (open or closed) and their contents if open
                 all_objs = []
@@ -1005,10 +1125,14 @@ class Game:
                     if hasattr(obj, "is_container") and obj.is_container():
                         if obj.attributes.get("open", False):
                             all_objs.extend(obj.attributes.get("contents", []))
-                print(f"[DEBUG] take/get: obj_name='{obj_name}', normalized='{obj_name_norm}'")
+                print(
+                    f"[DEBUG] take/get: obj_name='{obj_name}', normalized='{obj_name_norm}'"
+                )
                 print(f"[DEBUG] Objects considered:")
                 for o in all_objs:
-                    print(f"  - {o.name} (normalized: '{normalize(o.name)}', type: {type(o)})")
+                    print(
+                        f"  - {o.name} (normalized: '{normalize(o.name)}', type: {type(o)})"
+                    )
                 # Try exact match
                 obj = next(
                     (o for o in all_objs if normalize(o.name) == obj_name_norm), None
@@ -1016,12 +1140,21 @@ class Game:
                 # Try partial match
                 if not obj:
                     obj = next(
-                        (o for o in all_objs if obj_name_norm in normalize(o.name)), None
+                        (o for o in all_objs if obj_name_norm in normalize(o.name)),
+                        None,
                     )
                 # Try aliases if present
                 if not obj:
                     obj = next(
-                        (o for o in all_objs if hasattr(o, "aliases") and any(obj_name_norm == normalize(alias) for alias in o.aliases)), None
+                        (
+                            o
+                            for o in all_objs
+                            if hasattr(o, "aliases")
+                            and any(
+                                obj_name_norm == normalize(alias) for alias in o.aliases
+                            )
+                        ),
+                        None,
                     )
                 if obj:
                     # Prevent taking leaflet unless mailbox is open
@@ -1050,7 +1183,9 @@ class Game:
                         print("You can't take the leaflet unless the mailbox is open.")
                         return True
                     # Canonical snarky responses for uncarryable objects
-                    if not obj.attributes.get("takeable", True) or not obj.attributes.get("portable", True):
+                    if not obj.attributes.get(
+                        "takeable", True
+                    ) or not obj.attributes.get("portable", True):
                         snarky_lines = [
                             "The {name} is an integral part of the scenery and cannot be taken.",
                             "You must be joking.",
@@ -1059,6 +1194,7 @@ class Game:
                             "You can't take that.",
                         ]
                         import random
+
                         print(random.choice(snarky_lines).format(name=obj.name))
                         return True
                     obj_weight = (
@@ -1237,13 +1373,21 @@ class Game:
             if room:
                 for obj in room.objects:
                     all_objs.append(obj)
-                    if hasattr(obj, "is_container") and obj.is_container() and obj.attributes.get("open", False):
+                    if (
+                        hasattr(obj, "is_container")
+                        and obj.is_container()
+                        and obj.attributes.get("open", False)
+                    ):
                         all_objs.extend(obj.attributes.get("contents", []))
             all_objs.extend(self.inventory)
+
             def normalize(s):
                 return " ".join(s.lower().split())
+
             obj_name_norm = normalize(obj_name)
-            obj = next((o for o in all_objs if normalize(o.name) == obj_name_norm), None)
+            obj = next(
+                (o for o in all_objs if normalize(o.name) == obj_name_norm), None
+            )
             if obj:
                 # Canonical snark for non-edible objects
                 if not obj.attributes.get("edible", False):
@@ -1255,6 +1399,7 @@ class Game:
                         "You can't eat that.",
                     ]
                     import random
+
                     print(random.choice(snarky_eat).format(name=obj.name))
                     return True
                 else:
