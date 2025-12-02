@@ -1,4 +1,4 @@
-from entities import Room, Player, Action
+from entities import Room, Player, Action, THIEF, TROLL, CYCLOPS, GRUE, ROBOT
 from puzzles import trigger_puzzle
 from objects import GameObject
 from containers import Container
@@ -23,6 +23,7 @@ def load_rooms():
     # ...existing parsing logic...
     if not rooms:
         # Add a fallback room for demo/testing
+        # Add canonical NPCs to their rooms
         rooms["WHOUS"] = Room(
             id="WHOUS",
             desc_long=(
@@ -34,13 +35,19 @@ def load_rooms():
             exits={"east": "HOUSE"},
             objects=[
                 GameObject(
-                    "Welcome Mat", "A simple mat lies here.", attributes={"osize": 1, "score_value": 0}
+                    "Welcome Mat",
+                    "A simple mat lies here.",
+                    attributes={"osize": 1, "score_value": 0},
                 ),
                 GameObject(
-                    "Lantern", "A brass lantern, unlit.", attributes={"osize": 2, "score_value": 0}
+                    "Lantern",
+                    "A brass lantern, unlit.",
+                    attributes={"osize": 2, "score_value": 0},
                 ),
                 GameObject(
-                    "Sword", "A sharp sword gleams here.", attributes={"osize": 3, "score_value": 0}
+                    "Sword",
+                    "A sharp sword gleams here.",
+                    attributes={"osize": 3, "score_value": 0},
                 ),
                 Container(
                     "Mailbox",
@@ -62,16 +69,23 @@ def load_rooms():
                         ],
                     },
                 ),
-                GameObject("Key", "A small key.", attributes={"osize": 1, "score_value": 0}),
                 GameObject(
-                    "Robot", "A silent robot stands here.", attributes={"osize": 10, "score_value": 0}
+                    "Key", "A small key.", attributes={"osize": 1, "score_value": 0}
                 ),
                 GameObject(
-                    "Treasure Chest", "A heavy chest, locked.", attributes={"osize": 10, "score_value": 15}
+                    "Robot",
+                    "A silent robot stands here.",
+                    attributes={"osize": 10, "score_value": 0},
+                ),
+                GameObject(
+                    "Treasure Chest",
+                    "A heavy chest, locked.",
+                    attributes={"osize": 10, "score_value": 15},
                 ),
             ],
             flags=[],
             action=None,
+            npcs=[],
         )
         # Set locked exit for WHOUS
         rooms["WHOUS"].locked_exits = {"east": True}
@@ -81,9 +95,7 @@ def load_rooms():
                 obj.attributes["locked"] = True
             if obj.name.lower() == "mailbox":
                 obj.attributes["locked"] = True
-            # Add locked exit for HOUSE west door (for symmetry)
-            if "HOUSE" in rooms:
-                rooms["HOUSE"].locked_exits = {"west": True}
+        # Add locked exit for HOUSE west door (for symmetry)
         rooms["HOUSE"] = Room(
             id="HOUSE",
             desc_long="You are inside the white house. There is a door to the west.",
@@ -92,11 +104,143 @@ def load_rooms():
             objects=[],
             flags=[],
             action=None,
+            npcs=[],
         )
+        # Add canonical NPCs to their rooms
+        rooms["TROLL"] = Room(
+            id="TROLL",
+            desc_long="A menacing troll blocks the bridge, demanding payment.",
+            desc_short="Troll Room",
+            exits={"north": "BRIDGE", "south": "CELLA"},
+            objects=[
+                GameObject("Axe", "A heavy troll's axe.", attributes={"osize": 5})
+            ],
+            flags=[],
+            action=None,
+            npcs=[TROLL],
+        )
+        rooms["CYCLO"] = Room(
+            id="CYCLO",
+            desc_long="A huge cyclops glares at you, hungry and irritable.",
+            desc_short="Cyclops Room",
+            exits={"down": "TROLL"},
+            objects=[],
+            flags=[],
+            action=None,
+            npcs=[CYCLOPS],
+        )
+        rooms["TREAS"] = Room(
+            id="TREAS",
+            desc_long="The Treasure Room sparkles with loot. A sneaky thief lurks here, eyeing your valuables.",
+            desc_short="Treasure Room",
+            exits={"west": "CYCLO"},
+            objects=[
+                GameObject(
+                    "Chalice",
+                    "A golden chalice encrusted with gems.",
+                    attributes={"osize": 2, "score_value": 25},
+                )
+            ],
+            flags=[],
+            action=None,
+            npcs=[THIEF],
+        )
+        # Add Robot to Maintenance Room if present
+        if "MAINT" in rooms:
+            rooms["MAINT"].npcs.append(ROBOT)
     return rooms
 
 
 class Game:
+    def player_has_light(self):
+        # Check if player has a light source (e.g., lantern) and it's lit
+        for obj in self.inventory:
+            if obj.name.lower() == "lantern" and getattr(obj, "attributes", {}).get(
+                "lit", False
+            ):
+                return True
+        return False
+
+    def tick_npcs(self):
+        # Canonical Zork I event triggers for NPCs
+        for room in self.rooms.values():
+            for npc in getattr(room, "npcs", []):
+                if npc.name == "Thief":
+                    import random
+
+                    if npc.state.get("defeated"):
+                        # Drop all loot in room if defeated
+                        if npc.inventory:
+                            print("As the thief dies, his treasures reappear:")
+                            for item in npc.inventory:
+                                room.objects.append(item)
+                                print(f"  {item.name}: {item.description}")
+                            npc.inventory.clear()
+                        continue
+                    # Thief may randomly move to a room with valuables
+                    if random.random() < 0.2:
+                        treasure_rooms = [
+                            r
+                            for r in self.rooms.values()
+                            if any(
+                                getattr(o, "attributes", {}).get("score_value", 0) > 0
+                                for o in r.objects
+                            )
+                        ]
+                        if treasure_rooms:
+                            new_room = random.choice(treasure_rooms)
+                            if npc in room.npcs:
+                                room.npcs.remove(npc)
+                            if npc not in new_room.npcs:
+                                new_room.npcs.append(npc)
+                    # Attempt to steal only valuables from player if in same room
+                    if (
+                        self.current_room == room.id
+                        and npc.hostile
+                        and not npc.state.get("defeated")
+                    ):
+                        valuables = [
+                            obj
+                            for obj in self.inventory
+                            if getattr(obj, "attributes", {}).get("score_value", 0) > 0
+                        ]
+                        if valuables:
+                            if random.random() < 0.3:
+                                stolen = valuables.pop()
+                                self.inventory.remove(stolen)
+                                npc.inventory.append(stolen)
+                                print(f"The thief stole your {stolen.name}!")
+                elif npc.name == "Troll":
+                    # Troll blocks exit unless bribed or defeated
+                    if self.current_room == room.id:
+                        if npc.hostile:
+                            print(
+                                "The troll blocks your way, demanding payment or a fight."
+                            )
+                        elif npc.state.get("disarmed"):
+                            print(
+                                "The troll, disarmed, cowers in terror, pleading for his life in the guttural tongue of the trolls."
+                            )
+                            # Troll flees if defeated
+                            room.npcs.remove(npc)
+                            print("The troll flees the room!")
+                elif npc.name == "Cyclops":
+                    # Cyclops may fall asleep, get angry, or react to food/drink
+                    if npc.state.get("asleep"):
+                        if self.current_room == room.id:
+                            print(
+                                "The cyclops is sleeping blissfully at the foot of the stairs."
+                            )
+                    elif npc.state.get("wrath", 0) > 2:
+                        if self.current_room == room.id:
+                            print("The cyclops is enraged and may attack!")
+                    # Cyclops flees if given 'Odysseus' keyword
+                    if self.current_room == room.id and npc.state.get("odysseus"):
+                        print(
+                            "The cyclops, hearing the name of his father's deadly nemesis, flees the room in terror!"
+                        )
+                        room.npcs.remove(npc)
+
     BIGFIX = 9999  # Canonical value for uncarryable objects
     LOAD_MAX = 10  # Canonical Zork I carry limit (adjust as needed)
 
@@ -121,9 +265,9 @@ class Game:
         if self.is_room_dark():
             self.dark_moves += 1
             if self.dark_moves == 1:
-                print("It is pitch black. You are likely to be eaten by a grue!")
+                print(GRUE.description)
             elif self.dark_moves >= 2:
-                print("Oh no! You have been eaten by a grue.")
+                print(GRUE.interact(self))
                 exit()
         else:
             self.dark_moves = 0  # Reset counter if not in darkness
@@ -255,6 +399,11 @@ class Game:
             print("Exits:")
             for direction, dest in room.exits.items():
                 print(f"  {direction}: {dest}")
+        # Show NPCs present in the room
+        if hasattr(room, "npcs") and room.npcs:
+            print("NPCs:")
+            for npc in room.npcs:
+                print(f"  {npc.name}: {npc.description}")
         # Only show objects if not inside a closed container
         visible_objects = []
         for obj in room.objects:
@@ -383,7 +532,143 @@ class Game:
             print("Your inventory is empty.")
 
     def parse_command(self, command: str):
+        result = None
+        # ...existing code...
+        # Replace all 'return True' and 'return False' with 'result = True/False; break' and call tick_npcs before returning
+        # For brevity, only wrap the main return points here:
         cmd = command.strip().lower()
+        room = self.rooms.get(self.current_room)
+        if room and hasattr(room, "npcs") and room.npcs:
+            words = cmd.split()
+            # talk <npc>
+            if len(words) == 2 and words[0] == "talk":
+                npc_name = words[1]
+                npc = next((n for n in room.npcs if n.name.lower() == npc_name), None)
+                if npc:
+                    print(npc.interact(self, action="hello"))
+                    self.tick_npcs()
+                    return True
+                print(f"There is no {npc_name} here to talk to.")
+                self.tick_npcs()
+                return True
+            # fight <npc>
+            if len(words) == 2 and words[0] == "fight":
+                npc_name = words[1]
+                npc = next((n for n in room.npcs if n.name.lower() == npc_name), None)
+                if npc:
+                    print(npc.interact(self, action="fight"))
+                    self.tick_npcs()
+                    return True
+                print(f"There is no {npc_name} here to fight.")
+                self.tick_npcs()
+                return True
+            # bribe <npc> <item>
+            if len(words) == 3 and words[0] == "bribe":
+                npc_name = words[1]
+                item_name = words[2]
+                npc = next((n for n in room.npcs if n.name.lower() == npc_name), None)
+                item = next(
+                    (o for o in self.inventory if o.name.lower() == item_name), None
+                )
+                if npc and item:
+                    print(npc.interact(self, action="bribe", item=item))
+                    self.inventory.remove(item)
+                    self.tick_npcs()
+                    return True
+                print(f"Bribe failed: check NPC and item names.")
+                self.tick_npcs()
+                return True
+            # give <item> <npc>
+            if len(words) == 3 and words[0] == "give":
+                item_name = words[1]
+                npc_name = words[2]
+                npc = next((n for n in room.npcs if n.name.lower() == npc_name), None)
+                item = next(
+                    (o for o in self.inventory if o.name.lower() == item_name), None
+                )
+                if npc and item:
+                    print(npc.interact(self, action="give", item=item))
+                    self.inventory.remove(item)
+                    self.tick_npcs()
+                    return True
+                print(f"Give failed: check NPC and item names.")
+                self.tick_npcs()
+                return True
+            # activate robot
+            if len(words) == 2 and words[0] == "activate" and words[1] == "robot":
+                npc = next((n for n in room.npcs if n.name.lower() == "robot"), None)
+                if npc:
+                    print(npc.interact(self, action="activate"))
+                    self.tick_npcs()
+                    return True
+                print("There is no robot here to activate.")
+                self.tick_npcs()
+                return True
+            # command robot
+            if len(words) >= 2 and words[0] == "command" and words[1] == "robot":
+                npc = next((n for n in room.npcs if n.name.lower() == "robot"), None)
+                if npc:
+                    print(npc.interact(self, action="command"))
+                    self.tick_npcs()
+                    return True
+                print("There is no robot here to command.")
+                self.tick_npcs()
+                return True
+        # ...existing code for other commands...
+        # At the end of parse_command, call tick_npcs before returning if not already called
+        self.tick_npcs()
+        return True
+        cmd = command.strip().lower()
+        # NPC interaction commands
+        room = self.rooms.get(self.current_room)
+        if room and hasattr(room, "npcs") and room.npcs:
+            words = cmd.split()
+            # talk <npc>
+            if len(words) == 2 and words[0] == "talk":
+                npc_name = words[1]
+                npc = next((n for n in room.npcs if n.name.lower() == npc_name), None)
+                if npc:
+                    npc.interact(self, action="hello")
+                    return True
+                print(f"There is no {npc_name} here to talk to.")
+                return True
+            # fight <npc>
+            if len(words) == 2 and words[0] == "fight":
+                npc_name = words[1]
+                npc = next((n for n in room.npcs if n.name.lower() == npc_name), None)
+                if npc:
+                    npc.interact(self, action="fight")
+                    return True
+                print(f"There is no {npc_name} here to fight.")
+                return True
+            # bribe <npc> <item>
+            if len(words) == 3 and words[0] == "bribe":
+                npc_name = words[1]
+                item_name = words[2]
+                npc = next((n for n in room.npcs if n.name.lower() == npc_name), None)
+                item = next(
+                    (o for o in self.inventory if o.name.lower() == item_name), None
+                )
+                if npc and item:
+                    npc.interact(self, action="bribe", item=item)
+                    self.inventory.remove(item)
+                    return True
+                print(f"Bribe failed: check NPC and item names.")
+                return True
+            # give <item> <npc>
+            if len(words) == 3 and words[0] == "give":
+                item_name = words[1]
+                npc_name = words[2]
+                npc = next((n for n in room.npcs if n.name.lower() == npc_name), None)
+                item = next(
+                    (o for o in self.inventory if o.name.lower() == item_name), None
+                )
+                if npc and item:
+                    npc.interact(self, action="give", item=item)
+                    self.inventory.remove(item)
+                    return True
+                print(f"Give failed: check NPC and item names.")
+                return True
         # Canonical commands from MUD source
         if cmd in ["quit", "exit"]:
             print("Thanks for playing!")
@@ -603,7 +888,13 @@ class Game:
                     self.inventory.append(obj)
                     room.objects.remove(obj)
                     print(f"You take the {obj.name}.")
-                    if obj.name.lower() in ["treasure chest", "treasure", "jewel", "gold", "diamond"]:
+                    if obj.name.lower() in [
+                        "treasure chest",
+                        "treasure",
+                        "jewel",
+                        "gold",
+                        "diamond",
+                    ]:
                         self.score += 10  # Award points for treasures
                         print("You have found a treasure! (+10 points)")
                     else:
@@ -781,7 +1072,9 @@ class Game:
                 if len(locked_doors) == 1:
                     self.unlock_exit(locked_doors[0])
                 elif len(locked_doors) > 1:
-                    print(f"Which door do you want to unlock? Locked doors: {', '.join(locked_doors)}.")
+                    print(
+                        f"Which door do you want to unlock? Locked doors: {', '.join(locked_doors)}."
+                    )
                 else:
                     print("There are no locked doors here.")
             else:
@@ -790,14 +1083,20 @@ class Game:
         elif cmd.startswith("lock "):
             arg = cmd.split(" ", 1)[1]
             room = self.rooms[self.current_room]
-            unlocked_doors = [d for d in room.exits if not getattr(room, "locked_exits", {}).get(d, False)]
+            unlocked_doors = [
+                d
+                for d in room.exits
+                if not getattr(room, "locked_exits", {}).get(d, False)
+            ]
             if arg in room.exits:
                 self.lock_exit(arg)
             elif arg in ["door", "doors"]:
                 if len(unlocked_doors) == 1:
                     self.lock_exit(unlocked_doors[0])
                 elif len(unlocked_doors) > 1:
-                    print(f"Which door do you want to lock? Unlocked doors: {', '.join(unlocked_doors)}.")
+                    print(
+                        f"Which door do you want to lock? Unlocked doors: {', '.join(unlocked_doors)}."
+                    )
                 else:
                     print("There are no unlocked doors here.")
             else:
