@@ -1,5 +1,9 @@
 # Gameplay Duplication Framework - Todo List
 
+## Buglist
+
+- [ ] Mailbox can be 'taken' (should not be portable; not in parity with Zork I source)
+
 ## Current Development Focus
 
 - See the Roadmap section in README.md for all planned and future features.
@@ -15,15 +19,14 @@
   - [x] Locked doors and keys
   - [x] Score system for puzzles and treasures
   - [x] Multi-step puzzles and scripted events
-  - [x] NPCs (thief, troll, cyclops, robot, grue) and all canonical interactions
-  - [x] Advanced NPC event triggers (thief movement/stealing, troll blocking/retreat, cyclops sleep/wrath/food, grue danger, robot activation/command)
-  - [] Death and restart logic
-  - [] Save/load with full game state
-  - [] Object attributes (edible, readable, wearable, portable, etc.)
-  - [] Room flags (dangerous, dark, visited, etc.)
-  - [] Synonyms and flexible parser
-  - [] Random events (thief, troll, etc.)
-  - [] Darkness and light mechanics (grue danger)
+  - [x] NPCs (thief, troll, cyclops, etc.)
+  - Death and restart logic
+  - Save/load with full game state
+  - Object attributes (edible, readable, wearable, portable, etc.)
+  - Room flags (dangerous, dark, visited, etc.)
+  - Synonyms and flexible parser
+  - Random events (thief, troll, etc.)
+  - Darkness and light mechanics (grue danger) [partially complete, revisit for full parity]
   - Endgame logic and victory conditions
 - [ ] Room/location parity
   - Ensure all rooms, locations, and connections match the original Zork I map and source.
