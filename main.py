@@ -292,6 +292,15 @@ class Game:
             "score": self.score,
             "flags": self.flags,
             "puzzles": self.puzzles,
+            "player": self.player,
+            "thief_room": self.thief_room,
+            "thief_visible": self.thief_visible,
+            "thief_cooldown": self.thief_cooldown,
+            "demo_mode": self.demo_mode,
+            "mailbox_open": self.mailbox_open,
+            "leaflet_taken": self.leaflet_taken,
+            "lantern_lit": self.lantern_lit,
+            "dark_moves": self.dark_moves,
         }
         try:
             with open(filename, "wb") as f:
@@ -310,6 +319,15 @@ class Game:
             self.score = state.get("score", self.score)
             self.flags = state.get("flags", self.flags)
             self.puzzles = state.get("puzzles", self.puzzles)
+            self.player = state.get("player", self.player)
+            self.thief_room = state.get("thief_room", self.thief_room)
+            self.thief_visible = state.get("thief_visible", self.thief_visible)
+            self.thief_cooldown = state.get("thief_cooldown", self.thief_cooldown)
+            self.demo_mode = state.get("demo_mode", self.demo_mode)
+            self.mailbox_open = state.get("mailbox_open", self.mailbox_open)
+            self.leaflet_taken = state.get("leaflet_taken", self.leaflet_taken)
+            self.lantern_lit = state.get("lantern_lit", self.lantern_lit)
+            self.dark_moves = state.get("dark_moves", self.dark_moves)
             print(f"Game loaded from {filename}.")
             self.describe_current_room()
         except Exception as e:

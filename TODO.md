@@ -21,7 +21,7 @@
   - [x] Multi-step puzzles and scripted events
   - [x] NPCs (thief, troll, cyclops, etc.)
   - [x] Death and restart logic
-  - Save/load with full game state
+  - [x] Save/load with full game state
   - Object attributes (edible, readable, wearable, portable, etc.)
   - Room flags (dangerous, dark, visited, etc.)
   - Synonyms and flexible parser

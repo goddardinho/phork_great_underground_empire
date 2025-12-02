@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.2.6 (2025-12-02)
+
+- Canonical Zork I death and restart logic implemented: player death triggers canonical message and offers restart, restore, or quit options.
+- Game restart resets all state; restore loads a saved game; quit exits cleanly.
+- Save/load system expanded to persist and restore full game state, including player, inventory, rooms, NPCs, puzzles, flags, thief state, demo mode, and all mutable attributes.
+- All gameplay progress, health, and world state are now fully preserved and restored.
+- Ready for robust in-game testing and further feature development.
+
 ## v0.2.5 (2025-12-02)
 
 - Canonical NPCs (Thief, Troll, Cyclops, Grue, Robot) fully implemented with all source-accurate interactions and behaviors.
