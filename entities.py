@@ -1,3 +1,12 @@
+# Room flag bitfield constants and usage:
+#   ROOM_DARK: Room is dark and requires a light source
+#   ROOM_VISITED: Room has been visited by the player
+#   ROOM_DEADLY: Room is dangerous (e.g., contains a deadly hazard)
+# Add new flags as needed, using bitwise OR to combine
+# Example usage:
+#   room.set_flag(Room.ROOM_DARK)
+#   if room.has_flag(Room.ROOM_DARK): ...
+#   room.clear_flag(Room.ROOM_DARK)
 from typing import Any, Optional
 
 
@@ -268,6 +277,12 @@ from objects import GameObject
 
 
 class Room:
+    # Room flag bitfield constants
+    ROOM_DARK = 0x01
+    ROOM_VISITED = 0x02
+    ROOM_DEADLY = 0x04
+    # Add more as needed
+
     def __init__(
         self,
         id: str,
@@ -275,7 +290,7 @@ class Room:
         desc_short: str,
         exits: Dict[str, str],
         objects: List[GameObject],
-        flags: List[str] = [],
+        flags: int = 0,
         action: Optional[str] = None,
         locked_exits: Optional[Dict[str, bool]] = None,
         npcs: Optional[list] = None,
@@ -289,6 +304,15 @@ class Room:
         self.action = action
         self.locked_exits = locked_exits if locked_exits is not None else {}
         self.npcs = npcs if npcs is not None else []
+
+    def set_flag(self, flag: int):
+        self.flags |= flag
+
+    def clear_flag(self, flag: int):
+        self.flags &= ~flag
+
+    def has_flag(self, flag: int) -> bool:
+        return (self.flags & flag) != 0
 
 
 class Player:
