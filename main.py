@@ -121,7 +121,7 @@ def load_rooms():
                     },
                 ),
             ],
-            flags=[],
+            flags=0,  # Use bitfield flags, e.g., Room.ROOM_DARK | Room.ROOM_VISITED
             action=None,
             npcs=[],  # THIEF will be added in demo mode only
         )
@@ -163,7 +163,7 @@ def load_rooms():
                     },
                 ),
             ],
-            flags=[],
+            flags=0,  # Set appropriate bitfield flags if needed
             action=None,
             npcs=[TROLL, CYCLOPS, ROBOT],
         )
@@ -176,7 +176,7 @@ def load_rooms():
             objects=[
                 GameObject("Axe", "A heavy troll's axe.", attributes={"osize": 5})
             ],
-            flags=[],
+            flags=Room.ROOM_DEADLY,
             action=None,
             npcs=[TROLL],
         )
@@ -186,7 +186,7 @@ def load_rooms():
             desc_short="Cyclops Room",
             exits={"down": "TROLL"},
             objects=[],
-            flags=[],
+            flags=Room.ROOM_DEADLY,
             action=None,
             npcs=[CYCLOPS],
         )
@@ -202,7 +202,7 @@ def load_rooms():
                     attributes={"osize": 2, "score_value": 25},
                 )
             ],
-            flags=[],
+            flags=0,  # Use bitfield flags
             action=None,
             npcs=[THIEF],
         )
@@ -244,8 +244,8 @@ class Game:
         room = self.rooms.get(room_id or self.current_room)
         if not room:
             return False
-        # Room is dark if it has the 'dark' flag and no light source is present
-        if "dark" in getattr(room, "flags", []):
+        # Room is dark if it has the ROOM_DARK flag and no light source is present
+        if room.has_flag(Room.ROOM_DARK):
             # Check for lit lantern in inventory
             for obj in self.inventory:
                 if obj.name.lower() == "lantern" and getattr(obj, "attributes", {}).get(
@@ -447,11 +447,12 @@ class Game:
         if not room:
             return
         # Example: handle dark rooms
-        if "dark" in getattr(room, "flags", []):
+        if room.has_flag(Room.ROOM_DARK):
             print("It is pitch dark. You are likely to be eaten by a grue.")
         # Example: handle locked rooms
-        if "locked" in getattr(room, "flags", []):
-            print("The room is locked.")
+        # if room.has_flag(Room.ROOM_LOCKED):
+        #     print("The room is locked.")
+        # Add more flag logic as needed
         # Add more flag logic as needed
         if self.check_grue_danger():
             exit()
