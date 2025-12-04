@@ -6,6 +6,8 @@ from parsers import parse_exits, parse_objects, parse_flags, parse_action
 from typing import Optional, List, Dict
 import re
 import pickle
+import random
+import random
 
 
 def load_rooms():
@@ -329,8 +331,8 @@ class Game:
         valid_rooms = [
             rid
             for rid in room_ids
-            if "dark" not in getattr(self.rooms[rid], "flags", [])
-            and "locked" not in getattr(self.rooms[rid], "flags", [])
+            if not self.rooms[rid].has_flag(self.rooms[rid].ROOM_DARK)
+            and not self.rooms[rid].has_flag(self.rooms[rid].ROOM_DEADLY)
         ]
         if not valid_rooms:
             valid_rooms = room_ids
@@ -543,23 +545,26 @@ class Game:
     def move(self, direction):
         if not self.current_room or self.current_room not in self.rooms:
             print("No valid current room.")
-            return
+            return True
         room = self.rooms[self.current_room]
         # Check for locked exits
         locked_exits = getattr(room, "locked_exits", {})
         if direction in locked_exits and locked_exits[direction]:
             print(f"The door to {direction} is locked.")
-            return
+            return True
         if direction in room.exits:
             dest = room.exits[direction]
             if dest in self.rooms:
                 self.current_room = dest
                 self.describe_current_room()
                 self.check_grue_danger()
+                return True
             else:
                 print(f"Can't go {direction}: destination room not found.")
+                return True
         else:
             print(f"No exit in direction '{direction}'.")
+            return True
 
     def unlock_exit(self, direction):
         room = self.rooms[self.current_room]
@@ -631,6 +636,7 @@ class Game:
             print("Your inventory is empty.")
 
     def parse_command(self, command: str):
+        import random
         # Thief random encounter tick
         if self.thief_cooldown > 0:
             self.thief_cooldown -= 1
@@ -638,6 +644,7 @@ class Game:
             self.tick_thief()
         self.maybe_thief_event()
         cmd = command.strip().lower()
+        # ...existing code, properly indented...
         # Canonical: put <item> in <container>
         if cmd.startswith("put ") and " in " in cmd:
             parts = cmd.split(" in ", 1)
@@ -699,7 +706,8 @@ class Game:
                 print(f"There is no {surface_name} here to place things on.")
                 return True
             self.inventory.remove(item)
-            room.objects.append(item)
+            if room:
+                room.objects.append(item)
             print(f"You place the {item.name} on the {surface.name}.")
             return True
         # Canonical: unlock <container> with <key>
@@ -830,23 +838,24 @@ class Game:
                 else:
                     print(f"The {obj.name} is closed.")
                 return True
-            # If not a container, search the room
-            if obj_name in [room.id.lower(), "room", "area"]:
-                found = False
-                for o in room.objects:
-                    if (
-                        hasattr(o, "is_container")
-                        and o.is_container()
-                        and o.attributes.get("open", False)
-                    ):
-                        contents = o.attributes.get("contents", [])
-                        if contents:
-                            print(f"You search the {o.name} and find:")
-                            for item in contents:
-                                print(f"  {item.name}: {item.description}")
-                            found = True
-                if not found:
-                    print("You search the room but find nothing special.")
+            # If not a container, search the room (only if room is valid)
+            found = False
+            if room and hasattr(room, "id") and isinstance(room.id, str):
+                if obj_name in [room.id.lower(), "room", "area"]:
+                    for o in room.objects:
+                        if (
+                            hasattr(o, "is_container")
+                            and o.is_container()
+                            and o.attributes.get("open", False)
+                        ):
+                            contents = o.attributes.get("contents", [])
+                            if contents:
+                                print(f"You search the {o.name} and find:")
+                                for item in contents:
+                                    print(f"  {item.name}: {item.description}")
+                                found = True
+            if not found:
+                print("You search the room but find nothing special.")
                 return True
             print(f"You find nothing special about the {obj_name}.")
             return True
@@ -862,11 +871,11 @@ class Game:
                 "You can't {verb} the {name}.",
             ]
             verb = cmd.split(" ")[0]
-            print(
-                snarky_pushpull[-1].format(verb=verb, name=obj_name)
-                if verb in ["push", "pull"]
-                else random.choice(snarky_pushpull)
-            )
+            if verb in ["push", "pull"]:
+                msg = snarky_pushpull[-1].format(verb=verb, name=obj_name)
+            else:
+                msg = random.choice(snarky_pushpull)
+            print(msg)
             return True
 
         # Object interaction: use
@@ -878,7 +887,8 @@ class Game:
                 "Use the {name}? How?",
                 "You must be joking.",
             ]
-            print(random.choice(snarky_use).format(name=obj_name))
+            msg = random.choice(snarky_use).format(name=obj_name)
+            print(msg)
             return True
 
         # Object interaction: hang/place
@@ -890,7 +900,8 @@ class Game:
                 "Placing the {name} accomplishes nothing.",
                 "You must be joking.",
             ]
-            print(random.choice(snarky_hangplace).format(name=obj_name))
+            msg = random.choice(snarky_hangplace).format(name=obj_name)
+            print(msg)
             return True
 
         # Object interaction: examine (synonym for look)
@@ -1033,6 +1044,19 @@ class Game:
             locked_exits = getattr(room, "locked_exits", {})
             if direction in locked_exits and locked_exits[direction]:
                 print(f"The door to {direction} is locked.")
+                return True
+            if direction not in room.exits:
+                snarky_blocked = [
+                    "You can't go that way.",
+                    "There is no exit in that direction.",
+                    "You walk into an invisible wall.",
+                    "Blocked!",
+                    "You bump into nothingness.",
+                ]
+                import random
+                print(random.choice(snarky_blocked))
+                return True
+            return self.move(direction)
         elif (
             self.current_room
             and self.current_room in self.rooms
@@ -1621,9 +1645,23 @@ class Game:
             print("[Stub] You try to wear/remove something.")
             return True
         else:
-            print(
-                "Unknown command. Try 'look', 'go <direction>', 'inventory', or 'quit'."
-            )
+            snarky_unknowns = [
+                "I don't know that word.",
+                "You must be joking.",
+                "Unknown command: {}.",
+                "I don't understand what you mean.",
+                "That's not something you can do here.",
+                "What?",
+                "Pardon?",
+                "Try something else.",
+                "I don't recognize that command.",
+            ]
+            import random
+            msg = random.choice(snarky_unknowns)
+            if '{}' in msg:
+                print(msg.format(command.strip()))
+            else:
+                print(msg)
             return True
 
 
@@ -1644,5 +1682,7 @@ if __name__ == "__main__":
     game.describe_current_room()
     while True:
         command = input("\n> ")
-        if not game.parse_command(command):
+        result = game.parse_command(command)
+        if not result:
+            print(f"[DEBUG] Game exited after command: '{command}' (parse_command returned {result})")
             break
