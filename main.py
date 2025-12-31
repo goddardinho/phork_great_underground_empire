@@ -147,6 +147,25 @@ def load_rooms():
 
 
 class Game:
+    def game_over(self):
+        import sys
+        print("\n*** You have died! ***")
+        # If not running interactively (e.g., during tests), skip input loop
+        if not sys.stdin.isatty():
+            print("[Automated test mode: skipping restart/quit prompt]")
+            return
+        while True:
+            choice = input("Type 'restart' to play again or 'quit' to exit: ").strip().lower()
+            if choice == "restart":
+                print("Restarting game...\n")
+                self.__init__(self.demo_mode)
+                self.describe_current_room()
+                break
+            elif choice == "quit":
+                print("Thanks for playing!")
+                exit()
+            else:
+                print("Please type 'restart' or 'quit'.")
 
     BIGFIX = 9999  # Canonical value for uncarryable objects
     LOAD_MAX = 10  # Canonical Zork I carry limit (adjust as needed)
@@ -175,7 +194,7 @@ class Game:
                 print(GRUE.description)
             elif self.dark_moves >= 2:
                 print(GRUE.interact(self))
-                exit()
+                self.game_over()
         else:
             self.dark_moves = 0  # Reset counter if not in darkness
 
@@ -198,6 +217,8 @@ class Game:
         )  # Track Thief's current room
         self.thief_visible = False  # Is Thief currently visible to player?
         self.thief_cooldown = 0  # Moves until next possible encounter
+        self.deaths = 0  # Track number of player deaths
+        self.endgame = False  # Set to True if in endgame (expand as needed)
         from entities import Player
 
         start_room = (
@@ -248,6 +269,68 @@ class Game:
             valid_rooms = room_ids
         # Move thief every tick
         self.thief_room = random.choice(valid_rooms)
+    def game_over(self, desc=None):
+        import sys
+        # Canonical Zork death messages
+        DEATH_MSG = desc or "You have died."
+        SUICIDAL_MSG = ("Your adventure is over. You have died too many times.\n"
+                        "May your next life be more successful!")
+        ENDGAME_MSG = ("Normally I could attempt to rectify your condition, but I'm ashamed\n"
+                       "to say my abilities are not equal to dealing with your present state\n"
+                       "of disrepair. Permit me to express my profoundest regrets.")
+        # Deduct points for dying
+        self.score = max(0, self.score - 10)
+        self.deaths += 1
+        # Endgame death: immediate game over
+        if getattr(self, 'endgame', False):
+            print(f"\n{ENDGAME_MSG}")
+            self._final_quit(sys)
+            return
+        # Third death: game over
+        if self.deaths >= 3:
+            print(f"\n{SUICIDAL_MSG}")
+            self._final_quit(sys)
+            return
+        # Standard death: respawn
+        print(f"\n{DEATH_MSG}\nYou feel strangely disoriented, but alive.\n")
+        self._respawn_player()
+        if not sys.stdin.isatty():
+            print("[Automated test mode: skipping restart/quit prompt]")
+            return
+        while True:
+            choice = input("Type 'restart' to play again, 'quit' to exit, or press Enter to continue: ").strip().lower()
+            if choice == "restart":
+                print("Restarting game...\n")
+                self.__init__(self.demo_mode)
+                self.describe_current_room()
+                break
+            elif choice == "quit":
+                print("Thanks for playing!")
+                exit()
+            elif choice == "":
+                self.describe_current_room()
+                break
+            else:
+                print("Please type 'restart', 'quit', or press Enter.")
+
+    def _respawn_player(self):
+        # Move player to starting room, reset health, clear inventory (canonical Zork drops inventory)
+        self.current_room = self._get_start_room()
+        self.player.health = self.player.max_health
+        self.player.staggered = False
+        # Drop all inventory in current room
+        if self.inventory:
+            room = self.rooms.get(self.current_room)
+            if room:
+                room.objects.extend(self.inventory)
+        self.inventory = []
+
+    def _final_quit(self, sys):
+        print("\nGame over. Thanks for playing!")
+        if not sys.stdin.isatty():
+            return
+        input("Press Enter to exit.")
+        exit()
         # Thief may appear in player's room
         self.thief_visible = (
             self.thief_room == self.current_room and random.random() < 0.4
@@ -551,8 +634,10 @@ class Game:
                 )
                 if npc:
                     from combat import CombatEngine
-
-                    print(CombatEngine.combat_round(self.player, npc))
+                    result = CombatEngine.combat_round(self.player, npc)
+                    print(result)
+                    if self.player.is_dead():
+                        self.game_over()
                 else:
                     print(f"There is no {npc_name} here to attack.")
                 return True
@@ -1103,20 +1188,20 @@ class Game:
             if not taken_any:
                 print("You couldn't take anything.")
             return True
-        # Basic stubs for other commands
+        # Canonical Zork-like stubs for known but unimplemented commands
         elif cmd in ["get", "take"]:
-            print("Specify what to take, e.g. 'get mat'.")
+            print("What do you want to take?")
             return True
         elif cmd in ["drop", "put", "throw"]:
-            print("Specify what to drop, e.g. 'drop mat'.")
+            print("What do you want to drop?")
             return True
         elif cmd in ["climb", "jump", "swim"] or any(
             cmd.startswith(x + " ") for x in ["climb", "jump", "swim"]
         ):
-            print("[Stub] You try to climb/jump/swim.")
+            print("You can't do that here.")
             return True
         elif cmd in ["attack"] or cmd.startswith("attack "):
-            print("[Stub] You try to attack.")
+            print("Violence isn't always the answer.")
             return True
         elif cmd in ["help"]:
             print(
@@ -1138,10 +1223,10 @@ class Game:
             print(f"Your score is {self.score}.")
             return True
         elif cmd in ["wait"]:
-            print("[Stub] You wait a moment.")
+            print("Time passes...")
             return True
         elif cmd in ["listen"]:
-            print("[Stub] You listen carefully.")
+            print("You hear nothing unusual.")
             return True
         elif cmd.startswith("unlock "):
             direction = cmd.split(" ", 1)[1]
@@ -1154,22 +1239,26 @@ class Game:
         elif cmd in ["turn", "push", "pull"] or any(
             cmd.startswith(x + " ") for x in ["turn", "push", "pull"]
         ):
-            print("[Stub] You try to turn/push/pull something.")
+            print("Nothing happens.")
             return True
         elif cmd in ["light", "extinguish"] or any(
             cmd.startswith(x + " ") for x in ["light", "extinguish"]
         ):
-            print("[Stub] You try to light/extinguish something.")
+            print("You can't do that.")
             return True
         elif cmd in ["wear", "remove"] or any(
             cmd.startswith(x + " ") for x in ["wear", "remove"]
         ):
-            print("[Stub] You try to wear/remove something.")
+            print("You can't do that.")
             return True
         else:
-            print(
-                "Unknown command. Try 'look', 'go <direction>', 'inventory', or 'quit'."
-            )
+            import random
+            responses = [
+                "I beg your pardon?",
+                "I don't understand that.",
+                "What?"
+            ]
+            print(random.choice(responses))
             return True
 
 

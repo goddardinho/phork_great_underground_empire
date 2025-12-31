@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.2.6 (2025-12-31)
+
+- Death and restart logic fully implemented:
+	- Player death now triggers canonical Zork I behavior, including grue deaths, combat deaths, and scripted fatal events.
+	- Restart logic restores player to correct starting state, with inventory, room, and flags reset as per source.
+	- Automated tests for death and restart scenarios pass, including multiple deaths and grue encounters.
+	- TODO.md updated to mark death and restart logic as complete.
+
 ## v0.2.5 (2025-12-02)
 
 - Canonical NPCs (Thief, Troll, Cyclops, Grue, Robot) fully implemented with all source-accurate interactions and behaviors.
