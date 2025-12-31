@@ -147,25 +147,6 @@ def load_rooms():
 
 
 class Game:
-    def game_over(self):
-        import sys
-        print("\n*** You have died! ***")
-        # If not running interactively (e.g., during tests), skip input loop
-        if not sys.stdin.isatty():
-            print("[Automated test mode: skipping restart/quit prompt]")
-            return
-        while True:
-            choice = input("Type 'restart' to play again or 'quit' to exit: ").strip().lower()
-            if choice == "restart":
-                print("Restarting game...\n")
-                self.__init__(self.demo_mode)
-                self.describe_current_room()
-                break
-            elif choice == "quit":
-                print("Thanks for playing!")
-                exit()
-            else:
-                print("Please type 'restart' or 'quit'.")
 
     BIGFIX = 9999  # Canonical value for uncarryable objects
     LOAD_MAX = 10  # Canonical Zork I carry limit (adjust as needed)
@@ -389,13 +370,24 @@ class Game:
         return sum(obj_weight(o) for o in self.inventory)
 
     def save_game(self, filename="savegame.pkl"):
+        import random
         state = {
+            "version": 1,
             "rooms": self.rooms,
             "current_room": self.current_room,
             "inventory": self.inventory,
             "score": self.score,
             "flags": self.flags,
             "puzzles": self.puzzles,
+            "player": self.player,
+            "thief_room": self.thief_room,
+            "thief_visible": self.thief_visible,
+            "thief_cooldown": self.thief_cooldown,
+            "deaths": self.deaths,
+            "endgame": self.endgame,
+            "dark_moves": self.dark_moves,
+            "demo_mode": self.demo_mode,
+            "random_state": random.getstate(),
         }
         try:
             with open(filename, "wb") as f:
@@ -405,15 +397,28 @@ class Game:
             print(f"Error saving game: {e}")
 
     def load_game(self, filename="savegame.pkl"):
+        import random
         try:
             with open(filename, "rb") as f:
                 state = pickle.load(f)
+            # Versioning for future compatibility
+            version = state.get("version", 1)
             self.rooms = state.get("rooms", self.rooms)
             self.current_room = state.get("current_room", self.current_room)
             self.inventory = state.get("inventory", self.inventory)
             self.score = state.get("score", self.score)
             self.flags = state.get("flags", self.flags)
             self.puzzles = state.get("puzzles", self.puzzles)
+            self.player = state.get("player", self.player)
+            self.thief_room = state.get("thief_room", self.thief_room)
+            self.thief_visible = state.get("thief_visible", self.thief_visible)
+            self.thief_cooldown = state.get("thief_cooldown", self.thief_cooldown)
+            self.deaths = state.get("deaths", self.deaths)
+            self.endgame = state.get("endgame", self.endgame)
+            self.dark_moves = state.get("dark_moves", self.dark_moves)
+            self.demo_mode = state.get("demo_mode", self.demo_mode)
+            if "random_state" in state:
+                random.setstate(state["random_state"])
             print(f"Game loaded from {filename}.")
             self.describe_current_room()
         except Exception as e:

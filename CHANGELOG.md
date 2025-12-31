@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.2.7 (2025-12-31)
+
+- Save/load with full game state is now complete:
+	- All mutable game state (player, inventory, rooms, objects, containers, puzzles, flags, deaths, demo mode, random state, etc.) is now saved and restored.
+	- Edge cases tested: puzzles in progress, darkness, NPCs, containers, deaths, demo mode, and error handling.
+	- ENHANCEMENTS.md added with a comprehensive list of save/load test scenarios for future validation.
+	- TODO.md updated to mark this feature as complete.
+
 ## v0.2.6 (2025-12-31)
 
 - Death and restart logic fully implemented:
