@@ -22,15 +22,16 @@
   - [x] NPCs (thief, troll, cyclops, etc.)
   - [x] Death and restart logic
   - [x] Save/load with full game state
-  - Help system and command list
-  - Object attributes (edible, readable, wearable, portable, etc.)
-  - Room flags (dangerous, dark, visited, etc.)
-  - Synonyms and flexible parser
-  - Random events (thief, troll, etc.)
-  - Darkness and light mechanics (grue danger) [partially complete, revisit for full parity]
-  - Endgame logic and victory conditions
+  - [x] Help system and command list
+  - [ ] Object attributes (edible, readable, wearable, portable, etc.)
+  - [ ] Room flags (dangerous, dark, visited, etc.)
+  - [ ] Synonyms and flexible parser
+  - [ ] Random events (thief, troll, etc.)
+  - [ ] Darkness and light mechanics (grue danger) [partially complete, revisit for full parity]
+  - [ ] Endgame logic and victory conditions
 - [ ] Room/location parity
   - Ensure all rooms, locations, and connections match the original Zork I map and source.
+- [ ] Ensure gameplay functionality, look, and feel.
 
 ## Completed Tasks (see CHANGELOG.md for details)
 

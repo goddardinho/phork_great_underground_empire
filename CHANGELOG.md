@@ -1,8 +1,13 @@
 # Changelog
 
+## v0.3.1 (2026-01-09)
+
+- Patch version bump.
+
+
 ## v0.3.0 (2026-01-09)
 
-- _Describe changes for this release here._
+- Semantic versioning automation added.
 
 
 # Changelog
