@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.3.2 (2026-01-09)
+
+- Attribute-driven object logic validated and enforced:
+	- Audited and confirmed that the mailbox is not takeable or portable, matching canonical Zork behavior.
+	- Take logic in main.py blocks non-takeable and non-portable objects as intended.
+	- Added a runtime check to print mailbox attributes for verification, then removed it after validation.
+	- Confirmed via gameplay and test that attempts to take the mailbox are correctly blocked.
+	- Codebase cleaned of temporary debug logic.
+
 ## v0.3.1 (2026-01-09)
 
 - Patch version bump.

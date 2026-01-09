@@ -22,60 +22,6 @@ def load_rooms():
     action: Optional[str] = None
     # ...existing parsing logic...
     if not rooms:
-        # Runtime check: print mailbox takeable/portable attributes
-        mailbox = None
-        for obj in [
-            o for o in [
-                GameObject(
-                    "Welcome Mat",
-                    "A simple mat lies here.",
-                    attributes={
-                        "osize": 1,
-                        "score_value": 0,
-                        "takeable": True,
-                        "portable": True,
-                    },
-                ),
-                GameObject(
-                    "Lantern",
-                    "A brass lantern, unlit.",
-                    attributes={
-                        "osize": 2,
-                        "score_value": 0,
-                        "lit": False,
-                        "takeable": True,
-                        "portable": True,
-                    },
-                ),
-                GameObject(
-                    "Sword",
-                    "A sharp sword gleams here.",
-                    attributes={
-                        "osize": 3,
-                        "score_value": 0,
-                        "weapon": True,
-                        "takeable": True,
-                        "portable": True,
-                    },
-                ),
-                Container(
-                    "Mailbox",
-                    "A small mailbox. It is closed.",
-                    attributes={
-                        "osize": 4,
-                        "open": False,
-                        "openable": True,
-                        "locked": True,
-                        "container": True,
-                        "takeable": False,
-                        "portable": False,
-                        "contents": [],
-                    },
-                ),
-            ] if hasattr(o, 'name') and o.name.lower() == 'mailbox']:
-            mailbox = obj
-        if mailbox:
-            print(f"[RUNTIME CHECK] Mailbox takeable: {mailbox.attributes.get('takeable')}, portable: {mailbox.attributes.get('portable')}")
         # Add a fallback room for demo/testing
         # Add canonical NPCs to their rooms
         rooms["WHOUS"] = Room(
