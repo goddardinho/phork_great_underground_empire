@@ -23,7 +23,7 @@
   - [x] Death and restart logic
   - [x] Save/load with full game state
   - [x] Help system and command list
-  - [ ] Object attributes (edible, readable, wearable, portable, etc.)
+  - [x] Object attributes (edible, readable, wearable, portable, etc.)
   - [ ] Room flags (dangerous, dark, visited, etc.)
   - [ ] Synonyms and flexible parser
   - [ ] Random events (thief, troll, etc.)

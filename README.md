@@ -34,8 +34,8 @@ Phork is a clean-room Python reimplementation of the classic Zork I, inspired by
 - [x] Implement puzzles, NPCs, and advanced object logic
 - [x] Add automated tests for movement, puzzles, and map fidelity
 - [x] Add save/load functionality and more gameplay features
-- [ ] Gameplay parity
 - [ ] Room/location parity
+- [ ] Gameplay parity
 
 ## License
 

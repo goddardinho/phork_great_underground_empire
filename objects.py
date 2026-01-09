@@ -21,6 +21,34 @@ canonical_attributes = {
     "portable": True,    # Can be carried
     "readable": False,   # Can be read
     "visible": True,     # Is visible
+    "door": False,           # Is a door
+    "transparent": False,    # Is transparent
+    "indescribable": False,  # Not describable
+    "drinkable": False,      # Can be drunk
+    "victim": False,         # Is a victim
+    "flammable": False,      # Can be set on fire
+    "burning": False,        # Is on fire
+    "tool": False,           # Is a tool
+    "turnable": False,       # Can be turned
+    "vehicle": False,        # Is a vehicle
+    "reachable": False,      # Reachable from a vehicle
+    "asleep": False,         # Is asleep
+    "searchable": False,     # Can be searched
+    "sacred": False,         # Thief can't take
+    "tieable": False,        # Can be tied
+    "climbable": False,      # Can be climbed
+    "actor": False,          # Is an actor
+    "fighting": False,       # Is in melee
+    "villain": False,        # Is a villain
+    "staggered": False,      # Can't fight this turn
+    "dangerous": False,      # Dangerous to touch
+    "collective": False,     # Collective noun
+    "touched": False,        # Has been touched
+    "turned_on": False,      # Light is on
+    "diggable": False,       # Can be dug
+    "bunch": False,          # For "all", etc.
+    "trytake": False,        # Handles not being taken
+    "no_check": False,       # Skip put/drop checks
 }
 
 class GameObject:
@@ -61,9 +89,51 @@ class GameObject:
                 desc += f" It contains: {', '.join([o.name for o in contents])}."
             else:
                 desc += " It is empty."
-        # Show other canonical attributes
-        for attr, value in self.attributes.items():
-            if attr in ["osize", "score_value", "container", "locked", "open", "openable", "lit", "takeable", "wearable", "edible", "weapon", "portable", "readable"]:
-                if value:
-                    desc += f" [{attr}: {value}]"
+
+        # User-friendly attribute display, Zork-style
+        attr_labels = {
+            "door": "a door",
+            "transparent": "transparent",
+            "edible": "edible",
+            "indescribable": "indescribable",
+            "drinkable": "drinkable",
+            "container": "a container",
+            "lit": "a light",
+            "victim": "a victim",
+            "flammable": "flammable",
+            "burning": "burning",
+            "tool": "a tool",
+            "turnable": "turnable",
+            "vehicle": "a vehicle",
+            "reachable": "reachable from a vehicle",
+            "asleep": "asleep",
+            "searchable": "searchable",
+            "sacred": "sacred",
+            "tieable": "tieable",
+            "climbable": "climbable",
+            "actor": "an actor",
+            "weapon": "a weapon",
+            "fighting": "fighting",
+            "villain": "a villain",
+            "staggered": "staggered",
+            "dangerous": "dangerous to touch",
+            "collective": "collective noun",
+            "open": "open",
+            "touched": "touched",
+            "turned_on": "turned on",
+            "diggable": "diggable",
+            "bunch": "a bunch",
+            "trytake": "resists being taken",
+            "no_check": "ignores put/drop checks",
+            "wearable": "wearable",
+            "readable": "readable",
+            "takeable": "takeable",
+            "portable": "portable",
+        }
+        shown = []
+        for attr, label in attr_labels.items():
+            if self.attributes.get(attr, False):
+                shown.append(label)
+        if shown:
+            desc += " [" + ", ".join(shown) + "]"
         return desc
