@@ -268,11 +268,15 @@ from objects import GameObject
 
 
 class Room:
-    # Room flag bitfield constants
-    ROOM_DARK = 0x01
-    ROOM_VISITED = 0x02
-    ROOM_DEADLY = 0x04
-    # Add more as needed
+    # Room flag bitfield constants (canonical Zork)
+    ROOM_DARK     = 0x01  # Room is dark unless lit by a light source
+    ROOM_VISITED  = 0x02  # Player has entered the room before
+    ROOM_DEADLY   = 0x04  # Entering the room can cause death (e.g., grue, trap)
+    ROOM_OUTDOORS = 0x08  # Room is outdoors (affects weather, day/night, etc.)
+    ROOM_WATER    = 0x10  # Room contains water (affects swimming, drowning, etc.)
+    ROOM_SOUND    = 0x20  # Room has special sound behavior
+    ROOM_MAGIC    = 0x40  # Room has magical properties (teleport, etc.)
+    ROOM_LOCKED   = 0x80  # Room or exits are locked
 
     def __init__(
         self,

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4.0 (2026-01-09)
+
+- _Describe changes for this release here._
+
+
 ## v0.3.2 (2026-01-09)
 
 - Attribute-driven object logic validated and enforced:

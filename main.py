@@ -121,7 +121,7 @@ def load_rooms():
                     },
                 ),
             ],
-            flags=0,  # Use bitfield flags, e.g., Room.ROOM_DARK | Room.ROOM_VISITED
+            flags=Room.ROOM_OUTDOORS,  # Outdoors (field west of house)
             action=None,
             npcs=[],  # THIEF will be added in demo mode only
         )
@@ -163,7 +163,7 @@ def load_rooms():
                     },
                 ),
             ],
-            flags=0,  # Set appropriate bitfield flags if needed
+            flags=Room.ROOM_LOCKED,  # Indoors, west exit is locked
             action=None,
             npcs=[TROLL, CYCLOPS, ROBOT],
         )
@@ -176,7 +176,7 @@ def load_rooms():
             objects=[
                 GameObject("Axe", "A heavy troll's axe.", attributes={"osize": 5})
             ],
-            flags=Room.ROOM_DEADLY,
+            flags=Room.ROOM_DEADLY | Room.ROOM_OUTDOORS,  # Deadly and outdoors (bridge)
             action=None,
             npcs=[TROLL],
         )
@@ -186,7 +186,7 @@ def load_rooms():
             desc_short="Cyclops Room",
             exits={"down": "TROLL"},
             objects=[],
-            flags=Room.ROOM_DEADLY,
+            flags=Room.ROOM_DEADLY | Room.ROOM_DARK,  # Deadly and dark (cyclops lair)
             action=None,
             npcs=[CYCLOPS],
         )
@@ -202,7 +202,7 @@ def load_rooms():
                     attributes={"osize": 2, "score_value": 25},
                 )
             ],
-            flags=0,  # Use bitfield flags
+            flags=Room.ROOM_MAGIC,  # Treasure room often has magical properties
             action=None,
             npcs=[THIEF],
         )
