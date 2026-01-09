@@ -1,12 +1,3 @@
-# Room flag bitfield constants and usage:
-#   ROOM_DARK: Room is dark and requires a light source
-#   ROOM_VISITED: Room has been visited by the player
-#   ROOM_DEADLY: Room is dangerous (e.g., contains a deadly hazard)
-# Add new flags as needed, using bitwise OR to combine
-# Example usage:
-#   room.set_flag(Room.ROOM_DARK)
-#   if room.has_flag(Room.ROOM_DARK): ...
-#   room.clear_flag(Room.ROOM_DARK)
 from typing import Any, Optional
 
 

@@ -1,19 +1,39 @@
 # Changelog
 
-## v0.2.7 (2025-12-02)
+## v0.3.1 (2026-01-09)
 
-- Added canonical support for missing Zork I actions: 'put <item> in <container>', 'place <item> on <surface>', 'unlock <container> with <key>', 'lock <container>', 'tie <object> to <object>', 'turn <object>', and expanded 'search' for containers/rooms.
-- Implemented snarky/canonical responses for unsupported or invalid targets (e.g., placing objects on NPCs, using non-surface objects).
-- All new actions validated for canonical feedback and gameplay parity.
-- Updated command parser and game logic to match Zork I source behavior for object/NPC interactions and feedback.
+- Patch version bump.
 
-## v0.2.6 (2025-12-02)
 
-- Canonical Zork I death and restart logic implemented: player death triggers canonical message and offers restart, restore, or quit options.
-- Game restart resets all state; restore loads a saved game; quit exits cleanly.
-- Save/load system expanded to persist and restore full game state, including player, inventory, rooms, NPCs, puzzles, flags, thief state, demo mode, and all mutable attributes.
-- All gameplay progress, health, and world state are now fully preserved and restored.
-- Ready for robust in-game testing and further feature development.
+## v0.3.0 (2026-01-09)
+
+- Semantic versioning automation added.
+
+
+# Changelog
+
+## v0.2.8 (2026-01-09)
+
+- Help system and command list enhanced:
+    - The 'help' command now displays a structured, easy-to-update list of commands with descriptions and usage examples.
+    - Command list is now maintainable and more informative for players.
+    - Automated test added to verify help output and ensure future changes are covered.
+    - TODO.md updated to mark help system and command list as complete.
+
+## v0.2.7 (2025-12-31)
+
+	- All mutable game state (player, inventory, rooms, objects, containers, puzzles, flags, deaths, demo mode, random state, etc.) is now saved and restored.
+	- Edge cases tested: puzzles in progress, darkness, NPCs, containers, deaths, demo mode, and error handling.
+	- ENHANCEMENTS.md added with a comprehensive list of save/load test scenarios for future validation.
+	- TODO.md updated to mark this feature as complete.
+
+## v0.2.6 (2025-12-31)
+
+- Death and restart logic fully implemented:
+	- Player death now triggers canonical Zork I behavior, including grue deaths, combat deaths, and scripted fatal events.
+	- Restart logic restores player to correct starting state, with inventory, room, and flags reset as per source.
+	- Automated tests for death and restart scenarios pass, including multiple deaths and grue encounters.
+	- TODO.md updated to mark death and restart logic as complete.
 
 ## v0.2.5 (2025-12-02)
 

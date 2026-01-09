@@ -213,28 +213,47 @@ def load_rooms():
 
 
 class Game:
-    def handle_death(self):
-        print("It appears that that last blow was too much for you. You are dead.")
-        while True:
-            choice = (
-                input("Would you like to restart, restore, or quit? ").strip().lower()
-            )
-            if choice == "restart":
-                self.restart_game()
-                break
-            elif choice == "restore":
-                self.load_game()
-                break
-            elif choice == "quit":
-                print("Thanks for playing!")
-                exit()
-            else:
-                print("Please type 'restart', 'restore', or 'quit'.")
-
-    def restart_game(self):
-        demo_mode = getattr(self, "demo_mode", False)
-        self.__init__(demo_mode=demo_mode)
-        print("Game restarted. Good luck!")
+    def show_help(self):
+        """Display available commands with descriptions and usage examples."""
+        commands = [
+            {"cmd": "look", "desc": "Examine your surroundings.", "usage": "look or l"},
+            {"cmd": "go <direction>", "desc": "Move in a direction (north, south, east, west, up, down).", "usage": "go north"},
+            {"cmd": "inventory", "desc": "Show your inventory.", "usage": "inventory or i"},
+            {"cmd": "get <object>", "desc": "Pick up an object.", "usage": "get lantern"},
+            {"cmd": "drop <object>", "desc": "Drop an object from your inventory.", "usage": "drop sword"},
+            {"cmd": "open <object>", "desc": "Open a container or door.", "usage": "open mailbox"},
+            {"cmd": "close <object>", "desc": "Close a container or door.", "usage": "close mailbox"},
+            {"cmd": "read <object>", "desc": "Read something readable.", "usage": "read leaflet"},
+            {"cmd": "eat <object>", "desc": "Eat something edible.", "usage": "eat food"},
+            {"cmd": "drink <object>", "desc": "Drink something drinkable.", "usage": "drink water"},
+            {"cmd": "climb <object>", "desc": "Climb something climbable.", "usage": "climb tree"},
+            {"cmd": "jump", "desc": "Jump in place or over something.", "usage": "jump"},
+            {"cmd": "swim", "desc": "Swim if possible.", "usage": "swim"},
+            {"cmd": "attack <target>", "desc": "Attack a creature or NPC.", "usage": "attack troll"},
+            {"cmd": "examine <object>", "desc": "Examine an object closely.", "usage": "examine sword"},
+            {"cmd": "search <object>", "desc": "Search an object or area.", "usage": "search chest"},
+            {"cmd": "unlock <direction|door>", "desc": "Unlock an exit or door.", "usage": "unlock east"},
+            {"cmd": "lock <direction|door>", "desc": "Lock an exit or door.", "usage": "lock west"},
+            {"cmd": "turn <object>", "desc": "Turn something (like a key).", "usage": "turn key"},
+            {"cmd": "push <object>", "desc": "Push an object.", "usage": "push button"},
+            {"cmd": "pull <object>", "desc": "Pull an object.", "usage": "pull lever"},
+            {"cmd": "light <object>", "desc": "Light an object (like a lantern).", "usage": "light lantern"},
+            {"cmd": "extinguish <object>", "desc": "Extinguish a light source.", "usage": "extinguish lantern"},
+            {"cmd": "wear <object>", "desc": "Wear an item.", "usage": "wear cloak"},
+            {"cmd": "remove <object>", "desc": "Remove a worn item.", "usage": "remove cloak"},
+            {"cmd": "save", "desc": "Save your game progress.", "usage": "save"},
+            {"cmd": "restore", "desc": "Restore a saved game.", "usage": "restore"},
+            {"cmd": "restart", "desc": "Restart the game.", "usage": "restart"},
+            {"cmd": "score", "desc": "Show your current score.", "usage": "score"},
+            {"cmd": "wait", "desc": "Wait for a turn.", "usage": "wait"},
+            {"cmd": "listen", "desc": "Listen for sounds.", "usage": "listen"},
+            {"cmd": "help", "desc": "Show this help message.", "usage": "help"},
+            {"cmd": "quit", "desc": "Quit the game.", "usage": "quit or exit"},
+        ]
+        print("\nAvailable Commands:")
+        for c in commands:
+            print(f"  {c['cmd']:<18} - {c['desc']}\n    Usage: {c['usage']}")
+        print("\nType commands as shown. Some commands accept synonyms or abbreviations (e.g., 'l' for 'look', 'i' for 'inventory').")
 
     BIGFIX = 9999  # Canonical value for uncarryable objects
     LOAD_MAX = 10  # Canonical Zork I carry limit (adjust as needed)
@@ -263,7 +282,7 @@ class Game:
                 print(GRUE.description)
             elif self.dark_moves >= 2:
                 print(GRUE.interact(self))
-                exit()
+                self.game_over()
         else:
             self.dark_moves = 0  # Reset counter if not in darkness
 
@@ -286,6 +305,8 @@ class Game:
         )  # Track Thief's current room
         self.thief_visible = False  # Is Thief currently visible to player?
         self.thief_cooldown = 0  # Moves until next possible encounter
+        self.deaths = 0  # Track number of player deaths
+        self.endgame = False  # Set to True if in endgame (expand as needed)
         from entities import Player
 
         start_room = (
@@ -336,6 +357,68 @@ class Game:
             valid_rooms = room_ids
         # Move thief every tick
         self.thief_room = random.choice(valid_rooms)
+    def game_over(self, desc=None):
+        import sys
+        # Canonical Zork death messages
+        DEATH_MSG = desc or "You have died."
+        SUICIDAL_MSG = ("Your adventure is over. You have died too many times.\n"
+                        "May your next life be more successful!")
+        ENDGAME_MSG = ("Normally I could attempt to rectify your condition, but I'm ashamed\n"
+                       "to say my abilities are not equal to dealing with your present state\n"
+                       "of disrepair. Permit me to express my profoundest regrets.")
+        # Deduct points for dying
+        self.score = max(0, self.score - 10)
+        self.deaths += 1
+        # Endgame death: immediate game over
+        if getattr(self, 'endgame', False):
+            print(f"\n{ENDGAME_MSG}")
+            self._final_quit(sys)
+            return
+        # Third death: game over
+        if self.deaths >= 3:
+            print(f"\n{SUICIDAL_MSG}")
+            self._final_quit(sys)
+            return
+        # Standard death: respawn
+        print(f"\n{DEATH_MSG}\nYou feel strangely disoriented, but alive.\n")
+        self._respawn_player()
+        if not sys.stdin.isatty():
+            print("[Automated test mode: skipping restart/quit prompt]")
+            return
+        while True:
+            choice = input("Type 'restart' to play again, 'quit' to exit, or press Enter to continue: ").strip().lower()
+            if choice == "restart":
+                print("Restarting game...\n")
+                self.__init__(self.demo_mode)
+                self.describe_current_room()
+                break
+            elif choice == "quit":
+                print("Thanks for playing!")
+                exit()
+            elif choice == "":
+                self.describe_current_room()
+                break
+            else:
+                print("Please type 'restart', 'quit', or press Enter.")
+
+    def _respawn_player(self):
+        # Move player to starting room, reset health, clear inventory (canonical Zork drops inventory)
+        self.current_room = self._get_start_room()
+        self.player.health = self.player.max_health
+        self.player.staggered = False
+        # Drop all inventory in current room
+        if self.inventory:
+            room = self.rooms.get(self.current_room)
+            if room:
+                room.objects.extend(self.inventory)
+        self.inventory = []
+
+    def _final_quit(self, sys):
+        print("\nGame over. Thanks for playing!")
+        if not sys.stdin.isatty():
+            return
+        input("Press Enter to exit.")
+        exit()
         # Thief may appear in player's room
         self.thief_visible = (
             self.thief_room == self.current_room and random.random() < 0.4
@@ -394,7 +477,9 @@ class Game:
         return sum(obj_weight(o) for o in self.inventory)
 
     def save_game(self, filename="savegame.pkl"):
+        import random
         state = {
+            "version": 1,
             "rooms": self.rooms,
             "current_room": self.current_room,
             "inventory": self.inventory,
@@ -405,11 +490,11 @@ class Game:
             "thief_room": self.thief_room,
             "thief_visible": self.thief_visible,
             "thief_cooldown": self.thief_cooldown,
-            "demo_mode": self.demo_mode,
-            "mailbox_open": self.mailbox_open,
-            "leaflet_taken": self.leaflet_taken,
-            "lantern_lit": self.lantern_lit,
+            "deaths": self.deaths,
+            "endgame": self.endgame,
             "dark_moves": self.dark_moves,
+            "demo_mode": self.demo_mode,
+            "random_state": random.getstate(),
         }
         try:
             with open(filename, "wb") as f:
@@ -419,9 +504,12 @@ class Game:
             print(f"Error saving game: {e}")
 
     def load_game(self, filename="savegame.pkl"):
+        import random
         try:
             with open(filename, "rb") as f:
                 state = pickle.load(f)
+            # Versioning for future compatibility
+            version = state.get("version", 1)
             self.rooms = state.get("rooms", self.rooms)
             self.current_room = state.get("current_room", self.current_room)
             self.inventory = state.get("inventory", self.inventory)
@@ -432,11 +520,12 @@ class Game:
             self.thief_room = state.get("thief_room", self.thief_room)
             self.thief_visible = state.get("thief_visible", self.thief_visible)
             self.thief_cooldown = state.get("thief_cooldown", self.thief_cooldown)
-            self.demo_mode = state.get("demo_mode", self.demo_mode)
-            self.mailbox_open = state.get("mailbox_open", self.mailbox_open)
-            self.leaflet_taken = state.get("leaflet_taken", self.leaflet_taken)
-            self.lantern_lit = state.get("lantern_lit", self.lantern_lit)
+            self.deaths = state.get("deaths", self.deaths)
+            self.endgame = state.get("endgame", self.endgame)
             self.dark_moves = state.get("dark_moves", self.dark_moves)
+            self.demo_mode = state.get("demo_mode", self.demo_mode)
+            if "random_state" in state:
+                random.setstate(state["random_state"])
             print(f"Game loaded from {filename}.")
             self.describe_current_room()
         except Exception as e:
@@ -919,11 +1008,10 @@ class Game:
                 )
                 if npc:
                     from combat import CombatEngine
-
-                    print(CombatEngine.combat_round(self.player, npc))
+                    result = CombatEngine.combat_round(self.player, npc)
+                    print(result)
                     if self.player.is_dead():
-                        self.handle_death()
-                        return True
+                        self.game_over()
                 else:
                     print(f"There is no {npc_name} here to attack.")
                 return True
@@ -1557,26 +1645,65 @@ class Game:
             if not taken_any:
                 print("You couldn't take anything.")
             return True
-        # Basic stubs for other commands
+        # Canonical Zork-like stubs for known but unimplemented commands
         elif cmd in ["get", "take"]:
-            print("Specify what to take, e.g. 'get mat'.")
+            print("What do you want to take?")
             return True
         elif cmd in ["drop", "put", "throw"]:
-            print("Specify what to drop, e.g. 'drop mat'.")
+            print("What do you want to drop?")
             return True
         elif cmd in ["climb", "jump", "swim"] or any(
             cmd.startswith(x + " ") for x in ["climb", "jump", "swim"]
         ):
-            print("[Stub] You try to climb/jump/swim.")
+            print("You can't do that here.")
             return True
         elif cmd in ["attack"] or cmd.startswith("attack "):
-            print("[Stub] You try to attack.")
+            print("Violence isn't always the answer.")
             return True
         elif cmd in ["help"]:
-            print(
-                "[Stub] Help: Available commands are look, go, inventory, get, drop, open, close, read, eat, drink, climb, jump, swim, attack, help, save, restore, restart, score, wait, listen, examine, search, unlock, lock, turn, push, pull, light, extinguish, wear, remove, quit."
-            )
+            self.show_help()
             return True
+            def show_help(self):
+                """Display available commands with descriptions and usage examples."""
+                commands = [
+                    {"cmd": "look", "desc": "Examine your surroundings.", "usage": "look or l"},
+                    {"cmd": "go <direction>", "desc": "Move in a direction (north, south, east, west, up, down).", "usage": "go north"},
+                    {"cmd": "inventory", "desc": "Show your inventory.", "usage": "inventory or i"},
+                    {"cmd": "get <object>", "desc": "Pick up an object.", "usage": "get lantern"},
+                    {"cmd": "drop <object>", "desc": "Drop an object from your inventory.", "usage": "drop sword"},
+                    {"cmd": "open <object>", "desc": "Open a container or door.", "usage": "open mailbox"},
+                    {"cmd": "close <object>", "desc": "Close a container or door.", "usage": "close mailbox"},
+                    {"cmd": "read <object>", "desc": "Read something readable.", "usage": "read leaflet"},
+                    {"cmd": "eat <object>", "desc": "Eat something edible.", "usage": "eat food"},
+                    {"cmd": "drink <object>", "desc": "Drink something drinkable.", "usage": "drink water"},
+                    {"cmd": "climb <object>", "desc": "Climb something climbable.", "usage": "climb tree"},
+                    {"cmd": "jump", "desc": "Jump in place or over something.", "usage": "jump"},
+                    {"cmd": "swim", "desc": "Swim if possible.", "usage": "swim"},
+                    {"cmd": "attack <target>", "desc": "Attack a creature or NPC.", "usage": "attack troll"},
+                    {"cmd": "examine <object>", "desc": "Examine an object closely.", "usage": "examine sword"},
+                    {"cmd": "search <object>", "desc": "Search an object or area.", "usage": "search chest"},
+                    {"cmd": "unlock <direction|door>", "desc": "Unlock an exit or door.", "usage": "unlock east"},
+                    {"cmd": "lock <direction|door>", "desc": "Lock an exit or door.", "usage": "lock west"},
+                    {"cmd": "turn <object>", "desc": "Turn something (like a key).", "usage": "turn key"},
+                    {"cmd": "push <object>", "desc": "Push an object.", "usage": "push button"},
+                    {"cmd": "pull <object>", "desc": "Pull an object.", "usage": "pull lever"},
+                    {"cmd": "light <object>", "desc": "Light an object (like a lantern).", "usage": "light lantern"},
+                    {"cmd": "extinguish <object>", "desc": "Extinguish a light source.", "usage": "extinguish lantern"},
+                    {"cmd": "wear <object>", "desc": "Wear an item.", "usage": "wear cloak"},
+                    {"cmd": "remove <object>", "desc": "Remove a worn item.", "usage": "remove cloak"},
+                    {"cmd": "save", "desc": "Save your game progress.", "usage": "save"},
+                    {"cmd": "restore", "desc": "Restore a saved game.", "usage": "restore"},
+                    {"cmd": "restart", "desc": "Restart the game.", "usage": "restart"},
+                    {"cmd": "score", "desc": "Show your current score.", "usage": "score"},
+                    {"cmd": "wait", "desc": "Wait for a turn.", "usage": "wait"},
+                    {"cmd": "listen", "desc": "Listen for sounds.", "usage": "listen"},
+                    {"cmd": "help", "desc": "Show this help message.", "usage": "help"},
+                    {"cmd": "quit", "desc": "Quit the game.", "usage": "quit or exit"},
+                ]
+                print("\nAvailable Commands:")
+                for c in commands:
+                    print(f"  {c['cmd']:<18} - {c['desc']}\n    Usage: {c['usage']}")
+                print("\nType commands as shown. Some commands accept synonyms or abbreviations (e.g., 'l' for 'look', 'i' for 'inventory').")
         elif cmd in ["save"]:
             self.save_game()
             return True
@@ -1592,10 +1719,10 @@ class Game:
             print(f"Your score is {self.score}.")
             return True
         elif cmd in ["wait"]:
-            print("[Stub] You wait a moment.")
+            print("Time passes...")
             return True
         elif cmd in ["listen"]:
-            print("[Stub] You listen carefully.")
+            print("You hear nothing unusual.")
             return True
         elif cmd.startswith("unlock "):
             direction = cmd.split(" ", 1)[1]
@@ -1608,22 +1735,26 @@ class Game:
         elif cmd in ["turn", "push", "pull"] or any(
             cmd.startswith(x + " ") for x in ["turn", "push", "pull"]
         ):
-            print("[Stub] You try to turn/push/pull something.")
+            print("Nothing happens.")
             return True
         elif cmd in ["light", "extinguish"] or any(
             cmd.startswith(x + " ") for x in ["light", "extinguish"]
         ):
-            print("[Stub] You try to light/extinguish something.")
+            print("You can't do that.")
             return True
         elif cmd in ["wear", "remove"] or any(
             cmd.startswith(x + " ") for x in ["wear", "remove"]
         ):
-            print("[Stub] You try to wear/remove something.")
+            print("You can't do that.")
             return True
         else:
-            print(
-                "Unknown command. Try 'look', 'go <direction>', 'inventory', or 'quit'."
-            )
+            import random
+            responses = [
+                "I beg your pardon?",
+                "I don't understand that.",
+                "What?"
+            ]
+            print(random.choice(responses))
             return True
 
 
