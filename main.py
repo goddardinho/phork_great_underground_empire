@@ -22,6 +22,60 @@ def load_rooms():
     action: Optional[str] = None
     # ...existing parsing logic...
     if not rooms:
+        # Runtime check: print mailbox takeable/portable attributes
+        mailbox = None
+        for obj in [
+            o for o in [
+                GameObject(
+                    "Welcome Mat",
+                    "A simple mat lies here.",
+                    attributes={
+                        "osize": 1,
+                        "score_value": 0,
+                        "takeable": True,
+                        "portable": True,
+                    },
+                ),
+                GameObject(
+                    "Lantern",
+                    "A brass lantern, unlit.",
+                    attributes={
+                        "osize": 2,
+                        "score_value": 0,
+                        "lit": False,
+                        "takeable": True,
+                        "portable": True,
+                    },
+                ),
+                GameObject(
+                    "Sword",
+                    "A sharp sword gleams here.",
+                    attributes={
+                        "osize": 3,
+                        "score_value": 0,
+                        "weapon": True,
+                        "takeable": True,
+                        "portable": True,
+                    },
+                ),
+                Container(
+                    "Mailbox",
+                    "A small mailbox. It is closed.",
+                    attributes={
+                        "osize": 4,
+                        "open": False,
+                        "openable": True,
+                        "locked": True,
+                        "container": True,
+                        "takeable": False,
+                        "portable": False,
+                        "contents": [],
+                    },
+                ),
+            ] if hasattr(o, 'name') and o.name.lower() == 'mailbox']:
+            mailbox = obj
+        if mailbox:
+            print(f"[RUNTIME CHECK] Mailbox takeable: {mailbox.attributes.get('takeable')}, portable: {mailbox.attributes.get('portable')}")
         # Add a fallback room for demo/testing
         # Add canonical NPCs to their rooms
         rooms["WHOUS"] = Room(
@@ -265,12 +319,22 @@ class Game:
             return False
         # Room is dark if it has the ROOM_DARK flag and no light source is present
         if room.has_flag(Room.ROOM_DARK):
-            # Check for lit lantern in inventory
-            for obj in self.inventory:
-                if obj.name.lower() == "lantern" and getattr(obj, "attributes", {}).get(
-                    "lit", False
-                ):
-                    return False
+            def has_lit_light_source(objs):
+                for obj in objs:
+                    attrs = getattr(obj, "attributes", {})
+                    # Any object with lit or turned_on and light/tool/lantern/torch/whatever
+                    if (attrs.get("lit", False) or attrs.get("turned_on", False)) and (
+                        attrs.get("light", False) or obj.name.lower() in ["lantern", "lamp", "torch"]
+                    ):
+                        return True
+                    # Check open containers recursively
+                    if attrs.get("container", False) and attrs.get("open", False):
+                        if has_lit_light_source(attrs.get("contents", [])):
+                            return True
+                return False
+            # Check inventory and open containers for any lit/turned_on light source
+            if has_lit_light_source(self.inventory):
+                return False
             return True
         return False
 
@@ -856,26 +920,21 @@ class Game:
         # Canonical: tie <object> to <object>
         if cmd.startswith("tie ") and " to " in cmd:
             parts = cmd.split(" to ", 1)
-            obj1_name = parts[0][4:].strip()
-            obj2_name = parts[1].strip()
-            obj1 = next(
-                (o for o in self.inventory if o.name.lower() == obj1_name), None
-            )
+            obj_name = cmd.split(" ", 1)[1]
             room = self.rooms.get(self.current_room)
-            obj2 = None
-            if room:
-                obj2 = next(
-                    (o for o in room.objects if o.name.lower() == obj2_name), None
-                )
-            if not obj1:
-                print(f"You don't have a {obj1_name} to tie.")
+            obj = next((o for o in (self.inventory + (room.objects if room else [])) if o.name.lower() == obj_name), None)
+            if obj:
+                if obj.attributes.get("tieable", False):
+                    print(f"You tie the {obj.name} securely.")
+                    obj.attributes["tied"] = True
+                    return True
+                if obj.attributes.get("bunch", False) or obj.attributes.get("collective", False):
+                    print(f"You can't tie the {obj.name} as a whole.")
+                    return True
+                print(f"You can't tie the {obj.name}.")
                 return True
-            if not obj2:
-                print(f"There is no {obj2_name} here to tie things to.")
-                return True
-            print(
-                f"You tie the {obj1.name} to the {obj2.name}. (Nothing special happens.)"
-            )
+            print(f"There is no {obj_name} here to tie.")
+            return True
             return True
         # Canonical: turn <object>
         if cmd.startswith("turn "):
@@ -987,6 +1046,24 @@ class Game:
             obj_name = cmd.split(" ", 1)[1]
             from object_actions import object_action
 
+            # Try to find object in room or inventory
+            room = self.rooms.get(self.current_room)
+            obj = None
+            if room:
+                obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+            if not obj:
+                obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            # Actor inventory search
+            if obj and obj.attributes.get("actor", False) and hasattr(obj, "inventory"):
+                if obj.inventory:
+                    print(f"You examine the {obj.name} and find: {', '.join([item.name for item in obj.inventory])}.")
+                else:
+                    print(f"You examine the {obj.name} but find nothing of interest.")
+                return True
+            # Indescribable
+            if obj and obj.attributes.get("indescribable", False):
+                print(f"You can't make out any details about the {obj.name}.")
+                return True
             if object_action(self, "look", obj_name):
                 return True
             print(f"You see nothing special about the {obj_name}.")
@@ -1006,14 +1083,25 @@ class Game:
                     ),
                     None,
                 )
-                if npc:
-                    from combat import CombatEngine
-                    result = CombatEngine.combat_round(self.player, npc)
-                    print(result)
-                    if self.player.is_dead():
-                        self.game_over()
-                else:
+                # Trytake/villain resist
+                if not npc:
+                    # Check objects for villain/trytake
+                    obj = None
+                    if room:
+                        obj = next((o for o in room.objects if o.name.lower() == npc_name), None)
+                    if obj and obj.attributes.get("villain", False):
+                        print(f"The {obj.name} resists your attack!")
+                        return True
+                    if obj and obj.attributes.get("trytake", False):
+                        print(f"The {obj.name} seems to resist your attack.")
+                        return True
                     print(f"There is no {npc_name} here to attack.")
+                    return True
+                from combat import CombatEngine
+                result = CombatEngine.combat_round(self.player, npc)
+                print(result)
+                if self.player.is_dead():
+                    self.game_over()
                 return True
         # Other NPC interactions
         npc_actions = [
@@ -1312,10 +1400,26 @@ class Game:
                                 return True
                         print("You can't take the leaflet unless the mailbox is open.")
                         return True
-                    # Canonical snarky responses for uncarryable objects
-                    if not obj.attributes.get(
-                        "takeable", True
-                    ) or not obj.attributes.get("portable", True):
+                    # Prevent taking dangerous, burning, sacred, or villain objects, or those that resist being taken
+                    if obj.attributes.get("dangerous", False):
+                        print(f"You recoil from the {obj.name}; it looks dangerous to touch!")
+                        return True
+                    if obj.attributes.get("burning", False):
+                        print(f"You can't take the {obj.name} while it's burning!")
+                        return True
+                    if obj.attributes.get("sacred", False):
+                        print(f"You feel an invisible force prevents you from taking the {obj.name}.")
+                        return True
+                    if obj.attributes.get("collective", False):
+                        print(f"You can't take the {obj.name} as a whole; try taking individual items.")
+                        return True
+                    if obj.attributes.get("villain", False):
+                        print(f"The {obj.name} resists your attempt to take it!")
+                        return True
+                    if obj.attributes.get("trytake", False):
+                        print(f"The {obj.name} seems to resist being taken.")
+                        return True
+                    if not obj.attributes.get("takeable", True) or not obj.attributes.get("portable", True):
                         snarky_lines = [
                             "The {name} is an integral part of the scenery and cannot be taken.",
                             "You must be joking.",
@@ -1324,7 +1428,6 @@ class Game:
                             "You can't take that.",
                         ]
                         import random
-
                         print(random.choice(snarky_lines).format(name=obj.name))
                         return True
                     obj_weight = (
@@ -1344,6 +1447,8 @@ class Game:
                         return True
                     self.inventory.append(obj)
                     room.objects.remove(obj)
+                    # Set 'touched' attribute when object is taken (Zork TOUCHBIT)
+                    obj.attributes["touched"] = True
                     print(f"You take the {obj.name}.")
                     if obj.name.lower() in [
                         "treasure chest",
@@ -1440,19 +1545,88 @@ class Game:
         # Object-specific actions
         elif cmd.startswith("open "):
             obj_name = cmd.split(" ", 1)[1]
-            from object_actions import object_action
-
-            if object_action(self, "open", obj_name):
+            obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            if not obj:
+                room = self.rooms.get(self.current_room)
+                if room:
+                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+            if obj:
+                if obj.attributes.get("locked", False):
+                    print(f"The {obj.name} is locked.")
+                    return True
+                if obj.attributes.get("openable", False) or obj.attributes.get("door", False):
+                    if obj.attributes.get("open", False):
+                        print(f"The {obj.name} is already open.")
+                    else:
+                        obj.attributes["open"] = True
+                        print(f"You open the {obj.name}.")
+                    return True
+                print(f"You can't open the {obj.name}.")
                 return True
-            print(f"[Stub] You try to open the {obj_name}.")
+            print(f"There is no {obj_name} here to open.")
             return True
         elif cmd.startswith("close "):
             obj_name = cmd.split(" ", 1)[1]
-            from object_actions import object_action
-
-            if object_action(self, "close", obj_name):
+            obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            if not obj:
+                room = self.rooms.get(self.current_room)
+                if room:
+                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+            if obj:
+                if obj.attributes.get("openable", False) or obj.attributes.get("door", False):
+                    if not obj.attributes.get("open", False):
+                        print(f"The {obj.name} is already closed.")
+                    else:
+                        obj.attributes["open"] = False
+                        print(f"You close the {obj.name}.")
+                    return True
+                print(f"You can't close the {obj.name}.")
                 return True
-            print(f"[Stub] You try to close the {obj_name}.")
+            print(f"There is no {obj_name} here to close.")
+            return True
+        elif cmd.startswith("unlock "):
+            obj_name = cmd.split(" ", 1)[1]
+            obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            if not obj:
+                room = self.rooms.get(self.current_room)
+                if room:
+                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+            if obj:
+                if not obj.attributes.get("locked", False):
+                    print(f"The {obj.name} is already unlocked.")
+                    return True
+                obj.attributes["locked"] = False
+                print(f"You unlock the {obj.name}.")
+                return True
+            print(f"There is no {obj_name} here to unlock.")
+            return True
+        elif cmd.startswith("lock "):
+            obj_name = cmd.split(" ", 1)[1]
+            obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            if not obj:
+                room = self.rooms.get(self.current_room)
+                if room:
+                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+            if obj:
+                if obj.attributes.get("locked", False):
+                    print(f"The {obj.name} is already locked.")
+                    return True
+                obj.attributes["locked"] = True
+                print(f"You lock the {obj.name}.")
+                return True
+            print(f"There is no {obj_name} here to lock.")
+            return True
+        elif cmd.startswith("look through "):
+            obj_name = cmd.split(" ", 2)[2]
+            obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            if not obj:
+                room = self.rooms.get(self.current_room)
+                if room:
+                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+            if obj and obj.attributes.get("transparent", False):
+                print(f"You look through the {obj.name} and see... (TODO: implement view)")
+                return True
+            print(f"You can't look through the {obj_name}.")
             return True
         elif cmd.startswith("look "):
             obj_name = cmd.split(" ", 1)[1]
@@ -1480,19 +1654,86 @@ class Game:
             return True
         elif cmd.startswith("light "):
             obj_name = cmd.split(" ", 1)[1]
-            from object_actions import object_action
-
-            if object_action(self, "light", obj_name):
+            # Find object in inventory or room
+            obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            if not obj:
+                room = self.rooms.get(self.current_room)
+                if room:
+                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+            if obj:
+                if obj.attributes.get("burning", False):
+                    print(f"The {obj.name} is already burning.")
+                    return True
+                if obj.attributes.get("flammable", False):
+                    obj.attributes["burning"] = True
+                    print(f"You set the {obj.name} on fire!")
+                    return True
+                if obj.attributes.get("lit", False) or obj.attributes.get("turned_on", False):
+                    print(f"The {obj.name} is already lit.")
+                    return True
+                if obj.attributes.get("light", False):
+                    obj.attributes["lit"] = True
+                    print(f"You light the {obj.name}.")
+                    return True
+                print(f"You can't light the {obj.name}.")
                 return True
-            print(f"[Stub] You try to light the {obj_name}.")
+            print(f"There is no {obj_name} here to light.")
             return True
         elif cmd.startswith("extinguish "):
             obj_name = cmd.split(" ", 1)[1]
-            from object_actions import object_action
-
-            if object_action(self, "extinguish", obj_name):
+            obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            if not obj:
+                room = self.rooms.get(self.current_room)
+                if room:
+                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+            if obj:
+                if obj.attributes.get("burning", False):
+                    obj.attributes["burning"] = False
+                    print(f"You extinguish the {obj.name}. The flames die out.")
+                    return True
+                if obj.attributes.get("lit", False):
+                    obj.attributes["lit"] = False
+                    print(f"You extinguish the {obj.name}. It is no longer lit.")
+                    return True
+                print(f"The {obj.name} is not burning or lit.")
                 return True
-            print(f"[Stub] You try to extinguish the {obj_name}.")
+            print(f"There is no {obj_name} here to extinguish.")
+            return True
+        elif cmd.startswith("tie "):
+            obj_name = cmd.split(" ", 1)[1]
+            obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            if not obj:
+                room = self.rooms.get(self.current_room)
+                if room:
+                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+            if obj:
+                if obj.attributes.get("tieable", False):
+                    print(f"You tie the {obj.name} securely.")
+                    obj.attributes["tied"] = True
+                    return True
+                # Support for 'tie' as a verb for bunch/collective
+                if obj.attributes.get("bunch", False) or obj.attributes.get("collective", False):
+                    print(f"You can't tie the {obj.name} as a whole.")
+                    return True
+                print(f"You can't tie the {obj.name}.")
+                return True
+            print(f"There is no {obj_name} here to tie.")
+            return True
+        elif cmd.startswith("dig "):
+            obj_name = cmd.split(" ", 1)[1]
+            obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            if not obj:
+                room = self.rooms.get(self.current_room)
+                if room:
+                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+            if obj:
+                if obj.attributes.get("diggable", False):
+                    print(f"You dig into the {obj.name}.")
+                    obj.attributes["dug"] = True
+                    return True
+                print(f"You can't dig the {obj.name}.")
+                return True
+            print(f"There is no {obj_name} here to dig.")
             return True
         # Object interaction: eat/drink
         elif any(cmd.startswith(x + " ") for x in ["eat", "drink"]):
@@ -1519,7 +1760,32 @@ class Game:
                 (o for o in all_objs if normalize(o.name) == obj_name_norm), None
             )
             if obj:
-                # Canonical snark for non-edible objects
+                # Prevent eating dangerous, burning, or sacred objects
+                if obj.attributes.get("dangerous", False):
+                    print(f"You value your life too much to eat the {obj.name}!")
+                    return True
+                if obj.attributes.get("burning", False):
+                    print(f"You can't eat the {obj.name} while it's burning!")
+                    return True
+                if obj.attributes.get("sacred", False):
+                    print(f"You feel an invisible force prevents you from eating the {obj.name}.")
+                    return True
+            elif cmd.startswith("touch "):
+                obj_name = cmd.split(" ", 1)[1]
+                obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+                if not obj:
+                    room = self.rooms.get(self.current_room)
+                    if room:
+                        obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                if obj:
+                    if obj.attributes.get("dangerous", False):
+                        print(f"You touch the {obj.name} and instantly regret it! It's dangerous!")
+                        return True
+                    print(f"You touch the {obj.name}. Nothing unusual happens.")
+                    obj.attributes["touched"] = True
+                    return True
+                print(f"There is no {obj_name} here to touch.")
+                return True
                 if not obj.attributes.get("edible", False):
                     snarky_eat = [
                         "I don't think that would be very tasty.",
@@ -1529,7 +1795,6 @@ class Game:
                         "You can't eat that.",
                     ]
                     import random
-
                     print(random.choice(snarky_eat).format(name=obj.name))
                     return True
                 else:
@@ -1613,12 +1878,72 @@ class Game:
                     obj = next(
                         (o for o in room.objects if o.name.lower() == obj_name), None
                     )
+            def recursive_search(o, depth=0):
+                indent = "  " * depth
+                # Indescribable objects cannot be examined
+                if o.attributes.get("indescribable", False):
+                    print(f"{indent}You can't make out any details about the {o.name}.")
+                    return
+                print(f"{indent}{o.name}: {o.describe()}")
+                # If object is an actor (NPC), show their inventory recursively if present
+                if o.attributes.get("actor", False) and hasattr(o, "inventory"):
+                    inv = getattr(o, "inventory", [])
+                    if inv:
+                        print(f"{indent}{o.name} is carrying:")
+                        for item in inv:
+                            recursive_search(item, depth + 1)
+                    else:
+                        print(f"{indent}{o.name} is not carrying anything.")
+                # If object is searchable and is a container, show contents recursively
+                elif o.attributes.get("searchable", False) and o.is_container():
+                    contents = o.attributes.get("contents", [])
+                    if contents:
+                        print(f"{indent}It contains:")
+                        for item in contents:
+                            recursive_search(item, depth + 1)
+                    else:
+                        print(f"{indent}It is empty.")
+                # If object is searchable but not a container
+                elif o.attributes.get("searchable", False):
+                    print(f"{indent}You search the {o.name} but find nothing of interest.")
             if obj:
-                print(f"{obj.name}: {obj.description}")
+                recursive_search(obj)
             else:
                 print(f"You see no {obj_name} to examine.")
             return True
-        # Take all command
+        elif cmd.startswith("wake "):
+            obj_name = cmd.split(" ", 1)[1]
+            obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            if not obj:
+                room = self.rooms.get(self.current_room)
+                if room:
+                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+            if obj:
+                if obj.attributes.get("asleep", False):
+                    obj.attributes["asleep"] = False
+                    print(f"You wake the {obj.name}.")
+                    return True
+                print(f"The {obj.name} is already awake.")
+                return True
+            print(f"There is no {obj_name} here to wake.")
+            return True
+        elif cmd.startswith("sleep "):
+            obj_name = cmd.split(" ", 1)[1]
+            obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            if not obj:
+                room = self.rooms.get(self.current_room)
+                if room:
+                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+            if obj:
+                if not obj.attributes.get("asleep", False):
+                    obj.attributes["asleep"] = True
+                    print(f"You put the {obj.name} to sleep.")
+                    return True
+                print(f"The {obj.name} is already asleep.")
+                return True
+            print(f"There is no {obj_name} here to put to sleep.")
+            return True
+        # Take all command (skip collective/bunch objects)
         elif cmd in ["take all", "get all"]:
             room = (
                 self.rooms.get(self.current_room)
@@ -1630,6 +1955,9 @@ class Game:
                 return True
             taken_any = False
             for obj in list(room.objects):
+                if obj.attributes.get("collective", False) or obj.attributes.get("bunch", False):
+                    print(f"You can't take the {obj.name} as a whole; try taking individual items.")
+                    continue
                 if (
                     self.get_inventory_weight() + getattr(obj, "osize", 1)
                     > self.LOAD_MAX
@@ -1658,7 +1986,40 @@ class Game:
             print("You can't do that here.")
             return True
         elif cmd in ["attack"] or cmd.startswith("attack "):
-            print("Violence isn't always the answer.")
+            # Parse target
+            target_name = cmd.split(" ", 1)[1] if " " in cmd else None
+            room = self.rooms.get(self.current_room)
+            target = None
+            if target_name and room:
+                # Search room objects and NPCs
+                for obj in room.objects:
+                    if obj.name.lower() == target_name:
+                        target = obj
+                        break
+                if not target and hasattr(room, "npcs"):
+                    for npc in room.npcs:
+                        if npc.name.lower() == target_name:
+                            target = npc
+                            break
+            if not target:
+                print("There's nothing here by that name to attack.")
+                return True
+            # Prevent attacking objects that are not villains or fighting
+            if hasattr(target, "attributes"):
+                if target.attributes.get("staggered", False):
+                    print(f"The {target.name} is already staggered and can't fight back.")
+                    return True
+                if not (target.attributes.get("villain", False) or target.attributes.get("fighting", False)):
+                    print(f"Attacking the {target.name} seems pointless.")
+                    return True
+                if target.attributes.get("trytake", False):
+                    print(f"The {target.name} seems to resist your attack in a strange way.")
+                    return True
+            # If it's an NPC, use its interact method
+            if hasattr(target, "interact"):
+                print(target.interact(self, action="attack"))
+            else:
+                print(f"You attack the {target.name}, but nothing much happens.")
             return True
         elif cmd in ["help"]:
             self.show_help()
