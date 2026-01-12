@@ -269,14 +269,18 @@ from objects import GameObject
 
 class Room:
     # Room flag bitfield constants (canonical Zork)
-    ROOM_DARK     = 0x01  # Room is dark unless lit by a light source
-    ROOM_VISITED  = 0x02  # Player has entered the room before
-    ROOM_DEADLY   = 0x04  # Entering the room can cause death (e.g., grue, trap)
-    ROOM_OUTDOORS = 0x08  # Room is outdoors (affects weather, day/night, etc.)
-    ROOM_WATER    = 0x10  # Room contains water (affects swimming, drowning, etc.)
-    ROOM_SOUND    = 0x20  # Room has special sound behavior
-    ROOM_MAGIC    = 0x40  # Room has magical properties (teleport, etc.)
-    ROOM_LOCKED   = 0x80  # Room or exits are locked
+    ROOM_DARK      = 0x01  # Room is dark unless lit by a light source
+    ROOM_VISITED   = 0x02  # Player has entered the room before
+    ROOM_DEADLY    = 0x04  # Entering the room can cause death (e.g., grue, trap)
+    ROOM_OUTDOORS  = 0x08  # Room is outdoors (affects weather, day/night, etc.)
+    ROOM_WATER     = 0x10  # Room contains water (affects swimming, drowning, etc.)
+    ROOM_SOUND     = 0x20  # Room has special sound behavior
+    ROOM_MAGIC     = 0x40  # Room has magical properties (teleport, etc.)
+    ROOM_LOCKED    = 0x80  # Room or exits are locked
+    ROOM_SAFE      = 0x100  # Room is safe, player cannot die here
+    ROOM_NO_SAVE   = 0x200  # Saving is not allowed in this room
+    ROOM_NO_RESTORE= 0x400  # Restoring is not allowed in this room
+    ROOM_AIR       = 0x800  # Room requires air supply (suffocation possible)
 
     def __init__(
         self,
@@ -456,27 +460,29 @@ CYCLOPS = NPC(
 # Grue: special event NPC, not visible, eats player in dark rooms
 class Grue(NPC):
     def __init__(self):
-        super().__init__(
-            "Grue",
-            "It is pitch black. You are likely to be eaten by a grue.",
-            hostile=True,
-        )
-
-    def interact(self, player, action=None, item=None):
-        return "Oh, no! You walked into the slavering fangs of a lurking grue."
-
-
-GRUE = Grue()
-
-
-# Robot: commandable NPC in Maintenance Room
-class Robot(NPC):
-    def __init__(self):
-        super().__init__(
-            "Robot",
-            "A shiny, silent robot stands here, awaiting orders.",
-            hostile=False,
-        )
+        def __init__(
+            self,
+            id: str,
+            desc_long: str,
+            desc_short: str,
+            exits: dict,
+            objects: list,
+            flags: list = None,
+            action: str = None,
+            npcs: list = None,
+            locked_exits: dict = None,
+        ):
+            self.id = id
+            self.desc_long = desc_long
+            self.desc_short = desc_short
+            self.exits = exits
+            self.objects = objects
+            # Canonical Zork room flags
+            self.flags = flags if flags is not None else []
+            # Supported flags: dark, locked, dangerous, visited, endgame, safe, puzzle, scored, no_save, no_restore, light, water, air, outdoor
+            self.action = action
+            self.npcs = npcs if npcs is not None else []
+            self.locked_exits = locked_exits if locked_exits is not None else {}
         self.activated = False
 
     def interact(self, player, action=None, item=None):

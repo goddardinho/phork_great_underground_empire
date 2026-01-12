@@ -1,8 +1,14 @@
 # Changelog
 
-## v0.4.0 (2026-01-09)
+## v0.4.0 (2026-01-12)
 
-- _Describe changes for this release here._
+- Canonical Zork room flag logic fully implemented:
+	- All canonical room flags (dark, locked, deadly, safe, no_save, no_restore, water, air, visited, outdoors, etc.) are now supported and enforced.
+	- Room class in entities.py updated with all required flag constants and bitfield logic.
+	- Game class in main.py refactored for robust flag handling, including death/restart, movement, and room description behaviors.
+	- Automated tests for flag behaviors added in tests/test_canonical_room_flags.py; all tests passing.
+	- Indentation and code structure normalized in Game class and methods.
+	- TODO.md updated to mark canonical flag logic and tests as complete.
 
 
 ## v0.3.2 (2026-01-09)
