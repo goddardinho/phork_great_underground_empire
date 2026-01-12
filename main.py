@@ -121,7 +121,7 @@ def load_rooms():
                     },
                 ),
             ],
-            flags=0,  # Use bitfield flags, e.g., Room.ROOM_DARK | Room.ROOM_VISITED
+            flags=Room.ROOM_OUTDOORS,  # Outdoors (field west of house)
             action=None,
             npcs=[],  # THIEF will be added in demo mode only
         )
@@ -163,7 +163,7 @@ def load_rooms():
                     },
                 ),
             ],
-            flags=0,  # Set appropriate bitfield flags if needed
+            flags=Room.ROOM_LOCKED,  # Indoors, west exit is locked
             action=None,
             npcs=[TROLL, CYCLOPS, ROBOT],
         )
@@ -176,7 +176,7 @@ def load_rooms():
             objects=[
                 GameObject("Axe", "A heavy troll's axe.", attributes={"osize": 5})
             ],
-            flags=Room.ROOM_DEADLY,
+            flags=Room.ROOM_DEADLY | Room.ROOM_OUTDOORS,  # Deadly and outdoors (bridge)
             action=None,
             npcs=[TROLL],
         )
@@ -186,7 +186,7 @@ def load_rooms():
             desc_short="Cyclops Room",
             exits={"down": "TROLL"},
             objects=[],
-            flags=Room.ROOM_DEADLY,
+            flags=Room.ROOM_DEADLY | Room.ROOM_DARK,  # Deadly and dark (cyclops lair)
             action=None,
             npcs=[CYCLOPS],
         )
@@ -202,7 +202,7 @@ def load_rooms():
                     attributes={"osize": 2, "score_value": 25},
                 )
             ],
-            flags=0,  # Use bitfield flags
+            flags=Room.ROOM_MAGIC,  # Treasure room often has magical properties
             action=None,
             npcs=[THIEF],
         )
@@ -368,6 +368,11 @@ class Game:
         # Move thief every tick
         self.thief_room = random.choice(valid_rooms)
     def game_over(self, desc=None):
+        room = self.rooms.get(self.current_room)
+        # Prevent death in safe rooms
+        if room and hasattr(room, 'has_flag') and room.has_flag(Room.ROOM_SAFE):
+            print("You feel completely safe here. Nothing can harm you.")
+            return
         import sys
         # Canonical Zork death messages
         DEATH_MSG = desc or "You have died."
@@ -487,6 +492,10 @@ class Game:
         return sum(obj_weight(o) for o in self.inventory)
 
     def save_game(self, filename="savegame.pkl"):
+        room = self.rooms.get(self.current_room)
+        if room and hasattr(room, 'has_flag') and room.has_flag(Room.ROOM_NO_SAVE):
+            print("You cannot save your game in this room.")
+            return
         import random
         state = {
             "version": 1,
@@ -514,6 +523,10 @@ class Game:
             print(f"Error saving game: {e}")
 
     def load_game(self, filename="savegame.pkl"):
+        room = self.rooms.get(self.current_room)
+        if room and hasattr(room, 'has_flag') and room.has_flag(Room.ROOM_NO_RESTORE):
+            print("You cannot restore your game in this room.")
+            return
         import random
         try:
             with open(filename, "rb") as f:
@@ -588,6 +601,10 @@ class Game:
             print("No valid current room.")
             return
         room = self.rooms[self.current_room]
+        if room and not getattr(room, "visited", False):
+            room.visited = True
+            # Optionally award points for first visit
+            # self.score += 1
         print(f"\n{room.desc_long}\n")
         self.check_room_flags()
         self.check_puzzles()
@@ -631,19 +648,29 @@ class Game:
                 if container.attributes.get("open", False):
                     for item in container.attributes.get("contents", []):
                         if item.name.lower() == "leaflet":
-                            print(
-                                f"    {item.name} (in {container.name}): There is a small leaflet here."
-                            )
+                            print(f"    {item.name} (in {container.name}): There is a small leaflet here.")
                         else:
-                            print(
-                                f"    {item.name} (in {container.name}): {item.description}"
-                            )
+                            print(f"    {item.name} (in {container.name}): {item.description}")
 
     def move(self, direction):
         if not self.current_room or self.current_room not in self.rooms:
             print("No valid current room.")
             return
         room = self.rooms[self.current_room]
+        # Water/air room logic
+        if room:
+            if hasattr(room, 'has_flag') and room.has_flag(Room.ROOM_WATER):
+                has_boat = any(obj.name.lower() in ["boat", "raft"] for obj in self.inventory)
+                if not has_boat:
+                    print("You need a boat to travel here, or you will drown!")
+                    self.game_over("You have drowned.")
+                    return
+            if hasattr(room, 'has_flag') and room.has_flag(Room.ROOM_AIR):
+                has_mask = any(obj.name.lower() in ["mask", "air supply"] for obj in self.inventory)
+                if not has_mask:
+                    print("You cannot breathe here without an air supply!")
+                    self.game_over("You have suffocated.")
+                    return
         # Check for locked exits
         locked_exits = getattr(room, "locked_exits", {})
         if direction in locked_exits and locked_exits[direction]:

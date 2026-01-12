@@ -24,7 +24,7 @@
   - [x] Save/load with full game state
   - [x] Help system and command list
   - [x] Object attributes (edible, readable, wearable, portable, etc.)
-  - [ ] Room flags (dangerous, dark, visited, etc.)
+  - [x] Room flags (dangerous, dark, visited, etc.)
   - [ ] Synonyms and flexible parser
   - [ ] Random events (thief, troll, etc.)
   - [ ] Darkness and light mechanics (grue danger) [partially complete, revisit for full parity]

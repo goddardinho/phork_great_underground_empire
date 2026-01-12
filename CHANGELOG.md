@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.4.0 (2026-01-12)
+
+- Canonical Zork room flag logic fully implemented:
+	- All canonical room flags (dark, locked, deadly, safe, no_save, no_restore, water, air, visited, outdoors, etc.) are now supported and enforced.
+	- Room class in entities.py updated with all required flag constants and bitfield logic.
+	- Game class in main.py refactored for robust flag handling, including death/restart, movement, and room description behaviors.
+	- Automated tests for flag behaviors added in tests/test_canonical_room_flags.py; all tests passing.
+	- Indentation and code structure normalized in Game class and methods.
+	- TODO.md updated to mark canonical flag logic and tests as complete.
+
 ## v0.3.2 (2026-01-09)
 
 - Attribute-driven object logic validated and enforced:
@@ -13,13 +23,9 @@
 
 - Patch version bump.
 
-
 ## v0.3.0 (2026-01-09)
 
 - Semantic versioning automation added.
-
-
-# Changelog
 
 ## v0.2.8 (2026-01-09)
 
@@ -31,10 +37,10 @@
 
 ## v0.2.7 (2025-12-31)
 
-	- All mutable game state (player, inventory, rooms, objects, containers, puzzles, flags, deaths, demo mode, random state, etc.) is now saved and restored.
-	- Edge cases tested: puzzles in progress, darkness, NPCs, containers, deaths, demo mode, and error handling.
-	- ENHANCEMENTS.md added with a comprehensive list of save/load test scenarios for future validation.
-	- TODO.md updated to mark this feature as complete.
+- All mutable game state (player, inventory, rooms, objects, containers, puzzles, flags, deaths, demo mode, random state, etc.) is now saved and restored.
+- Edge cases tested: puzzles in progress, darkness, NPCs, containers, deaths, demo mode, and error handling.
+- ENHANCEMENTS.md added with a comprehensive list of save/load test scenarios for future validation.
+- TODO.md updated to mark this feature as complete.
 
 ## v0.2.6 (2025-12-31)
 
@@ -132,8 +138,6 @@
 - Added generic .mud file parser to extract tags and properties from any .mud file.
 - Parser supports flexible tag extraction for objects, actions, flags, and more.
 - Ready for integration with game data loading and expansion.
-
-# Changelog
 
 ## v0.1.2 (2025-11-21)
 
