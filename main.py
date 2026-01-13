@@ -217,30 +217,110 @@ class Game:
         """Display available commands with descriptions and usage examples."""
         commands = [
             {"cmd": "look", "desc": "Examine your surroundings.", "usage": "look or l"},
-            {"cmd": "go <direction>", "desc": "Move in a direction (north, south, east, west, up, down).", "usage": "go north"},
-            {"cmd": "inventory", "desc": "Show your inventory.", "usage": "inventory or i"},
-            {"cmd": "get <object>", "desc": "Pick up an object.", "usage": "get lantern"},
-            {"cmd": "drop <object>", "desc": "Drop an object from your inventory.", "usage": "drop sword"},
-            {"cmd": "open <object>", "desc": "Open a container or door.", "usage": "open mailbox"},
-            {"cmd": "close <object>", "desc": "Close a container or door.", "usage": "close mailbox"},
-            {"cmd": "read <object>", "desc": "Read something readable.", "usage": "read leaflet"},
-            {"cmd": "eat <object>", "desc": "Eat something edible.", "usage": "eat food"},
-            {"cmd": "drink <object>", "desc": "Drink something drinkable.", "usage": "drink water"},
-            {"cmd": "climb <object>", "desc": "Climb something climbable.", "usage": "climb tree"},
-            {"cmd": "jump", "desc": "Jump in place or over something.", "usage": "jump"},
+            {
+                "cmd": "go <direction>",
+                "desc": "Move in a direction (north, south, east, west, up, down).",
+                "usage": "go north",
+            },
+            {
+                "cmd": "inventory",
+                "desc": "Show your inventory.",
+                "usage": "inventory or i",
+            },
+            {
+                "cmd": "get <object>",
+                "desc": "Pick up an object.",
+                "usage": "get lantern",
+            },
+            {
+                "cmd": "drop <object>",
+                "desc": "Drop an object from your inventory.",
+                "usage": "drop sword",
+            },
+            {
+                "cmd": "open <object>",
+                "desc": "Open a container or door.",
+                "usage": "open mailbox",
+            },
+            {
+                "cmd": "close <object>",
+                "desc": "Close a container or door.",
+                "usage": "close mailbox",
+            },
+            {
+                "cmd": "read <object>",
+                "desc": "Read something readable.",
+                "usage": "read leaflet",
+            },
+            {
+                "cmd": "eat <object>",
+                "desc": "Eat something edible.",
+                "usage": "eat food",
+            },
+            {
+                "cmd": "drink <object>",
+                "desc": "Drink something drinkable.",
+                "usage": "drink water",
+            },
+            {
+                "cmd": "climb <object>",
+                "desc": "Climb something climbable.",
+                "usage": "climb tree",
+            },
+            {
+                "cmd": "jump",
+                "desc": "Jump in place or over something.",
+                "usage": "jump",
+            },
             {"cmd": "swim", "desc": "Swim if possible.", "usage": "swim"},
-            {"cmd": "attack <target>", "desc": "Attack a creature or NPC.", "usage": "attack troll"},
-            {"cmd": "examine <object>", "desc": "Examine an object closely.", "usage": "examine sword"},
-            {"cmd": "search <object>", "desc": "Search an object or area.", "usage": "search chest"},
-            {"cmd": "unlock <direction|door>", "desc": "Unlock an exit or door.", "usage": "unlock east"},
-            {"cmd": "lock <direction|door>", "desc": "Lock an exit or door.", "usage": "lock west"},
-            {"cmd": "turn <object>", "desc": "Turn something (like a key).", "usage": "turn key"},
+            {
+                "cmd": "attack <target>",
+                "desc": "Attack a creature or NPC.",
+                "usage": "attack troll",
+            },
+            {
+                "cmd": "examine <object>",
+                "desc": "Examine an object closely.",
+                "usage": "examine sword",
+            },
+            {
+                "cmd": "search <object>",
+                "desc": "Search an object or area.",
+                "usage": "search chest",
+            },
+            {
+                "cmd": "unlock <direction|door>",
+                "desc": "Unlock an exit or door.",
+                "usage": "unlock east",
+            },
+            {
+                "cmd": "lock <direction|door>",
+                "desc": "Lock an exit or door.",
+                "usage": "lock west",
+            },
+            {
+                "cmd": "turn <object>",
+                "desc": "Turn something (like a key).",
+                "usage": "turn key",
+            },
             {"cmd": "push <object>", "desc": "Push an object.", "usage": "push button"},
             {"cmd": "pull <object>", "desc": "Pull an object.", "usage": "pull lever"},
-            {"cmd": "light <object>", "desc": "Light an object (like a lantern).", "usage": "light lantern"},
-            {"cmd": "extinguish <object>", "desc": "Extinguish a light source.", "usage": "extinguish lantern"},
+            {
+                "cmd": "light <object>",
+                "desc": "Light an object (like a lantern).",
+                "usage": "light lantern",
+            },
+            {
+                "cmd": "extinguish <object>",
+                "desc": "Extinguish a light source.",
+                "usage": "extinguish lantern",
+            },
             {"cmd": "wear <object>", "desc": "Wear an item.", "usage": "wear cloak"},
-            {"cmd": "remove <object>", "desc": "Remove a worn item.", "usage": "remove cloak"},
+            {
+                "cmd": "remove <object>",
+                "desc": "Remove a worn item.",
+                "usage": "remove cloak",
+            },
             {"cmd": "save", "desc": "Save your game progress.", "usage": "save"},
             {"cmd": "restore", "desc": "Restore a saved game.", "usage": "restore"},
             {"cmd": "restart", "desc": "Restart the game.", "usage": "restart"},
@@ -253,7 +333,9 @@ class Game:
         print("\nAvailable Commands:")
         for c in commands:
             print(f"  {c['cmd']:<18} - {c['desc']}\n    Usage: {c['usage']}")
-        print("\nType commands as shown. Some commands accept synonyms or abbreviations (e.g., 'l' for 'look', 'i' for 'inventory').")
+        print(
+            "\nType commands as shown. Some commands accept synonyms or abbreviations (e.g., 'l' for 'look', 'i' for 'inventory')."
+        )
 
     BIGFIX = 9999  # Canonical value for uncarryable objects
     LOAD_MAX = 10  # Canonical Zork I carry limit (adjust as needed)
@@ -265,12 +347,14 @@ class Game:
             return False
         # Room is dark if it has the ROOM_DARK flag and no light source is present
         if room.has_flag(Room.ROOM_DARK):
+
             def has_lit_light_source(objs):
                 for obj in objs:
                     attrs = getattr(obj, "attributes", {})
                     # Any object with lit or turned_on and light/tool/lantern/torch/whatever
                     if (attrs.get("lit", False) or attrs.get("turned_on", False)) and (
-                        attrs.get("light", False) or obj.name.lower() in ["lantern", "lamp", "torch"]
+                        attrs.get("light", False)
+                        or obj.name.lower() in ["lantern", "lamp", "torch"]
                     ):
                         return True
                     # Check open containers recursively
@@ -278,6 +362,7 @@ class Game:
                         if has_lit_light_source(attrs.get("contents", [])):
                             return True
                 return False
+
             # Check inventory and open containers for any lit/turned_on light source
             if has_lit_light_source(self.inventory):
                 return False
@@ -367,25 +452,31 @@ class Game:
             valid_rooms = room_ids
         # Move thief every tick
         self.thief_room = random.choice(valid_rooms)
+
     def game_over(self, desc=None):
         room = self.rooms.get(self.current_room)
         # Prevent death in safe rooms
-        if room and hasattr(room, 'has_flag') and room.has_flag(Room.ROOM_SAFE):
+        if room and hasattr(room, "has_flag") and room.has_flag(Room.ROOM_SAFE):
             print("You feel completely safe here. Nothing can harm you.")
             return
         import sys
+
         # Canonical Zork death messages
         DEATH_MSG = desc or "You have died."
-        SUICIDAL_MSG = ("Your adventure is over. You have died too many times.\n"
-                        "May your next life be more successful!")
-        ENDGAME_MSG = ("Normally I could attempt to rectify your condition, but I'm ashamed\n"
-                       "to say my abilities are not equal to dealing with your present state\n"
-                       "of disrepair. Permit me to express my profoundest regrets.")
+        SUICIDAL_MSG = (
+            "Your adventure is over. You have died too many times.\n"
+            "May your next life be more successful!"
+        )
+        ENDGAME_MSG = (
+            "Normally I could attempt to rectify your condition, but I'm ashamed\n"
+            "to say my abilities are not equal to dealing with your present state\n"
+            "of disrepair. Permit me to express my profoundest regrets."
+        )
         # Deduct points for dying
         self.score = max(0, self.score - 10)
         self.deaths += 1
         # Endgame death: immediate game over
-        if getattr(self, 'endgame', False):
+        if getattr(self, "endgame", False):
             print(f"\n{ENDGAME_MSG}")
             self._final_quit(sys)
             return
@@ -401,7 +492,13 @@ class Game:
             print("[Automated test mode: skipping restart/quit prompt]")
             return
         while True:
-            choice = input("Type 'restart' to play again, 'quit' to exit, or press Enter to continue: ").strip().lower()
+            choice = (
+                input(
+                    "Type 'restart' to play again, 'quit' to exit, or press Enter to continue: "
+                )
+                .strip()
+                .lower()
+            )
             if choice == "restart":
                 print("Restarting game...\n")
                 self.__init__(self.demo_mode)
@@ -493,10 +590,11 @@ class Game:
 
     def save_game(self, filename="savegame.pkl"):
         room = self.rooms.get(self.current_room)
-        if room and hasattr(room, 'has_flag') and room.has_flag(Room.ROOM_NO_SAVE):
+        if room and hasattr(room, "has_flag") and room.has_flag(Room.ROOM_NO_SAVE):
             print("You cannot save your game in this room.")
             return
         import random
+
         state = {
             "version": 1,
             "rooms": self.rooms,
@@ -524,10 +622,11 @@ class Game:
 
     def load_game(self, filename="savegame.pkl"):
         room = self.rooms.get(self.current_room)
-        if room and hasattr(room, 'has_flag') and room.has_flag(Room.ROOM_NO_RESTORE):
+        if room and hasattr(room, "has_flag") and room.has_flag(Room.ROOM_NO_RESTORE):
             print("You cannot restore your game in this room.")
             return
         import random
+
         try:
             with open(filename, "rb") as f:
                 state = pickle.load(f)
@@ -648,9 +747,13 @@ class Game:
                 if container.attributes.get("open", False):
                     for item in container.attributes.get("contents", []):
                         if item.name.lower() == "leaflet":
-                            print(f"    {item.name} (in {container.name}): There is a small leaflet here.")
+                            print(
+                                f"    {item.name} (in {container.name}): There is a small leaflet here."
+                            )
                         else:
-                            print(f"    {item.name} (in {container.name}): {item.description}")
+                            print(
+                                f"    {item.name} (in {container.name}): {item.description}"
+                            )
 
     def move(self, direction):
         if not self.current_room or self.current_room not in self.rooms:
@@ -659,14 +762,18 @@ class Game:
         room = self.rooms[self.current_room]
         # Water/air room logic
         if room:
-            if hasattr(room, 'has_flag') and room.has_flag(Room.ROOM_WATER):
-                has_boat = any(obj.name.lower() in ["boat", "raft"] for obj in self.inventory)
+            if hasattr(room, "has_flag") and room.has_flag(Room.ROOM_WATER):
+                has_boat = any(
+                    obj.name.lower() in ["boat", "raft"] for obj in self.inventory
+                )
                 if not has_boat:
                     print("You need a boat to travel here, or you will drown!")
                     self.game_over("You have drowned.")
                     return
-            if hasattr(room, 'has_flag') and room.has_flag(Room.ROOM_AIR):
-                has_mask = any(obj.name.lower() in ["mask", "air supply"] for obj in self.inventory)
+            if hasattr(room, "has_flag") and room.has_flag(Room.ROOM_AIR):
+                has_mask = any(
+                    obj.name.lower() in ["mask", "air supply"] for obj in self.inventory
+                )
                 if not has_mask:
                     print("You cannot breathe here without an air supply!")
                     self.game_over("You have suffocated.")
@@ -895,13 +1002,22 @@ class Game:
             parts = cmd.split(" to ", 1)
             obj_name = cmd.split(" ", 1)[1]
             room = self.rooms.get(self.current_room)
-            obj = next((o for o in (self.inventory + (room.objects if room else [])) if o.name.lower() == obj_name), None)
+            obj = next(
+                (
+                    o
+                    for o in (self.inventory + (room.objects if room else []))
+                    if o.name.lower() == obj_name
+                ),
+                None,
+            )
             if obj:
                 if obj.attributes.get("tieable", False):
                     print(f"You tie the {obj.name} securely.")
                     obj.attributes["tied"] = True
                     return True
-                if obj.attributes.get("bunch", False) or obj.attributes.get("collective", False):
+                if obj.attributes.get("bunch", False) or obj.attributes.get(
+                    "collective", False
+                ):
                     print(f"You can't tie the {obj.name} as a whole.")
                     return True
                 print(f"You can't tie the {obj.name}.")
@@ -1023,13 +1139,19 @@ class Game:
             room = self.rooms.get(self.current_room)
             obj = None
             if room:
-                obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                obj = next(
+                    (o for o in room.objects if o.name.lower() == obj_name), None
+                )
             if not obj:
-                obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+                obj = next(
+                    (o for o in self.inventory if o.name.lower() == obj_name), None
+                )
             # Actor inventory search
             if obj and obj.attributes.get("actor", False) and hasattr(obj, "inventory"):
                 if obj.inventory:
-                    print(f"You examine the {obj.name} and find: {', '.join([item.name for item in obj.inventory])}.")
+                    print(
+                        f"You examine the {obj.name} and find: {', '.join([item.name for item in obj.inventory])}."
+                    )
                 else:
                     print(f"You examine the {obj.name} but find nothing of interest.")
                 return True
@@ -1061,7 +1183,10 @@ class Game:
                     # Check objects for villain/trytake
                     obj = None
                     if room:
-                        obj = next((o for o in room.objects if o.name.lower() == npc_name), None)
+                        obj = next(
+                            (o for o in room.objects if o.name.lower() == npc_name),
+                            None,
+                        )
                     if obj and obj.attributes.get("villain", False):
                         print(f"The {obj.name} resists your attack!")
                         return True
@@ -1071,6 +1196,7 @@ class Game:
                     print(f"There is no {npc_name} here to attack.")
                     return True
                 from combat import CombatEngine
+
                 result = CombatEngine.combat_round(self.player, npc)
                 print(result)
                 if self.player.is_dead():
@@ -1375,16 +1501,22 @@ class Game:
                         return True
                     # Prevent taking dangerous, burning, sacred, or villain objects, or those that resist being taken
                     if obj.attributes.get("dangerous", False):
-                        print(f"You recoil from the {obj.name}; it looks dangerous to touch!")
+                        print(
+                            f"You recoil from the {obj.name}; it looks dangerous to touch!"
+                        )
                         return True
                     if obj.attributes.get("burning", False):
                         print(f"You can't take the {obj.name} while it's burning!")
                         return True
                     if obj.attributes.get("sacred", False):
-                        print(f"You feel an invisible force prevents you from taking the {obj.name}.")
+                        print(
+                            f"You feel an invisible force prevents you from taking the {obj.name}."
+                        )
                         return True
                     if obj.attributes.get("collective", False):
-                        print(f"You can't take the {obj.name} as a whole; try taking individual items.")
+                        print(
+                            f"You can't take the {obj.name} as a whole; try taking individual items."
+                        )
                         return True
                     if obj.attributes.get("villain", False):
                         print(f"The {obj.name} resists your attempt to take it!")
@@ -1392,7 +1524,9 @@ class Game:
                     if obj.attributes.get("trytake", False):
                         print(f"The {obj.name} seems to resist being taken.")
                         return True
-                    if not obj.attributes.get("takeable", True) or not obj.attributes.get("portable", True):
+                    if not obj.attributes.get(
+                        "takeable", True
+                    ) or not obj.attributes.get("portable", True):
                         snarky_lines = [
                             "The {name} is an integral part of the scenery and cannot be taken.",
                             "You must be joking.",
@@ -1401,6 +1535,7 @@ class Game:
                             "You can't take that.",
                         ]
                         import random
+
                         print(random.choice(snarky_lines).format(name=obj.name))
                         return True
                     obj_weight = (
@@ -1522,12 +1657,16 @@ class Game:
             if not obj:
                 room = self.rooms.get(self.current_room)
                 if room:
-                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                    obj = next(
+                        (o for o in room.objects if o.name.lower() == obj_name), None
+                    )
             if obj:
                 if obj.attributes.get("locked", False):
                     print(f"The {obj.name} is locked.")
                     return True
-                if obj.attributes.get("openable", False) or obj.attributes.get("door", False):
+                if obj.attributes.get("openable", False) or obj.attributes.get(
+                    "door", False
+                ):
                     if obj.attributes.get("open", False):
                         print(f"The {obj.name} is already open.")
                     else:
@@ -1544,9 +1683,13 @@ class Game:
             if not obj:
                 room = self.rooms.get(self.current_room)
                 if room:
-                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                    obj = next(
+                        (o for o in room.objects if o.name.lower() == obj_name), None
+                    )
             if obj:
-                if obj.attributes.get("openable", False) or obj.attributes.get("door", False):
+                if obj.attributes.get("openable", False) or obj.attributes.get(
+                    "door", False
+                ):
                     if not obj.attributes.get("open", False):
                         print(f"The {obj.name} is already closed.")
                     else:
@@ -1563,7 +1706,9 @@ class Game:
             if not obj:
                 room = self.rooms.get(self.current_room)
                 if room:
-                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                    obj = next(
+                        (o for o in room.objects if o.name.lower() == obj_name), None
+                    )
             if obj:
                 if not obj.attributes.get("locked", False):
                     print(f"The {obj.name} is already unlocked.")
@@ -1579,7 +1724,9 @@ class Game:
             if not obj:
                 room = self.rooms.get(self.current_room)
                 if room:
-                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                    obj = next(
+                        (o for o in room.objects if o.name.lower() == obj_name), None
+                    )
             if obj:
                 if obj.attributes.get("locked", False):
                     print(f"The {obj.name} is already locked.")
@@ -1595,9 +1742,13 @@ class Game:
             if not obj:
                 room = self.rooms.get(self.current_room)
                 if room:
-                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                    obj = next(
+                        (o for o in room.objects if o.name.lower() == obj_name), None
+                    )
             if obj and obj.attributes.get("transparent", False):
-                print(f"You look through the {obj.name} and see... (TODO: implement view)")
+                print(
+                    f"You look through the {obj.name} and see... (TODO: implement view)"
+                )
                 return True
             print(f"You can't look through the {obj_name}.")
             return True
@@ -1632,7 +1783,9 @@ class Game:
             if not obj:
                 room = self.rooms.get(self.current_room)
                 if room:
-                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                    obj = next(
+                        (o for o in room.objects if o.name.lower() == obj_name), None
+                    )
             if obj:
                 if obj.attributes.get("burning", False):
                     print(f"The {obj.name} is already burning.")
@@ -1641,7 +1794,9 @@ class Game:
                     obj.attributes["burning"] = True
                     print(f"You set the {obj.name} on fire!")
                     return True
-                if obj.attributes.get("lit", False) or obj.attributes.get("turned_on", False):
+                if obj.attributes.get("lit", False) or obj.attributes.get(
+                    "turned_on", False
+                ):
                     print(f"The {obj.name} is already lit.")
                     return True
                 if obj.attributes.get("light", False):
@@ -1658,7 +1813,9 @@ class Game:
             if not obj:
                 room = self.rooms.get(self.current_room)
                 if room:
-                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                    obj = next(
+                        (o for o in room.objects if o.name.lower() == obj_name), None
+                    )
             if obj:
                 if obj.attributes.get("burning", False):
                     obj.attributes["burning"] = False
@@ -1678,14 +1835,18 @@ class Game:
             if not obj:
                 room = self.rooms.get(self.current_room)
                 if room:
-                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                    obj = next(
+                        (o for o in room.objects if o.name.lower() == obj_name), None
+                    )
             if obj:
                 if obj.attributes.get("tieable", False):
                     print(f"You tie the {obj.name} securely.")
                     obj.attributes["tied"] = True
                     return True
                 # Support for 'tie' as a verb for bunch/collective
-                if obj.attributes.get("bunch", False) or obj.attributes.get("collective", False):
+                if obj.attributes.get("bunch", False) or obj.attributes.get(
+                    "collective", False
+                ):
                     print(f"You can't tie the {obj.name} as a whole.")
                     return True
                 print(f"You can't tie the {obj.name}.")
@@ -1698,7 +1859,9 @@ class Game:
             if not obj:
                 room = self.rooms.get(self.current_room)
                 if room:
-                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                    obj = next(
+                        (o for o in room.objects if o.name.lower() == obj_name), None
+                    )
             if obj:
                 if obj.attributes.get("diggable", False):
                     print(f"You dig into the {obj.name}.")
@@ -1741,18 +1904,27 @@ class Game:
                     print(f"You can't eat the {obj.name} while it's burning!")
                     return True
                 if obj.attributes.get("sacred", False):
-                    print(f"You feel an invisible force prevents you from eating the {obj.name}.")
+                    print(
+                        f"You feel an invisible force prevents you from eating the {obj.name}."
+                    )
                     return True
             elif cmd.startswith("touch "):
                 obj_name = cmd.split(" ", 1)[1]
-                obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+                obj = next(
+                    (o for o in self.inventory if o.name.lower() == obj_name), None
+                )
                 if not obj:
                     room = self.rooms.get(self.current_room)
                     if room:
-                        obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                        obj = next(
+                            (o for o in room.objects if o.name.lower() == obj_name),
+                            None,
+                        )
                 if obj:
                     if obj.attributes.get("dangerous", False):
-                        print(f"You touch the {obj.name} and instantly regret it! It's dangerous!")
+                        print(
+                            f"You touch the {obj.name} and instantly regret it! It's dangerous!"
+                        )
                         return True
                     print(f"You touch the {obj.name}. Nothing unusual happens.")
                     obj.attributes["touched"] = True
@@ -1768,6 +1940,7 @@ class Game:
                         "You can't eat that.",
                     ]
                     import random
+
                     print(random.choice(snarky_eat).format(name=obj.name))
                     return True
                 else:
@@ -1851,6 +2024,7 @@ class Game:
                     obj = next(
                         (o for o in room.objects if o.name.lower() == obj_name), None
                     )
+
             def recursive_search(o, depth=0):
                 indent = "  " * depth
                 # Indescribable objects cannot be examined
@@ -1878,7 +2052,10 @@ class Game:
                         print(f"{indent}It is empty.")
                 # If object is searchable but not a container
                 elif o.attributes.get("searchable", False):
-                    print(f"{indent}You search the {o.name} but find nothing of interest.")
+                    print(
+                        f"{indent}You search the {o.name} but find nothing of interest."
+                    )
+
             if obj:
                 recursive_search(obj)
             else:
@@ -1890,7 +2067,9 @@ class Game:
             if not obj:
                 room = self.rooms.get(self.current_room)
                 if room:
-                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                    obj = next(
+                        (o for o in room.objects if o.name.lower() == obj_name), None
+                    )
             if obj:
                 if obj.attributes.get("asleep", False):
                     obj.attributes["asleep"] = False
@@ -1906,7 +2085,9 @@ class Game:
             if not obj:
                 room = self.rooms.get(self.current_room)
                 if room:
-                    obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+                    obj = next(
+                        (o for o in room.objects if o.name.lower() == obj_name), None
+                    )
             if obj:
                 if not obj.attributes.get("asleep", False):
                     obj.attributes["asleep"] = True
@@ -1928,8 +2109,12 @@ class Game:
                 return True
             taken_any = False
             for obj in list(room.objects):
-                if obj.attributes.get("collective", False) or obj.attributes.get("bunch", False):
-                    print(f"You can't take the {obj.name} as a whole; try taking individual items.")
+                if obj.attributes.get("collective", False) or obj.attributes.get(
+                    "bunch", False
+                ):
+                    print(
+                        f"You can't take the {obj.name} as a whole; try taking individual items."
+                    )
                     continue
                 if (
                     self.get_inventory_weight() + getattr(obj, "osize", 1)
@@ -1980,13 +2165,20 @@ class Game:
             # Prevent attacking objects that are not villains or fighting
             if hasattr(target, "attributes"):
                 if target.attributes.get("staggered", False):
-                    print(f"The {target.name} is already staggered and can't fight back.")
+                    print(
+                        f"The {target.name} is already staggered and can't fight back."
+                    )
                     return True
-                if not (target.attributes.get("villain", False) or target.attributes.get("fighting", False)):
+                if not (
+                    target.attributes.get("villain", False)
+                    or target.attributes.get("fighting", False)
+                ):
                     print(f"Attacking the {target.name} seems pointless.")
                     return True
                 if target.attributes.get("trytake", False):
-                    print(f"The {target.name} seems to resist your attack in a strange way.")
+                    print(
+                        f"The {target.name} seems to resist your attack in a strange way."
+                    )
                     return True
             # If it's an NPC, use its interact method
             if hasattr(target, "interact"):
@@ -1997,38 +2189,147 @@ class Game:
         elif cmd in ["help"]:
             self.show_help()
             return True
+
             def show_help(self):
                 """Display available commands with descriptions and usage examples."""
                 commands = [
-                    {"cmd": "look", "desc": "Examine your surroundings.", "usage": "look or l"},
-                    {"cmd": "go <direction>", "desc": "Move in a direction (north, south, east, west, up, down).", "usage": "go north"},
-                    {"cmd": "inventory", "desc": "Show your inventory.", "usage": "inventory or i"},
-                    {"cmd": "get <object>", "desc": "Pick up an object.", "usage": "get lantern"},
-                    {"cmd": "drop <object>", "desc": "Drop an object from your inventory.", "usage": "drop sword"},
-                    {"cmd": "open <object>", "desc": "Open a container or door.", "usage": "open mailbox"},
-                    {"cmd": "close <object>", "desc": "Close a container or door.", "usage": "close mailbox"},
-                    {"cmd": "read <object>", "desc": "Read something readable.", "usage": "read leaflet"},
-                    {"cmd": "eat <object>", "desc": "Eat something edible.", "usage": "eat food"},
-                    {"cmd": "drink <object>", "desc": "Drink something drinkable.", "usage": "drink water"},
-                    {"cmd": "climb <object>", "desc": "Climb something climbable.", "usage": "climb tree"},
-                    {"cmd": "jump", "desc": "Jump in place or over something.", "usage": "jump"},
+                    {
+                        "cmd": "look",
+                        "desc": "Examine your surroundings.",
+                        "usage": "look or l",
+                    },
+                    {
+                        "cmd": "go <direction>",
+                        "desc": "Move in a direction (north, south, east, west, up, down).",
+                        "usage": "go north",
+                    },
+                    {
+                        "cmd": "inventory",
+                        "desc": "Show your inventory.",
+                        "usage": "inventory or i",
+                    },
+                    {
+                        "cmd": "get <object>",
+                        "desc": "Pick up an object.",
+                        "usage": "get lantern",
+                    },
+                    {
+                        "cmd": "drop <object>",
+                        "desc": "Drop an object from your inventory.",
+                        "usage": "drop sword",
+                    },
+                    {
+                        "cmd": "open <object>",
+                        "desc": "Open a container or door.",
+                        "usage": "open mailbox",
+                    },
+                    {
+                        "cmd": "close <object>",
+                        "desc": "Close a container or door.",
+                        "usage": "close mailbox",
+                    },
+                    {
+                        "cmd": "read <object>",
+                        "desc": "Read something readable.",
+                        "usage": "read leaflet",
+                    },
+                    {
+                        "cmd": "eat <object>",
+                        "desc": "Eat something edible.",
+                        "usage": "eat food",
+                    },
+                    {
+                        "cmd": "drink <object>",
+                        "desc": "Drink something drinkable.",
+                        "usage": "drink water",
+                    },
+                    {
+                        "cmd": "climb <object>",
+                        "desc": "Climb something climbable.",
+                        "usage": "climb tree",
+                    },
+                    {
+                        "cmd": "jump",
+                        "desc": "Jump in place or over something.",
+                        "usage": "jump",
+                    },
                     {"cmd": "swim", "desc": "Swim if possible.", "usage": "swim"},
-                    {"cmd": "attack <target>", "desc": "Attack a creature or NPC.", "usage": "attack troll"},
-                    {"cmd": "examine <object>", "desc": "Examine an object closely.", "usage": "examine sword"},
-                    {"cmd": "search <object>", "desc": "Search an object or area.", "usage": "search chest"},
-                    {"cmd": "unlock <direction|door>", "desc": "Unlock an exit or door.", "usage": "unlock east"},
-                    {"cmd": "lock <direction|door>", "desc": "Lock an exit or door.", "usage": "lock west"},
-                    {"cmd": "turn <object>", "desc": "Turn something (like a key).", "usage": "turn key"},
-                    {"cmd": "push <object>", "desc": "Push an object.", "usage": "push button"},
-                    {"cmd": "pull <object>", "desc": "Pull an object.", "usage": "pull lever"},
-                    {"cmd": "light <object>", "desc": "Light an object (like a lantern).", "usage": "light lantern"},
-                    {"cmd": "extinguish <object>", "desc": "Extinguish a light source.", "usage": "extinguish lantern"},
-                    {"cmd": "wear <object>", "desc": "Wear an item.", "usage": "wear cloak"},
-                    {"cmd": "remove <object>", "desc": "Remove a worn item.", "usage": "remove cloak"},
-                    {"cmd": "save", "desc": "Save your game progress.", "usage": "save"},
-                    {"cmd": "restore", "desc": "Restore a saved game.", "usage": "restore"},
+                    {
+                        "cmd": "attack <target>",
+                        "desc": "Attack a creature or NPC.",
+                        "usage": "attack troll",
+                    },
+                    {
+                        "cmd": "examine <object>",
+                        "desc": "Examine an object closely.",
+                        "usage": "examine sword",
+                    },
+                    {
+                        "cmd": "search <object>",
+                        "desc": "Search an object or area.",
+                        "usage": "search chest",
+                    },
+                    {
+                        "cmd": "unlock <direction|door>",
+                        "desc": "Unlock an exit or door.",
+                        "usage": "unlock east",
+                    },
+                    {
+                        "cmd": "lock <direction|door>",
+                        "desc": "Lock an exit or door.",
+                        "usage": "lock west",
+                    },
+                    {
+                        "cmd": "turn <object>",
+                        "desc": "Turn something (like a key).",
+                        "usage": "turn key",
+                    },
+                    {
+                        "cmd": "push <object>",
+                        "desc": "Push an object.",
+                        "usage": "push button",
+                    },
+                    {
+                        "cmd": "pull <object>",
+                        "desc": "Pull an object.",
+                        "usage": "pull lever",
+                    },
+                    {
+                        "cmd": "light <object>",
+                        "desc": "Light an object (like a lantern).",
+                        "usage": "light lantern",
+                    },
+                    {
+                        "cmd": "extinguish <object>",
+                        "desc": "Extinguish a light source.",
+                        "usage": "extinguish lantern",
+                    },
+                    {
+                        "cmd": "wear <object>",
+                        "desc": "Wear an item.",
+                        "usage": "wear cloak",
+                    },
+                    {
+                        "cmd": "remove <object>",
+                        "desc": "Remove a worn item.",
+                        "usage": "remove cloak",
+                    },
+                    {
+                        "cmd": "save",
+                        "desc": "Save your game progress.",
+                        "usage": "save",
+                    },
+                    {
+                        "cmd": "restore",
+                        "desc": "Restore a saved game.",
+                        "usage": "restore",
+                    },
                     {"cmd": "restart", "desc": "Restart the game.", "usage": "restart"},
-                    {"cmd": "score", "desc": "Show your current score.", "usage": "score"},
+                    {
+                        "cmd": "score",
+                        "desc": "Show your current score.",
+                        "usage": "score",
+                    },
                     {"cmd": "wait", "desc": "Wait for a turn.", "usage": "wait"},
                     {"cmd": "listen", "desc": "Listen for sounds.", "usage": "listen"},
                     {"cmd": "help", "desc": "Show this help message.", "usage": "help"},
@@ -2037,7 +2338,10 @@ class Game:
                 print("\nAvailable Commands:")
                 for c in commands:
                     print(f"  {c['cmd']:<18} - {c['desc']}\n    Usage: {c['usage']}")
-                print("\nType commands as shown. Some commands accept synonyms or abbreviations (e.g., 'l' for 'look', 'i' for 'inventory').")
+                print(
+                    "\nType commands as shown. Some commands accept synonyms or abbreviations (e.g., 'l' for 'look', 'i' for 'inventory')."
+                )
+
         elif cmd in ["save"]:
             self.save_game()
             return True
@@ -2083,11 +2387,8 @@ class Game:
             return True
         else:
             import random
-            responses = [
-                "I beg your pardon?",
-                "I don't understand that.",
-                "What?"
-            ]
+
+            responses = ["I beg your pardon?", "I don't understand that.", "What?"]
             print(random.choice(responses))
             return True
 

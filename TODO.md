@@ -32,6 +32,11 @@
 - [ ] Room/location parity
   - Ensure all rooms, locations, and connections match the original Zork I map and source.
 - [ ] Ensure gameplay functionality, look, and feel.
+  - [ ] Wire all canonical rooms
+  - [ ] Wire all canonical objects
+  - [ ] Wire all canonical NPCs
+  - [ ] Wire all canonical puzzles
+  - [ ] Test gameplay
 
 ## Completed Tasks (see CHANGELOG.md for details)
 
