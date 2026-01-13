@@ -1,5 +1,7 @@
 from main import Room
 from entities import Room as RoomFlags
+# Always use canonical NPC singletons for combat NPCs (never instantiate generic NPC)
+from entities import THIEF, TROLL, CYCLOPS, GRUE, ROBOT
 
 # Auto-generated room definitions from map.json
 

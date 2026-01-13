@@ -447,14 +447,7 @@ class NPC:
         return False
 
 
-# Example NPCs (expanded for canonical logic)
-THIEF = NPC("Thief", "A sneaky thief lurks here, eyeing your valuables.", hostile=True)
-TROLL = NPC(
-    "Troll", "A menacing troll blocks the bridge, demanding payment.", hostile=True
-)
-CYCLOPS = NPC(
-    "Cyclops", "A huge cyclops glares at you, hungry and irritable.", hostile=True
-)
+
 
 
 # Grue: special event NPC, not visible, eats player in dark rooms

@@ -11,8 +11,15 @@ def test_death_by_grue():
     result_message = ""
     try:
         game = Game()
-        # Force current room to be dark
-        game.rooms[game.current_room].flags.append("dark")
+        # Force current room to be dark (support both bitmask and list flags)
+        room = game.rooms[game.current_room]
+        if hasattr(room, 'set_flag'):
+            room.set_flag(getattr(room, 'ROOM_DARK', 0x01))
+        elif isinstance(room.flags, list):
+            if 'dark' not in room.flags:
+                room.flags.append('dark')
+        elif isinstance(room.flags, int):
+            room.flags |= 0x01  # fallback if set_flag missing
         game.inventory = []  # No lantern
         # Perform actions to trigger grue
         for _ in range(3):
