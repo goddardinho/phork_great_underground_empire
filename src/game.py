@@ -10,6 +10,7 @@ from .world.room_loader import ZorkRoomLoader
 from .entities.player import Player
 from .entities.objects import GameObject
 from .parser.command_parser import CommandParser, Command
+from .responses import responses
 
 
 class GameEngine:
@@ -57,9 +58,9 @@ class GameEngine:
             return
         
         # Route command to appropriate handler
-        self._route_command(command)
+        self._route_command(command, user_input)
     
-    def _route_command(self, command) -> None:
+    def _route_command(self, command, user_input: str) -> None:
         """Route a command to its appropriate handler (extracted from _process_command)."""
         verb = command.verb
         
@@ -107,7 +108,11 @@ class GameEngine:
         elif verb == "extinguish":
             self._handle_extinguish(command)
         else:
-            print(f"I don't understand that.")
+            # Check for special Easter egg commands first
+            if responses.is_special_command(verb):
+                print(responses.get_special_command_response(verb))
+            else:
+                print(responses.get_unknown_command_response(user_input))
     
     def _handle_movement(self, direction: str) -> None:
         """Handle player movement."""
@@ -136,7 +141,7 @@ class GameEngine:
             else:
                 print("Error: That exit leads nowhere!")
         else:
-            print("You can't go that way.")
+            print(responses.get_cant_go_response())
     
     def _handle_look(self, command: Command) -> None:
         """Handle look command."""
@@ -171,7 +176,7 @@ class GameEngine:
                 self.player.pending_command = command
                 self._show_disambiguation_prompt()
             else:
-                print(f"I don't see a {command.noun} here.")
+                print(responses.get_dont_see_object_response(command.noun))
             return
         
         if not target_obj.is_takeable():
@@ -205,7 +210,7 @@ class GameEngine:
             elif container and not container.is_open():
                 print(f"The {container.name} is closed.")
             else:
-                print("I can't do that.")
+                print(responses.get_cant_do_that_response())
         else:
             print(f"I cannot reach that.")
     
@@ -225,12 +230,12 @@ class GameEngine:
             return
         
         if not target_obj:
-            print(f"I don't see a {command.noun} here.")
+            print(responses.get_dont_see_object_response(command.noun))
             return
         
         # Check if object is in inventory
         if target_obj.id not in self.player.inventory:
-            print(f"You don't have that.")
+            print(responses.get_inventory_response("dont_have"))
             return
         
         current_room = self.world.get_room(self.player.current_room)
@@ -251,7 +256,7 @@ class GameEngine:
                 self.player.pending_command = command
                 self._show_disambiguation_prompt()
             else:
-                print(f"I don't see a {command.noun} here.")
+                print(responses.get_dont_see_object_response(command.noun))
             return
         
         # Show base description with dynamic updates
