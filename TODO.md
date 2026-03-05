@@ -26,6 +26,8 @@
 - [ ] **Ambiguity resolution** (which sword - the rusty one or the silver one?)
 - [ ] **Synonym expansion** from Zork vocabulary
 
+*Progress: 11/13 core features complete (85%) - Ready for v1.0 Foundation*
+
 ## Medium-term Goals (v1.1 - Zork Parity)
 
 ### Objects & Puzzles  
