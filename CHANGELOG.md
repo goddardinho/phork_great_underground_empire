@@ -17,6 +17,13 @@
 	- Comprehensive test suite covering all disambiguation scenarios and edge cases
 	- Classic text adventure ambiguity resolution with modern user-friendly interaction patterns
 
+- **Project cleanup and optimization:**
+	- Removed unused files: duplicate test_disambiguation.py, legacy map.json, empty src/utils/ directory
+	- Cleaned build artifacts: __pycache__ directories, .pytest_cache, dummy_save.pkl
+	- Updated .gitignore patterns for save files and test artifacts
+	- Synchronized documentation: README.md project structure updated to reflect current architecture
+	- Workspace optimization: streamlined directory structure for cleaner development environment
+
 ## v0.6.2 (2026-03-05)
 
 - **Room flags system implemented:**

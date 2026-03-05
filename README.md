@@ -58,7 +58,8 @@ src/
 │   └── objects.py       # Game items and their behaviors
 ├── parser/              # Command parsing and interpretation
 │   └── command_parser.py # Natural language command processing
-└── utils/               # Utility functions and loaders
+└── parsers/             # Specialized file format parsers
+    └── mdl_parser.py   # Original .mud file parser
 tests/                   # Comprehensive test suite
 zork_mtl_source/        # Original Zork I MDL source files (reference)
 ```
