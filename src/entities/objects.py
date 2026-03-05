@@ -12,6 +12,7 @@ class GameObject:
     name: str  # What players see and type
     description: str  # Full description when examined
     attributes: Dict[str, Any] = field(default_factory=dict)
+    aliases: List[str] = field(default_factory=list)  # Alternative names for this object
     
     def get_attribute(self, name: str, default: Any = None) -> Any:
         """Get an attribute value with optional default."""
@@ -86,3 +87,31 @@ class GameObject:
     def __str__(self) -> str:
         """String representation for display."""
         return self.name
+    
+    def matches(self, noun: str) -> bool:
+        """Check if the given noun matches this object's name or aliases."""
+        noun_lower = noun.lower().strip()
+        
+        # Check aliases first (exact match for precision)
+        for alias in self.aliases:
+            if noun_lower == alias.lower():
+                return True
+        
+        # Check primary name with refined matching rules
+        name_lower = self.name.lower()
+        name_words = name_lower.split()
+        
+        # Exact match against full name
+        if noun_lower == name_lower:
+            return True
+            
+        # Check if noun matches any complete word in the name
+        for word in name_words:
+            if noun_lower == word:
+                return True
+        
+        # Allow longer substring matches (5+ chars) to catch partial but meaningful matches
+        if len(noun_lower) >= 5 and noun_lower in name_lower:
+            return True
+                
+        return False

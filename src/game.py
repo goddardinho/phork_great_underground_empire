@@ -446,34 +446,34 @@ class GameEngine:
             self._handle_take(command)
     
     def _find_object(self, noun: str) -> Optional['GameObject']:
-        """Find an object by name in current room, inventory, or open containers."""
+        """Find an object by name or alias in current room, inventory, or open containers."""
         current_room = self.world.get_room(self.player.current_room)
         
         # Check current room
         if current_room:
             for item_id in current_room.items:
                 obj = self.objects.get(item_id)
-                if obj and noun.lower() in obj.name.lower():
+                if obj and obj.matches(noun):
                     return obj
                 
                 # Also check inside open containers in the room
                 if obj and obj.is_container() and obj.is_open():
                     for contained_id in obj.get_contents():
                         contained_obj = self.objects.get(contained_id)
-                        if contained_obj and noun.lower() in contained_obj.name.lower():
+                        if contained_obj and contained_obj.matches(noun):
                             return contained_obj
         
         # Check inventory  
         for item_id in self.player.inventory:
             obj = self.objects.get(item_id)
-            if obj and noun.lower() in obj.name.lower():
+            if obj and obj.matches(noun):
                 return obj
             
             # Also check inside open containers in inventory
             if obj and obj.is_container() and obj.is_open():
                 for contained_id in obj.get_contents():
                     contained_obj = self.objects.get(contained_id)
-                    if contained_obj and noun.lower() in contained_obj.name.lower():
+                    if contained_obj and contained_obj.matches(noun):
                         return contained_obj
         
         return None
@@ -607,6 +607,7 @@ Type 'help' for a list of commands.
             id="MAILBOX",
             name="small mailbox",
             description="The small mailbox.",
+            aliases=["mailbox", "box", "mail"],
             attributes={
                 "takeable": False, 
                 "container": True, 
@@ -620,6 +621,7 @@ Type 'help' for a list of commands.
             id="LEAFLET",
             name="leaflet", 
             description="A small promotional leaflet.",
+            aliases=["pamphlet", "brochure", "paper", "advertisement"],
             attributes={
                 "takeable": True, 
                 "weight": 1,
@@ -639,6 +641,7 @@ Type 'help' for a list of commands.
             id="WINDOW",
             name="small window",
             description="A small window in the corner of the house. It is slightly ajar and looks like it could be opened wider or closed.",
+            aliases=["window", "aperture"],
             attributes={
                 "takeable": False,
                 "openable": True,

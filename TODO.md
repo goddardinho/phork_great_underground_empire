@@ -9,9 +9,9 @@
 - [x] Look and examine commands  
 - [x] Basic inventory management (take, drop, inventory)
 - [x] Simple command parser with synonyms
-- [x] **Robust object interaction** (open, close, read, etc.)
-- [x] **Container support** (put X in Y, get X from Y)  
-- [ ] **Multiple object names and aliases**
+- [x] Robust object interaction (open, close, read, etc.)
+- [x] Container support (put X in Y, get X from Y)  
+- [x] Multiple object names and aliases
 
 ### World Building  
 - [x] Room system with exits and descriptions

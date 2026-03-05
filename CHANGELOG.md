@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.5.1 (2026-03-05)
+
+- **Multiple object names and aliases implemented:**
+	- Objects can now be referenced by multiple names for natural gameplay
+	- Smart matching algorithm: exact aliases, primary name words, refined substring matching
+	- Prevents false positives while maintaining intuitive object recognition
+	- Enhanced GameObject class with aliases field and sophisticated matching logic
+	- All game commands support aliases (examine, take, put, get, open, close, etc.)
+	- Examples: "examine box" (mailbox), "read pamphlet" (leaflet), "open aperture" (window)
+	- Case-insensitive matching with proper error handling for invalid names
+	- Integration tested across inventory, containers, and room interactions
+
 ## v0.5.0 (2026-03-05)
 
 - **Container system and preposition handling implemented:**
