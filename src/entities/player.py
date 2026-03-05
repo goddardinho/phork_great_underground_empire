@@ -14,6 +14,16 @@ class Player:
         self.max_inventory_size: int = 10
         self.brief_mode: bool = False  # Whether to show brief room descriptions
         
+        # Disambiguation state
+        self.awaiting_disambiguation: bool = False
+        self.disambiguation_options: List['GameObject'] = []
+        self.pending_command: Optional[str] = None  # The original command waiting for disambiguation
+        
+        # Disambiguation state
+        self.awaiting_disambiguation: bool = False
+        self.disambiguation_options: List[GameObject] = []
+        self.pending_command: Optional[str] = None  # The original command waiting for disambiguation
+        
     def add_to_inventory(self, item_id: str) -> bool:
         """Add an item to inventory. Returns True if successful."""
         if len(self.inventory) >= self.max_inventory_size:

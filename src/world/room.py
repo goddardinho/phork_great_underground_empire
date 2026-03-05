@@ -37,8 +37,24 @@ class Room:
         """Check if room has a specific flag."""
         return flag in self.flags
     
-    def get_description(self, is_brief: bool = False) -> str:
-        """Get room description. Brief mode shows just the name if visited."""
-        if is_brief and self.visited:
+    def get_description(self, force_brief: bool = False, force_verbose: bool = False) -> str:
+        """
+        Get room description based on visit status and preferences.
+        
+        Args:
+            force_brief: If True, always show brief description (just name)
+            force_verbose: If True, always show full description
+        
+        Returns:
+            Formatted room description
+        """
+        # Force verbose overrides everything (like the "look" command)
+        if force_verbose:
+            return f"{self.name}\n\n{self.description}"
+        
+        # Force brief shows just the name (when brief mode is on and room visited)
+        if force_brief and self.visited:
             return self.name
+        
+        # Default: show full description
         return f"{self.name}\n\n{self.description}"

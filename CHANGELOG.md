@@ -1,5 +1,69 @@
 # Changelog
 
+## v0.6.3 (2026-03-05)
+
+- **Ambiguity resolution system implemented:**
+	- Intelligent disambiguation when multiple objects match user commands ("which sword - the rusty one or the silver one?")
+	- Interactive selection prompts with numbered choices and descriptive text support
+	- Player can respond with numbers (1, 2) or descriptive text ("rusty", "silver")
+	- Cancellation support with "cancel" command to abort disambiguation
+	- Location-aware context: shows where objects are located ("here", "in inventory", "in container")
+	- Enhanced Player class with disambiguation state tracking (awaiting_disambiguation, disambiguation_options, pending_command)
+	- Comprehensive GameEngine methods: _find_all_objects(), _handle_disambiguation_response(), _show_disambiguation_prompt(), _execute_disambiguated_command()
+	- All command handlers support disambiguation: take, examine, drop, open, close, put, get from container
+	- Special handling for container disambiguation ("get knife from box" scenarios)
+	- Test objects added: rusty/silver knives in temple, wooden/metal boxes in cave
+	- Demonstration mode available with --demo-disambiguation command line option
+	- Comprehensive test suite covering all disambiguation scenarios and edge cases
+	- Classic text adventure ambiguity resolution with modern user-friendly interaction patterns
+
+- **Project cleanup and optimization:**
+	- Removed unused files: duplicate test_disambiguation.py, legacy map.json, empty src/utils/ directory
+	- Cleaned build artifacts: __pycache__ directories, .pytest_cache, dummy_save.pkl
+	- Updated .gitignore patterns for save files and test artifacts
+	- Synchronized documentation: README.md project structure updated to reflect current architecture
+	- Workspace optimization: streamlined directory structure for cleaner development environment
+
+## v0.6.2 (2026-03-05)
+
+- **Room flags system implemented:**
+	- Complete flag-based room mechanics for atmospheric and gameplay effects
+	- Dark rooms require light sources or player cannot see (classic grue mechanics)
+	- Dangerous rooms with random death mechanics for treacherous areas
+	- Atmospheric flags: noisy (echoing footsteps), cold (frigid air), outdoor (breeze), sacred (ancient power)
+	- Light source system: torch and matches with lighting/extinguishing commands
+	- Enhanced GameObject class with light source attributes (light_source, lit, light_turns)
+	- Added "light" and "extinguish" commands with proper parser integration
+	- Room flag checking integrated into movement and description systems
+	- Test rooms created: Forest (outdoor/noisy), Cave (dark/cold), Temple (sacred/outdoor), Chasm (dangerous/dark)
+	- Authentic text adventure experience with environmental storytelling
+
+## v0.6.1 (2026-03-05)
+
+- **Dynamic room descriptions implemented:**
+	- First-time visits always show full room descriptions for immersive discovery
+	- Brief mode ("brief" command) shows short descriptions for previously visited rooms  
+	- Verbose mode ("verbose" command) always shows full descriptions
+	- Look command always displays complete room descriptions regardless of mode
+	- Enhanced Room class with flexible description rendering (force_brief, force_verbose)
+	- Proper visit tracking: rooms marked as visited after description is shown
+	- Updated command parser to recognize "brief" and "verbose" commands
+	- Help system updated to document new display commands
+	- Authentic text adventure experience with classic room description behavior
+
+## v0.6.0 (2026-03-05)
+
+- **Original Zork world loading implemented:**
+	- Custom MDL parser created to read authentic 1978 MIT Zork .mud files
+	- Successfully parses and loads all 196 rooms from original source code
+	- Room loader integrates parsed data with modern World and Room systems
+	- Authentic room descriptions, names, and exit mappings from original game
+	- Command-line option --mud enables loading from zork_mtl_source/ directory
+	- Essential starting objects (mailbox, leaflet) created for classic opening experience
+	- Exit validation system handles blocked passages and special mechanics
+	- Phase-based implementation: parser infrastructure, data transformation, game integration
+	- Players can now experience the complete original Zork world map
+
 ## v0.5.1 (2026-03-05)
 
 - **Multiple object names and aliases implemented:**

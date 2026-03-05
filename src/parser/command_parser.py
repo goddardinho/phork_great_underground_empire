@@ -44,6 +44,11 @@ class CommandParser:
             "read": "read", "r": "read",
             "open": "open", "close": "close", 
             "unlock": "unlock", "lock": "lock",
+            # Display modes
+            "brief": "brief", "verbose": "verbose",
+            # Light source commands
+            "light": "light", "ignite": "light", "kindle": "light",
+            "extinguish": "extinguish", "put out": "extinguish", "douse": "extinguish",
         }
         
         # Common prepositions

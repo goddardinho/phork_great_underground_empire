@@ -50,6 +50,20 @@ class GameObject:
         """Check if this object can be read."""
         return self.get_attribute("readable", False) or self.get_attribute("readable_text", None) is not None
     
+    def is_light_source(self) -> bool:
+        """Check if this object provides light."""
+        return self.get_attribute("light_source", False)
+    
+    def is_lit(self) -> bool:
+        """Check if this light source is currently providing light."""
+        return self.is_light_source() and self.get_attribute("lit", False)
+    
+    def light_turns_remaining(self) -> int:
+        """Get remaining turns of light (0 = infinite, -1 = no light)."""
+        if not self.is_light_source():
+            return -1
+        return self.get_attribute("light_turns", 0)
+    
     def get_readable_text(self) -> Optional[str]:
         """Get the text content of a readable object."""
         return self.get_attribute("readable_text", None)

@@ -43,4 +43,6 @@ Thumbs.db
 
 # Game saves (if added later)
 *.sav
+*.pkl
 saves/
+dummy_save.pkl
