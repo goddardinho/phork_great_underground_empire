@@ -1,6 +1,18 @@
 # Changelog
 
-## v1.1.0-dev (2026-03-05) 🎭 **Canonical Response System** 🎭
+## v1.1.0-dev (2026-03-05) 🎭 **Enhanced Container System** 🎭
+
+- **Enhanced container object system with robust mechanics:**
+	- **Advanced container attributes**: Added `locked`, `capacity`, and state management methods
+	- **Capacity management**: Containers can have item limits (0 = unlimited like mailbox)
+	- **Lock system**: Containers can be locked/unlocked with proper validation
+	- **State checking**: `can_open()`, `can_close()`, `is_at_capacity()` methods for robust validation
+	- **Snarky response integration**: Container actions use authentic Zork response system
+	- **Enhanced open/close commands**: Better error handling and state management
+	- **Improved put/get commands**: Capacity checking, lock validation, and better feedback
+	- **Container content display**: Dynamic descriptions show open/closed state and contents
+	- **Comprehensive test suite**: [tests/test_enhanced_containers.py](tests/test_enhanced_containers.py) validates all functionality
+	- **Gameplay validation**: Tested mailbox, leaflet, and container interactions in live game
 
 - **Comprehensive snarky response system with authentic Zork personality:**
 	- 70+ varied witty responses to prevent repetitive "I don't understand" messages

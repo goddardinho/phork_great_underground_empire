@@ -240,6 +240,13 @@ class ZorkResponses:
             return response.replace("{object}", object_name)
         return "Something happened."
     
+    def get_action_response(self, action_type: str, object_name: str = "") -> str:
+        """Get action-specific responses."""
+        if action_type in self.action_responses:
+            response = random.choice(self.action_responses[action_type])
+            return response.replace("{object}", object_name)
+        return "Something happened."
+    
     def is_special_command(self, command: str) -> bool:
         """Check if command is a special Easter egg command."""
         return command.lower() in self.special_commands

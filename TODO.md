@@ -35,7 +35,7 @@
 - [x] **Verify command response snarkiness** ensure all commands have canonical snarky responses (including unknown commands) ✅ **COMPLETE!** (Validated against original parser.mud source)
 
 ### Objects & Puzzles  
-- [ ] **Container objects (mailbox, chest, etc.)** - Enhanced container system with proper open/close mechanics
+- [x] **Container objects (mailbox, chest, etc.)** - Enhanced container system with proper open/close mechanics ✅ **COMPLETE!**
 - [ ] Light sources and darkness mechanics
 - [ ] Multi-step puzzles 
 - [ ] Score system
