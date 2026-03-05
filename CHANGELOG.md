@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.6.3 (2026-03-05)
+
+- **Ambiguity resolution system implemented:**
+	- Intelligent disambiguation when multiple objects match user commands ("which sword - the rusty one or the silver one?")
+	- Interactive selection prompts with numbered choices and descriptive text support
+	- Player can respond with numbers (1, 2) or descriptive text ("rusty", "silver")
+	- Cancellation support with "cancel" command to abort disambiguation
+	- Location-aware context: shows where objects are located ("here", "in inventory", "in container")
+	- Enhanced Player class with disambiguation state tracking (awaiting_disambiguation, disambiguation_options, pending_command)
+	- Comprehensive GameEngine methods: _find_all_objects(), _handle_disambiguation_response(), _show_disambiguation_prompt(), _execute_disambiguated_command()
+	- All command handlers support disambiguation: take, examine, drop, open, close, put, get from container
+	- Special handling for container disambiguation ("get knife from box" scenarios)
+	- Test objects added: rusty/silver knives in temple, wooden/metal boxes in cave
+	- Demonstration mode available with --demo-disambiguation command line option
+	- Comprehensive test suite covering all disambiguation scenarios and edge cases
+	- Classic text adventure ambiguity resolution with modern user-friendly interaction patterns
+
 ## v0.6.2 (2026-03-05)
 
 - **Room flags system implemented:**

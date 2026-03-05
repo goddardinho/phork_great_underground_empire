@@ -44,6 +44,12 @@ class GameEngine:
     
     def _process_command(self, user_input: str) -> None:
         """Process a single user command."""
+        
+        # Check if we're awaiting disambiguation
+        if self.player.awaiting_disambiguation:
+            self._handle_disambiguation_response(user_input)
+            return
+        
         command = self.parser.parse(user_input)
         
         if not command:
@@ -51,6 +57,10 @@ class GameEngine:
             return
         
         # Route command to appropriate handler
+        self._route_command(command)
+    
+    def _route_command(self, command) -> None:
+        """Route a command to its appropriate handler (extracted from _process_command)."""
         verb = command.verb
         
         if verb in ["north", "south", "east", "west", "northeast", "northwest", 
@@ -149,7 +159,11 @@ class GameEngine:
         # Find the object
         target_obj = self._find_object(command.noun)
         if not target_obj:
-            print(f"I don't see a {command.noun} here.")
+            if self.player.awaiting_disambiguation:
+                self.player.pending_command = command
+                self._show_disambiguation_prompt()
+            else:
+                print(f"I don't see a {command.noun} here.")
             return
         
         if not target_obj.is_takeable():
@@ -193,15 +207,21 @@ class GameEngine:
             print("Drop what?")
             return
         
-        # Find object in inventory
-        target_obj = None
-        for item_id in self.player.inventory:
-            obj = self.objects.get(item_id)
-            if obj and command.noun in obj.name.lower():
-                target_obj = obj
-                break
+        # Find object - this will handle disambiguation if needed
+        target_obj = self._find_object(command.noun)
+        
+        # If disambiguation is in progress, save command for later execution
+        if self.player.awaiting_disambiguation:
+            self.player.pending_command = command
+            self._show_disambiguation_prompt()
+            return
         
         if not target_obj:
+            print(f"I don't see a {command.noun} here.")
+            return
+        
+        # Check if object is in inventory
+        if target_obj.id not in self.player.inventory:
             print(f"You don't have that.")
             return
         
@@ -219,7 +239,11 @@ class GameEngine:
         
         target_obj = self._find_object(command.noun)
         if not target_obj:
-            print(f"I don't see a {command.noun} here.")
+            if self.player.awaiting_disambiguation:
+                self.player.pending_command = command
+                self._show_disambiguation_prompt()
+            else:
+                print(f"I don't see a {command.noun} here.")
             return
         
         # Show base description with dynamic updates
@@ -443,16 +467,28 @@ class GameEngine:
                 print(f"The {container_obj.name} is closed.")
                 return
             
-            # Find the item in the container
-            item_obj = None
+            # Find the item in the container - use disambiguation
+            # Temporarily switch scope to just this container for finding
+            container_items = []
             for item_id in container_obj.get_contents():
                 obj = self.objects.get(item_id)
-                if obj and command.noun.lower() in obj.name.lower():
-                    item_obj = obj
-                    break
+                if obj and obj.matches(command.noun):
+                    container_items.append(obj)
             
-            if not item_obj:
+            if not container_items:
                 print(f"I don't see a {command.noun} in the {container_obj.name}.")
+                return
+            elif len(container_items) == 1:
+                item_obj = container_items[0]
+            else:
+                # Multiple matches in container - show disambiguation
+                self.player.awaiting_disambiguation = True
+                self.player.disambiguation_options = container_items
+                self.player.pending_command = command
+                print("Which one do you mean?")
+                for i, obj in enumerate(container_items):
+                    print(f"  {i+1}. the {obj.name} (in the {container_obj.name})")
+                print("(Enter a number, or type 'cancel' to abort)")
                 return
             
             # Check if player can carry it
@@ -469,37 +505,19 @@ class GameEngine:
             self._handle_take(command)
     
     def _find_object(self, noun: str) -> Optional['GameObject']:
-        """Find an object by name or alias in current room, inventory, or open containers."""
-        current_room = self.world.get_room(self.player.current_room)
+        """Find an object by name or alias. Handles disambiguation if multiple matches found."""
+        matches = self._find_all_objects(noun)
         
-        # Check current room
-        if current_room:
-            for item_id in current_room.items:
-                obj = self.objects.get(item_id)
-                if obj and obj.matches(noun):
-                    return obj
-                
-                # Also check inside open containers in the room
-                if obj and obj.is_container() and obj.is_open():
-                    for contained_id in obj.get_contents():
-                        contained_obj = self.objects.get(contained_id)
-                        if contained_obj and contained_obj.matches(noun):
-                            return contained_obj
-        
-        # Check inventory  
-        for item_id in self.player.inventory:
-            obj = self.objects.get(item_id)
-            if obj and obj.matches(noun):
-                return obj
-            
-            # Also check inside open containers in inventory
-            if obj and obj.is_container() and obj.is_open():
-                for contained_id in obj.get_contents():
-                    contained_obj = self.objects.get(contained_id)
-                    if contained_obj and contained_obj.matches(noun):
-                        return contained_obj
-        
-        return None
+        if not matches:
+            return None
+        elif len(matches) == 1:
+            return matches[0]
+        else:
+            # Multiple matches - initiate disambiguation
+            self.player.awaiting_disambiguation = True
+            self.player.disambiguation_options = matches
+            self.player.pending_command = None  # Will be set by caller if needed
+            return None  # Signal ambiguity
     
     def _find_object_location(self, obj: 'GameObject') -> Tuple[str, Optional[str]]:
         """Find where an object is located. Returns (location_type, container_id)."""
@@ -621,6 +639,151 @@ Shortcuts are available for most commands.
         
         obj.set_attribute("lit", False)
         print(f"The {obj.name} is extinguished.")
+    
+    def _find_all_objects(self, noun: str) -> List['GameObject']:
+        """Find all objects matching the given noun in accessible locations."""
+        matches = []
+        current_room = self.world.get_room(self.player.current_room)
+        
+        # Check current room
+        if current_room:
+            for item_id in current_room.items:
+                obj = self.objects.get(item_id)
+                if obj and obj.matches(noun):
+                    matches.append(obj)
+                    
+                # Also check inside open containers in the room
+                if obj and obj.is_container() and obj.is_open():
+                    for contained_id in obj.get_contents():
+                        contained_obj = self.objects.get(contained_id)
+                        if contained_obj and contained_obj.matches(noun):
+                            matches.append(contained_obj)
+        
+        # Check inventory  
+        for item_id in self.player.inventory:
+            obj = self.objects.get(item_id)
+            if obj and obj.matches(noun):
+                matches.append(obj)
+            
+            # Also check inside open containers in inventory
+            if obj and obj.is_container() and obj.is_open():
+                for contained_id in obj.get_contents():
+                    contained_obj = self.objects.get(contained_id)
+                    if contained_obj and contained_obj.matches(noun):
+                        matches.append(contained_obj)
+        
+        return matches
+    
+    def _handle_disambiguation_response(self, user_input: str) -> None:
+        """Handle player's response to disambiguation prompt."""
+        user_input = user_input.strip().lower()
+        
+        # Check for cancel/quit disambiguation
+        if user_input in ['cancel', 'quit', 'nevermind', 'none']:
+            self._clear_disambiguation()
+            print("Cancelled.")
+            return
+        
+        # Try to parse as a number (1, 2, 3, etc.)
+        try:
+            choice_num = int(user_input)
+            if 1 <= choice_num <= len(self.player.disambiguation_options):
+                chosen_obj = self.player.disambiguation_options[choice_num - 1]
+                self._execute_disambiguated_command(chosen_obj)
+                return
+            else:
+                print(f"Please choose a number between 1 and {len(self.player.disambiguation_options)}.")
+                return
+        except ValueError:
+            pass
+        
+        # Try to match the response against object descriptions
+        for i, obj in enumerate(self.player.disambiguation_options):
+            # Check if user input matches part of the object description
+            if (user_input in obj.name.lower() or 
+                user_input in obj.description.lower() or
+                any(user_input in alias.lower() for alias in obj.aliases)):
+                self._execute_disambiguated_command(obj)
+                return
+        
+        # No match found
+        print("I don't understand. Please choose a number or be more specific.")
+        self._show_disambiguation_prompt()
+    
+    def _execute_disambiguated_command(self, chosen_obj: 'GameObject') -> None:
+        """Execute the pending command with the chosen object."""
+        if not self.player.pending_command:
+            self._clear_disambiguation()
+            return
+        
+        command = self.player.pending_command
+        
+        # Special handling for "get X from Y" commands that use container-specific disambiguation
+        if (command.verb == "get" and command.preposition == "from" and command.noun2):
+            # For container disambiguation, directly execute the get operation
+            container_obj = self._find_object(command.noun2)
+            if container_obj and container_obj.is_container():
+                # Check if player can carry it
+                if self.player.is_inventory_full():
+                    print("Your load is too heavy.")
+                else:
+                    # Remove from container and add to inventory
+                    container_obj.remove_from_container(chosen_obj.id)
+                    self.player.add_to_inventory(chosen_obj.id)
+                    print(f"You take the {chosen_obj.name} from the {container_obj.name}.")
+            self._clear_disambiguation()
+            return
+        
+        # For regular commands, use the mock approach
+        original_find_object = self._find_object
+        
+        def mock_find_object(noun: str) -> Optional['GameObject']:
+            # Return the chosen object if the noun matches
+            if chosen_obj.matches(noun):
+                return chosen_obj
+            return original_find_object(noun)
+        
+        # Temporarily replace the find_object method
+        self._find_object = mock_find_object
+        
+        try:
+            # Clear disambiguation state first
+            self._clear_disambiguation()
+            
+            # Re-execute the original command with the chosen object
+            self._route_command(command)
+        finally:
+            # Restore original method
+            self._find_object = original_find_object
+    
+    def _clear_disambiguation(self) -> None:
+        """Clear disambiguation state."""
+        self.player.awaiting_disambiguation = False
+        self.player.disambiguation_options = []
+        self.player.pending_command = None
+    
+    def _show_disambiguation_prompt(self) -> None:
+        """Show the disambiguation options to the player."""
+        print("Which one do you mean?")
+        for i, obj in enumerate(self.player.disambiguation_options, 1):
+            location_desc = self._get_object_location_description(obj)
+            print(f"  {i}. the {obj.name} ({location_desc})")
+        print("(Enter a number, or type 'cancel' to abort)")
+    
+    def _get_object_location_description(self, obj: 'GameObject') -> str:
+        """Get a description of where an object is located."""
+        location_type, container_id = self._find_object_location(obj)
+        
+        if location_type == "inventory":
+            return "in your inventory"
+        elif location_type == "room":
+            return "here"
+        elif location_type == "container" and container_id:
+            container = self.objects.get(container_id)
+            if container:
+                return f"in the {container.name}"
+        
+        return "somewhere nearby"
     
     def _has_light_source(self) -> bool:
         """Check if player has any active light source."""
@@ -987,15 +1150,78 @@ Type 'help' for a list of commands.
             }
         )
         
+        # Add test objects for disambiguation
+        rusty_knife = GameObject(
+            id="RUSTY_KNIFE",
+            name="rusty knife",
+            description="An old rusty knife with a chipped blade. It looks like it hasn't been used in years.",
+            aliases=["knife", "blade", "rusty blade"],
+            attributes={
+                "takeable": True,
+                "weight": 1
+            }
+        )
+        
+        silver_knife = GameObject(
+            id="SILVER_KNIFE",
+            name="silver knife",
+            description="A gleaming silver knife with an ornate handle. The blade is perfectly sharp.",
+            aliases=["knife", "blade", "silver blade"],
+            attributes={
+                "takeable": True,
+                "weight": 1
+            }
+        )
+        
+        wooden_box = GameObject(
+            id="WOODEN_BOX",
+            name="wooden box",
+            description="A simple wooden box with iron hinges. It appears to be handcrafted.",
+            aliases=["box", "container", "wooden container"],
+            attributes={
+                "takeable": True,
+                "container": True,
+                "openable": True,
+                "open": False,
+                "contents": [],
+                "weight": 2
+            }
+        )
+        
+        metal_box = GameObject(
+            id="METAL_BOX",
+            name="metal box",
+            description="A sturdy metal box with a complex lock mechanism. It looks very secure.",
+            aliases=["box", "container", "metal container"],
+            attributes={
+                "takeable": True,
+                "container": True,
+                "openable": True,
+                "open": False,
+                "contents": [],
+                "weight": 3
+            }
+        )
+        
         # Add objects to world
         self.objects["MAILBOX"] = mailbox
         self.objects["LEAFLET"] = leaflet
         self.objects["WINDOW"] = window
         self.objects["TORCH"] = torch
         self.objects["MATCHES"] = matches
+        self.objects["RUSTY_KNIFE"] = rusty_knife
+        self.objects["SILVER_KNIFE"] = silver_knife
+        self.objects["WOODEN_BOX"] = wooden_box
+        self.objects["METAL_BOX"] = metal_box
         
         # Place objects in rooms
         west_house.add_item("MAILBOX")  # Mailbox at west of house (leaflet is inside it)
         house_entrance.add_item("WINDOW")  # Window at behind house
         forest.add_item("TORCH")  # Torch in the forest
         forest.add_item("MATCHES")  # Matches in the forest
+        
+        # Place ambiguous objects for testing
+        temple.add_item("RUSTY_KNIFE")  # Rusty knife in temple
+        temple.add_item("SILVER_KNIFE")  # Silver knife in temple  
+        cave.add_item("WOODEN_BOX")  # Wooden box in cave
+        cave.add_item("METAL_BOX")  # Metal box in cave

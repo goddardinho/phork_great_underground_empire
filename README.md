@@ -10,6 +10,10 @@ Phork is a clean-room Python reimplementation of the classic Zork I, inspired by
 - Clean, modular Python architecture with full type hints
 - Room and object structure based on Zork I
 - Extensible command parser with natural language processing
+- **Intelligent ambiguity resolution** - handles "which sword - the rusty one or the silver one?"
+- Dynamic room descriptions with brief/verbose modes
+- Room flags system (light sources, dangers, atmospheric effects)
+- Container support with nested object interactions
 - Comprehensive test suite for reliability
 - MIT License
 

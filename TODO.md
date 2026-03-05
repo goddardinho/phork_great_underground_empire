@@ -18,15 +18,16 @@
 - [x] Basic object placement in rooms
 - [x] Load rooms from original .mud files (data/ directory)
 - [x] Dynamic room descriptions (visited/unvisited states)
-- [x] **Room flags** (dark, dangerous, etc.)
+- [x] Room flags (dark, dangerous, etc.)
 
 ### Parser Enhancement
 - [x] Basic verb-noun parsing
-- [x] **Preposition handling** (put X in Y, look at X, etc.)
-- [ ] **Ambiguity resolution** (which sword - the rusty one or the silver one?)
+- [x] Preposition handling (put X in Y, look at X, etc.)
+- [x] Ambiguity resolution (which sword - the rusty one or the silver one?)
 - [ ] **Synonym expansion** from Zork vocabulary
+- [ ] **Wire all rooms** ensure all rooms are wired and functional
 
-*Progress: 11/13 core features complete (85%) - Ready for v1.0 Foundation*
+*Progress: 12/13 core features complete (92%) - Ready for v1.0 Foundation*
 
 ## Medium-term Goals (v1.1 - Zork Parity)
 
