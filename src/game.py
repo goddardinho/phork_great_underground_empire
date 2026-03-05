@@ -80,6 +80,10 @@ class GameEngine:
             self._handle_quit()
         elif verb == "help":
             self._handle_help()
+        elif verb == "brief":
+            self._handle_brief()
+        elif verb == "verbose":
+            self._handle_verbose()
         else:
             print(f"I don't understand that.")
     
@@ -94,8 +98,8 @@ class GameEngine:
         if target_room_id:
             target_room = self.world.get_room(target_room_id)
             if target_room:
+                # Move player and show room (visited status handled in _look_around)
                 self.player.move_to_room(target_room_id)
-                target_room.visited = True
                 self._look_around()
             else:
                 print("Error: That exit leads nowhere!")
@@ -108,8 +112,8 @@ class GameEngine:
             # Looking at specific object - use examine functionality
             self._handle_examine(command)
         else:
-            # Look around room
-            self._look_around()
+            # Looking around the room - always show full description
+            self._look_around(force_verbose=True)
     
     def _handle_inventory(self) -> None:
         """Handle inventory command."""
@@ -525,20 +529,43 @@ Available commands:
   Movement: north, south, east, west, up, down (or n, s, e, w, u, d)
   Actions: look, examine <object>, take <object>, drop <object>, inventory (or i)
   Object Interaction: open <object>, close <object>, read <object>
+  Container Operations: put <object> in <container>, get <object> from <container>
+  Display: brief (short room descriptions), verbose (full room descriptions)
   Other: help, quit (or q)
 
 Shortcuts are available for most commands.
 """
         print(help_text)
     
-    def _look_around(self) -> None:
+    def _handle_brief(self) -> None:
+        """Handle brief command - enable brief room descriptions."""
+        self.player.brief_mode = True
+        print("Brief descriptions enabled. Visited rooms will show short descriptions.")
+    
+    def _handle_verbose(self) -> None:
+        """Handle verbose command - enable full room descriptions."""
+        self.player.brief_mode = False
+        print("Verbose descriptions enabled. All rooms will show full descriptions.")
+    
+    def _look_around(self, force_verbose: bool = False) -> None:
         """Show the current room description."""
         current_room = self.world.get_room(self.player.current_room)
         if not current_room:
             print("You are in a void.")
             return
         
-        print(current_room.get_description(self.player.brief_mode))
+        # Determine how to show the description
+        if force_verbose:
+            # "look" command - always show full description
+            print(current_room.get_description(force_verbose=True))
+        elif not current_room.visited:
+            # First visit - always show full description regardless of brief mode
+            print(current_room.get_description(force_verbose=True))
+        else:
+            # Subsequent visit - respect brief mode setting
+            print(current_room.get_description(force_brief=self.player.brief_mode))
+        
+        # Mark room as visited after showing description
         current_room.visited = True
         
         # Show items in room

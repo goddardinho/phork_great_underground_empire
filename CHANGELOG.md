@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.6.1 (2026-03-05)
+
+- **Dynamic room descriptions implemented:**
+	- First-time visits always show full room descriptions for immersive discovery
+	- Brief mode ("brief" command) shows short descriptions for previously visited rooms  
+	- Verbose mode ("verbose" command) always shows full descriptions
+	- Look command always displays complete room descriptions regardless of mode
+	- Enhanced Room class with flexible description rendering (force_brief, force_verbose)
+	- Proper visit tracking: rooms marked as visited after description is shown
+	- Updated command parser to recognize "brief" and "verbose" commands
+	- Help system updated to document new display commands
+	- Authentic text adventure experience with classic room description behavior
+
 ## v0.6.0 (2026-03-05)
 
 - **Original Zork world loading implemented:**
