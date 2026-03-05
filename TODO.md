@@ -16,9 +16,9 @@
 ### World Building  
 - [x] Room system with exits and descriptions
 - [x] Basic object placement in rooms
-- [x] **Load rooms from original .mud files** (data/ directory)
-- [x] **Dynamic room descriptions** (visited/unvisited states)
-- [ ] **Room flags** (dark, dangerous, etc.)
+- [x] Load rooms from original .mud files (data/ directory)
+- [x] Dynamic room descriptions (visited/unvisited states)
+- [x] **Room flags** (dark, dangerous, etc.)
 
 ### Parser Enhancement
 - [x] Basic verb-noun parsing

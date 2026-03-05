@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.6.2 (2026-03-05)
+
+- **Room flags system implemented:**
+	- Complete flag-based room mechanics for atmospheric and gameplay effects
+	- Dark rooms require light sources or player cannot see (classic grue mechanics)
+	- Dangerous rooms with random death mechanics for treacherous areas
+	- Atmospheric flags: noisy (echoing footsteps), cold (frigid air), outdoor (breeze), sacred (ancient power)
+	- Light source system: torch and matches with lighting/extinguishing commands
+	- Enhanced GameObject class with light source attributes (light_source, lit, light_turns)
+	- Added "light" and "extinguish" commands with proper parser integration
+	- Room flag checking integrated into movement and description systems
+	- Test rooms created: Forest (outdoor/noisy), Cave (dark/cold), Temple (sacred/outdoor), Chasm (dangerous/dark)
+	- Authentic text adventure experience with environmental storytelling
+
 ## v0.6.1 (2026-03-05)
 
 - **Dynamic room descriptions implemented:**

@@ -84,6 +84,10 @@ class GameEngine:
             self._handle_brief()
         elif verb == "verbose":
             self._handle_verbose()
+        elif verb == "light":
+            self._handle_light(command)
+        elif verb == "extinguish":
+            self._handle_extinguish(command)
         else:
             print(f"I don't understand that.")
     
@@ -101,6 +105,16 @@ class GameEngine:
                 # Move player and show room (visited status handled in _look_around)
                 self.player.move_to_room(target_room_id)
                 self._look_around()
+                
+                # Check for dangers after moving
+                death_message = self._check_danger()
+                if death_message:
+                    print()
+                    print(death_message)
+                    print("\n*** You have died ***")
+                    print("Would you like to restart, restore a saved game, or quit?")
+                    # For now, just end the game
+                    self.running = False
             else:
                 print("Error: That exit leads nowhere!")
         else:
@@ -530,6 +544,7 @@ Available commands:
   Actions: look, examine <object>, take <object>, drop <object>, inventory (or i)
   Object Interaction: open <object>, close <object>, read <object>
   Container Operations: put <object> in <container>, get <object> from <container>
+  Light Sources: light <object>, extinguish <object>
   Display: brief (short room descriptions), verbose (full room descriptions)
   Other: help, quit (or q)
 
@@ -547,11 +562,145 @@ Shortcuts are available for most commands.
         self.player.brief_mode = False
         print("Verbose descriptions enabled. All rooms will show full descriptions.")
     
+    def _handle_light(self, command: Command) -> None:
+        """Handle lighting objects like torches."""
+        if not command.noun:
+            print("Light what?")
+            return
+        
+        obj = self._find_object(command.noun)
+        if not obj:
+            print(f"I don't see a {command.noun} here.")
+            return
+        
+        if not obj.is_light_source():
+            print(f"You can't light the {obj.name}.")
+            return
+        
+        if obj.is_lit():
+            print(f"The {obj.name} is already lit.")
+            return
+        
+        # Check if player has matches or other lighting source
+        has_matches = False
+        for item_id in self.player.inventory:
+            match_obj = self.objects.get(item_id)
+            if match_obj and "matches" in match_obj.name.lower():
+                uses = match_obj.get_attribute("uses_remaining", 0)
+                if uses > 0:
+                    match_obj.set_attribute("uses_remaining", uses - 1)
+                    has_matches = True
+                    break
+        
+        if not has_matches:
+            print("You have no way to light it.")
+            return
+        
+        # Light the object
+        obj.set_attribute("lit", True)
+        print(f"The {obj.name} is now lit.")
+    
+    def _handle_extinguish(self, command: Command) -> None:
+        """Handle extinguishing light sources."""
+        if not command.noun:
+            print("Extinguish what?")
+            return
+        
+        obj = self._find_object(command.noun)
+        if not obj:
+            print(f"I don't see a {command.noun} here.")
+            return
+        
+        if not obj.is_light_source():
+            print(f"The {obj.name} is not a light source.")
+            return
+        
+        if not obj.is_lit():
+            print(f"The {obj.name} is not lit.")
+            return
+        
+        obj.set_attribute("lit", False)
+        print(f"The {obj.name} is extinguished.")
+    
+    def _has_light_source(self) -> bool:
+        """Check if player has any active light source."""
+        # Check inventory for lit light sources
+        for item_id in self.player.inventory:
+            obj = self.objects.get(item_id)
+            if obj and obj.is_lit():
+                return True
+        
+        # Check current room for lit light sources
+        current_room = self.world.get_room(self.player.current_room)
+        if current_room:
+            for item_id in current_room.items:
+                obj = self.objects.get(item_id)
+                if obj and obj.is_lit():
+                    return True
+        
+        return False
+    
+    def _check_darkness(self) -> bool:
+        """Check if current room is dark and player has no light. Returns True if too dark to see."""
+        current_room = self.world.get_room(self.player.current_room)
+        if not current_room or not current_room.has_flag("dark"):
+            return False
+        
+        return not self._has_light_source()
+    
+    def _check_danger(self) -> Optional[str]:
+        """Check for room dangers and return death message if applicable."""
+        current_room = self.world.get_room(self.player.current_room)
+        if not current_room:
+            return None
+        
+        # Check for grue in dark rooms
+        if current_room.has_flag("dark") and self._check_darkness():
+            import random
+            if random.random() < 0.1:  # 10% chance per turn in darkness
+                return "You are likely to be eaten by a grue."
+        
+        # Check for explicitly dangerous rooms
+        if current_room.has_flag("dangerous"):
+            import random
+            if random.random() < 0.05:  # 5% chance per turn in dangerous areas
+                return "You have died from the treacherous conditions here."
+        
+        return None
+    
+    def _get_atmospheric_description(self) -> Optional[str]:
+        """Get additional atmospheric text based on room flags."""
+        current_room = self.world.get_room(self.player.current_room)
+        if not current_room:
+            return None
+        
+        atmospheric_text = []
+        
+        if current_room.has_flag("noisy"):
+            atmospheric_text.append("Your footsteps echo loudly here.")
+        
+        if current_room.has_flag("sacred"):
+            atmospheric_text.append("An aura of ancient power fills this place.")
+        
+        if current_room.has_flag("outdoor"):
+            atmospheric_text.append("A gentle breeze stirs the air.")
+        
+        if current_room.has_flag("cold"):
+            atmospheric_text.append("The air is frigid here.")
+        
+        return " ".join(atmospheric_text) if atmospheric_text else None
+    
     def _look_around(self, force_verbose: bool = False) -> None:
         """Show the current room description."""
         current_room = self.world.get_room(self.player.current_room)
         if not current_room:
             print("You are in a void.")
+            return
+        
+        # Check for darkness first
+        if self._check_darkness():
+            print("It is pitch black. You are likely to be eaten by a grue.")
+            current_room.visited = True  # Still mark as visited
             return
         
         # Determine how to show the description
@@ -585,6 +734,11 @@ Shortcuts are available for most commands.
         if current_room.exits:
             exit_list = list(current_room.exits.keys())
             print(f"Obvious exits: {', '.join(exit_list)}")
+        
+        # Show atmospheric descriptions based on room flags
+        atmospheric = self._get_atmospheric_description()
+        if atmospheric:
+            print(atmospheric)
     
     def _show_welcome(self) -> None:
         """Show the welcome message."""
@@ -712,7 +866,40 @@ Type 'help' for a list of commands.
             id="HOUSE",
             name="Behind House", 
             description="You are behind the white house. A path leads into the forest to the east. In one corner of the house there is a small window which is slightly ajar.",
-            exits={"west": "WHOUS"}
+            exits={"west": "WHOUS", "east": "FOREST"}
+        )
+        
+        # Add some test rooms with flags
+        forest = Room(
+            id="FOREST",
+            name="Forest Path",
+            description="You are on a winding path through an ancient forest. Tall trees block most of the sunlight.",
+            exits={"west": "HOUSE", "down": "CAVE", "south": "TEMPLE"},
+            flags={"outdoor", "noisy"}
+        )
+        
+        cave = Room(
+            id="CAVE",
+            name="Dark Cave",
+            description="You are in a pitch-black cave. The air is damp and cold, and you can hear water dripping somewhere in the darkness.",
+            exits={"up": "FOREST", "north": "DANGER"},
+            flags={"dark", "cold"}
+        )
+        
+        temple = Room(
+            id="TEMPLE",
+            name="Ancient Temple",
+            description="You stand before an ancient temple, its weathered stones covered in mystical symbols that seem to glow faintly.",
+            exits={"north": "FOREST"},
+            flags={"sacred", "outdoor"}
+        )
+        
+        dangerous_room = Room(
+            id="DANGER",
+            name="Treacherous Chasm",
+            description="You are on the edge of a deep, crumbling chasm. Loose rocks fall away into the darkness below at the slightest movement.",
+            exits={"south": "CAVE"},
+            flags={"dangerous", "dark"}
         )
         
         # Add rooms to world
@@ -720,6 +907,10 @@ Type 'help' for a list of commands.
         self.world.add_room(north_house)
         self.world.add_room(south_house)
         self.world.add_room(house_entrance)
+        self.world.add_room(forest)
+        self.world.add_room(cave)
+        self.world.add_room(temple)
+        self.world.add_room(dangerous_room)
         
         # Create some basic objects
         mailbox = GameObject(
@@ -768,11 +959,43 @@ Type 'help' for a list of commands.
             }
         )
         
+        # Add a torch for light source testing
+        torch = GameObject(
+            id="TORCH",
+            name="brass torch",
+            description="A sturdy brass torch with oil-soaked rags wrapped around one end. It could provide light if lit.",
+            aliases=["torch", "light", "lantern"],
+            attributes={
+                "takeable": True,
+                "weight": 2,
+                "light_source": True,
+                "lit": False,  # Initially unlit
+                "light_turns": 50  # 50 turns of light when lit
+            }
+        )
+        
+        # Add matches to light the torch
+        matches = GameObject(
+            id="MATCHES",
+            name="book of matches",
+            description="A small book of wooden matches. There are several left.",
+            aliases=["matches", "match", "book"],
+            attributes={
+                "takeable": True,
+                "weight": 1,
+                "uses_remaining": 10
+            }
+        )
+        
         # Add objects to world
         self.objects["MAILBOX"] = mailbox
         self.objects["LEAFLET"] = leaflet
         self.objects["WINDOW"] = window
+        self.objects["TORCH"] = torch
+        self.objects["MATCHES"] = matches
         
         # Place objects in rooms
         west_house.add_item("MAILBOX")  # Mailbox at west of house (leaflet is inside it)
         house_entrance.add_item("WINDOW")  # Window at behind house
+        forest.add_item("TORCH")  # Torch in the forest
+        forest.add_item("MATCHES")  # Matches in the forest
