@@ -42,7 +42,7 @@ class GameEngine:
         command = self.parser.parse(user_input)
         
         if not command:
-            print("I don't understand that.")
+            print("Beg pardon?")
             return
         
         # Route command to appropriate handler
@@ -67,12 +67,16 @@ class GameEngine:
             self._handle_close(command)
         elif verb == "read":
             self._handle_read(command)
+        elif verb == "put":
+            self._handle_put(command)
+        elif verb == "get":
+            self._handle_get(command)
         elif verb == "q" or verb == "quit":
             self._handle_quit()
         elif verb == "help":
             self._handle_help()
         else:
-            print(f"I don't know how to '{verb}'.")
+            print(f"I don't understand that.")
     
     def _handle_movement(self, direction: str) -> None:
         """Handle player movement."""
@@ -126,11 +130,11 @@ class GameEngine:
             return
         
         if not target_obj.is_takeable():
-            print(f"You can't take the {target_obj.name}.")
+            print(f"You cannot take that.")
             return
         
         if self.player.is_inventory_full():
-            print("You are carrying too many things.")
+            print("Your load is too heavy.")
             return
         
         # Find where the object is located
@@ -148,7 +152,7 @@ class GameEngine:
                 print(f"Taken: {target_obj.name}")
         elif location_type == "container":
             # Take from container
-            container = self.objects.get(container_id)
+            container = self.objects.get(container_id) if container_id else None
             if container and container.is_open():
                 container.remove_from_container(target_obj.id)
                 self.player.add_to_inventory(target_obj.id)
@@ -156,9 +160,9 @@ class GameEngine:
             elif container and not container.is_open():
                 print(f"The {container.name} is closed.")
             else:
-                print("Something went wrong.")
+                print("I can't do that.")
         else:
-            print(f"I can't reach the {target_obj.name}.")
+            print(f"I cannot reach that.")
     
     def _handle_drop(self, command: Command) -> None:
         """Handle drop command."""
@@ -175,7 +179,7 @@ class GameEngine:
                 break
         
         if not target_obj:
-            print(f"You aren't carrying a {command.noun}.")
+            print(f"You don't have that.")
             return
         
         current_room = self.world.get_room(self.player.current_room)
@@ -205,28 +209,22 @@ class GameEngine:
             else:
                 description = "A small window in the corner of the house. It is closed tightly."
         elif target_obj.is_container():
-            # For containers, update description based on contents
+            # For containers, update description based on contents and state
             contents = target_obj.get_contents()
+            
+            # Start with base description but remove state-specific parts
+            base_desc = target_obj.description
+            # Remove existing state indicators
+            base_desc = base_desc.replace("There appears to be something inside.", "")
+            base_desc = base_desc.replace("is closed.", "").replace("is open.", "")
+            
+            # Add appropriate state description
             if target_obj.is_open():
-                if contents:
-                    description = target_obj.description.replace(
-                        "There appears to be something inside.", 
-                        "It is open."
-                    )
-                else:
-                    description = target_obj.description.replace(
-                        "There appears to be something inside.", 
-                        "It is open and empty."
-                    )
+                description = base_desc.strip() + " It is open."
             else:
+                description = base_desc.strip() + " It is closed."
                 if contents:
-                    if "There appears to be something inside." not in description:
-                        description += " There appears to be something inside."
-                else:
-                    description = description.replace(
-                        "There appears to be something inside.", 
-                        "It appears to be empty."
-                    )
+                    description += " There appears to be something inside."
         
         print(description)
         
@@ -254,7 +252,7 @@ class GameEngine:
             return
         
         if not target_obj.is_openable():
-            print(f"You can't open the {target_obj.name}.")
+            print(f"You cannot open that.")
             return
         
         if target_obj.is_open():
@@ -297,7 +295,7 @@ class GameEngine:
             return
         
         if not target_obj.is_openable():
-            print(f"You can't close the {target_obj.name}.")
+            print(f"You cannot close that.")
             return
         
         if not target_obj.is_open():
@@ -331,7 +329,121 @@ class GameEngine:
         elif target_obj.get_attribute("readable", False):
             print(f"The {target_obj.name} has no text on it.")
         else:
-            print(f"You can't read the {target_obj.name}.")
+            print(f"How can I read a {target_obj.name}?")
+
+    def _handle_put(self, command: Command) -> None:
+        """Handle put command (put X in Y)."""
+        if not command.noun:
+            print("Put what?")
+            return
+        
+        if not command.preposition or command.preposition != "in":
+            print("Put it in what?")
+            return
+        
+        if not command.noun2:
+            print("Put it in what?")
+            return
+        
+        # Find the item to put
+        item_obj = self._find_object(command.noun)
+        if not item_obj:
+            print(f"I don't see a {command.noun} here.")
+            return
+        
+        # Find the container
+        container_obj = self._find_object(command.noun2)
+        if not container_obj:
+            print(f"I don't see a {command.noun2} here.")
+            return
+        
+        # Check if target is a container
+        if not container_obj.is_container():
+            print(f"I don't see how I can put anything in that.")
+            return
+        
+        # Check if container is openable and open
+        if container_obj.is_openable() and not container_obj.is_open():
+            print(f"The {container_obj.name} is closed.")
+            return
+        
+        # Make sure the item isn't the container itself
+        if item_obj.id == container_obj.id:
+            print("That would be quite a contortion!")
+            return
+        
+        # Find where the item currently is
+        location_type, current_container_id = self._find_object_location(item_obj)
+        
+        if location_type == "inventory":
+            # Remove from inventory and add to container
+            self.player.remove_from_inventory(item_obj.id)
+            container_obj.add_to_container(item_obj.id)
+            print(f"You put the {item_obj.name} in the {container_obj.name}.")
+        elif location_type == "room":
+            # Remove from room and add to container
+            current_room = self.world.get_room(self.player.current_room)
+            if current_room:
+                current_room.remove_item(item_obj.id)
+                container_obj.add_to_container(item_obj.id)
+                print(f"You put the {item_obj.name} in the {container_obj.name}.")
+        elif location_type == "container":
+            # Move from one container to another
+            current_container = self.objects.get(current_container_id) if current_container_id else None
+            if current_container:
+                current_container.remove_from_container(item_obj.id)
+                container_obj.add_to_container(item_obj.id)
+                print(f"You put the {item_obj.name} in the {container_obj.name}.")
+        else:
+            print(f"You can't reach the {item_obj.name}.")
+
+    def _handle_get(self, command: Command) -> None:
+        """Handle get command (get X from Y or just get X)."""
+        if not command.noun:
+            print("Get what?")
+            return
+        
+        # Check for "get X from Y" syntax
+        if command.preposition == "from" and command.noun2:
+            # Find the container
+            container_obj = self._find_object(command.noun2)
+            if not container_obj:
+                print(f"I don't see a {command.noun2} here.")
+                return
+            
+            if not container_obj.is_container():
+                print(f"I don't see how you can get anything from that.")
+                return
+            
+            # Check if container is openable and open
+            if container_obj.is_openable() and not container_obj.is_open():
+                print(f"The {container_obj.name} is closed.")
+                return
+            
+            # Find the item in the container
+            item_obj = None
+            for item_id in container_obj.get_contents():
+                obj = self.objects.get(item_id)
+                if obj and command.noun.lower() in obj.name.lower():
+                    item_obj = obj
+                    break
+            
+            if not item_obj:
+                print(f"I don't see a {command.noun} in the {container_obj.name}.")
+                return
+            
+            # Check if player can carry it
+            if self.player.is_inventory_full():
+                print("Your load is too heavy.")
+                return
+            # Remove from container and add to inventory
+            container_obj.remove_from_container(item_obj.id)
+            self.player.add_to_inventory(item_obj.id)
+            print(f"You take the {item_obj.name} from the {container_obj.name}.")
+        
+        else:
+            # Just "get X" - same as "take X"
+            self._handle_take(command)
     
     def _find_object(self, noun: str) -> Optional['GameObject']:
         """Find an object by name in current room, inventory, or open containers."""
@@ -467,21 +579,21 @@ Type 'help' for a list of commands.
             id="NHOUS",
             name="North of House", 
             description="You are facing the north side of a white house. There is no door here, and all the windows are boarded up.",
-            exits={"south": "WHOUS", "east": "NEHOUS"}
+            exits={"south": "WHOUS"}
         )
         
         south_house = Room(
             id="SHOUS",
             name="South of House",
             description="You are facing the south side of a white house. There is no door here, and all the windows are boarded up.",
-            exits={"north": "WHOUS", "east": "SEHOUS"}
+            exits={"north": "WHOUS"}
         )
         
         house_entrance = Room(
             id="HOUSE",
             name="Behind House", 
             description="You are behind the white house. A path leads into the forest to the east. In one corner of the house there is a small window which is slightly ajar.",
-            exits={"west": "WHOUS", "east": "FORES"}
+            exits={"west": "WHOUS"}
         )
         
         # Add rooms to world
@@ -494,7 +606,7 @@ Type 'help' for a list of commands.
         mailbox = GameObject(
             id="MAILBOX",
             name="small mailbox",
-            description="The small mailbox is closed. There appears to be something inside.",
+            description="The small mailbox.",
             attributes={
                 "takeable": False, 
                 "container": True, 

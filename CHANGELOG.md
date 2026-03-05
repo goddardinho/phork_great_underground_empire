@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.5.0 (2026-03-05)
+
+- **Container system and preposition handling implemented:**
+	- Full container support added: put X in Y, get X from Y commands work seamlessly
+	- Preposition parsing enhanced to handle complex commands with proper syntax
+	- Container state management: open/closed, contents tracking, access control
+	- Integration with existing inventory and object systems
+	- Comprehensive error handling for invalid container operations
+- **Canonical Zork response tone implemented:**
+	- All user feedback updated to match original Zork's snarky, light-hearted personality
+	- "Beg pardon?" for empty input, "That would be quite a contortion!" for impossible actions
+	- Responses now feel authentic to the 1970s adventure game experience
+- **Navigation fixes and cleanup:**
+	- Removed broken exits to prevent "Error: That exit leads nowhere!" messages
+	- All room connections now properly validated
+	- Clean navigation experience across the initial room network
+
 ## v0.4.0 (2026-01-12)
 
 - Canonical Zork room flag logic fully implemented:

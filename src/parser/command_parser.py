@@ -36,7 +36,9 @@ class CommandParser:
             "u": "up", "d": "down",
             "l": "look", "examine": "examine", "x": "examine",
             "i": "inventory", "inv": "inventory",
-            "get": "take", "pick": "take", "grab": "take",
+            "pick": "take", "grab": "take",
+            "put": "put", "place": "put",
+            "get": "get", "retrieve": "get",
             "quit": "q",
             # Object interactions
             "read": "read", "r": "read",

@@ -10,7 +10,7 @@
 - [x] Basic inventory management (take, drop, inventory)
 - [x] Simple command parser with synonyms
 - [x] **Robust object interaction** (open, close, read, etc.)
-- [ ] **Container support** (put X in Y, get X from Y)  
+- [x] **Container support** (put X in Y, get X from Y)  
 - [ ] **Multiple object names and aliases**
 
 ### World Building  
@@ -22,7 +22,7 @@
 
 ### Parser Enhancement
 - [x] Basic verb-noun parsing
-- [ ] **Preposition handling** (put X in Y, look at X, etc.)
+- [x] **Preposition handling** (put X in Y, look at X, etc.)
 - [ ] **Ambiguity resolution** (which sword - the rusty one or the silver one?)
 - [ ] **Synonym expansion** from Zork vocabulary
 
