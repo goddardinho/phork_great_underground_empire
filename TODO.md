@@ -24,8 +24,8 @@
 - [x] Basic verb-noun parsing
 - [x] Preposition handling (put X in Y, look at X, etc.)
 - [x] Ambiguity resolution (which sword - the rusty one or the silver one?)
-- [x] **Synonym expansion** from Zork vocabulary (80+ verbs, 30+ nouns, multi-word support)
-- [x] **Wire all rooms** ensure all rooms are wired and functional (78.5% exits working - core navigation complete)
+- [x] Synonym expansion from Zork vocabulary (80+ verbs, 30+ nouns, multi-word support)
+- [x] Wire all rooms ensure all rooms are wired and functional (78.5% exits working - core navigation complete)
 
 *Progress: 14/14 core features complete (100%) - 🎉 **v1.0 FOUNDATION COMPLETE!** 🎉*
 
