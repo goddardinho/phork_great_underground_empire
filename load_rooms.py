@@ -253,7 +253,184 @@ def load_rooms():
         "SAFE-ROOM": Room.ROOM_LOCKED,
         # Add more as needed...
     }
-    # Add all canonical rooms as stubs if not already defined
+    # Add canonical details for iconic rooms
+    rooms["WHOUS"] = Room(
+        id="WHOUS",
+        desc_long="You are standing in an open field west of a white house, with a boarded front door. There is a small mailbox here.",
+        desc_short="West of House",
+        exits={"east": "HOUSE", "south": "FORE1", "north": "NHOUS", "west": "FORE3"},
+        objects=[
+            GameObject("Mailbox", "A small mailbox. It is closed.", attributes={"osize": 4, "open": False, "openable": True, "locked": False, "container": True, "takeable": False, "portable": False, "contents": [
+                GameObject("Leaflet", "A leaflet. It reads: 'WELCOME TO ZORK!'")
+            ]}),
+        ],
+        flags=Room.ROOM_OUTDOORS,
+        action=None,
+        npcs=[],
+    )
+    rooms["NHOUS"] = Room(
+        id="NHOUS",
+        desc_long="You are facing the north side of a white house. There is no door here, and all the windows are barred.",
+        desc_short="North of House",
+        exits={"south": "WHOUS", "east": "FORE2"},
+        objects=[],
+        flags=Room.ROOM_OUTDOORS,
+        action=None,
+        npcs=[],
+    )
+    rooms["SHOUS"] = Room(
+        id="SHOUS",
+        desc_long="You are facing the south side of a white house. There is no door here, and all the windows are barred.",
+        desc_short="South of House",
+        exits={"north": "WHOUS", "east": "FORE4"},
+        objects=[],
+        flags=Room.ROOM_OUTDOORS,
+        action=None,
+        npcs=[],
+    )
+    rooms["EHOUS"] = Room(
+        id="EHOUS",
+        desc_long="You are behind the white house. In one corner of the house there is a small window which is closed.",
+        desc_short="Behind House",
+        exits={"west": "HOUSE", "south": "FORE5"},
+        objects=[
+            GameObject("Window", "A small window. It is closed.", attributes={"osize": 2, "openable": True, "open": False, "takeable": False, "portable": False}),
+        ],
+        flags=Room.ROOM_OUTDOORS,
+        action=None,
+        npcs=[],
+    )
+    rooms["HOUSE"] = Room(
+        id="HOUSE",
+        desc_long="You are inside the white house. There is a door to the west and a staircase leading up. A passage leads east into the living room, and a dark staircase can be seen leading downward. The kitchen is to the north.",
+        desc_short="Inside House",
+        exits={"west": "WHOUS", "up": "ATTIC", "east": "LROOM", "down": "CELLAR", "north": "KITCH"},
+        objects=[
+            GameObject("Table", "A wooden table stands here.", attributes={"osize": 8, "takeable": False, "portable": False, "surface": True}),
+        ],
+        flags=Room.ROOM_LOCKED,
+        action=None,
+        npcs=[],
+    )
+    rooms["KITCH"] = Room(
+        id="KITCH",
+        desc_long="You are in the kitchen. A table seems to have been used recently for the preparation of food. A passage leads to the west and a dark staircase can be seen leading downward. A refrigerator is to one side of the room. On the table is a brass lantern. A brown sack is here."
+        ,
+        desc_short="Kitchen",
+        exits={"west": "HOUSE", "down": "CELLAR"},
+        objects=[
+            GameObject("Lantern", "A brass lantern.", attributes={"osize": 2, "takeable": True, "portable": True}),
+            GameObject("Refrigerator", "A refrigerator. It is closed.", attributes={"osize": 10, "openable": True, "open": False, "container": True, "takeable": False, "portable": False}),
+            GameObject("Sack", "A brown sack.", attributes={"osize": 1, "takeable": True, "portable": True, "container": True, "open": True, "openable": True, "contents": [
+                GameObject("Lunch", "A tasty lunch.", attributes={"osize": 1, "takeable": True, "portable": True}),
+                GameObject("Water Bottle", "A bottle of water.", attributes={"osize": 1, "takeable": True, "portable": True}),
+            ]}),
+        ],
+        flags=0,
+        action=None,
+        npcs=[],
+    )
+    rooms["LROOM"] = Room(
+        id="LROOM",
+        desc_long="You are in the living room. There is a trophy case and a large oriental rug in the center of the room. Above the trophy case hangs an elvish sword of great antiquity. A battery-powered brass lamp is on the trophy case. The door to the east leads back outside.",
+        desc_short="Living Room",
+        exits={"east": "HOUSE"},
+        objects=[
+            GameObject("Trophy Case", "A trophy case.", attributes={"osize": 8, "openable": True, "open": False, "container": True, "takeable": False, "portable": False}),
+            GameObject("Rug", "A large oriental rug.", attributes={"osize": 10, "takeable": False, "portable": False}),
+            GameObject("Sword", "An elvish sword of great antiquity.", attributes={"osize": 2, "takeable": True, "portable": True, "weapon": True}),
+            GameObject("Lamp", "A battery-powered brass lamp.", attributes={"osize": 1, "takeable": True, "portable": True}),
+        ],
+        flags=0,
+        action=None,
+        npcs=[],
+    )
+    rooms["ATTIC"] = Room(
+        id="ATTIC",
+        desc_long="You are in the attic. The only exit is a stairway leading down.",
+        desc_short="Attic",
+        exits={"down": "HOUSE"},
+        objects=[],
+        flags=0,
+        action=None,
+        npcs=[],
+    )
+    rooms["KITCH"] = Room(
+        id="KITCH",
+        desc_long="You are in the kitchen. A table seems to have been used recently for the preparation of food. A passage leads to the west and a dark staircase can be seen leading downward. A refrigerator is to one side of the room. On the table is a brass lantern."
+        ,
+        desc_short="Kitchen",
+        exits={"west": "HOUSE", "down": "CELLAR"},
+        objects=[
+            GameObject("Lantern", "A brass lantern.", attributes={"osize": 2, "takeable": True, "portable": True}),
+            GameObject("Refrigerator", "A refrigerator. It is closed.", attributes={"osize": 10, "openable": True, "open": False, "container": True, "takeable": False, "portable": False}),
+        ],
+        flags=0,
+        action=None,
+        npcs=[],
+    )
+    rooms["LROOM"] = Room(
+        id="LROOM",
+        desc_long="You are in the living room. There is a trophy case and a large oriental rug in the center of the room. Above the trophy case hangs an elvish sword of great antiquity. A battery-powered brass lamp is on the trophy case. The door to the east leads back outside.",
+        desc_short="Living Room",
+        exits={"east": "HOUSE"},
+        objects=[
+            GameObject("Trophy Case", "A trophy case.", attributes={"osize": 8, "openable": True, "open": False, "container": True, "takeable": False, "portable": False}),
+            GameObject("Rug", "A large oriental rug.", attributes={"osize": 10, "takeable": False, "portable": False}),
+            GameObject("Sword", "An elvish sword of great antiquity.", attributes={"osize": 2, "takeable": True, "portable": True, "weapon": True}),
+            GameObject("Lamp", "A battery-powered brass lamp.", attributes={"osize": 1, "takeable": True, "portable": True}),
+        ],
+        flags=0,
+        action=None,
+        npcs=[],
+    )
+    rooms["CELLAR"] = Room(
+        id="CELLAR",
+        desc_long="You are in a dark, damp cellar. The smell of mold fills the air. There are stairs leading up. A passage leads south, and a crawlway leads west.",
+        desc_short="Cellar",
+        exits={"up": "KITCH", "south": "TROLL", "west": "STUDI"},
+        objects=[
+            GameObject("Bottle", "A dusty old wine bottle.", attributes={"osize": 1, "score_value": 2, "takeable": True, "portable": True}),
+        ],
+        flags=Room.ROOM_DARK,
+        action=None,
+        npcs=[],
+    )
+    rooms["CYCLO"] = Room(
+        id="CYCLO",
+        desc_long="A huge cyclops glares at you, hungry and irritable. The only exit is down a narrow stairway.",
+        desc_short="Cyclops Room",
+        exits={"down": "TROLL"},
+        objects=[],
+        flags=Room.ROOM_DARK | Room.ROOM_DEADLY,
+        action=None,
+        npcs=[CYCLOPS],
+    )
+    rooms["TREAS"] = Room(
+        id="TREAS",
+        desc_long="The Treasure Room sparkles with loot. A sneaky thief lurks here, eyeing your valuables.",
+        desc_short="Treasure Room",
+        exits={"west": "CYCLO"},
+        objects=[
+            GameObject("Chalice", "A golden chalice encrusted with gems.", attributes={"osize": 2, "score_value": 25, "takeable": True, "portable": True}),
+        ],
+        flags=Room.ROOM_MAGIC,
+        action=None,
+        npcs=[THIEF],
+    )
+    rooms["TROLL"] = Room(
+        id="TROLL",
+        desc_long="A menacing troll blocks the bridge, demanding payment. The only exits are north and south.",
+        desc_short="Troll Room",
+        exits={"north": "BRIDGE", "south": "CELLA"},
+        objects=[
+            GameObject("Axe", "A heavy troll's axe.", attributes={"osize": 5, "takeable": True, "portable": True, "weapon": True}),
+        ],
+        flags=Room.ROOM_DEADLY,
+        action=None,
+        npcs=[TROLL],
+    )
+    # All other rooms as stubs
     for r in canonical_rooms:
         if r not in rooms:
             rooms[r] = Room(
@@ -266,18 +443,4 @@ def load_rooms():
                 action=None,
                 npcs=[],
             )
-    # Example: add a canonical object to CELLAR
-    if "CELLAR" in rooms:
-        rooms["CELLAR"].objects.append(
-            GameObject(
-                "Bottle",
-                "A dusty old wine bottle.",
-                attributes={
-                    "osize": 1,
-                    "score_value": 2,
-                    "takeable": True,
-                    "portable": True,
-                },
-            )
-        )
     return rooms

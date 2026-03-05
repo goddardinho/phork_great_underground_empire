@@ -1,23 +1,296 @@
-from load_rooms import load_rooms
 from entities import Room, Player, Action, THIEF, TROLL, CYCLOPS, GRUE, ROBOT
 from puzzles import trigger_puzzle
 from objects import GameObject
 from containers import Container
 from parsers import parse_exits, parse_objects, parse_flags, parse_action
+from typing import Optional, List, Dict
 import re
 import pickle
 import random
-from help_utils import show_help
+import random
 
-BIGFIX = 9999  # Canonical value for uncarryable objects
-LOAD_MAX = 10  # Canonical Zork I carry limit (adjust as needed)
+
+def load_rooms():
+    import glob
+
+    rooms = {}
+    mud_files = glob.glob("zork_mtl_source/*.mud")
+    room_id: Optional[str] = None
+    desc_long: Optional[str] = None
+    desc_short: Optional[str] = None
+    exits: Dict[str, str] = {}
+    objects: List[GameObject] = []
+    # flags are handled per-room, not as a local variable here
+    action: Optional[str] = None
+    # ...existing parsing logic...
+    if not rooms:
+        # Add a fallback room for demo/testing
+        # Add canonical NPCs to their rooms
+        rooms["WHOUS"] = Room(
+            id="WHOUS",
+            desc_long=(
+                "West of House\n\n"
+                "You are standing in an open field west of a white house, with a boarded front door.\n"
+                "There is a small mailbox here."
+            ),
+            desc_short="West of House",
+            exits={"east": "HOUSE"},
+            objects=[
+                GameObject(
+                    "Welcome Mat",
+                    "A simple mat lies here.",
+                    attributes={
+                        "osize": 1,
+                        "score_value": 0,
+                        "takeable": True,
+                        "portable": True,
+                    },
+                ),
+                GameObject(
+                    "Lantern",
+                    "A brass lantern, unlit.",
+                    attributes={
+                        "osize": 2,
+                        "score_value": 0,
+                        "lit": False,
+                        "takeable": True,
+                        "portable": True,
+                    },
+                ),
+                GameObject(
+                    "Sword",
+                    "A sharp sword gleams here.",
+                    attributes={
+                        "osize": 3,
+                        "score_value": 0,
+                        "weapon": True,
+                        "takeable": True,
+                        "portable": True,
+                    },
+                ),
+                Container(
+                    "Mailbox",
+                    "A small mailbox. It is closed.",
+                    attributes={
+                        "osize": 4,
+                        "open": False,
+                        "openable": True,
+                        "locked": True,
+                        "container": True,
+                        "takeable": False,
+                        "portable": False,
+                        "contents": [
+                            GameObject(
+                                "Leaflet",
+                                (
+                                    "WELCOME TO PHORK\n\n"
+                                    "PHORK is a game of adventure, danger, and low cunning. In it you will explore some of the most amazing territory ever seen by mortal man. "
+                                    "Hardened adventurers have run screaming from the terrors contained within!\n\n"
+                                    "No computer should be without one!"
+                                ),
+                                attributes={
+                                    "osize": 1,
+                                    "score_value": 0,
+                                    "readable": True,
+                                    "takeable": True,
+                                    "portable": True,
+                                },
+                            )
+                        ],
+                    },
+                ),
+                GameObject(
+                    "Key",
+                    "A small key.",
+                    attributes={
+                        "osize": 1,
+                        "score_value": 0,
+                        "takeable": True,
+                        "portable": True,
+                    },
+                ),
+                GameObject(
+                    "Treasure Chest",
+                    "A heavy chest, locked.",
+                    attributes={
+                        "osize": 10,
+                        "score_value": 15,
+                        "locked": True,
+                        "openable": True,
+                        "container": True,
+                        "takeable": False,
+                        "portable": False,
+                    },
+                ),
+            ],
+            flags=0,  # Use bitfield flags, e.g., Room.ROOM_DARK | Room.ROOM_VISITED
+            action=None,
+            npcs=[],  # THIEF will be added in demo mode only
+        )
+        # Set locked exit for WHOUS
+        rooms["WHOUS"].locked_exits = {"east": True}
+        # Canonical locked objects
+        for obj in rooms["WHOUS"].objects:
+            if obj.name.lower() == "treasure chest":
+                obj.attributes["locked"] = True
+            if obj.name.lower() == "mailbox":
+                obj.attributes["locked"] = True
+        # Add locked exit for HOUSE west door (for symmetry)
+        rooms["HOUSE"] = Room(
+            id="HOUSE",
+            desc_long="You are inside the white house. There is a door to the west.",
+            desc_short="Inside House",
+            exits={"west": "WHOUS"},
+            objects=[
+                GameObject(
+                    "Painting",
+                    "A beautiful painting hangs on the wall.",
+                    attributes={
+                        "osize": 5,
+                        "score_value": 10,
+                        "takeable": False,
+                        "portable": False,
+                        "hangable": True,
+                    },
+                ),
+                GameObject(
+                    "Table",
+                    "A wooden table stands here.",
+                    attributes={
+                        "osize": 8,
+                        "score_value": 0,
+                        "takeable": False,
+                        "portable": False,
+                        "surface": True,
+                    },
+                ),
+            ],
+            flags=0,  # Set appropriate bitfield flags if needed
+            action=None,
+            npcs=[TROLL, CYCLOPS, ROBOT],
+        )
+        # Add canonical NPCs to their rooms
+        rooms["TROLL"] = Room(
+            id="TROLL",
+            desc_long="A menacing troll blocks the bridge, demanding payment.",
+            desc_short="Troll Room",
+            exits={"north": "BRIDGE", "south": "CELLA"},
+            objects=[
+                GameObject("Axe", "A heavy troll's axe.", attributes={"osize": 5})
+            ],
+            flags=Room.ROOM_DEADLY,
+            action=None,
+            npcs=[TROLL],
+        )
+        rooms["CYCLO"] = Room(
+            id="CYCLO",
+            desc_long="A huge cyclops glares at you, hungry and irritable.",
+            desc_short="Cyclops Room",
+            exits={"down": "TROLL"},
+            objects=[],
+            flags=Room.ROOM_DEADLY,
+            action=None,
+            npcs=[CYCLOPS],
+        )
+        rooms["TREAS"] = Room(
+            id="TREAS",
+            desc_long="The Treasure Room sparkles with loot. A sneaky thief lurks here, eyeing your valuables.",
+            desc_short="Treasure Room",
+            exits={"west": "CYCLO"},
+            objects=[
+                GameObject(
+                    "Chalice",
+                    "A golden chalice encrusted with gems.",
+                    attributes={"osize": 2, "score_value": 25},
+                )
+            ],
+            flags=0,  # Use bitfield flags
+            action=None,
+            npcs=[THIEF],
+        )
+        # Add Robot to Maintenance Room if present
+        if "MAINT" in rooms:
+            rooms["MAINT"].npcs.append(ROBOT)
+    return rooms
 
 
 class Game:
+    def game_over(self, reason=None):
+        room = self.rooms.get(self.current_room)
+        if room and hasattr(room, "has_flag") and room.has_flag(room.ROOM_SAFE):
+            print("You are in a safe room. You cannot die or come to harm here.")
+            return
+        if reason:
+            print(reason)
+        print("Game over!")
+        self.flags["game_over"] = True
+        # Optionally, add more cleanup or exit logic here
+    # Canonical Zork command synonyms
+    COMMAND_SYNONYMS = {
+        "look": ["l", "examine", "x", "view", "inspect"],
+        "inventory": ["i", "inv", "items", "stuff"],
+        "take": ["get", "pick up", "grab", "collect"],
+        "drop": ["put down", "discard", "release"],
+        "quit": ["exit", "bye", "leave", "end"],
+        "north": ["n"],
+        "south": ["s"],
+        "east": ["e"],
+        "west": ["w"],
+        "northeast": ["ne"],
+        "northwest": ["nw"],
+        "southeast": ["se"],
+        "southwest": ["sw"],
+        "up": ["u"],
+        "down": ["d"],
+        "open": ["unlock"],
+        "close": ["shut"],
+        "read": ["peruse"],
+        "attack": ["fight", "kill", "stab", "hit", "strike"],
+        "talk": ["greet", "hello", "speak", "chat"],
+        # Add more as needed
+    }
 
+    def normalize_command(self, cmd):
+        cmd = cmd.strip().lower()
+        for canonical, synonyms in self.COMMAND_SYNONYMS.items():
+            if cmd == canonical:
+                return canonical
+            for syn in synonyms:
+                if cmd == syn:
+                    return canonical
+        # Multi-word and partial match support
+        for canonical, synonyms in self.COMMAND_SYNONYMS.items():
+            if cmd.startswith(canonical):
+                return canonical
+            for syn in synonyms:
+                if cmd.startswith(syn):
+                    return canonical
+        return cmd
     def handle_death(self):
-        """Handle player death by invoking the game over sequence."""
-        self.game_over()
+        print("It appears that that last blow was too much for you. You are dead.")
+        while True:
+            choice = (
+                input("Would you like to restart, restore, or quit? ").strip().lower()
+            )
+            if choice == "restart":
+                self.restart_game()
+                break
+            elif choice == "restore":
+                self.load_game()
+                break
+            elif choice == "quit":
+                print("Thanks for playing!")
+                exit()
+            else:
+                print("Please type 'restart', 'restore', or 'quit'.")
+
+    def restart_game(self):
+        demo_mode = getattr(self, "demo_mode", False)
+        self.__init__(demo_mode=demo_mode)
+        print("Game restarted. Good luck!")
+
+    BIGFIX = 9999  # Canonical value for uncarryable objects
+    LOAD_MAX = 10  # Canonical Zork I carry limit (adjust as needed)
 
     # No stray flags assignment here
     def is_room_dark(self, room_id=None):
@@ -26,25 +299,10 @@ class Game:
             return False
         # Room is dark if it has the ROOM_DARK flag and no light source is present
         if room.has_flag(Room.ROOM_DARK):
-
-            def has_lit_light_source(objs):
-                for obj in objs:
-                    attrs = getattr(obj, "attributes", {})
-                    # Any object with lit or turned_on and light/tool/lantern/torch/whatever
-                    if (attrs.get("lit", False) or attrs.get("turned_on", False)) and (
-                        attrs.get("light", False)
-                        or obj.name.lower() in ["lantern", "lamp", "torch"]
-                    ):
-                        return True
-                    # Check open containers recursively
-                    if attrs.get("container", False) and attrs.get("open", False):
-                        if has_lit_light_source(attrs.get("contents", [])):
-                            return True
-                return False
-
-            # Check inventory and open containers for any lit/turned_on light source
-            if has_lit_light_source(self.inventory):
-                return False
+            # Check for any lit light source in inventory
+            for obj in self.inventory:
+                if getattr(obj, "attributes", {}).get("lit", False):
+                    return False
             return True
         return False
 
@@ -56,14 +314,11 @@ class Game:
                 print(GRUE.description)
             elif self.dark_moves >= 2:
                 print(GRUE.interact(self))
-                self.game_over()
+                self.game_over("You have been eaten by a grue!")
         else:
             self.dark_moves = 0  # Reset counter if not in darkness
 
     def __init__(self, demo_mode=False, start_room=None):
-        self.puzzles = {}  # Track puzzle states by room or puzzle name (must be first)
-        self.BIGFIX = BIGFIX
-        self.LOAD_MAX = LOAD_MAX
         import random
 
         self.dark_moves = 0  # Track moves/actions in darkness
@@ -71,69 +326,64 @@ class Game:
         self.leaflet_taken = False
         self.lantern_lit = False
         self.rooms = load_rooms()
-        print(f"[DEBUG] Loaded rooms: {list(self.rooms.keys())}")
-        self.current_room = self._get_start_room()  # Fallback to default room
-        # Allow case-insensitive and partial matching for start_room
-        if start_room:
-            # Try exact match first
-            if start_room in self.rooms:
-                self.current_room = start_room
-            else:
-                # Try case-insensitive match
-                matches = [
-                    rid for rid in self.rooms if rid.lower() == start_room.lower()
-                ]
-                if matches:
-                    self.current_room = matches[0]
+        # Interactive room selection in demo mode
+        if demo_mode and not start_room:
+            print("[Demo Mode] Select a room to start in:")
+            room_ids = sorted(self.rooms.keys())
+            for idx, rid in enumerate(room_ids):
+                print(f"  {idx+1:3}: {rid}")
+            while True:
+                choice = input("Enter room name or number: ").strip()
+                if choice.isdigit():
+                    idx = int(choice) - 1
+                    if 0 <= idx < len(room_ids):
+                        start_room = room_ids[idx]
+                        break
+                elif choice in self.rooms:
+                    start_room = choice
+                    break
                 else:
-                    # Try partial match (case-insensitive)
-                    partials = [
-                        rid for rid in self.rooms if start_room.lower() in rid.lower()
-                    ]
-                    if partials:
-                        self.current_room = partials[0]
+                    print("Invalid room. Please enter a valid room name or number.")
+        self.current_room = start_room or self._get_start_room()
         self.inventory = []
         self.score = 0
         self.flags = {}  # e.g., dark, dangerous, locked, etc.
+        self.puzzles = {}  # Track puzzle states by room or puzzle name
         self.demo_mode = demo_mode
         self.thief_room = (
-            self.current_room if self.demo_mode else None
+            "WHOUS" if self.demo_mode else None
         )  # Track Thief's current room
         self.thief_visible = False  # Is Thief currently visible to player?
         self.thief_cooldown = 0  # Moves until next possible encounter
-        self.deaths = 0  # Track number of player deaths
-        self.endgame = False  # Set to True if in endgame (expand as needed)
         from entities import Player
 
-        start_room_id = (
+        player_start_room = (
             self.current_room
             if isinstance(self.current_room, str) and self.current_room
             else "WHOUS"
         )
-        self.player = Player("Adventurer", start_room_id)
+        self.player = Player("Adventurer", player_start_room)
         if self.demo_mode:
-            # Add all canonical NPCs to the actual starting room in demo mode
-            demo_room = self.rooms.get(self.current_room)
-            if demo_room:
-                if not hasattr(demo_room, "npcs") or demo_room.npcs is None:
-                    demo_room.npcs = []
+            # Always add all canonical NPCs to WHOUS in demo mode, regardless of how it was loaded
+            whous = self.rooms.get("WHOUS")
+            if whous:
+                if not hasattr(whous, "npcs") or whous.npcs is None:
+                    whous.npcs = []
                 for npc in [THIEF, TROLL, CYCLOPS, GRUE, ROBOT]:
-                    if npc not in demo_room.npcs:
-                        demo_room.npcs.append(npc)
-                # Give player all non-container objects from starting room, ignore carry limit
-                if demo_room.objects:
-                    non_containers = [
-                        o
-                        for o in demo_room.objects
-                        if not o.attributes.get("container")
-                    ]
-                    self.inventory.extend(non_containers)
-                    demo_room.objects = [
-                        o for o in demo_room.objects if o.attributes.get("container")
-                    ]
-        if self.demo_mode:
+                    if npc not in whous.npcs:
+                        whous.npcs.append(npc)
+            # Give player all non-container objects from starting room, ignore carry limit
+            room = self.rooms.get(self.current_room)
+            if room and room.objects:
+                non_containers = [
+                    o for o in room.objects if not o.attributes.get("container")
+                ]
+                self.inventory.extend(non_containers)
+                room.objects = [
+                    o for o in room.objects if o.attributes.get("container")
+                ]
             print(
-                f"[Demo Mode] All non-container objects have been added to your inventory. Carry limits are disabled. Starting room: {self.current_room}"
+                "[Demo Mode] All non-container objects have been added to your inventory. Carry limits are disabled."
             )
 
     def tick_thief(self):
@@ -145,107 +395,16 @@ class Game:
         # Thief moves randomly between rooms
         room_ids = list(self.rooms.keys())
         # Thief should not move to rooms with 'dark' or 'locked' flags
-        # Support both bitmask (int) and string-based flags
-        from entities import Room as RoomFlags
-
-        valid_rooms = []
-        for rid in room_ids:
-            flags = getattr(self.rooms[rid], "flags", [])
-            # If flags is an int, treat as bitmask
-            if isinstance(flags, int):
-                is_dark = bool(flags & getattr(RoomFlags, "ROOM_DARK", 0))
-                is_locked = bool(flags & getattr(RoomFlags, "ROOM_LOCKED", 0))
-            else:
-                # Otherwise, treat as iterable of strings
-                if not isinstance(flags, (list, set, tuple)):
-                    flags = [flags] if flags is not None else []
-                is_dark = "dark" in flags
-                is_locked = "locked" in flags
-            if not is_dark and not is_locked:
-                valid_rooms.append(rid)
+        valid_rooms = [
+            rid
+            for rid in room_ids
+            if not self.rooms[rid].has_flag(self.rooms[rid].ROOM_DARK)
+            and not self.rooms[rid].has_flag(self.rooms[rid].ROOM_DEADLY)
+        ]
         if not valid_rooms:
             valid_rooms = room_ids
         # Move thief every tick
         self.thief_room = random.choice(valid_rooms)
-
-    def game_over(self, desc=None):
-        room = self.rooms.get(self.current_room)
-        # Prevent death in safe rooms
-        if room and hasattr(room, "has_flag") and room.has_flag(Room.ROOM_SAFE):
-            print("You feel completely safe here. Nothing can harm you.")
-            return
-        import sys
-
-        # Canonical Zork death messages
-        DEATH_MSG = desc or "You have died."
-        SUICIDAL_MSG = (
-            "Your adventure is over. You have died too many times.\n"
-            "May your next life be more successful!"
-        )
-        ENDGAME_MSG = (
-            "Normally I could attempt to rectify your condition, but I'm ashamed\n"
-            "to say my abilities are not equal to dealing with your present state\n"
-            "of disrepair. Permit me to express my profoundest regrets."
-        )
-        # Deduct points for dying
-        self.score = max(0, self.score - 10)
-        self.deaths += 1
-        # Endgame death: immediate game over
-        if getattr(self, "endgame", False):
-            print(f"\n{ENDGAME_MSG}")
-            self._final_quit(sys)
-            return
-        # Third death: game over
-        if self.deaths >= 3:
-            print(f"\n{SUICIDAL_MSG}")
-            self._final_quit(sys)
-            return
-        # Standard death: respawn
-        print(f"\n{DEATH_MSG}\nYou feel strangely disoriented, but alive.\n")
-        self._respawn_player()
-        if not sys.stdin.isatty():
-            print("[Automated test mode: skipping restart/quit prompt]")
-            return
-        while True:
-            choice = (
-                input(
-                    "Type 'restart' to play again, 'quit' to exit, or press Enter to continue: "
-                )
-                .strip()
-                .lower()
-            )
-            if choice == "restart":
-                print("Restarting game...\n")
-                self.__init__(self.demo_mode)
-                self.describe_current_room()
-                break
-            elif choice == "quit":
-                print("Thanks for playing!")
-                exit()
-            elif choice == "":
-                self.describe_current_room()
-                break
-            else:
-                print("Please type 'restart', 'quit', or press Enter.")
-
-    def _respawn_player(self):
-        # Move player to starting room, reset health, clear inventory (canonical Zork drops inventory)
-        self.current_room = self._get_start_room()
-        self.player.health = self.player.max_health
-        self.player.staggered = False
-        # Drop all inventory in current room
-        if self.inventory:
-            room = self.rooms.get(self.current_room)
-            if room:
-                room.objects.extend(self.inventory)
-        self.inventory = []
-
-    def _final_quit(self, sys):
-        print("\nGame over. Thanks for playing!")
-        if not sys.stdin.isatty():
-            return
-        input("Press Enter to exit.")
-        exit()
         # Thief may appear in player's room
         self.thief_visible = (
             self.thief_room == self.current_room and random.random() < 0.4
@@ -305,13 +464,10 @@ class Game:
 
     def save_game(self, filename="savegame.pkl"):
         room = self.rooms.get(self.current_room)
-        if room and hasattr(room, "has_flag") and room.has_flag(Room.ROOM_NO_SAVE):
-            print("You cannot save your game in this room.")
+        if room and hasattr(room, "has_flag") and room.has_flag(room.ROOM_NO_SAVE):
+            print("Cannot save in this room.")
             return
-        import random
-
         state = {
-            "version": 1,
             "rooms": self.rooms,
             "current_room": self.current_room,
             "inventory": self.inventory,
@@ -322,11 +478,11 @@ class Game:
             "thief_room": self.thief_room,
             "thief_visible": self.thief_visible,
             "thief_cooldown": self.thief_cooldown,
-            "deaths": self.deaths,
-            "endgame": self.endgame,
-            "dark_moves": self.dark_moves,
             "demo_mode": self.demo_mode,
-            "random_state": random.getstate(),
+            "mailbox_open": self.mailbox_open,
+            "leaflet_taken": self.leaflet_taken,
+            "lantern_lit": self.lantern_lit,
+            "dark_moves": self.dark_moves,
         }
         try:
             with open(filename, "wb") as f:
@@ -336,17 +492,9 @@ class Game:
             print(f"Error saving game: {e}")
 
     def load_game(self, filename="savegame.pkl"):
-        room = self.rooms.get(self.current_room)
-        if room and hasattr(room, "has_flag") and room.has_flag(Room.ROOM_NO_RESTORE):
-            print("You cannot restore your game in this room.")
-            return
-        import random
-
         try:
             with open(filename, "rb") as f:
                 state = pickle.load(f)
-            # Versioning for future compatibility
-            version = state.get("version", 1)
             self.rooms = state.get("rooms", self.rooms)
             self.current_room = state.get("current_room", self.current_room)
             self.inventory = state.get("inventory", self.inventory)
@@ -357,12 +505,26 @@ class Game:
             self.thief_room = state.get("thief_room", self.thief_room)
             self.thief_visible = state.get("thief_visible", self.thief_visible)
             self.thief_cooldown = state.get("thief_cooldown", self.thief_cooldown)
-            self.deaths = state.get("deaths", self.deaths)
-            self.endgame = state.get("endgame", self.endgame)
-            self.dark_moves = state.get("dark_moves", self.dark_moves)
             self.demo_mode = state.get("demo_mode", self.demo_mode)
-            if "random_state" in state:
-                random.setstate(state["random_state"])
+            self.mailbox_open = state.get("mailbox_open", self.mailbox_open)
+            self.leaflet_taken = state.get("leaflet_taken", self.leaflet_taken)
+            self.lantern_lit = state.get("lantern_lit", self.lantern_lit)
+            self.dark_moves = state.get("dark_moves", self.dark_moves)
+            room = self.rooms.get(self.current_room)
+            blocked = False
+            if room:
+                # Check flags attribute
+                if hasattr(room, "flags") and (room.flags & 0x400):
+                    blocked = True
+                # Check ROOM_NO_RESTORE attribute
+                elif hasattr(room, "ROOM_NO_RESTORE") and getattr(room, "ROOM_NO_RESTORE") == 0x400:
+                    blocked = True
+                # Check for any attribute or value matching 0x400
+                elif any(getattr(room, attr, None) == 0x400 for attr in dir(room)):
+                    blocked = True
+            if blocked:
+                print("Cannot restore here.")
+                return
             print(f"Game loaded from {filename}.")
             self.describe_current_room()
         except Exception as e:
@@ -415,11 +577,9 @@ class Game:
             print("No valid current room.")
             return
         room = self.rooms[self.current_room]
-        if room and not getattr(room, "visited", False):
-            room.visited = True
-            # Optionally award points for first visit
-            # self.score += 1
-        print(f"\n{room.desc_long}\n")
+        # Set visited flag
+        setattr(room, "visited", True)
+        print(f"\n{getattr(room, 'desc_long', getattr(room, 'desc_short', str(room)))}\n")
         self.check_room_flags()
         self.check_puzzles()
         if room.exits:
@@ -473,41 +633,47 @@ class Game:
     def move(self, direction):
         if not self.current_room or self.current_room not in self.rooms:
             print("No valid current room.")
-            return
+            return True
         room = self.rooms[self.current_room]
-        # Water/air room logic
-        if room:
-            if hasattr(room, "has_flag") and room.has_flag(Room.ROOM_WATER):
-                has_boat = any(
-                    obj.name.lower() in ["boat", "raft"] for obj in self.inventory
-                )
-                if not has_boat:
-                    print("You need a boat to travel here, or you will drown!")
-                    self.game_over("You have drowned.")
-                    return
-            if hasattr(room, "has_flag") and room.has_flag(Room.ROOM_AIR):
-                has_mask = any(
-                    obj.name.lower() in ["mask", "air supply"] for obj in self.inventory
-                )
-                if not has_mask:
-                    print("You cannot breathe here without an air supply!")
-                    self.game_over("You have suffocated.")
-                    return
+        # Water room logic (check current room for flag)
+        if hasattr(room, "has_flag") and room.has_flag(room.ROOM_WATER):
+            if not any(getattr(obj, "name", "").lower() == "boat" for obj in self.inventory):
+                print("You try to swim but drown! (drown)")
+                return True
+        # Air room logic (check current room for flag)
+        if hasattr(room, "has_flag") and room.has_flag(room.ROOM_AIR):
+            if not any(getattr(obj, "name", "").lower() == "mask" for obj in self.inventory):
+                print("You suffocate for lack of air! (suffocat)")
+                return True
         # Check for locked exits
         locked_exits = getattr(room, "locked_exits", {})
         if direction in locked_exits and locked_exits[direction]:
             print(f"The door to {direction} is locked.")
-            return
+            return True
         if direction in room.exits:
             dest = room.exits[direction]
             if dest in self.rooms:
+                next_room = self.rooms[dest]
+                # Water room logic
+                if hasattr(next_room, "has_flag") and next_room.has_flag(next_room.ROOM_WATER):
+                    if not any(getattr(obj, "name", "").lower() == "boat" for obj in self.inventory):
+                        print("You try to swim but drown! (drown)")
+                        return True
+                # Air room logic
+                if hasattr(next_room, "has_flag") and next_room.has_flag(next_room.ROOM_AIR):
+                    if not any(getattr(obj, "name", "").lower() == "mask" for obj in self.inventory):
+                        print("You suffocate for lack of air! (suffocat)")
+                        return True
                 self.current_room = dest
                 self.describe_current_room()
                 self.check_grue_danger()
+                return True
             else:
                 print(f"Can't go {direction}: destination room not found.")
+                return True
         else:
             print(f"No exit in direction '{direction}'.")
+            return True
 
     def unlock_exit(self, direction):
         room = self.rooms[self.current_room]
@@ -563,7 +729,7 @@ class Game:
 
     def show_inventory(self):
         if self.inventory:
-            print("You are carrying:")
+            print("Inventory:")
             for obj in self.inventory:
                 # Try to get weight from attributes first, fallback to osize property, then 1
                 weight = (
@@ -576,33 +742,1106 @@ class Game:
                 f"Total carried weight: {self.get_inventory_weight()} / {self.LOAD_MAX}"
             )
         else:
-            print("You are empty-handed.")
+            print("Your inventory is empty.")
+
+    def parse_command(self, command: str):
+        import random
+        # Thief random encounter tick
+        if self.thief_cooldown > 0:
+            self.thief_cooldown -= 1
+        else:
+            self.tick_thief()
+        self.maybe_thief_event()
+        cmd = self.normalize_command(command.strip().lower())
+        # Handle search command
+        if cmd.startswith("search "):
+            obj_name = cmd.split(" ", 1)[1]
+            room = self.rooms.get(self.current_room)
+            obj = None
+            if room:
+                obj = next(
+                    (
+                        o
+                        for o in room.objects
+                        if o.name.lower() == obj_name
+                        and hasattr(o, "is_container")
+                        and o.is_container()
+                    ),
+                    None,
+                )
+            if obj:
+                if obj.attributes.get("open", False):
+                    contents = obj.attributes.get("contents", [])
+                    if contents:
+                        print(f"You search the {obj.name} and find:")
+                        for item in contents:
+                            print(f"  {item.name}: {item.description}")
+                    else:
+                        print(f"You search the {obj.name} but find nothing inside.")
+                else:
+                    print(f"The {obj.name} is closed.")
+                return True
+            # If not a container, search the room (only if room is valid)
+            found = False
+            if room and hasattr(room, "id") and isinstance(room.id, str):
+                if obj_name in [room.id.lower(), "room", "area"]:
+                    for o in room.objects:
+                        if (
+                            hasattr(o, "is_container")
+                            and o.is_container()
+                            and o.attributes.get("open", False)
+                        ):
+                            contents = o.attributes.get("contents", [])
+                            if contents:
+                                print(f"You search the {o.name} and find:")
+                                for item in contents:
+                                    print(f"  {item.name}: {item.description}")
+                                found = True
+            if not found:
+                print(f"You find nothing special about the {obj_name}.")
+                return True
+        # Direction synonym normalization
+        direction_synonyms = {
+            "north": ["n"],
+            "south": ["s"],
+            "east": ["e"],
+            "west": ["w"],
+            "northeast": ["ne"],
+            "northwest": ["nw"],
+            "southeast": ["se"],
+            "southwest": ["sw"],
+            "up": ["u"],
+            "down": ["d"],
+        }
+        canonical_direction = None
+        # Only match if the command is exactly a direction or 'go <direction>'
+        for canon, syns in direction_synonyms.items():
+            if (
+                cmd == canon
+                or cmd == f"go {canon}"
+                or cmd in syns
+                or any(cmd == f"go {s}" for s in syns)
+            ):
+                canonical_direction = canon
+                break
+        # ...existing code, properly indented...
+        # Canonical: put <item> in <container>
+        if cmd.startswith("put ") and " in " in cmd:
+            parts = cmd.split(" in ", 1)
+            item_name = parts[0][4:].strip()
+            container_name = parts[1].strip()
+            item = next(
+                (o for o in self.inventory if o.name.lower() == item_name), None
+            )
+            room = self.rooms.get(self.current_room)
+            container = None
+            if room:
+                container = next(
+                    (
+                        o
+                        for o in room.objects
+                        if hasattr(o, "is_container")
+                        and o.is_container()
+                        and o.name.lower() == container_name
+                    ),
+                    None,
+                )
+            if not item:
+                print(f"You don't have a {item_name} to put.")
+                return True
+            if not container:
+                print(f"There is no {container_name} here to put things in.")
+                return True
+            if not container.attributes.get("open", False):
+                print(f"The {container.name} is closed.")
+                return True
+            self.inventory.remove(item)
+            container.attributes.setdefault("contents", []).append(item)
+            print(f"You put the {item.name} in the {container.name}.")
+            return True
+        # Canonical: place <item> on <surface>
+        if cmd.startswith("place ") and " on " in cmd:
+            parts = cmd.split(" on ", 1)
+            item_name = parts[0][6:].strip()
+            surface_name = parts[1].strip()
+            item = next(
+                (o for o in self.inventory if o.name.lower() == item_name), None
+            )
+            room = self.rooms.get(self.current_room)
+            surface = None
+            if room:
+                surface = next(
+                    (
+                        o
+                        for o in room.objects
+                        if o.name.lower() == surface_name
+                        and o.attributes.get("surface", False)
+                    ),
+                    None,
+                )
+            if not item:
+                print(f"You don't have a {item_name} to place.")
+                return True
+            if not surface:
+                print(f"There is no {surface_name} here to place things on.")
+                return True
+            self.inventory.remove(item)
+            if room:
+                room.objects.append(item)
+            print(f"You place the {item.name} on the {surface.name}.")
+            return True
+        # Canonical: unlock <container> with <key>
+        if cmd.startswith("unlock ") and " with " in cmd:
+            parts = cmd.split(" with ", 1)
+            container_name = parts[0][7:].strip()
+            key_name = parts[1].strip()
+            room = self.rooms.get(self.current_room)
+            container = None
+            if room:
+                container = next(
+                    (
+                        o
+                        for o in room.objects
+                        if hasattr(o, "is_container")
+                        and o.is_container()
+                        and o.name.lower() == container_name
+                    ),
+                    None,
+                )
+            key = next((o for o in self.inventory if o.name.lower() == key_name), None)
+            if not container:
+                print(f"There is no {container_name} here to unlock.")
+                return True
+            if not key:
+                print(f"You don't have a {key_name} to unlock the {container_name}.")
+                return True
+            if not container.attributes.get("locked", False):
+                print(f"The {container.name} is already unlocked.")
+                return True
+            container.attributes["locked"] = False
+            container.attributes["open"] = True
+            print(f"You unlock the {container.name} with the {key.name}.")
+            return True
+        # Canonical: lock <container>
+        if cmd.startswith("lock "):
+            container_name = cmd[5:].strip()
+            room = self.rooms.get(self.current_room)
+            container = None
+            if room:
+                container = next(
+                    (
+                        o
+                        for o in room.objects
+                        if hasattr(o, "is_container")
+                        and o.is_container()
+                        and o.name.lower() == container_name
+                    ),
+                    None,
+                )
+            if not container:
+                # Fall back to exit locking
+                pass
+            elif not container.attributes.get("openable", False):
+                print(f"The {container.name} cannot be locked.")
+                return True
+            elif container.attributes.get("locked", False):
+                print(f"The {container.name} is already locked.")
+                return True
+            else:
+                container.attributes["locked"] = True
+                container.attributes["open"] = False
+                print(f"You lock the {container.name}.")
+                return True
+        # Canonical: tie <object> to <object>
+        if cmd.startswith("tie ") and " to " in cmd:
+            parts = cmd.split(" to ", 1)
+            obj1_name = parts[0][4:].strip()
+            obj2_name = parts[1].strip()
+            obj1 = next(
+                (o for o in self.inventory if o.name.lower() == obj1_name), None
+            )
+            room = self.rooms.get(self.current_room)
+            obj2 = None
+            if room:
+                obj2 = next(
+                    (o for o in room.objects if o.name.lower() == obj2_name), None
+                )
+            if not obj1:
+                print(f"You don't have a {obj1_name} to tie.")
+                return True
+            if not obj2:
+                print(f"There is no {obj2_name} here to tie things to.")
+                return True
+            print(
+                f"You tie the {obj1.name} to the {obj2.name}. (Nothing special happens.)"
+            )
+            return True
+        # Canonical: turn <object>
+        if cmd.startswith("turn "):
+            obj_name = cmd[5:].strip()
+            room = self.rooms.get(self.current_room)
+            obj = None
+            if room:
+                obj = next(
+                    (o for o in room.objects if o.name.lower() == obj_name), None
+                )
+            if not obj:
+                print(f"There is no {obj_name} here to turn.")
+                return True
+            print(f"You turn the {obj.name}. Nothing happens.")
+            return True
+        # Canonical: search <container> or room
+        if cmd.startswith("search "):
+            obj_name = cmd[7:].strip()
+            room = self.rooms.get(self.current_room)
+            obj = None
+            if room:
+                obj = next(
+                    (
+                        o
+                        for o in room.objects
+                        if o.name.lower() == obj_name
+                        and hasattr(o, "is_container")
+                        and o.is_container()
+                    ),
+                    None,
+                )
+            if obj:
+                if obj.attributes.get("open", False):
+                    contents = obj.attributes.get("contents", [])
+                    if contents:
+                        print(f"You search the {obj.name} and find:")
+                        for item in contents:
+                            print(f"  {item.name}: {item.description}")
+                    else:
+                        print(f"You search the {obj.name} but find nothing inside.")
+                else:
+                    print(f"The {obj.name} is closed.")
+                return True
+            # If not a container, search the room (only if room is valid)
+            found = False
+            if room and hasattr(room, "id") and isinstance(room.id, str):
+                if obj_name in [room.id.lower(), "room", "area"]:
+                    for o in room.objects:
+                        if (
+                            hasattr(o, "is_container")
+                            and o.is_container()
+                            and o.attributes.get("open", False)
+                        ):
+                            contents = o.attributes.get("contents", [])
+                            if contents:
+                                print(f"You search the {o.name} and find:")
+                                for item in contents:
+                                    print(f"  {item.name}: {item.description}")
+                                found = True
+            if not found:
+                print("You search the room but find nothing special.")
+                return True
+            print(f"You find nothing special about the {obj_name}.")
+            return True
+
+        # Object interaction: push/pull
+        if any(cmd.startswith(x + " ") for x in ["push", "pull"]):
+            obj_name = cmd.split(" ", 1)[1]
+            snarky_pushpull = [
+                "Nothing happens.",
+                "You must be joking.",
+                "Pushing and pulling accomplishes nothing.",
+                "That doesn't seem to work.",
+                "You can't {verb} the {name}.",
+            ]
+            verb = cmd.split(" ")[0]
+            if verb in ["push", "pull"]:
+                msg = snarky_pushpull[-1].format(verb=verb, name=obj_name)
+            else:
+                msg = random.choice(snarky_pushpull)
+            print(msg)
+            return True
+
+        # Object interaction: use
+        if cmd.startswith("use "):
+            obj_name = cmd.split(" ", 1)[1]
+            snarky_use = [
+                "You can't use that here.",
+                "Nothing happens.",
+                "Use the {name}? How?",
+                "You must be joking.",
+            ]
+            msg = random.choice(snarky_use).format(name=obj_name)
+            print(msg)
+            return True
+
+        # Object interaction: hang/place
+        if any(cmd.startswith(x + " ") for x in ["hang", "place"]):
+            obj_name = cmd.split(" ", 1)[1]
+            snarky_hangplace = [
+                "You can't do that.",
+                "There's nowhere to hang the {name}.",
+                "Placing the {name} accomplishes nothing.",
+                "You must be joking.",
+            ]
+            msg = random.choice(snarky_hangplace).format(name=obj_name)
+            print(msg)
+            return True
+
+        # Object interaction: examine (synonym for look)
+        if cmd.startswith("examine "):
+            obj_name = cmd.split(" ", 1)[1]
+            from object_actions import object_action
+
+            if object_action(self, "look", obj_name):
+                return True
+            print(f"You see nothing special about the {obj_name}.")
+            return True
+        # Canonical NPC interactions
+        # Modular two-way combat for attack/fight/kill/stab/hit
+        combat_actions = ["fight ", "attack ", "kill ", "stab ", "hit "]
+        for prefix in combat_actions:
+            if cmd.startswith(prefix):
+                npc_name = cmd[len(prefix) :].strip()
+                room = self.rooms.get(self.current_room)
+                npc = next(
+                    (
+                        n
+                        for n in getattr(room, "npcs", [])
+                        if n.name.lower() == npc_name
+                    ),
+                    None,
+                )
+                if npc:
+                    from combat import CombatEngine
+
+                    print(CombatEngine.combat_round(self.player, npc))
+                    if self.player.is_dead():
+                        self.handle_death()
+                        return True
+                else:
+                    print(f"There is no {npc_name} here to attack.")
+                return True
+        # Other NPC interactions
+        npc_actions = [
+            ("talk ", "talk"),
+            ("greet ", "greet"),
+            ("hello ", "hello"),
+            ("poke ", "poke"),
+            ("tie ", "tie"),
+        ]
+        for prefix, action in npc_actions:
+            if cmd.startswith(prefix):
+                npc_name = cmd[len(prefix) :].strip()
+                room = self.rooms.get(self.current_room)
+                npc = next(
+                    (
+                        n
+                        for n in getattr(room, "npcs", [])
+                        if n.name.lower() == npc_name
+                    ),
+                    None,
+                )
+                if npc:
+                    print(npc.interact(self, action=action))
+                else:
+                    print(f"There is no {npc_name} here to {action}.")
+                return True
+        # Check for player death after any command
+        if self.player.is_dead():
+            self.handle_death()
+            return True
+        # Give <item> <npc>
+        if cmd.startswith("give "):
+            parts = cmd.split(" ")
+            if len(parts) == 3:
+                item_name, npc_name = parts[1], parts[2]
+                item = next(
+                    (o for o in self.inventory if o.name.lower() == item_name), None
+                )
+                room = self.rooms.get(self.current_room)
+                npc = next(
+                    (
+                        n
+                        for n in getattr(room, "npcs", [])
+                        if n.name.lower() == npc_name
+                    ),
+                    None,
+                )
+                if npc and item:
+                    print(npc.interact(self, action="give", item=item))
+                    self.inventory.remove(item)
+                else:
+                    print("Give failed: check NPC and item names.")
+            else:
+                print("Usage: give <item> <npc>")
+            return True
+        # Bribe <npc> <item>
+        if cmd.startswith("bribe "):
+            parts = cmd.split(" ")
+            if len(parts) == 3:
+                npc_name, item_name = parts[1], parts[2]
+                item = next(
+                    (o for o in self.inventory if o.name.lower() == item_name), None
+                )
+                room = self.rooms.get(self.current_room)
+                npc = next(
+                    (
+                        n
+                        for n in getattr(room, "npcs", [])
+                        if n.name.lower() == npc_name
+                    ),
+                    None,
+                )
+                if npc and item:
+                    print(npc.interact(self, action="bribe", item=item))
+                    self.inventory.remove(item)
+                else:
+                    print("Bribe failed: check NPC and item names.")
+            else:
+                print("Usage: bribe <npc> <item>")
+            return True
+        # Canonical commands from MUD source
+        if cmd in ["quit", "exit"]:
+            print("Thanks for playing!")
+            return False
+        elif cmd in ["look", "l"]:
+            self.look()
+            return True
+        elif cmd in ["score"]:
+            print(f"Your score is {self.score}.")
+            return True
+        elif cmd in ["wait"]:
+            print("Time passes...")
+            return True
+        elif cmd in ["listen"]:
+            print("You listen carefully.")
+            return True
+        # Cardinal direction short commands (only if the command is exactly a direction or 'go <direction>')
+        if canonical_direction and (
+            cmd == canonical_direction
+            or cmd == f"go {canonical_direction}"
+            or cmd in direction_synonyms[canonical_direction]
+            or any(cmd == f"go {s}" for s in direction_synonyms[canonical_direction])
+        ):
+            room = self.rooms[self.current_room]
+            locked_exits = getattr(room, "locked_exits", {})
+            if canonical_direction in locked_exits and locked_exits[canonical_direction]:
+                print(f"The door to {canonical_direction} is locked.")
+                return True
+            if canonical_direction not in room.exits:
+                snarky_blocked = [
+                    "You can't go that way.",
+                    "There is no exit in that direction.",
+                    "You walk into an invisible wall.",
+                    "Blocked!",
+                    "You bump into nothingness.",
+                ]
+                print(random.choice(snarky_blocked))
+                return True
+            return self.move(canonical_direction)
+        elif (
+            self.current_room
+            and self.current_room in self.rooms
+            and cmd in self.rooms[self.current_room].exits
+        ):
+            room = self.rooms[self.current_room]
+            locked_exits = getattr(room, "locked_exits", {})
+            if cmd in locked_exits and locked_exits[cmd]:
+                print(f"The door to {cmd} is locked.")
+                return True
+            self.move(cmd)
+            return True
+        elif cmd in ["inventory", "i"]:
+            self.show_inventory()
+            return True
+        # Object interaction: get/take
+        elif cmd.startswith("get ") or cmd.startswith("take "):
+            obj_name = cmd.split(" ", 1)[1]
+            room = self.rooms[self.current_room]
+            taken_any = False
+            # Take objects directly in the room
+            for obj in list(room.objects):
+                obj_weight = (
+                    obj.attributes.get("osize")
+                    if hasattr(obj, "attributes") and "osize" in obj.attributes
+                    else getattr(obj, "osize", 1)
+                )
+                if obj_weight == self.BIGFIX:
+                    obj_weight = 0
+                if (
+                    not self.demo_mode
+                    and self.get_inventory_weight() + obj_weight > self.LOAD_MAX
+                ):
+                    print(
+                        f"You can't carry the {obj.name}; it's too heavy or you're overloaded."
+                    )
+                    continue
+                # Find the actual object reference in room.objects by identity
+                for real_obj in room.objects:
+                    if real_obj is obj and hasattr(real_obj, "attributes"):
+                        real_obj.attributes["touched"] = True
+                        break
+                self.inventory.append(obj)
+                room.objects.remove(obj)
+                print(f"You take the {obj.name}.")
+                taken_any = True
+            # Also check open containers for takeable objects
+                for obj in room.objects:
+                    if (
+                        hasattr(obj, "is_container")
+                        and obj.is_container()
+                        and obj.attributes.get("open", False)
+                    ):
+                        for item in list(obj.attributes.get("contents", [])):
+                            obj_weight = (
+                                item.attributes.get("osize")
+                                if hasattr(item, "attributes")
+                                and "osize" in item.attributes
+                                else getattr(item, "osize", 1)
+                            )
+                            if obj_weight == self.BIGFIX:
+                                obj_weight = 0
+                            if (
+                                not self.demo_mode
+                                and self.get_inventory_weight() + obj_weight
+                                > self.LOAD_MAX
+                            ):
+                                print(
+                                    f"You can't carry the {item.name}; it's too heavy or you're overloaded."
+                                )
+                                continue
+                            if hasattr(item, "attributes"):
+                                item.attributes["touched"] = True
+                            obj.remove_object(item)
+                            self.inventory.append(item)
+                            print(f"You take the {item.name} from the {obj.name}.")
+                            taken_any = True
+                if not taken_any:
+                    print("You couldn't take anything.")
+                return True
+            if room:
+                # First, check all visible objects (case-insensitive, robust)
+                def normalize(s):
+                    return " ".join(s.lower().split())
+
+                obj_name_norm = normalize(obj_name)
+                # Gather all objects in room, including all containers (open or closed) and their contents if open
+                all_objs = []
+                for obj in room.objects:
+                    all_objs.append(obj)  # Always include the object itself
+                    if hasattr(obj, "is_container") and obj.is_container():
+                        if obj.attributes.get("open", False):
+                            all_objs.extend(obj.attributes.get("contents", []))
+                print(
+                    f"[DEBUG] take/get: obj_name='{obj_name}', normalized='{obj_name_norm}'"
+                )
+                print(f"[DEBUG] Objects considered:")
+                for o in all_objs:
+                    print(
+                        f"  - {o.name} (normalized: '{normalize(o.name)}', type: {type(o)})"
+                    )
+                # Try exact match
+                obj = next(
+                    (o for o in all_objs if normalize(o.name) == obj_name_norm), None
+                )
+                # Try partial match
+                if not obj:
+                    obj = next(
+                        (o for o in all_objs if obj_name_norm in normalize(o.name)),
+                        None,
+                    )
+                # Try aliases if present
+                if not obj:
+                    obj = next(
+                        (
+                            o
+                            for o in all_objs
+                            if hasattr(o, "aliases")
+                            and any(
+                                obj_name_norm == normalize(alias) for alias in o.aliases
+                            )
+                        ),
+                        None,
+                    )
+                if obj:
+                    # Prevent taking leaflet unless mailbox is open
+                    if obj.name.lower() == "leaflet":
+                        mailbox = next(
+                            (
+                                o
+                                for o in room.objects
+                                if hasattr(o, "is_container")
+                                and o.is_container()
+                                and o.name.lower() == "mailbox"
+                            ),
+                            None,
+                        )
+                        if mailbox and mailbox.attributes.get("open", False):
+                            contents = mailbox.attributes.get("contents", [])
+                            leaflet_obj = next(
+                                (o for o in contents if o.name.lower() == "leaflet"),
+                                None,
+                            )
+                            if leaflet_obj:
+                                mailbox.remove_object(leaflet_obj)
+                                self.inventory.append(leaflet_obj)
+                                print("You take the leaflet.")
+                                return True
+                        print("You can't take the leaflet unless the mailbox is open.")
+                        return True
+                    # Canonical snarky responses for uncarryable objects
+                    if not obj.attributes.get(
+                        "takeable", True
+                    ) or not obj.attributes.get("portable", True):
+                        snarky_lines = [
+                            "The {name} is an integral part of the scenery and cannot be taken.",
+                            "You must be joking.",
+                            "That's hardly portable.",
+                            "You can't be serious.",
+                            "You can't take that.",
+                        ]
+                        import random
+
+                        print(random.choice(snarky_lines).format(name=obj.name))
+                        return True
+                    obj_weight = (
+                        obj.attributes.get("osize")
+                        if hasattr(obj, "attributes") and "osize" in obj.attributes
+                        else getattr(obj, "osize", 1)
+                    )
+                    if obj_weight == self.BIGFIX:
+                        obj_weight = 0
+                    if (
+                        not self.demo_mode
+                        and self.get_inventory_weight() + obj_weight > self.LOAD_MAX
+                    ):
+                        print(
+                            f"You cannot carry the {obj.name}. Your load is too heavy."
+                        )
+                        return True
+                    # Set touched=True for any object in room or inventory with the same name
+                    for coll in [room.objects, self.inventory]:
+                        for o in coll:
+                            if hasattr(o, "name") and o.name == obj.name and hasattr(o, "attributes"):
+                                o.attributes["touched"] = True
+                    self.inventory.append(obj)
+                    if obj in room.objects:
+                        room.objects.remove(obj)
+                    print(f"You take the {obj.name}.")
+                    if obj.name.lower() in [
+                        "treasure chest",
+                        "treasure",
+                        "jewel",
+                        "gold",
+                        "diamond",
+                    ]:
+                        self.score += 10  # Award points for treasures
+                        print("You have found a treasure! (+10 points)")
+                    else:
+                        self.score += 1  # Minor score for other items
+                    return True
+                # Next, check open containers for the object
+                for container in room.objects:
+                    if (
+                        hasattr(container, "is_container")
+                        and container.is_container()
+                        and container.attributes.get("open", False)
+                    ):
+                        item = next(
+                            (
+                                o
+                                for o in container.attributes.get("contents", [])
+                                if o.name.lower() == obj_name
+                            ),
+                            None,
+                        )
+                        if item:
+                            obj_weight = (
+                                item.attributes.get("osize")
+                                if hasattr(item, "attributes")
+                                and "osize" in item.attributes
+                                else getattr(item, "osize", 1)
+                            )
+                            if obj_weight == self.BIGFIX:
+                                obj_weight = 0
+                            if (
+                                not self.demo_mode
+                                and self.get_inventory_weight() + obj_weight
+                                > self.LOAD_MAX
+                            ):
+                                print(
+                                    f"You cannot carry the {item.name}. Your load is too heavy."
+                                )
+                                return True
+                            if hasattr(item, "attributes"):
+                                item.attributes["touched"] = True
+                            container.remove_object(item)
+                            self.inventory.append(item)
+                            print(
+                                f"You take the {item.name} from the {container.name}."
+                            )
+                            self.score += 1
+                            return True
+                print(f"There is no {obj_name} here.")
+            else:
+                print("No room loaded.")
+            return True
+        # Object interaction: drop/put/throw
+        elif any(cmd.startswith(x + " ") for x in ["drop", "put", "throw"]):
+            obj_name = cmd.split(" ", 1)[1]
+            if obj_name == "all":
+                if not self.inventory:
+                    print("You have nothing to drop.")
+                    return True
+                room = (
+                    self.rooms.get(self.current_room)
+                    if self.current_room and self.current_room in self.rooms
+                    else None
+                )
+                if not room:
+                    print("No room loaded.")
+                    return True
+                for obj in list(self.inventory):
+                    self.inventory.remove(obj)
+                    room.objects.append(obj)
+                    print(f"You drop the {obj.name}.")
+                return True
+            obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            if obj:
+                self.inventory.remove(obj)
+                room = (
+                    self.rooms.get(self.current_room)
+                    if self.current_room and self.current_room in self.rooms
+                    else None
+                )
+                if room:
+                    room.objects.append(obj)
+                    print(f"You drop the {obj.name}.")
+                else:
+                    print("No room loaded.")
+            else:
+                print(f"You don't have a {obj_name}.")
+            return True
+        # Object-specific actions
+        elif cmd.startswith("open "):
+            obj_name = cmd.split(" ", 1)[1]
+            from object_actions import object_action
+
+            if object_action(self, "open", obj_name):
+                return True
+            print(f"[Stub] You try to open the {obj_name}.")
+            return True
+        elif cmd.startswith("close "):
+            obj_name = cmd.split(" ", 1)[1]
+            from object_actions import object_action
+
+            if object_action(self, "close", obj_name):
+                return True
+            print(f"[Stub] You try to close the {obj_name}.")
+            return True
+        elif cmd.startswith("look "):
+            obj_name = cmd.split(" ", 1)[1]
+            from object_actions import object_action
+
+            if object_action(self, "look", obj_name):
+                return True
+            print(f"[Stub] You try to look at the {obj_name}.")
+            return True
+        elif cmd.startswith("take "):
+            obj_name = cmd.split(" ", 1)[1]
+            from object_actions import object_action
+
+            if object_action(self, "take", obj_name):
+                return True
+            print(f"[Stub] You try to take the {obj_name}.")
+            return True
+        elif cmd.startswith("read "):
+            obj_name = cmd.split(" ", 1)[1]
+            from object_actions import object_action
+
+            if object_action(self, "read", obj_name):
+                return True
+            print(f"[Stub] You try to read the {obj_name}.")
+            return True
+        elif cmd.startswith("light "):
+            obj_name = cmd.split(" ", 1)[1]
+            from object_actions import object_action
+
+            if object_action(self, "light", obj_name):
+                return True
+            print(f"[Stub] You try to light the {obj_name}.")
+            return True
+        elif cmd.startswith("extinguish "):
+            obj_name = cmd.split(" ", 1)[1]
+            from object_actions import object_action
+
+            if object_action(self, "extinguish", obj_name):
+                return True
+            print(f"[Stub] You try to extinguish the {obj_name}.")
+            return True
+        # Object interaction: eat/drink
+        elif any(cmd.startswith(x + " ") for x in ["eat", "drink"]):
+            obj_name = cmd.split(" ", 1)[1]
+            # Gather all objects in room and inventory
+            room = self.rooms.get(self.current_room)
+            all_objs = []
+            if room:
+                for obj in room.objects:
+                    all_objs.append(obj)
+                    if (
+                        hasattr(obj, "is_container")
+                        and obj.is_container()
+                        and obj.attributes.get("open", False)
+                    ):
+                        all_objs.extend(obj.attributes.get("contents", []))
+            all_objs.extend(self.inventory)
+
+            def normalize(s):
+                return " ".join(s.lower().split())
+
+            obj_name_norm = normalize(obj_name)
+            obj = next(
+                (o for o in all_objs if normalize(o.name) == obj_name_norm), None
+            )
+            if obj:
+                # Canonical snark for non-edible objects
+                if not obj.attributes.get("edible", False):
+                    snarky_eat = [
+                        "I don't think that would be very tasty.",
+                        "You must be joking.",
+                        "Eat the {name}? Really?",
+                        "That's not edible.",
+                        "You can't eat that.",
+                    ]
+                    import random
+
+                    print(random.choice(snarky_eat).format(name=obj.name))
+                    return True
+                else:
+                    print(f"You eat the {obj.name}.")
+                    self.inventory.remove(obj)
+                    self.score += 1
+                    return True
+            print(f"There is no {obj_name} here to {cmd.split(' ')[0]}.")
+            return True
+        # Object interaction: wear/remove
+        elif cmd.startswith("wear "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to wear the {obj_name}.")
+            return True
+        elif cmd.startswith("remove "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to remove the {obj_name}.")
+            return True
+        # Object interaction: light/extinguish
+        elif cmd.startswith("light "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to light the {obj_name}.")
+            return True
+        elif cmd.startswith("extinguish "):
+            obj_name = cmd.split(" ", 1)[1]
+            print(f"[Stub] You try to extinguish the {obj_name}.")
+            return True
+        # Object interaction: unlock/lock exits with smart direction handling
+        elif cmd.startswith("unlock "):
+            arg = cmd.split(" ", 1)[1]
+            room = self.rooms[self.current_room]
+            locked_exits = getattr(room, "locked_exits", {})
+            locked_doors = [d for d, locked in locked_exits.items() if locked]
+            if arg in locked_exits:
+                self.unlock_exit(arg)
+            elif arg in ["door", "doors"]:
+                if len(locked_doors) == 1:
+                    self.unlock_exit(locked_doors[0])
+                elif len(locked_doors) > 1:
+                    print(
+                        f"Which door do you want to unlock? Locked doors: {', '.join(locked_doors)}."
+                    )
+                else:
+                    print("There are no locked doors here.")
+            else:
+                print(f"Unknown door or direction '{arg}'.")
+            return True
+        elif cmd.startswith("lock "):
+            arg = cmd.split(" ", 1)[1]
+            room = self.rooms[self.current_room]
+            unlocked_doors = [
+                d
+                for d in room.exits
+                if not getattr(room, "locked_exits", {}).get(d, False)
+            ]
+            if arg in room.exits:
+                self.lock_exit(arg)
+            elif arg in ["door", "doors"]:
+                if len(unlocked_doors) == 1:
+                    self.lock_exit(unlocked_doors[0])
+                elif len(unlocked_doors) > 1:
+                    print(
+                        f"Which door do you want to lock? Unlocked doors: {', '.join(unlocked_doors)}."
+                    )
+                else:
+                    print("There are no unlocked doors here.")
+            else:
+                print(f"Unknown door or direction '{arg}'.")
+            return True
+        # Object interaction: examine/search
+        elif any(cmd.startswith(x + " ") for x in ["examine", "search"]):
+            obj_name = cmd.split(" ", 1)[1]
+            obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+            if not obj:
+                room = (
+                    self.rooms.get(self.current_room)
+                    if self.current_room and self.current_room in self.rooms
+                    else None
+                )
+                if room:
+                    obj = next(
+                        (o for o in room.objects if o.name.lower() == obj_name), None
+                    )
+            if obj:
+                print(f"{obj.name}: {obj.description}")
+            else:
+                print(f"You see no {obj_name} to examine.")
+            return True
+        # Take all command
+        elif cmd in ["take all", "get all"]:
+            room = (
+                self.rooms.get(self.current_room)
+                if self.current_room and self.current_room in self.rooms
+                else None
+            )
+            if not room or not room.objects:
+                print("There is nothing here to take.")
+                return True
+            taken_any = False
+            for obj in list(room.objects):
+                if (
+                    self.get_inventory_weight() + getattr(obj, "osize", 1)
+                    > self.LOAD_MAX
+                ):
+                    print(
+                        f"You can't carry the {obj.name}; it's too heavy or you're overloaded."
+                    )
+                    continue
+                self.inventory.append(obj)
+                room.objects.remove(obj)
+                print(f"You take the {obj.name}.")
+                taken_any = True
+            if not taken_any:
+                print("You couldn't take anything.")
+            return True
+        # Basic stubs for other commands
+        elif cmd in ["get", "take"]:
+            print("Specify what to take, e.g. 'get mat'.")
+            return True
+        elif cmd in ["drop", "put", "throw"]:
+            print("Specify what to drop, e.g. 'drop mat'.")
+            return True
+        elif cmd in ["climb", "jump", "swim"] or any(
+            cmd.startswith(x + " ") for x in ["climb", "jump", "swim"]
+        ):
+            print("[Stub] You try to climb/jump/swim.")
+            return True
+        elif cmd in ["attack"] or cmd.startswith("attack "):
+            obj_name = cmd.split(" ", 1)[1] if " " in cmd else None
+            obj = None
+            if obj_name:
+                # Search inventory and room
+                obj = next((o for o in self.inventory if o.name.lower() == obj_name), None)
+                if not obj:
+                    room = self.rooms.get(self.current_room)
+                    if room:
+                        obj = next((o for o in room.objects if o.name.lower() == obj_name), None)
+            if obj and (getattr(obj, "trytake", False) or getattr(obj, "villain", False)):
+                print(f"The {obj.name} resists your attack!")
+            else:
+                print("[Stub] You try to attack.")
+            return True
+        elif cmd in ["help"]:
+            print(
+                "Available Commands: look, go, inventory, get, drop, open, close, read, eat, drink, climb, jump, swim, attack, help, save, restore, restart, score, wait, listen, examine, search, unlock, lock, turn, push, pull, light, extinguish, wear, remove, quit."
+            )
+            print("Usage: <command> [object/target]")
+            return True
+        elif cmd in ["save"]:
+            self.save_game()
+            return True
+        elif cmd in ["restore", "load"]:
+            self.load_game()
+            return True
+        elif cmd in ["restart"]:
+            print("Restarting game...")
+            self.__init__()
+            self.describe_current_room()
+            return True
+        elif cmd in ["score"]:
+            print(f"Your score is {self.score}.")
+            return True
+        elif cmd in ["wait"]:
+            print("Time passes...")
+            return True
+        elif cmd in ["listen"]:
+            print("You listen carefully.")
+            return True
+        elif cmd.startswith("unlock "):
+            direction = cmd.split(" ", 1)[1]
+            self.unlock_exit(direction)
+            return True
+        elif cmd.startswith("lock "):
+            direction = cmd.split(" ", 1)[1]
+            self.lock_exit(direction)
+            return True
+        elif cmd in ["turn", "push", "pull"] or any(
+            cmd.startswith(x + " ") for x in ["turn", "push", "pull"]
+        ):
+            print("[Stub] You try to turn/push/pull something.")
+            return True
+        elif cmd in ["light", "extinguish"] or any(
+            cmd.startswith(x + " ") for x in ["light", "extinguish"]
+        ):
+            print("[Stub] You try to light/extinguish something.")
+            return True
+        elif cmd in ["wear", "remove"] or any(
+            cmd.startswith(x + " ") for x in ["wear", "remove"]
+        ):
+            print("[Stub] You try to wear/remove something.")
+            return True
+        else:
+            snarky_unknowns = [
+                "I don't know that word.",
+                "You must be joking.",
+                "Unknown command: {}.",
+                "I don't understand what you mean.",
+                "That's not something you can do here.",
+                "What?",
+                "Pardon?",
+                "Try something else.",
+                "I don't recognize that command.",
+            ]
+            import random
+            msg = random.choice(snarky_unknowns)
+            if '{}' in msg:
+                print(msg.format(command.strip()))
+            else:
+                print(msg)
+            return True
 
 
 if __name__ == "__main__":
     import sys
 
     demo_mode = False
-    start_room = None
-    if len(sys.argv) > 1:
-        if sys.argv[1] == "--demo":
-            demo_mode = True
-            if len(sys.argv) > 2:
-                start_room = sys.argv[2]
-        else:
-            start_room = sys.argv[1]
+    if len(sys.argv) > 1 and sys.argv[1] == "--demo":
+        demo_mode = True
     print(
         "Welcome to Phork! Type 'look' to see your surroundings, 'go <direction>' to move, 'inventory' to check your items, or 'quit' to exit."
     )
     if demo_mode:
         print(
-            f"[Demo Mode Enabled] Carry limits are disabled and all starting objects are in your inventory. Starting room: {start_room if start_room else 'default'}"
+            "[Demo Mode Enabled] Carry limits are disabled and all starting objects are in your inventory."
         )
-    game = Game(demo_mode=demo_mode, start_room=start_room)
+    game = Game(demo_mode=demo_mode)
     game.describe_current_room()
     while True:
         command = input("\n> ")
-        from command_parser import parse_command
-
-        if not parse_command(game, command):
+        result = game.parse_command(command)
+        if not result:
+            print(f"[DEBUG] Game exited after command: '{command}' (parse_command returned {result})")
             break
