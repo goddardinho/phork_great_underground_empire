@@ -16,9 +16,9 @@ def main() -> None:
     """Main entry point for the game."""
     parser = argparse.ArgumentParser(description="Zork - Text Adventure Game")
     parser.add_argument(
-        "--mud", 
+        "--test", 
         action="store_true", 
-        help="Load world from original .mud files instead of simple test world"
+        help="Use simple test world instead of full Zork experience"
     )
     parser.add_argument(
         "--mud-dir", 
@@ -43,14 +43,14 @@ def main() -> None:
         demo_disambiguation()
         return
     
-    if args.mud:
-        print("Loading from original 1978 MIT Zork source files...")
-    else:
+    if args.test:
         print("Using simple test world...")
+    else:
+        print("Loading from original 1978 MIT Zork source files...")
     
     print()
     
-    game = GameEngine(use_mud_files=args.mud, mud_directory=args.mud_dir)
+    game = GameEngine(use_mud_files=not args.test, mud_directory=args.mud_dir)
     game.run()
 
 
