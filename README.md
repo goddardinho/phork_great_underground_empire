@@ -2,27 +2,75 @@
 
 Phork is a clean-room Python reimplementation of the classic Zork I, inspired by the original MDL source code. This project aims for feature parity and map fidelity with Zork I, using only the original source files in `zork_mtl_source` as reference.
 
+**🔄 Recently Rewritten** - This project has been completely rewritten from the ground up with a clean, modular architecture for better maintainability and extensibility.
+
 ## Features
 
 - Text-based interactive fiction gameplay
+- Clean, modular Python architecture with full type hints
 - Room and object structure based on Zork I
-- Modular, extensible Python codebase
+- Extensible command parser with natural language processing
+- Comprehensive test suite for reliability
 - MIT License
 
 ## Getting Started
 
-1. Clone this repository.
-2. Ensure you have Python 3.8+ installed.
-3. Run the game:
-   ```sh
-   python main.py
-   ```
+### Quick Start
+```bash
+# Setup (first time only)
+./setup.sh
 
-## Project Structure
+# Activate environment and run
+source .venv/bin/activate
+PYTHONPATH=. python main.py
+```
 
-- `main.py` — Main game loop and logic
-- `zork_mtl_source/` — Original Zork I MDL source files (reference only)
-- `.gitignore` — Standard Python and project ignores
+### Manual Setup
+1. Clone this repository
+2. Ensure you have Python 3.8+ installed
+3. Create virtual environment: `python -m venv .venv`
+4. Activate environment: `source .venv/bin/activate`
+5. Install dependencies: `pip install -r requirements.txt`
+6. Run the game: `PYTHONPATH=. python main.py`
+
+## Architecture
+
+This rewrite focuses on:
+- **Clean separation of concerns** - Each module has a single responsibility
+- **Type safety** - Full type hints throughout codebase
+- **Testability** - Easy to unit test each component
+- **Maintainability** - Clear, readable code structure
+
+### Project Structure
+
+```
+src/
+├── game.py              # Main game engine and coordination
+├── world/               # Game world (rooms, connections)
+│   ├── room.py          # Room class and logic
+│   └── world.py         # World container and management
+├── entities/            # Game objects and characters
+│   ├── player.py        # Player state and inventory
+│   └── objects.py       # Game items and their behaviors
+├── parser/              # Command parsing and interpretation
+│   └── command_parser.py # Natural language command processing
+└── utils/               # Utility functions and loaders
+tests/                   # Comprehensive test suite
+zork_mtl_source/        # Original Zork I MDL source files (reference)
+```
+
+## Development
+
+```bash
+# Run tests
+python -m pytest tests/
+
+# Type checking (when mypy is installed)
+mypy src/
+
+# Code formatting (when black is installed) 
+black src/ tests/
+```
 
 ## Roadmap
 

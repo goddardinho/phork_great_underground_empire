@@ -1,46 +1,84 @@
-# Gameplay Duplication Framework - Todo List
+# Phork Rewrite - Development Roadmap
 
-## Buglist
+*🔄 This project has been completely rewritten with a clean, modular architecture. Previous implementation is preserved in `backup/pre-rewrite` branch.*
 
-- [ ] Mailbox can be 'taken' (should not be portable; not in parity with Zork I source)
+## Immediate Priorities (v1.0 Foundation)
 
-## Current Development Focus
+### Core Gameplay Loop
+- [x] Basic movement system (north, south, east, west, up, down)
+- [x] Look and examine commands  
+- [x] Basic inventory management (take, drop, inventory)
+- [x] Simple command parser with synonyms
+- [x] **Robust object interaction** (open, close, read, etc.)
+- [x] **Container support** (put X in Y, get X from Y)  
+- [ ] **Multiple object names and aliases**
 
-- See the Roadmap section in README.md for all planned and future features.
-- [x] Expand parser to support all Zork I commands
-- [x] Implement puzzles, NPCs, and advanced object logic
-- [x] Add automated tests for movement, puzzles, and map fidelity
-- [x] Add save/load functionality and more gameplay features
-- [x] Implement room flags and puzzles
-- [x] Add custom actions, scripted events, and game state features (score, save/restore, NPCs)
--- [ ] Gameplay parity
-  - [x] Object-specific actions (e.g., mailbox, leaflet, lantern)
-  - [x] Inventory limits and object weight
-  - [x] Locked doors and keys
-  - [x] Score system for puzzles and treasures
-  - [x] Multi-step puzzles and scripted events
-  - [x] NPCs (thief, troll, cyclops, etc.)
-  - [x] Death and restart logic
-  - [x] Save/load with full game state
-  - [x] Help system and command list
-  - [x] Object attributes (edible, readable, wearable, portable, etc.)
-  - [x] Room flags (dangerous, dark, visited, etc.)
-  - [ ] Synonyms and flexible parser
-  - [ ] Random events (thief, troll, etc.)
-  - [ ] Darkness and light mechanics (grue danger) [partially complete, revisit for full parity]
-  - [ ] Endgame logic and victory conditions
-- [ ] Room/location parity
-  - Ensure all rooms, locations, and connections match the original Zork I map and source.
-- [ ] Ensure gameplay functionality, look, and feel.
+### World Building  
+- [x] Room system with exits and descriptions
+- [x] Basic object placement in rooms
+- [ ] **Load rooms from original .mud files** (data/ directory)
+- [ ] **Dynamic room descriptions** (visited/unvisited states)
+- [ ] **Room flags** (dark, dangerous, etc.)
 
-## Completed Tasks (see CHANGELOG.md for details)
+### Parser Enhancement
+- [x] Basic verb-noun parsing
+- [x] **Preposition handling** (put X in Y, look at X, etc.)
+- [ ] **Ambiguity resolution** (which sword - the rusty one or the silver one?)
+- [ ] **Synonym expansion** from Zork vocabulary
 
-- [x] Enrich all rooms with real data, exits, objects, flags, and actions
-- [x] Automate exit population from source
-- [x] Validate room and exit data with map comparison script
-- [x] Remove stray/duplicate room/object code
-- [x] Add missing imports and class definitions for Room and GameObject
-- [x] Document enrichment logic and mapping for maintainers
+## Medium-term Goals (v1.1 - Zork Parity)
+
+### Objects & Puzzles  
+- [ ] Container objects (mailbox, chest, etc.)
+- [ ] Light sources and darkness mechanics
+- [ ] Multi-step puzzles 
+- [ ] Score system
+- [ ] Object combinations and transformations
+
+### NPCs & Combat
+- [ ] Basic NPC conversations
+- [ ] Thief, Troll, and other iconic characters  
+- [ ] Simple combat system
+- [ ] NPC movement and behaviors
+
+### Game State
+- [ ] Save/load functionality
+- [ ] Death and restart mechanics  
+- [ ] Inventory size limits and object weight
+- [ ] Time-based events
+
+## Long-term Vision (v2.0+)
+
+### Enhanced Features
+- [ ] Rich text descriptions and formatting
+- [ ] Sound effects and multimedia (optional)
+- [ ] Hint system
+- [ ] Multiple difficulty levels
+- [ ] Procedural content expansion
+
+### Technical Improvements  
+- [ ] Performance optimization for large worlds
+- [ ] Plugin system for custom content
+- [ ] Web interface option
+- [ ] Multi-language support
+
+## Development Standards
+
+- **Type Safety**: All new code must have complete type hints
+- **Testing**: Unit tests for all new functionality
+- **Documentation**: Docstrings for all public interfaces  
+- **Code Quality**: Black formatting, mypy type checking
+
+## Note on Original Implementation
+
+The previous complex implementation with 20+ modules has been archived. While feature-rich, it had become difficult to maintain due to circular dependencies and unclear separation of concerns. This rewrite prioritizes:
+
+1. **Simplicity** over feature completeness initially
+2. **Architecture** that can grow without becoming unwieldy  
+3. **Test coverage** from the beginning
+4. **Clear interfaces** between components
+
+The goal is to rebuild functionality systematically on a foundation that will support long-term growth and maintenance.
 
 ## Reference
 

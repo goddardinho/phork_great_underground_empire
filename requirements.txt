@@ -1,0 +1,9 @@
+# Core dependencies
+dataclasses-json>=0.6.0  # For serialization if needed
+typing-extensions>=4.0.0  # For better typing support
+
+# Development dependencies
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=22.0.0
+mypy>=1.0.0
