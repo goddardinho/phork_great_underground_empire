@@ -115,10 +115,7 @@ class MDLParser:
         exit_match = re.search(r'<EXIT\s+([^>]*)>', room_text, re.DOTALL)
         if exit_match:
             exit_content = exit_match.group(1)
-            # Parse direction-room pairs, ignoring #NEXIT entries which are blocked exits
-            exit_pairs = re.findall(r'"([^"]+)"\s+"([^"#][^"]*)"', exit_content)
-            for direction, target in exit_pairs:
-                exits[direction.lower()] = target
+            exits = self._parse_exits(exit_content)
         
         # Extract objects (items in parentheses)
         objects = []
@@ -143,6 +140,218 @@ class MDLParser:
             objects=objects,
             flags=flags
         )
+
+    def _parse_exits(self, exit_content: str) -> Dict[str, str]:
+        """Parse complex exit structures from MDL format."""
+        exits = {}
+        
+        # Remove newlines and multiple spaces for easier parsing
+        exit_content = ' '.join(exit_content.split())
+        
+        # Split into individual direction-destination pairs
+        # Handle quoted strings, DOOR structures, NEXIT, CEXIT, etc.
+        i = 0
+        while i < len(exit_content):
+            # Skip whitespace
+            while i < len(exit_content) and exit_content[i].isspace():
+                i += 1
+            
+            if i >= len(exit_content):
+                break
+                
+            # Look for direction (quoted string)
+            if exit_content[i] == '"':
+                direction, i = self._extract_quoted_string(exit_content, i)
+                if not direction:
+                    continue
+                    
+                # Skip whitespace after direction
+                while i < len(exit_content) and exit_content[i].isspace():
+                    i += 1
+                    
+                if i >= len(exit_content):
+                    break
+                
+                # Parse the destination based on what follows
+                destination = None
+                
+                if exit_content[i:].startswith('#NEXIT'):
+                    # Blocked exit - skip this entirely
+                    i = self._skip_nexit(exit_content, i)
+                    continue
+                elif exit_content[i] == '<':
+                    # Complex structure (DOOR, CEXIT, etc.)
+                    if exit_content[i:].startswith('<DOOR'):
+                        destination, i = self._parse_door_structure(exit_content, i)
+                    elif exit_content[i:].startswith('<CEXIT'):
+                        destination, i = self._parse_cexit_structure(exit_content, i)
+                    else:
+                        # Unknown structure - skip it
+                        i = self._skip_structure(exit_content, i)
+                elif exit_content[i] == '"':
+                    # Simple room name
+                    destination, i = self._extract_quoted_string(exit_content, i)
+                elif exit_content[i] == ',':
+                    # Variable reference like ,MR-G - extract the variable name
+                    destination, i = self._extract_variable_ref(exit_content, i)
+                else:
+                    # Try to extract unquoted identifier
+                    destination, i = self._extract_identifier(exit_content, i)
+                
+                if destination and direction:
+                    exits[direction.lower()] = destination
+                    
+            else:
+                # Not a quoted direction, skip this token
+                i += 1
+        
+        return exits
+
+    def _extract_quoted_string(self, text: str, start: int) -> Tuple[Optional[str], int]:
+        """Extract a quoted string starting at position start."""
+        if start >= len(text) or text[start] != '"':
+            return None, start
+            
+        i = start + 1
+        result = ""
+        
+        while i < len(text) and text[i] != '"':
+            result += text[i]
+            i += 1
+            
+        if i < len(text) and text[i] == '"':
+            i += 1  # Skip closing quote
+            
+        return result if result else None, i
+
+    def _skip_nexit(self, text: str, start: int) -> int:
+        """Skip a #NEXIT structure."""
+        # Skip until we find the end of the message
+        i = start
+        while i < len(text) and text[i:i+6] != '#NEXIT':
+            i += 1
+            
+        if i < len(text):
+            i += 6  # Skip '#NEXIT'
+            
+        # Skip whitespace
+        while i < len(text) and text[i].isspace():
+            i += 1
+            
+        # Skip the quoted message if present
+        if i < len(text) and text[i] == '"':
+            _, i = self._extract_quoted_string(text, i)
+            
+        return i
+
+    def _parse_door_structure(self, text: str, start: int) -> Tuple[Optional[str], int]:
+        """Parse a DOOR structure: <DOOR "object" "room1" "room2" "message">"""
+        if not text[start:].startswith('<DOOR'):
+            return None, start
+            
+        # Find the end of the DOOR structure
+        bracket_count = 0
+        i = start
+        
+        while i < len(text):
+            if text[i] == '<':
+                bracket_count += 1
+            elif text[i] == '>':
+                bracket_count -= 1
+                if bracket_count == 0:
+                    break
+            i += 1
+            
+        if bracket_count != 0:
+            return None, i
+            
+        door_content = text[start:i+1]
+        
+        # Extract the rooms from the DOOR structure
+        # Format: <DOOR "object" "room1" "room2" "message">
+        quoted_strings = re.findall(r'"([^"]*)"', door_content)
+        
+        if len(quoted_strings) >= 3:
+            # Use room1 as the primary destination (could be enhanced to be smarter)
+            return quoted_strings[1], i + 1
+            
+        return None, i + 1
+
+    def _parse_cexit_structure(self, text: str, start: int) -> Tuple[Optional[str], int]:
+        """Parse a CEXIT structure: <CEXIT "flag" "room" "message" <> action>"""
+        if not text[start:].startswith('<CEXIT'):
+            return None, start
+            
+        # Find the end of the CEXIT structure
+        bracket_count = 0
+        i = start
+        
+        while i < len(text):
+            if text[i] == '<':
+                bracket_count += 1
+            elif text[i] == '>':
+                bracket_count -= 1
+                if bracket_count == 0:
+                    break
+            i += 1
+            
+        if bracket_count != 0:
+            return None, i
+            
+        cexit_content = text[start:i+1]
+        
+        # Extract the room from the CEXIT structure  
+        # Format: <CEXIT "flag" "room" "message" <> action>
+        quoted_strings = re.findall(r'"([^"]*)"', cexit_content)
+        
+        if len(quoted_strings) >= 2:
+            # Room is usually the second quoted string
+            return quoted_strings[1], i + 1
+            
+        return None, i + 1
+
+    def _skip_structure(self, text: str, start: int) -> int:
+        """Skip an unknown < > structure."""
+        bracket_count = 0
+        i = start
+        
+        while i < len(text):
+            if text[i] == '<':
+                bracket_count += 1
+            elif text[i] == '>':
+                bracket_count -= 1
+                if bracket_count == 0:
+                    break
+            i += 1
+            
+        return i + 1 if i < len(text) else i
+
+    def _extract_variable_ref(self, text: str, start: int) -> Tuple[Optional[str], int]:
+        """Extract a variable reference like ,MR-G"""
+        if start >= len(text) or text[start] != ',':
+            return None, start
+            
+        i = start + 1
+        result = ""
+        
+        # Extract identifier characters
+        while i < len(text) and (text[i].isalnum() or text[i] in '-_'):
+            result += text[i]
+            i += 1
+            
+        return result if result else None, i
+
+    def _extract_identifier(self, text: str, start: int) -> Tuple[Optional[str], int]:
+        """Extract an unquoted identifier."""
+        i = start
+        result = ""
+        
+        # Extract identifier characters until whitespace or special chars
+        while i < len(text) and (text[i].isalnum() or text[i] in '-_'):
+            result += text[i]
+            i += 1
+            
+        return result if result else None, i
     
     def parse_file(self, file_path: Path) -> Dict[str, RoomData]:
         """Parse an entire .mud file and extract all room definitions."""
