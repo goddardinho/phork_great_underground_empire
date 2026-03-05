@@ -1,6 +1,25 @@
 # Changelog
 
-## v0.7.0 (2026-03-05) 🏆 **v1.0 FOUNDATION MILESTONE ACHIEVED!** 🏆
+## v1.1.0-dev (2026-03-05) 🎭 **Canonical Response System** 🎭
+
+- **Comprehensive snarky response system with authentic Zork personality:**
+	- 70+ varied witty responses to prevent repetitive "I don't understand" messages
+	- 15+ Easter egg commands with special responses: xyzzy, plugh, hello, curse, jump, scream, etc.
+	- Authentic Zork-style personality: snarky, witty, establishment-classy language
+	- Randomized response selection ensures variety in repeated invalid commands
+	- Context-aware responses that include object names when appropriate
+	- **Canonical validation against original Zork source code (parser.mud)**:
+		- "Huh?" and "What?" - parser.mud line 327 most common responses
+		- "I beg your pardon?" - parser.mud line 79 for empty input
+		- "That doesn't make sense!" - parser.mud line 377 exact original phrasing
+		- "I don't know how to do that." - act3.mud line 335 direct quote
+		- Response priority order matches original Zork parsing behavior
+	- Integrated throughout game engine for consistent personality across all interactions
+	- Comprehensive test suite created in [tests/test_responses.py](tests/test_responses.py)
+
+**v1.1 Development Phase Started:** Enhanced container object system is next priority
+
+## v1.0.0 (2026-03-05) 🏆 **FOUNDATION COMPLETE** 🏆
 
 - **Room wiring system completed:**
 	- Enhanced MDL parser to handle complex exit structures from original Zork files

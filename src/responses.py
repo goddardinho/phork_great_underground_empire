@@ -8,18 +8,19 @@ class ZorkResponses:
     """Collection of authentic Zork-style snarky responses."""
     
     def __init__(self) -> None:
-        # Unknown command responses - varied and witty
+        # Unknown command responses - CANONICAL ZORK RESPONSES
+        # Based on original parser.mud and action files  
         self.unknown_commands = [
-            "I don't understand that.",
-            "I beg your pardon?",
-            "Huh?",  
-            "What?",
-            "Come again?",
-            "I'm afraid I don't understand.",
-            "That doesn't make sense to me.",
-            "I don't know the word \"{word}\".",
+            "Huh?",  # parser.mud line 327 - most common response
+            "What?",  # close variant used in original
+            "I beg your pardon?",  # parser.mud line 79 - for empty input
+            "That doesn't make sense!", # parser.mud line 377 - exact quote
+            "I don't know how to do that.", # act3.mud line 335 - exact quote
+            "I don't understand that.", 
+            "Come again?", 
+            "I don't know the word \"{word}\".", # word-specific response
             "That's not a verb I recognize.",
-            "I don't know how to do that.",
+            "I'm afraid I don't understand.",  
             "You can't do that here.",
             "That's not something you can do.",
         ]

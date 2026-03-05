@@ -32,10 +32,10 @@
 ## Medium-term Goals (v1.1 - Zork Parity)
 
 ### Polish & Personality
-- [ ] **Verify command response snarkiness** ensure all commands have canonical snarky responses (including unknown commands)
+- [x] **Verify command response snarkiness** ensure all commands have canonical snarky responses (including unknown commands) ✅ **COMPLETE!** (Validated against original parser.mud source)
 
 ### Objects & Puzzles  
-- [ ] Container objects (mailbox, chest, etc.)
+- [ ] **Container objects (mailbox, chest, etc.)** - Enhanced container system with proper open/close mechanics
 - [ ] Light sources and darkness mechanics
 - [ ] Multi-step puzzles 
 - [ ] Score system
