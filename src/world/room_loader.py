@@ -71,13 +71,25 @@ class ZorkRoomLoader:
             description = f"You are in {data.short_name}."
         
         # Filter exits to only include those that point to valid rooms
-        # We'll validate these exist later
+        # We'll validate these exist later  
         exits = {}
         for direction, target_room in data.exits.items():
             # Convert direction names to our standard format
             std_direction = self._standardize_direction(direction)
             if std_direction:
-                exits[std_direction] = target_room
+                # Resolve context-dependent connections
+                if target_room == "KITCHEN-WINDOW-MARKER":
+                    # KITCHEN-WINDOW is bidirectional: KITCH <-> EHOUS
+                    if data.id == "EHOUS":
+                        resolved_target = "KITCH"
+                    elif data.id == "KITCH":
+                        resolved_target = "EHOUS"  
+                    else:
+                        # Unexpected room with kitchen window - skip
+                        continue
+                    exits[std_direction] = resolved_target
+                else:
+                    exits[std_direction] = target_room
         
         return Room(
             id=data.id,

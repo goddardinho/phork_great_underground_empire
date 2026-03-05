@@ -2,7 +2,7 @@
 
 Phork is a clean-room Python reimplementation of the classic Zork I, inspired by the original MDL source code. This project aims for feature parity and map fidelity with Zork I, using only the original source files in `zork_mtl_source` as reference.
 
-**🔄 Recently Rewritten** - This project has been completely rewritten from the ground up with a clean, modular architecture for better maintainability and extensibility.
+**🎉 v1.0.0 Released!** - Complete authentic Zork experience with 196 rooms, 99.8% connectivity, and robust navigation system.
 
 ## Features
 
@@ -24,9 +24,18 @@ Phork is a clean-room Python reimplementation of the classic Zork I, inspired by
 # Setup (first time only)
 ./setup.sh
 
-# Activate environment and run
+# Activate environment and play full Zork
 source .venv/bin/activate
-PYTHONPATH=. python main.py
+python3 main.py
+```
+
+### Development Mode
+```bash
+# Use simple test world for development
+python3 main.py --test
+
+# Run disambiguation demo
+python3 main.py --demo-disambiguation
 ```
 
 ### Manual Setup

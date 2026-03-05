@@ -66,6 +66,14 @@ class GameEngine:
         if verb in ["north", "south", "east", "west", "northeast", "northwest", 
                    "southeast", "southwest", "up", "down"]:
             self._handle_movement(verb)
+        elif verb == "go" and command.noun:
+            # Handle "go north", "go east", etc.
+            direction = command.noun
+            if direction in ["north", "south", "east", "west", "northeast", "northwest",
+                           "southeast", "southwest", "up", "down", "in", "out"]:
+                self._handle_movement(direction)
+            else:
+                print(f"I don't know how to go {direction}.")
         elif verb == "look":
             self._handle_look(command)
         elif verb == "examine":
