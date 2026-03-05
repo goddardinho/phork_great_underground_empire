@@ -34,10 +34,14 @@ class CommandParser:
             "n": "north", "s": "south", "e": "east", "w": "west",
             "ne": "northeast", "nw": "northwest", "se": "southeast", "sw": "southwest",
             "u": "up", "d": "down",
-            "l": "look", "examine": "look", "x": "look",
+            "l": "look", "examine": "examine", "x": "examine",
             "i": "inventory", "inv": "inventory",
             "get": "take", "pick": "take", "grab": "take",
             "quit": "q",
+            # Object interactions
+            "read": "read", "r": "read",
+            "open": "open", "close": "close", 
+            "unlock": "unlock", "lock": "lock",
         }
         
         # Common prepositions

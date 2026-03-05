@@ -1,6 +1,6 @@
 """GameObject class - Represents items and objects in the game."""
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
 
 
@@ -44,6 +44,44 @@ class GameObject:
     def is_open(self) -> bool:
         """Check if this openable object is currently open."""
         return self.get_attribute("open", False)
+    
+    def is_readable(self) -> bool:
+        """Check if this object can be read."""
+        return self.get_attribute("readable", False) or self.get_attribute("readable_text", None) is not None
+    
+    def get_readable_text(self) -> Optional[str]:
+        """Get the text content of a readable object."""
+        return self.get_attribute("readable_text", None)
+    
+    def add_to_container(self, item_id: str) -> bool:
+        """Add an item to this container. Returns True if successful."""
+        if not self.is_container():
+            return False
+        
+        contents = self.get_attribute("contents", [])
+        if item_id not in contents:
+            contents.append(item_id)
+            self.set_attribute("contents", contents)
+        return True
+    
+    def remove_from_container(self, item_id: str) -> bool:
+        """Remove an item from this container. Returns True if item was present."""
+        if not self.is_container():
+            return False
+        
+        contents = self.get_attribute("contents", [])
+        try:
+            contents.remove(item_id)
+            self.set_attribute("contents", contents)
+            return True
+        except ValueError:
+            return False
+    
+    def get_contents(self) -> List[str]:
+        """Get the list of items in this container."""
+        if not self.is_container():
+            return []
+        return self.get_attribute("contents", [])
     
     def __str__(self) -> str:
         """String representation for display."""

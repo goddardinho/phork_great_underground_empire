@@ -9,7 +9,7 @@
 - [x] Look and examine commands  
 - [x] Basic inventory management (take, drop, inventory)
 - [x] Simple command parser with synonyms
-- [ ] **Robust object interaction** (open, close, read, etc.)
+- [x] **Robust object interaction** (open, close, read, etc.)
 - [ ] **Container support** (put X in Y, get X from Y)  
 - [ ] **Multiple object names and aliases**
 
