@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.6.0 (2026-03-05)
+
+- **Original Zork world loading implemented:**
+	- Custom MDL parser created to read authentic 1978 MIT Zork .mud files
+	- Successfully parses and loads all 196 rooms from original source code
+	- Room loader integrates parsed data with modern World and Room systems
+	- Authentic room descriptions, names, and exit mappings from original game
+	- Command-line option --mud enables loading from zork_mtl_source/ directory
+	- Essential starting objects (mailbox, leaflet) created for classic opening experience
+	- Exit validation system handles blocked passages and special mechanics
+	- Phase-based implementation: parser infrastructure, data transformation, game integration
+	- Players can now experience the complete original Zork world map
+
 ## v0.5.1 (2026-03-05)
 
 - **Multiple object names and aliases implemented:**

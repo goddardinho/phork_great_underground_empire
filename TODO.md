@@ -16,7 +16,7 @@
 ### World Building  
 - [x] Room system with exits and descriptions
 - [x] Basic object placement in rooms
-- [ ] **Load rooms from original .mud files** (data/ directory)
+- [x] **Load rooms from original .mud files** (data/ directory)
 - [ ] **Dynamic room descriptions** (visited/unvisited states)
 - [ ] **Room flags** (dark, dangerous, etc.)
 

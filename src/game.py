@@ -2,9 +2,11 @@
 
 from typing import Dict, List, Optional, Tuple
 import sys
+from pathlib import Path
 
 from .world.world import World
 from .world.room import Room
+from .world.room_loader import ZorkRoomLoader
 from .entities.player import Player
 from .entities.objects import GameObject
 from .parser.command_parser import CommandParser, Command
@@ -13,15 +15,18 @@ from .parser.command_parser import CommandParser, Command
 class GameEngine:
     """Main game engine that coordinates all game systems."""
     
-    def __init__(self) -> None:
+    def __init__(self, use_mud_files: bool = False, mud_directory: Optional[Path] = None) -> None:
         self.world = World()
         self.player = Player()
         self.parser = CommandParser()
         self.objects: Dict[str, GameObject] = {}  # object_id -> GameObject
         self.running = True
         
-        # Initialize with a basic starting area
-        self._create_initial_world()
+        # Initialize world from .mud files or create a basic test world
+        if use_mud_files:
+            self._load_world_from_mud_files(mud_directory)
+        else:
+            self._create_initial_world()
     
     def run(self) -> None:
         """Main game loop."""
@@ -564,6 +569,93 @@ Type 'help' for a list of commands.
 """
         print(welcome_text)
     
+    def _load_world_from_mud_files(self, mud_directory: Optional[Path] = None) -> None:
+        """Load world from original Zork .mud files."""
+        if mud_directory is None:
+            mud_directory = Path("zork_mtl_source")
+        
+        if not mud_directory.exists():
+            print(f"Warning: {mud_directory} not found. Creating simple test world instead.")
+            self._create_initial_world()
+            return
+        
+        print(f"Loading Zork world from {mud_directory}...")
+        
+        # Load rooms from .mud files
+        loader = ZorkRoomLoader(self.world)
+        room_count = loader.load_from_mud_files(mud_directory)
+        
+        if room_count == 0:
+            print("Failed to load rooms from .mud files. Creating simple test world instead.")
+            self._create_initial_world()
+            return
+        
+        print(f"✓ Loaded {room_count} rooms from original Zork")
+        
+        # Set starting room to West of House (just like original Zork)
+        starting_room = "WHOUS"
+        if starting_room not in self.world.rooms:
+            print("Warning: Starting room WHOUS not found. Using first available room.")
+            starting_room = list(self.world.rooms.keys())[0] if self.world.rooms else "UNKNOWN"
+        
+        self.player.current_room = starting_room
+        
+        # Create some basic objects for the iconic starting area
+        self._create_essential_objects()
+    
+    def _create_essential_objects(self) -> None:
+        """Create essential objects like the mailbox and leaflet for the starting area."""
+        
+        # Only create objects if we have the WHOUS room
+        if "WHOUS" not in self.world.rooms:
+            return
+        
+        whous = self.world.get_room("WHOUS")
+        if not whous:
+            return
+        
+        # Create the iconic mailbox and leaflet
+        mailbox = GameObject(
+            id="MAILBOX",
+            name="small mailbox",
+            description="The small mailbox is a sturdy metal box with a hinged lid.",
+            aliases=["mailbox", "box", "mail"],
+            attributes={
+                "takeable": False, 
+                "container": True, 
+                "openable": True, 
+                "open": False,
+                "contents": ["LEAFLET"]  # Contains the leaflet initially
+            }
+        )
+        
+        leaflet = GameObject(
+            id="LEAFLET",
+            name="leaflet", 
+            description="A small promotional leaflet with faded text.",
+            aliases=["pamphlet", "brochure", "paper", "advertisement"],
+            attributes={
+                "takeable": True, 
+                "weight": 1,
+                "readable": True,
+                "readable_text": (
+                    "WELCOME TO ZORK!\n\n"
+                    "Zork is a game of adventure, danger, and low cunning. In it you will "
+                    "explore some of the most amazing territory ever seen by mortals. No "
+                    "computer should be without one!\n\n"
+                    "This leaflet was found in a small mailbox."
+                )
+            }
+        )
+        
+        # Add objects to world
+        self.objects["MAILBOX"] = mailbox
+        self.objects["LEAFLET"] = leaflet
+        
+        # Place mailbox at West of House
+        whous.add_item("MAILBOX")
+        print("✓ Created essential starting objects")
+
     def _create_initial_world(self) -> None:
         """Create a simple starting world for testing."""
         # Create West of House
