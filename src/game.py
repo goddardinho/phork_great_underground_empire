@@ -195,11 +195,17 @@ class GameEngine:
             print(f"I don't see a {command.noun} here.")
             return
         
-        # Show base description
+        # Show base description with dynamic updates
         description = target_obj.description
         
-        # For containers, update description based on contents
-        if target_obj.is_container():
+        # Special handling for different object types
+        if target_obj.id == "WINDOW":
+            if target_obj.is_open():
+                description = "A small window in the corner of the house. It is open, letting in fresh air."
+            else:
+                description = "A small window in the corner of the house. It is closed tightly."
+        elif target_obj.is_container():
+            # For containers, update description based on contents
             contents = target_obj.get_contents()
             if target_obj.is_open():
                 if contents:
@@ -252,12 +258,20 @@ class GameEngine:
             return
         
         if target_obj.is_open():
-            print(f"The {target_obj.name} is already open.")
+            if target_obj.id == "WINDOW":
+                print(f"The {target_obj.name} is already open.")
+            else:
+                print(f"The {target_obj.name} is already open.")
             return
         
         # Open the object
         target_obj.set_attribute("open", True)
-        print(f"You open the {target_obj.name}.")
+        
+        # Custom messages for different object types
+        if target_obj.id == "WINDOW":
+            print(f"You open the {target_obj.name} wider. Fresh air flows in.")
+        else:
+            print(f"You open the {target_obj.name}.")
         
         # Show contents if it's a container
         if target_obj.is_container():
@@ -292,7 +306,12 @@ class GameEngine:
         
         # Close the object
         target_obj.set_attribute("open", False)
-        print(f"You close the {target_obj.name}.")
+        
+        # Custom messages for different object types
+        if target_obj.id == "WINDOW":
+            print(f"You close the {target_obj.name} tightly, shutting out the fresh air.")
+        else:
+            print(f"You close the {target_obj.name}.")
     
     def _handle_read(self, command: Command) -> None:
         """Handle read command."""
@@ -503,9 +522,23 @@ Type 'help' for a list of commands.
             }
         )
         
+        # Window at Behind House
+        window = GameObject(
+            id="WINDOW",
+            name="small window",
+            description="A small window in the corner of the house. It is slightly ajar and looks like it could be opened wider or closed.",
+            attributes={
+                "takeable": False,
+                "openable": True,
+                "open": True,  # Initially slightly ajar (open)
+            }
+        )
+        
         # Add objects to world
         self.objects["MAILBOX"] = mailbox
         self.objects["LEAFLET"] = leaflet
+        self.objects["WINDOW"] = window
         
-        # Place mailbox at west of house (leaflet is inside it)
-        west_house.add_item("MAILBOX")
+        # Place objects in rooms
+        west_house.add_item("MAILBOX")  # Mailbox at west of house (leaflet is inside it)
+        house_entrance.add_item("WINDOW")  # Window at behind house
