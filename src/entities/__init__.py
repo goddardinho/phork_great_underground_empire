@@ -1,0 +1,1 @@
+"""Entities module - Contains Player, GameObject, and NPC classes."""

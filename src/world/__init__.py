@@ -1,0 +1,1 @@
+"""World module - Contains Room and World classes."""
