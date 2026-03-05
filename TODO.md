@@ -24,12 +24,15 @@
 - [x] Basic verb-noun parsing
 - [x] Preposition handling (put X in Y, look at X, etc.)
 - [x] Ambiguity resolution (which sword - the rusty one or the silver one?)
-- [ ] **Synonym expansion** from Zork vocabulary
+- [x] **Synonym expansion** from Zork vocabulary (80+ verbs, 30+ nouns, multi-word support)
 - [ ] **Wire all rooms** ensure all rooms are wired and functional
 
-*Progress: 12/13 core features complete (92%) - Ready for v1.0 Foundation*
+*Progress: 13/14 core features complete (93%) - Final feature: room connectivity*
 
 ## Medium-term Goals (v1.1 - Zork Parity)
+
+### Polish & Personality
+- [ ] **Verify command response snarkiness** ensure all commands have canonical snarky responses (including unknown commands)
 
 ### Objects & Puzzles  
 - [ ] Container objects (mailbox, chest, etc.)
