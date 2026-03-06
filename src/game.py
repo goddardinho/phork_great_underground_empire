@@ -12,6 +12,7 @@ from .entities.objects import GameObject
 from .parser.command_parser import CommandParser, Command
 from .responses import ZorkResponses
 from .puzzles import integrate_puzzles_into_game
+from .score import ScoreManager
 
 
 class GameEngine:
@@ -25,6 +26,7 @@ class GameEngine:
         self.objects: Dict[str, GameObject] = {}  # object_id -> GameObject
         self.running = True
         self.puzzle_manager = None  # Will be initialized after world creation
+        self.score_manager = ScoreManager()
         
         # Initialize world from .mud files or create a basic test world
         if use_mud_files:
@@ -69,6 +71,13 @@ class GameEngine:
     def _route_command(self, command, user_input: str) -> None:
         """Route a command to its appropriate handler (extracted from _process_command)."""
         verb = command.verb
+        
+        # Commands that don't consume moves
+        non_move_commands = ["inventory", "score", "help", "brief", "verbose"]
+        
+        # Increment move counter for most commands (except info/display commands)
+        if verb not in non_move_commands:
+            self.score_manager.increment_moves()
         
         if verb in ["north", "south", "east", "west", "northeast", "northwest", 
                    "southeast", "southwest", "up", "down"]:
@@ -117,6 +126,8 @@ class GameEngine:
             self._handle_unlock(command)
         elif verb == "lock":
             self._handle_lock(command)
+        elif verb == "score":
+            self._handle_score()
         else:
             # Check for special Easter egg commands first
             if self.responses.is_special_command(verb):
@@ -215,6 +226,11 @@ class GameEngine:
                 current_room.remove_item(target_obj.id)
                 self.player.add_to_inventory(target_obj.id)
                 print(f"Taken: {target_obj.name}")
+                
+                # Award treasure score (OFVAL) if this is a treasure
+                points_awarded = self.score_manager.find_treasure(target_obj.id)
+                if points_awarded > 0:
+                    print(f"(You have found a treasure worth {points_awarded} points!)")
         elif location_type == "container":
             # Take from container
             container = self.objects.get(container_id) if container_id else None
@@ -222,6 +238,11 @@ class GameEngine:
                 container.remove_from_container(target_obj.id)
                 self.player.add_to_inventory(target_obj.id)
                 print(f"Taken: {target_obj.name}")
+                
+                # Award treasure score (OFVAL) if this is a treasure  
+                points_awarded = self.score_manager.find_treasure(target_obj.id)
+                if points_awarded > 0:
+                    print(f"(You have found a treasure worth {points_awarded} points!)")
             elif container and not container.is_open():
                 print(f"The {container.name} is closed.")
             else:
@@ -776,6 +797,11 @@ Shortcuts are available for most commands.
         # Simple lock (would need key checking in full implementation)
         obj.set_attribute("locked", True)
         print(f"You lock the {obj.name}.")
+    
+    def _handle_score(self) -> None:
+        """Handle score command - display current score and ranking."""
+        # Display canonical score report (moves already tracked in _route_command)
+        print(self.score_manager.get_score_report())
     
     def _find_all_objects(self, noun: str, check_inventory_only: bool = False) -> List['GameObject']:
         """Find all objects matching the given noun in accessible locations."""
@@ -1606,9 +1632,62 @@ Type 'help' for a list of commands.
             }
         )
         
+        # Additional canonical treasures from original Zork
+        bauble = GameObject(
+            id="BAUBLE",
+            name="beautiful bauble",
+            description="A delicate ornamental bauble that sparkles with inner light.",
+            aliases=["bauble", "ornament"],
+            attributes={
+                "takeable": True,
+                "weight": 1,
+                "treasure": True
+            }
+        )
+        
+        brass_lantern = GameObject(
+            id="BRASS_LANTERN", 
+            name="brass lantern",
+            description="An ornate brass lantern with intricate engravings. It's quite valuable.",
+            aliases=["lantern", "brass"],
+            attributes={
+                "takeable": True,
+                "weight": 2,
+                "treasure": True
+            }
+        )
+        
+        coin = GameObject(
+            id="COIN",
+            name="large coin",
+            description="A heavy gold coin with ancient inscriptions around the edge.",
+            aliases=["coin", "gold"],
+            attributes={
+                "takeable": True,
+                "weight": 1,
+                "treasure": True
+            }
+        )
+        
+        painting = GameObject(
+            id="PAINTING",
+            name="beautiful painting",
+            description="An exquisite oil painting in an ornate gold frame.",
+            aliases=["painting", "picture", "art"],
+            attributes={
+                "takeable": True,  
+                "weight": 3,
+                "treasure": True
+            }
+        )
+        
         self.objects["KEYS"] = rusty_keys
         self.objects["BRASS_LAMP"] = brass_lamp  
         self.objects["JEWELED_EGG"] = jeweled_egg
+        self.objects["BAUBLE"] = bauble
+        self.objects["BRASS_LANTERN"] = brass_lantern
+        self.objects["COIN"] = coin
+        self.objects["PAINTING"] = painting
         
         # Place objects in rooms (for simple test world)
         west_house.add_item("MAILBOX")  # Mailbox at west of house (leaflet is inside it)
@@ -1626,3 +1705,9 @@ Type 'help' for a list of commands.
         north_house.add_item("KEYS")  # Keys at north of house
         temple.add_item("BRASS_LAMP")  # Treasure lamp in temple
         dangerous_room.add_item("JEWELED_EGG")  # Valuable egg in dangerous area
+        
+        # Place additional treasures around the world
+        forest.add_item("BAUBLE")  # Beautiful bauble in forest
+        cave.add_item("BRASS_LANTERN")  # Brass lantern in cave  
+        house_entrance.add_item("COIN")  # Large coin behind house
+        temple.add_item("PAINTING")  # Beautiful painting in temple

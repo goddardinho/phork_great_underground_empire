@@ -39,7 +39,7 @@
 - [x] **Canonical bulk actions (take all, drop everything, etc.)** - Implemented authentic 1978 MIT Zork bulk action system using special meta-objects ✅ **COMPLETE!**
 - [x] **Light sources and darkness mechanics** - Full implementation with torch/matches, darkness detection, and authentic grue encounters ✅ **COMPLETE!** *v1.1.2*
 - [x] **Multi-step puzzles** - Complete puzzle system with authentic Zork patterns (mailbox tutorial, grate unlock, dam control, treasure collection) ✅ **COMPLETE!** *v1.1.3*
-- [ ] Score system
+- [x] **Score system** - Canonical Zork scoring with authentic OFVAL/OTVAL treasure values, ranking system, move counting, and score commands ✅ **COMPLETE!** *v1.1.4*
 - [ ] Object combinations and transformations
 
 ### 🔍 **World Validation & Polish (v1.1.6)**
