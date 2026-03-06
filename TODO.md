@@ -42,7 +42,7 @@
 - [x] **Score system** - Canonical Zork scoring with authentic OFVAL/OTVAL treasure values, ranking system, move counting, and score commands ✅ **COMPLETE!** *v1.1.4*
 - [x] **Object combinations and transformations** - Complete object interaction system with authentic Zork combinations (bell heating, rope+hook grappling, mirror breaking, tool usage) and ObjectCombinationManager ✅ **COMPLETE!** *v1.2.0*
 
-### 🔍 **World Validation & Polish (v1.2.1)**
+### 🔍 **World Validation & Polish (v1.2.2)**
 - [ ] **Comprehensive room wiring audit** - Validate all 196 rooms have correct exits
 - [ ] **Full connectivity testing** - Automated traversal of entire game world  
 - [ ] **Full command and response testing** - Validation and testing of all commands and responses for canonical gameplay
@@ -57,7 +57,7 @@
 - [ ] NPC movement and behaviors
 
 ### Game State
-- [ ] Save/load functionality
+- [x] **Save/load functionality** - Complete JSON-based save/load system with timestamp tracking, version compatibility, and comprehensive state persistence (player, world, score, combinations) ✅ **COMPLETE!** *v1.2.1*
 - [ ] Death and restart mechanics  
 - [ ] Inventory size limits and object weight
 - [ ] Time-based events
