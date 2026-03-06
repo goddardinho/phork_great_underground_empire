@@ -11,6 +11,7 @@ from .entities.player import Player
 from .entities.objects import GameObject
 from .parser.command_parser import CommandParser, Command
 from .responses import ZorkResponses
+from .puzzles import integrate_puzzles_into_game
 
 
 class GameEngine:
@@ -23,12 +24,16 @@ class GameEngine:
         self.responses = ZorkResponses()
         self.objects: Dict[str, GameObject] = {}  # object_id -> GameObject
         self.running = True
+        self.puzzle_manager = None  # Will be initialized after world creation
         
         # Initialize world from .mud files or create a basic test world
         if use_mud_files:
             self._load_world_from_mud_files(mud_directory)
         else:
             self._create_initial_world()
+            
+        # Initialize puzzle system after world creation
+        self.puzzle_manager = integrate_puzzles_into_game(self)
     
     def run(self) -> None:
         """Main game loop."""
@@ -108,6 +113,10 @@ class GameEngine:
             self._handle_light(command)
         elif verb == "extinguish":
             self._handle_extinguish(command)
+        elif verb == "unlock":
+            self._handle_unlock(command)
+        elif verb == "lock":
+            self._handle_lock(command)
         else:
             # Check for special Easter egg commands first
             if self.responses.is_special_command(verb):
@@ -696,6 +705,77 @@ Shortcuts are available for most commands.
         
         obj.set_attribute("lit", False)
         print(f"The {obj.name} is extinguished.")
+
+    def _handle_unlock(self, command: Command) -> None:
+        """Handle unlock command for doors, containers, etc."""
+        if not command.noun:
+            print("Unlock what?")
+            return
+        
+        # Check if we're unlocking a grate (special puzzle object)
+        if command.noun.lower() == "grate":
+            current_room = self.world.get_room(self.player.current_room)
+            if current_room and current_room.id == "GRATE_ROOM":
+                # Check if player has keys
+                if "KEYS" in self.player.inventory:
+                    # This will be handled by the puzzle system
+                    print("You unlock the grate with the rusty keys.")
+                    # Add the downward exit
+                    current_room.exits["down"] = "CAVE"
+                    return
+                else:
+                    print("You don't have anything to unlock it with.")
+                    return
+            else:
+                print("I don't see a grate here.")
+                return
+        
+        # Find the object to unlock
+        obj = self._find_object(command.noun)
+        if not obj:
+            print(f"I don't see a {command.noun} here.")
+            return
+        
+        # Check if object can be unlocked
+        if not obj.is_openable():
+            print(f"You can't unlock the {obj.name}.")
+            return
+            
+        if not obj.is_locked():
+            print(f"The {obj.name} isn't locked.")
+            return
+        
+        # Simple unlock (would need key checking in full implementation)
+        obj.set_attribute("locked", False)
+        print(f"You unlock the {obj.name}.")
+        
+    def _handle_lock(self, command: Command) -> None:
+        """Handle lock command for doors, containers, etc."""
+        if not command.noun:
+            print("Lock what?")
+            return
+        
+        obj = self._find_object(command.noun)
+        if not obj:
+            print(f"I don't see a {command.noun} here.")
+            return
+        
+        # Check if object can be locked
+        if not obj.is_openable():
+            print(f"You can't lock the {obj.name}.")
+            return
+            
+        if obj.is_locked():
+            print(f"The {obj.name} is already locked.")
+            return
+            
+        if obj.is_open():
+            print(f"You can't lock the {obj.name} while it's open.")
+            return
+        
+        # Simple lock (would need key checking in full implementation)
+        obj.set_attribute("locked", True)
+        print(f"You lock the {obj.name}.")
     
     def _find_all_objects(self, noun: str, check_inventory_only: bool = False) -> List['GameObject']:
         """Find all objects matching the given noun in accessible locations."""
@@ -1292,7 +1372,7 @@ Type 'help' for a list of commands.
             id="FOREST",
             name="Forest Path",
             description="You are on a winding path through an ancient forest. Tall trees block most of the sunlight.",
-            exits={"west": "HOUSE", "down": "CAVE", "south": "TEMPLE"},
+            exits={"west": "HOUSE", "down": "CAVE", "south": "TEMPLE", "southeast": "GRATE_ROOM"},
             flags={"outdoor", "noisy"}
         )
         
@@ -1320,6 +1400,23 @@ Type 'help' for a list of commands.
             flags={"dangerous", "dark"}
         )
         
+        # Add puzzle-specific rooms
+        grate_room = Room(
+            id="GRATE_ROOM",
+            name="Grate Clearing",
+            description="You are in a small clearing. In the center is a heavy metal grate set into the ground. It appears to be locked.",
+            exits={"east": "FOREST"},
+            flags={"outdoor"}
+        )
+        
+        dam_control = Room(
+            id="DAM_CONTROL",
+            name="Dam Control Room", 
+            description="You are in the control room of Flood Control Dam #3. There is a control panel with a large metal bolt and a green plastic bubble.",
+            exits={"north": "GRATE_ROOM"},
+            flags={"indoor"}
+        )
+        
         # Add rooms to world
         self.world.add_room(west_house)
         self.world.add_room(north_house)
@@ -1329,6 +1426,8 @@ Type 'help' for a list of commands.
         self.world.add_room(cave)
         self.world.add_room(temple)
         self.world.add_room(dangerous_room)
+        self.world.add_room(grate_room)
+        self.world.add_room(dam_control)
         
         # Create some basic objects
         mailbox = GameObject(
@@ -1469,6 +1568,48 @@ Type 'help' for a list of commands.
         self.objects["WOODEN_BOX"] = wooden_box
         self.objects["METAL_BOX"] = metal_box
         
+        # Add puzzle-specific objects
+        rusty_keys = GameObject(
+            id="KEYS",
+            name="rusty keys",
+            description="A small ring of old, rusty keys. They look like they might unlock something important.",
+            aliases=["keys", "key", "ring"],
+            attributes={
+                "takeable": True,
+                "weight": 1
+            }
+        )
+        
+        brass_lamp = GameObject(
+            id="BRASS_LAMP",
+            name="brass lamp",
+            description="An elegant brass lamp with intricate engravings. It appears to be valuable.",
+            aliases=["lamp", "light", "lantern"],
+            attributes={
+                "takeable": True,
+                "weight": 3,
+                "treasure": True,  # This is a treasure
+                "treasure_value": 20
+            }
+        )
+        
+        jeweled_egg = GameObject(
+            id="JEWELED_EGG",
+            name="jeweled egg",
+            description="A beautiful egg encrusted with precious gems. It gleams in the light.",
+            aliases=["egg", "jewel", "gems"],
+            attributes={
+                "takeable": True,
+                "weight": 1,
+                "treasure": True,
+                "treasure_value": 30
+            }
+        )
+        
+        self.objects["KEYS"] = rusty_keys
+        self.objects["BRASS_LAMP"] = brass_lamp  
+        self.objects["JEWELED_EGG"] = jeweled_egg
+        
         # Place objects in rooms (for simple test world)
         west_house.add_item("MAILBOX")  # Mailbox at west of house (leaflet is inside it)
         house_entrance.add_item("WINDOW")  # Window at behind house
@@ -1480,3 +1621,8 @@ Type 'help' for a list of commands.
         temple.add_item("SILVER_KNIFE")  # Silver knife in temple  
         cave.add_item("WOODEN_BOX")  # Wooden box in cave
         cave.add_item("METAL_BOX")  # Metal box in cave
+        
+        # Place puzzle objects
+        north_house.add_item("KEYS")  # Keys at north of house
+        temple.add_item("BRASS_LAMP")  # Treasure lamp in temple
+        dangerous_room.add_item("JEWELED_EGG")  # Valuable egg in dangerous area

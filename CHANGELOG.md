@@ -1,5 +1,27 @@
 # Changelog
 
+## v1.1.3 (2026-03-06) 🧩 **Multi-Step Puzzle System** 🧩
+
+- **🎯 Complete authentic Zork puzzle mechanics implemented:**
+	- **Puzzle Framework**: PuzzleState enum, PuzzleStep dataclass, and PuzzleManager orchestration system
+	- **Authentic Patterns**: Mailbox tutorial, grate unlock sequence, dam control puzzle, treasure collection mechanics
+	- **State Management**: Persistent puzzle progress with proper state transitions and validation
+	- **GameEngine Integration**: Enhanced command processing with puzzle trigger detection and response handling
+	- **Command Extensions**: Added `unlock` and `lock` commands with special grate handling and container locking support
+
+- **🏆 Classic Zork puzzles fully functional:**
+	- **Mailbox Tutorial**: Step-by-step introduction using original leaflet and mailbox interaction patterns
+	- **Grate Access**: Multi-step sequence requiring key collection, grate location, and proper unlock mechanics
+	- **Dam Control**: Complex control panel puzzle with water level manipulation and machinery feedback
+	- **Treasure Collection**: Proper scoring system integration with treasure placement and point awards
+	- **Room Integration**: Added GRATE_ROOM and DAM_CONTROL areas with authentic descriptions
+
+- **🎮 Production-ready puzzle infrastructure:**
+	- **Comprehensive Testing**: Full validation of puzzle sequences, state persistence, and edge case handling
+	- **Score Integration**: Treasures properly award points (20+ points available from puzzle completion)
+	- **Robust Error Handling**: Graceful handling of invalid sequences, missing objects, and state conflicts
+	- **Authentic Experience**: True-to-original puzzle difficulty and feedback matching 1978 MIT Zork gameplay
+
 ## v1.1.2 (2026-03-06) 🔦 **Light Sources & Darkness Mechanics** 🔦
 
 - **🌟 Complete authentic Zork light source system implemented:**
