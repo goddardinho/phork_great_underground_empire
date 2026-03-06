@@ -40,9 +40,9 @@
 - [x] **Light sources and darkness mechanics** - Full implementation with torch/matches, darkness detection, and authentic grue encounters ✅ **COMPLETE!** *v1.1.2*
 - [x] **Multi-step puzzles** - Complete puzzle system with authentic Zork patterns (mailbox tutorial, grate unlock, dam control, treasure collection) ✅ **COMPLETE!** *v1.1.3*
 - [x] **Score system** - Canonical Zork scoring with authentic OFVAL/OTVAL treasure values, ranking system, move counting, and score commands ✅ **COMPLETE!** *v1.1.4*
-- [ ] Object combinations and transformations
+- [x] **Object combinations and transformations** - Complete object interaction system with authentic Zork combinations (bell heating, rope+hook grappling, mirror breaking, tool usage) and ObjectCombinationManager ✅ **COMPLETE!** *v1.2.0*
 
-### 🔍 **World Validation & Polish (v1.1.6)**
+### 🔍 **World Validation & Polish (v1.2.1)**
 - [ ] **Comprehensive room wiring audit** - Validate all 196 rooms have correct exits
 - [ ] **Full connectivity testing** - Automated traversal of entire game world  
 - [ ] **Full command and response testing** - Validation and testing of all commands and responses for canonical gameplay
