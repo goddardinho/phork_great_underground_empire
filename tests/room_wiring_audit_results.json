@@ -1,0 +1,5007 @@
+{
+  "total_rooms": 196,
+  "issues": [
+    {
+      "room_id": "VAIR1",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "VAIR3",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "CAGED",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "BKTWI",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "BKVAU",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "BKEXE",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "CPOUT",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "PALAN",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "MRDE",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "MRDW",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "MRGE",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "MRGW",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "MRCE",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "MRCW",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "MRBE",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "MRBW",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "MRAE",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "MRAW",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "CRYPT",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "CELL",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "PCELL",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "NCELL",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "NIRVA",
+      "type": "orphaned_room",
+      "description": "Room has no incoming connections (orphaned)",
+      "direction": null,
+      "target": null,
+      "severity": "medium"
+    },
+    {
+      "room_id": "WHOUS",
+      "type": "one_way_connection",
+      "description": "One-way connection north to NHOUS (no reverse south)",
+      "direction": "north",
+      "target": "NHOUS",
+      "severity": "low"
+    },
+    {
+      "room_id": "WHOUS",
+      "type": "one_way_connection",
+      "description": "One-way connection south to SHOUS (no reverse north)",
+      "direction": "south",
+      "target": "SHOUS",
+      "severity": "low"
+    },
+    {
+      "room_id": "WHOUS",
+      "type": "one_way_connection",
+      "description": "One-way connection west to FORE1 (no reverse east)",
+      "direction": "west",
+      "target": "FORE1",
+      "severity": "low"
+    },
+    {
+      "room_id": "NHOUS",
+      "type": "one_way_connection",
+      "description": "One-way connection west to WHOUS (no reverse east)",
+      "direction": "west",
+      "target": "WHOUS",
+      "severity": "low"
+    },
+    {
+      "room_id": "NHOUS",
+      "type": "one_way_connection",
+      "description": "One-way connection east to EHOUS (no reverse west)",
+      "direction": "east",
+      "target": "EHOUS",
+      "severity": "low"
+    },
+    {
+      "room_id": "NHOUS",
+      "type": "one_way_connection",
+      "description": "One-way connection north to FORE3 (no reverse south)",
+      "direction": "north",
+      "target": "FORE3",
+      "severity": "low"
+    },
+    {
+      "room_id": "SHOUS",
+      "type": "one_way_connection",
+      "description": "One-way connection west to WHOUS (no reverse east)",
+      "direction": "west",
+      "target": "WHOUS",
+      "severity": "low"
+    },
+    {
+      "room_id": "SHOUS",
+      "type": "one_way_connection",
+      "description": "One-way connection east to EHOUS (no reverse west)",
+      "direction": "east",
+      "target": "EHOUS",
+      "severity": "low"
+    },
+    {
+      "room_id": "EHOUS",
+      "type": "one_way_connection",
+      "description": "One-way connection north to NHOUS (no reverse south)",
+      "direction": "north",
+      "target": "NHOUS",
+      "severity": "low"
+    },
+    {
+      "room_id": "EHOUS",
+      "type": "one_way_connection",
+      "description": "One-way connection south to SHOUS (no reverse north)",
+      "direction": "south",
+      "target": "SHOUS",
+      "severity": "low"
+    },
+    {
+      "room_id": "EHOUS",
+      "type": "one_way_connection",
+      "description": "One-way connection east to CLEAR (no reverse west)",
+      "direction": "east",
+      "target": "CLEAR",
+      "severity": "low"
+    },
+    {
+      "room_id": "FORE1",
+      "type": "one_way_connection",
+      "description": "One-way connection north to FORE1 (no reverse south)",
+      "direction": "north",
+      "target": "FORE1",
+      "severity": "low"
+    },
+    {
+      "room_id": "FORE1",
+      "type": "one_way_connection",
+      "description": "One-way connection east to FORE3 (no reverse west)",
+      "direction": "east",
+      "target": "FORE3",
+      "severity": "low"
+    },
+    {
+      "room_id": "FORE1",
+      "type": "one_way_connection",
+      "description": "One-way connection south to FORE2 (no reverse north)",
+      "direction": "south",
+      "target": "FORE2",
+      "severity": "low"
+    },
+    {
+      "room_id": "FORE1",
+      "type": "one_way_connection",
+      "description": "One-way connection west to FORE1 (no reverse east)",
+      "direction": "west",
+      "target": "FORE1",
+      "severity": "low"
+    },
+    {
+      "room_id": "FORE2",
+      "type": "one_way_connection",
+      "description": "One-way connection east to CLEAR (no reverse west)",
+      "direction": "east",
+      "target": "CLEAR",
+      "severity": "low"
+    },
+    {
+      "room_id": "FORE2",
+      "type": "one_way_connection",
+      "description": "One-way connection south to FORE4 (no reverse north)",
+      "direction": "south",
+      "target": "FORE4",
+      "severity": "low"
+    },
+    {
+      "room_id": "FORE2",
+      "type": "one_way_connection",
+      "description": "One-way connection west to FORE1 (no reverse east)",
+      "direction": "west",
+      "target": "FORE1",
+      "severity": "low"
+    },
+    {
+      "room_id": "FORE3",
+      "type": "one_way_connection",
+      "description": "One-way connection north to FORE2 (no reverse south)",
+      "direction": "north",
+      "target": "FORE2",
+      "severity": "low"
+    },
+    {
+      "room_id": "FORE3",
+      "type": "one_way_connection",
+      "description": "One-way connection south to CLEAR (no reverse north)",
+      "direction": "south",
+      "target": "CLEAR",
+      "severity": "low"
+    },
+    {
+      "room_id": "FORE3",
+      "type": "one_way_connection",
+      "description": "One-way connection west to NHOUS (no reverse east)",
+      "direction": "west",
+      "target": "NHOUS",
+      "severity": "low"
+    },
+    {
+      "room_id": "FORE4",
+      "type": "one_way_connection",
+      "description": "One-way connection east to CLTOP (no reverse west)",
+      "direction": "east",
+      "target": "CLTOP",
+      "severity": "low"
+    },
+    {
+      "room_id": "FORE4",
+      "type": "one_way_connection",
+      "description": "One-way connection south to FORE4 (no reverse north)",
+      "direction": "south",
+      "target": "FORE4",
+      "severity": "low"
+    },
+    {
+      "room_id": "FORE4",
+      "type": "one_way_connection",
+      "description": "One-way connection west to FORE2 (no reverse east)",
+      "direction": "west",
+      "target": "FORE2",
+      "severity": "low"
+    },
+    {
+      "room_id": "FORE5",
+      "type": "one_way_connection",
+      "description": "One-way connection north to FORE5 (no reverse south)",
+      "direction": "north",
+      "target": "FORE5",
+      "severity": "low"
+    },
+    {
+      "room_id": "FORE5",
+      "type": "one_way_connection",
+      "description": "One-way connection west to FORE2 (no reverse east)",
+      "direction": "west",
+      "target": "FORE2",
+      "severity": "low"
+    },
+    {
+      "room_id": "CLEAR",
+      "type": "one_way_connection",
+      "description": "One-way connection north to CLEAR (no reverse south)",
+      "direction": "north",
+      "target": "CLEAR",
+      "severity": "low"
+    },
+    {
+      "room_id": "CLEAR",
+      "type": "one_way_connection",
+      "description": "One-way connection east to CLEAR (no reverse west)",
+      "direction": "east",
+      "target": "CLEAR",
+      "severity": "low"
+    },
+    {
+      "room_id": "CLEAR",
+      "type": "one_way_connection",
+      "description": "One-way connection south to FORE2 (no reverse north)",
+      "direction": "south",
+      "target": "FORE2",
+      "severity": "low"
+    },
+    {
+      "room_id": "CELLA",
+      "type": "one_way_connection",
+      "description": "One-way connection south to CHAS2 (no reverse north)",
+      "direction": "south",
+      "target": "CHAS2",
+      "severity": "low"
+    },
+    {
+      "room_id": "MTROL",
+      "type": "one_way_connection",
+      "description": "One-way connection east to CRAW4 (no reverse west)",
+      "direction": "east",
+      "target": "CRAW4",
+      "severity": "low"
+    },
+    {
+      "room_id": "MTROL",
+      "type": "one_way_connection",
+      "description": "One-way connection north to PASS1 (no reverse south)",
+      "direction": "north",
+      "target": "PASS1",
+      "severity": "low"
+    },
+    {
+      "room_id": "MTROL",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MAZE1 (no reverse north)",
+      "direction": "south",
+      "target": "MAZE1",
+      "severity": "low"
+    },
+    {
+      "room_id": "GALLE",
+      "type": "one_way_connection",
+      "description": "One-way connection south to STUDI (no reverse north)",
+      "direction": "south",
+      "target": "STUDI",
+      "severity": "low"
+    },
+    {
+      "room_id": "GALLE",
+      "type": "one_way_connection",
+      "description": "One-way connection west to BKENT (no reverse east)",
+      "direction": "west",
+      "target": "BKENT",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE1",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MTROL (no reverse east)",
+      "direction": "west",
+      "target": "MTROL",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE1",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MAZE1 (no reverse south)",
+      "direction": "north",
+      "target": "MAZE1",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE1",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MAZE2 (no reverse north)",
+      "direction": "south",
+      "target": "MAZE2",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE1",
+      "type": "one_way_connection",
+      "description": "One-way connection east to MAZE4 (no reverse west)",
+      "direction": "east",
+      "target": "MAZE4",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE2",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MAZE1 (no reverse north)",
+      "direction": "south",
+      "target": "MAZE1",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE2",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MAZE4 (no reverse south)",
+      "direction": "north",
+      "target": "MAZE4",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE3",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MAZE4 (no reverse south)",
+      "direction": "north",
+      "target": "MAZE4",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE3",
+      "type": "one_way_connection",
+      "description": "One-way connection up to MAZE5 (no reverse down)",
+      "direction": "up",
+      "target": "MAZE5",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE4",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MAZE3 (no reverse east)",
+      "direction": "west",
+      "target": "MAZE3",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE4",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MAZE1 (no reverse south)",
+      "direction": "north",
+      "target": "MAZE1",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE4",
+      "type": "one_way_connection",
+      "description": "One-way connection east to DEAD1 (no reverse west)",
+      "direction": "east",
+      "target": "DEAD1",
+      "severity": "low"
+    },
+    {
+      "room_id": "DEAD1",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MAZE4 (no reverse north)",
+      "direction": "south",
+      "target": "MAZE4",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE5",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MAZE3 (no reverse south)",
+      "direction": "north",
+      "target": "MAZE3",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE6",
+      "type": "one_way_connection",
+      "description": "One-way connection down to MAZE5 (no reverse up)",
+      "direction": "down",
+      "target": "MAZE5",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE6",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MAZE6 (no reverse east)",
+      "direction": "west",
+      "target": "MAZE6",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE6",
+      "type": "one_way_connection",
+      "description": "One-way connection up to MAZE9 (no reverse down)",
+      "direction": "up",
+      "target": "MAZE9",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE7",
+      "type": "one_way_connection",
+      "description": "One-way connection up to MAZ14 (no reverse down)",
+      "direction": "up",
+      "target": "MAZ14",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE7",
+      "type": "one_way_connection",
+      "description": "One-way connection east to MAZE8 (no reverse west)",
+      "direction": "east",
+      "target": "MAZE8",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE7",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MAZ15 (no reverse north)",
+      "direction": "south",
+      "target": "MAZ15",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE8",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MAZE8 (no reverse east)",
+      "direction": "west",
+      "target": "MAZE8",
+      "severity": "low"
+    },
+    {
+      "room_id": "DEAD3",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MAZE8 (no reverse south)",
+      "direction": "north",
+      "target": "MAZE8",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE9",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MAZE6 (no reverse south)",
+      "direction": "north",
+      "target": "MAZE6",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE9",
+      "type": "one_way_connection",
+      "description": "One-way connection east to MAZ11 (no reverse west)",
+      "direction": "east",
+      "target": "MAZ11",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE9",
+      "type": "one_way_connection",
+      "description": "One-way connection down to MAZ10 (no reverse up)",
+      "direction": "down",
+      "target": "MAZ10",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE9",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MAZ13 (no reverse north)",
+      "direction": "south",
+      "target": "MAZ13",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZE9",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MAZ12 (no reverse east)",
+      "direction": "west",
+      "target": "MAZ12",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZ10",
+      "type": "one_way_connection",
+      "description": "One-way connection east to MAZE9 (no reverse west)",
+      "direction": "east",
+      "target": "MAZE9",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZ10",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MAZ13 (no reverse east)",
+      "direction": "west",
+      "target": "MAZ13",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZ12",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MAZE5 (no reverse east)",
+      "direction": "west",
+      "target": "MAZE5",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZ12",
+      "type": "one_way_connection",
+      "description": "One-way connection east to MAZ13 (no reverse west)",
+      "direction": "east",
+      "target": "MAZ13",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZ12",
+      "type": "one_way_connection",
+      "description": "One-way connection up to MAZE9 (no reverse down)",
+      "direction": "up",
+      "target": "MAZE9",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZ13",
+      "type": "one_way_connection",
+      "description": "One-way connection east to MAZE9 (no reverse west)",
+      "direction": "east",
+      "target": "MAZE9",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZ13",
+      "type": "one_way_connection",
+      "description": "One-way connection down to MAZ12 (no reverse up)",
+      "direction": "down",
+      "target": "MAZ12",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZ13",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MAZ10 (no reverse north)",
+      "direction": "south",
+      "target": "MAZ10",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZ13",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MAZ11 (no reverse east)",
+      "direction": "west",
+      "target": "MAZ11",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZ14",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MAZ15 (no reverse east)",
+      "direction": "west",
+      "target": "MAZ15",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZ14",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MAZE7 (no reverse north)",
+      "direction": "south",
+      "target": "MAZE7",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZ15",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MAZ14 (no reverse east)",
+      "direction": "west",
+      "target": "MAZ14",
+      "severity": "low"
+    },
+    {
+      "room_id": "MAZ15",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MAZE7 (no reverse north)",
+      "direction": "south",
+      "target": "MAZE7",
+      "severity": "low"
+    },
+    {
+      "room_id": "CYCLO",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MAZ15 (no reverse east)",
+      "direction": "west",
+      "target": "MAZ15",
+      "severity": "low"
+    },
+    {
+      "room_id": "TREAS",
+      "type": "one_way_connection",
+      "description": "One-way connection east to CPANT (no reverse west)",
+      "direction": "east",
+      "target": "CPANT",
+      "severity": "low"
+    },
+    {
+      "room_id": "RAVI1",
+      "type": "one_way_connection",
+      "description": "One-way connection down to RESES (no reverse up)",
+      "direction": "down",
+      "target": "RESES",
+      "severity": "low"
+    },
+    {
+      "room_id": "RAVI1",
+      "type": "one_way_connection",
+      "description": "One-way connection east to CHAS1 (no reverse west)",
+      "direction": "east",
+      "target": "CHAS1",
+      "severity": "low"
+    },
+    {
+      "room_id": "RAVI1",
+      "type": "one_way_connection",
+      "description": "One-way connection west to CRAW1 (no reverse east)",
+      "direction": "west",
+      "target": "CRAW1",
+      "severity": "low"
+    },
+    {
+      "room_id": "CRAW1",
+      "type": "one_way_connection",
+      "description": "One-way connection west to RAVI1 (no reverse east)",
+      "direction": "west",
+      "target": "RAVI1",
+      "severity": "low"
+    },
+    {
+      "room_id": "CRAW1",
+      "type": "one_way_connection",
+      "description": "One-way connection east to DOME (no reverse west)",
+      "direction": "east",
+      "target": "DOME",
+      "severity": "low"
+    },
+    {
+      "room_id": "RESES",
+      "type": "one_way_connection",
+      "description": "One-way connection south to RAVI1 (no reverse north)",
+      "direction": "south",
+      "target": "RAVI1",
+      "severity": "low"
+    },
+    {
+      "room_id": "RESES",
+      "type": "one_way_connection",
+      "description": "One-way connection up to CANY1 (no reverse down)",
+      "direction": "up",
+      "target": "CANY1",
+      "severity": "low"
+    },
+    {
+      "room_id": "RESEN",
+      "type": "one_way_connection",
+      "description": "One-way connection north to ATLAN (no reverse south)",
+      "direction": "north",
+      "target": "ATLAN",
+      "severity": "low"
+    },
+    {
+      "room_id": "STREA",
+      "type": "one_way_connection",
+      "description": "One-way connection north to ICY (no reverse south)",
+      "direction": "north",
+      "target": "ICY",
+      "severity": "low"
+    },
+    {
+      "room_id": "EGYPT",
+      "type": "one_way_connection",
+      "description": "One-way connection up to ICY (no reverse down)",
+      "direction": "up",
+      "target": "ICY",
+      "severity": "low"
+    },
+    {
+      "room_id": "EGYPT",
+      "type": "one_way_connection",
+      "description": "One-way connection south to LEDG3 (no reverse north)",
+      "direction": "south",
+      "target": "LEDG3",
+      "severity": "low"
+    },
+    {
+      "room_id": "EGYPT",
+      "type": "one_way_connection",
+      "description": "One-way connection east to CRAW1 (no reverse west)",
+      "direction": "east",
+      "target": "CRAW1",
+      "severity": "low"
+    },
+    {
+      "room_id": "ICY",
+      "type": "one_way_connection",
+      "description": "One-way connection north to STREA (no reverse south)",
+      "direction": "north",
+      "target": "STREA",
+      "severity": "low"
+    },
+    {
+      "room_id": "ICY",
+      "type": "one_way_connection",
+      "description": "One-way connection east to EGYPT (no reverse west)",
+      "direction": "east",
+      "target": "EGYPT",
+      "severity": "low"
+    },
+    {
+      "room_id": "ICY",
+      "type": "one_way_connection",
+      "description": "One-way connection west to RUBYR (no reverse east)",
+      "direction": "west",
+      "target": "RUBYR",
+      "severity": "low"
+    },
+    {
+      "room_id": "RUBYR",
+      "type": "one_way_connection",
+      "description": "One-way connection west to LAVA (no reverse east)",
+      "direction": "west",
+      "target": "LAVA",
+      "severity": "low"
+    },
+    {
+      "room_id": "RUBYR",
+      "type": "one_way_connection",
+      "description": "One-way connection south to ICY (no reverse north)",
+      "direction": "south",
+      "target": "ICY",
+      "severity": "low"
+    },
+    {
+      "room_id": "CANY1",
+      "type": "one_way_connection",
+      "description": "One-way connection east to DAM (no reverse west)",
+      "direction": "east",
+      "target": "DAM",
+      "severity": "low"
+    },
+    {
+      "room_id": "CANY1",
+      "type": "one_way_connection",
+      "description": "One-way connection south to CAROU (no reverse north)",
+      "direction": "south",
+      "target": "CAROU",
+      "severity": "low"
+    },
+    {
+      "room_id": "ECHO",
+      "type": "one_way_connection",
+      "description": "One-way connection east to CHAS3 (no reverse west)",
+      "direction": "east",
+      "target": "CHAS3",
+      "severity": "low"
+    },
+    {
+      "room_id": "ECHO",
+      "type": "one_way_connection",
+      "description": "One-way connection west to PASS5 (no reverse east)",
+      "direction": "west",
+      "target": "PASS5",
+      "severity": "low"
+    },
+    {
+      "room_id": "ECHO",
+      "type": "one_way_connection",
+      "description": "One-way connection up to CAVE3 (no reverse down)",
+      "direction": "up",
+      "target": "CAVE3",
+      "severity": "low"
+    },
+    {
+      "room_id": "MIRR1",
+      "type": "one_way_connection",
+      "description": "One-way connection east to CAVE1 (no reverse west)",
+      "direction": "east",
+      "target": "CAVE1",
+      "severity": "low"
+    },
+    {
+      "room_id": "MIRR2",
+      "type": "one_way_connection",
+      "description": "One-way connection north to CRAW3 (no reverse south)",
+      "direction": "north",
+      "target": "CRAW3",
+      "severity": "low"
+    },
+    {
+      "room_id": "CAVE1",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MIRR1 (no reverse south)",
+      "direction": "north",
+      "target": "MIRR1",
+      "severity": "low"
+    },
+    {
+      "room_id": "CRAW3",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MGRAI (no reverse south)",
+      "direction": "north",
+      "target": "MGRAI",
+      "severity": "low"
+    },
+    {
+      "room_id": "PASS3",
+      "type": "one_way_connection",
+      "description": "One-way connection west to SLIDE (no reverse east)",
+      "direction": "west",
+      "target": "SLIDE",
+      "severity": "low"
+    },
+    {
+      "room_id": "PASS3",
+      "type": "one_way_connection",
+      "description": "One-way connection north to CRAW2 (no reverse south)",
+      "direction": "north",
+      "target": "CRAW2",
+      "severity": "low"
+    },
+    {
+      "room_id": "ENTRA",
+      "type": "one_way_connection",
+      "description": "One-way connection south to SLIDE (no reverse north)",
+      "direction": "south",
+      "target": "SLIDE",
+      "severity": "low"
+    },
+    {
+      "room_id": "SQUEE",
+      "type": "one_way_connection",
+      "description": "One-way connection south to ENTRA (no reverse north)",
+      "direction": "south",
+      "target": "ENTRA",
+      "severity": "low"
+    },
+    {
+      "room_id": "TSHAF",
+      "type": "one_way_connection",
+      "description": "One-way connection west to ENTRA (no reverse east)",
+      "direction": "west",
+      "target": "ENTRA",
+      "severity": "low"
+    },
+    {
+      "room_id": "BLADD",
+      "type": "one_way_connection",
+      "description": "One-way connection south to TIMBE (no reverse north)",
+      "direction": "south",
+      "target": "TIMBE",
+      "severity": "low"
+    },
+    {
+      "room_id": "DEAD7",
+      "type": "one_way_connection",
+      "description": "One-way connection south to BLADD (no reverse north)",
+      "direction": "south",
+      "target": "BLADD",
+      "severity": "low"
+    },
+    {
+      "room_id": "BSHAF",
+      "type": "one_way_connection",
+      "description": "One-way connection east to MACHI (no reverse west)",
+      "direction": "east",
+      "target": "MACHI",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE1",
+      "type": "one_way_connection",
+      "description": "One-way connection east to TUNNE (no reverse west)",
+      "direction": "east",
+      "target": "TUNNE",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE2",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MINE1 (no reverse north)",
+      "direction": "south",
+      "target": "MINE1",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE2",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MINE5 (no reverse east)",
+      "direction": "west",
+      "target": "MINE5",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE2",
+      "type": "one_way_connection",
+      "description": "One-way connection up to MINE3 (no reverse down)",
+      "direction": "up",
+      "target": "MINE3",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE3",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MINE2 (no reverse east)",
+      "direction": "west",
+      "target": "MINE2",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE3",
+      "type": "one_way_connection",
+      "description": "One-way connection east to MINE5 (no reverse west)",
+      "direction": "east",
+      "target": "MINE5",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE4",
+      "type": "one_way_connection",
+      "description": "One-way connection up to MINE5 (no reverse down)",
+      "direction": "up",
+      "target": "MINE5",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE4",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MINE2 (no reverse east)",
+      "direction": "west",
+      "target": "MINE2",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE5",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MINE7 (no reverse south)",
+      "direction": "north",
+      "target": "MINE7",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE5",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MINE2 (no reverse east)",
+      "direction": "west",
+      "target": "MINE2",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE5",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MINE3 (no reverse north)",
+      "direction": "south",
+      "target": "MINE3",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE5",
+      "type": "one_way_connection",
+      "description": "One-way connection up to MINE3 (no reverse down)",
+      "direction": "up",
+      "target": "MINE3",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE5",
+      "type": "one_way_connection",
+      "description": "One-way connection east to MINE4 (no reverse west)",
+      "direction": "east",
+      "target": "MINE4",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE7",
+      "type": "one_way_connection",
+      "description": "One-way connection east to MINE1 (no reverse west)",
+      "direction": "east",
+      "target": "MINE1",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE7",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MINE5 (no reverse east)",
+      "direction": "west",
+      "target": "MINE5",
+      "severity": "low"
+    },
+    {
+      "room_id": "MINE7",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MINE6 (no reverse north)",
+      "direction": "south",
+      "target": "MINE6",
+      "severity": "low"
+    },
+    {
+      "room_id": "DOME",
+      "type": "one_way_connection",
+      "description": "One-way connection east to CRAW1 (no reverse west)",
+      "direction": "east",
+      "target": "CRAW1",
+      "severity": "low"
+    },
+    {
+      "room_id": "DOME",
+      "type": "one_way_connection",
+      "description": "One-way connection down to MTORC (no reverse up)",
+      "direction": "down",
+      "target": "MTORC",
+      "severity": "low"
+    },
+    {
+      "room_id": "MTORC",
+      "type": "one_way_connection",
+      "description": "One-way connection down to CRAW4 (no reverse up)",
+      "direction": "down",
+      "target": "CRAW4",
+      "severity": "low"
+    },
+    {
+      "room_id": "CRAW4",
+      "type": "one_way_connection",
+      "description": "One-way connection north to CHAS2 (no reverse south)",
+      "direction": "north",
+      "target": "CHAS2",
+      "severity": "low"
+    },
+    {
+      "room_id": "CRAW4",
+      "type": "one_way_connection",
+      "description": "One-way connection south to STUDI (no reverse north)",
+      "direction": "south",
+      "target": "STUDI",
+      "severity": "low"
+    },
+    {
+      "room_id": "CRAW4",
+      "type": "one_way_connection",
+      "description": "One-way connection east to MTROL (no reverse west)",
+      "direction": "east",
+      "target": "MTROL",
+      "severity": "low"
+    },
+    {
+      "room_id": "CHAS2",
+      "type": "one_way_connection",
+      "description": "One-way connection west to CELLA (no reverse east)",
+      "direction": "west",
+      "target": "CELLA",
+      "severity": "low"
+    },
+    {
+      "room_id": "CHAS2",
+      "type": "one_way_connection",
+      "description": "One-way connection north to CRAW4 (no reverse south)",
+      "direction": "north",
+      "target": "CRAW4",
+      "severity": "low"
+    },
+    {
+      "room_id": "PASS1",
+      "type": "one_way_connection",
+      "description": "One-way connection east to CAROU (no reverse west)",
+      "direction": "east",
+      "target": "CAROU",
+      "severity": "low"
+    },
+    {
+      "room_id": "PASS1",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MTROL (no reverse east)",
+      "direction": "west",
+      "target": "MTROL",
+      "severity": "low"
+    },
+    {
+      "room_id": "PASS1",
+      "type": "one_way_connection",
+      "description": "One-way connection down to RAVI1 (no reverse up)",
+      "direction": "down",
+      "target": "RAVI1",
+      "severity": "low"
+    },
+    {
+      "room_id": "PASS5",
+      "type": "one_way_connection",
+      "description": "One-way connection north to CHAS1 (no reverse south)",
+      "direction": "north",
+      "target": "CHAS1",
+      "severity": "low"
+    },
+    {
+      "room_id": "PASS5",
+      "type": "one_way_connection",
+      "description": "One-way connection south to CAROU (no reverse north)",
+      "direction": "south",
+      "target": "CAROU",
+      "severity": "low"
+    },
+    {
+      "room_id": "CHAS1",
+      "type": "one_way_connection",
+      "description": "One-way connection south to RAVI1 (no reverse north)",
+      "direction": "south",
+      "target": "RAVI1",
+      "severity": "low"
+    },
+    {
+      "room_id": "CHAS1",
+      "type": "one_way_connection",
+      "description": "One-way connection east to PASS5 (no reverse west)",
+      "direction": "east",
+      "target": "PASS5",
+      "severity": "low"
+    },
+    {
+      "room_id": "CAVE3",
+      "type": "one_way_connection",
+      "description": "One-way connection south to ECHO (no reverse north)",
+      "direction": "south",
+      "target": "ECHO",
+      "severity": "low"
+    },
+    {
+      "room_id": "CAVE3",
+      "type": "one_way_connection",
+      "description": "One-way connection east to DAM (no reverse west)",
+      "direction": "east",
+      "target": "DAM",
+      "severity": "low"
+    },
+    {
+      "room_id": "CHAS3",
+      "type": "one_way_connection",
+      "description": "One-way connection south to ECHO (no reverse north)",
+      "direction": "south",
+      "target": "ECHO",
+      "severity": "low"
+    },
+    {
+      "room_id": "CHAS3",
+      "type": "one_way_connection",
+      "description": "One-way connection east to TCAVE (no reverse west)",
+      "direction": "east",
+      "target": "TCAVE",
+      "severity": "low"
+    },
+    {
+      "room_id": "CHAS3",
+      "type": "one_way_connection",
+      "description": "One-way connection north to DEAD5 (no reverse south)",
+      "direction": "north",
+      "target": "DEAD5",
+      "severity": "low"
+    },
+    {
+      "room_id": "CAVE4",
+      "type": "one_way_connection",
+      "description": "One-way connection north to CAROU (no reverse south)",
+      "direction": "north",
+      "target": "CAROU",
+      "severity": "low"
+    },
+    {
+      "room_id": "RIDDL",
+      "type": "one_way_connection",
+      "description": "One-way connection down to CAVE4 (no reverse up)",
+      "direction": "down",
+      "target": "CAVE4",
+      "severity": "low"
+    },
+    {
+      "room_id": "MGRAI",
+      "type": "one_way_connection",
+      "description": "One-way connection west to CAROU (no reverse east)",
+      "direction": "west",
+      "target": "CAROU",
+      "severity": "low"
+    },
+    {
+      "room_id": "MGRAI",
+      "type": "one_way_connection",
+      "description": "One-way connection east to CRAW3 (no reverse west)",
+      "direction": "east",
+      "target": "CRAW3",
+      "severity": "low"
+    },
+    {
+      "room_id": "MGRAI",
+      "type": "one_way_connection",
+      "description": "One-way connection up to TEMP1 (no reverse down)",
+      "direction": "up",
+      "target": "TEMP1",
+      "severity": "low"
+    },
+    {
+      "room_id": "TEMP1",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MGRAI (no reverse east)",
+      "direction": "west",
+      "target": "MGRAI",
+      "severity": "low"
+    },
+    {
+      "room_id": "DAM",
+      "type": "one_way_connection",
+      "description": "One-way connection south to CANY1 (no reverse north)",
+      "direction": "south",
+      "target": "CANY1",
+      "severity": "low"
+    },
+    {
+      "room_id": "DAM",
+      "type": "one_way_connection",
+      "description": "One-way connection east to CAVE3 (no reverse west)",
+      "direction": "east",
+      "target": "CAVE3",
+      "severity": "low"
+    },
+    {
+      "room_id": "DOCK",
+      "type": "one_way_connection",
+      "description": "One-way connection north to DAM (no reverse south)",
+      "direction": "north",
+      "target": "DAM",
+      "severity": "low"
+    },
+    {
+      "room_id": "RIVR1",
+      "type": "one_way_connection",
+      "description": "One-way connection west to DOCK (no reverse east)",
+      "direction": "west",
+      "target": "DOCK",
+      "severity": "low"
+    },
+    {
+      "room_id": "RIVR1",
+      "type": "one_way_connection",
+      "description": "One-way connection down to RIVR2 (no reverse up)",
+      "direction": "down",
+      "target": "RIVR2",
+      "severity": "low"
+    },
+    {
+      "room_id": "RIVR2",
+      "type": "one_way_connection",
+      "description": "One-way connection down to RIVR3 (no reverse up)",
+      "direction": "down",
+      "target": "RIVR3",
+      "severity": "low"
+    },
+    {
+      "room_id": "RIVR3",
+      "type": "one_way_connection",
+      "description": "One-way connection down to RIVR4 (no reverse up)",
+      "direction": "down",
+      "target": "RIVR4",
+      "severity": "low"
+    },
+    {
+      "room_id": "RIVR3",
+      "type": "one_way_connection",
+      "description": "One-way connection east to WCLF1 (no reverse west)",
+      "direction": "east",
+      "target": "WCLF1",
+      "severity": "low"
+    },
+    {
+      "room_id": "RIVR3",
+      "type": "one_way_connection",
+      "description": "One-way connection west to RCAVE (no reverse east)",
+      "direction": "west",
+      "target": "RCAVE",
+      "severity": "low"
+    },
+    {
+      "room_id": "RIVR4",
+      "type": "one_way_connection",
+      "description": "One-way connection down to RIVR5 (no reverse up)",
+      "direction": "down",
+      "target": "RIVR5",
+      "severity": "low"
+    },
+    {
+      "room_id": "RIVR4",
+      "type": "one_way_connection",
+      "description": "One-way connection east to WCLF2 (no reverse west)",
+      "direction": "east",
+      "target": "WCLF2",
+      "severity": "low"
+    },
+    {
+      "room_id": "RIVR4",
+      "type": "one_way_connection",
+      "description": "One-way connection west to BEACH (no reverse east)",
+      "direction": "west",
+      "target": "BEACH",
+      "severity": "low"
+    },
+    {
+      "room_id": "RIVR5",
+      "type": "one_way_connection",
+      "description": "One-way connection down to FCHMP (no reverse up)",
+      "direction": "down",
+      "target": "FCHMP",
+      "severity": "low"
+    },
+    {
+      "room_id": "TCAVE",
+      "type": "one_way_connection",
+      "description": "One-way connection south to RCAVE (no reverse north)",
+      "direction": "south",
+      "target": "RCAVE",
+      "severity": "low"
+    },
+    {
+      "room_id": "FALLS",
+      "type": "one_way_connection",
+      "description": "One-way connection up to RAINB (no reverse down)",
+      "direction": "up",
+      "target": "RAINB",
+      "severity": "low"
+    },
+    {
+      "room_id": "RAINB",
+      "type": "one_way_connection",
+      "description": "One-way connection east to POG (no reverse west)",
+      "direction": "east",
+      "target": "POG",
+      "severity": "low"
+    },
+    {
+      "room_id": "CLBOT",
+      "type": "one_way_connection",
+      "description": "One-way connection north to POG (no reverse south)",
+      "direction": "north",
+      "target": "POG",
+      "severity": "low"
+    },
+    {
+      "room_id": "CLTOP",
+      "type": "one_way_connection",
+      "description": "One-way connection south to FORE4 (no reverse north)",
+      "direction": "south",
+      "target": "FORE4",
+      "severity": "low"
+    },
+    {
+      "room_id": "CLTOP",
+      "type": "one_way_connection",
+      "description": "One-way connection west to FORE5 (no reverse east)",
+      "direction": "west",
+      "target": "FORE5",
+      "severity": "low"
+    },
+    {
+      "room_id": "VAIR2",
+      "type": "one_way_connection",
+      "description": "One-way connection west to LEDG2 (no reverse east)",
+      "direction": "west",
+      "target": "LEDG2",
+      "severity": "low"
+    },
+    {
+      "room_id": "VAIR4",
+      "type": "one_way_connection",
+      "description": "One-way connection east to LEDG4 (no reverse west)",
+      "direction": "east",
+      "target": "LEDG4",
+      "severity": "low"
+    },
+    {
+      "room_id": "LEDG3",
+      "type": "one_way_connection",
+      "description": "One-way connection east to EGYPT (no reverse west)",
+      "direction": "east",
+      "target": "EGYPT",
+      "severity": "low"
+    },
+    {
+      "room_id": "LAVA",
+      "type": "one_way_connection",
+      "description": "One-way connection west to RUBYR (no reverse east)",
+      "direction": "west",
+      "target": "RUBYR",
+      "severity": "low"
+    },
+    {
+      "room_id": "CMACH",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MAGNE (no reverse east)",
+      "direction": "west",
+      "target": "MAGNE",
+      "severity": "low"
+    },
+    {
+      "room_id": "BKENT",
+      "type": "one_way_connection",
+      "description": "One-way connection south to GALLE (no reverse north)",
+      "direction": "south",
+      "target": "GALLE",
+      "severity": "low"
+    },
+    {
+      "room_id": "BKTW",
+      "type": "one_way_connection",
+      "description": "One-way connection north to BKVW (no reverse south)",
+      "direction": "north",
+      "target": "BKVW",
+      "severity": "low"
+    },
+    {
+      "room_id": "BKTW",
+      "type": "one_way_connection",
+      "description": "One-way connection south to BKENT (no reverse north)",
+      "direction": "south",
+      "target": "BKENT",
+      "severity": "low"
+    },
+    {
+      "room_id": "BKTW",
+      "type": "one_way_connection",
+      "description": "One-way connection west to BKBOX (no reverse east)",
+      "direction": "west",
+      "target": "BKBOX",
+      "severity": "low"
+    },
+    {
+      "room_id": "BKTE",
+      "type": "one_way_connection",
+      "description": "One-way connection north to BKVE (no reverse south)",
+      "direction": "north",
+      "target": "BKVE",
+      "severity": "low"
+    },
+    {
+      "room_id": "BKTE",
+      "type": "one_way_connection",
+      "description": "One-way connection south to BKENT (no reverse north)",
+      "direction": "south",
+      "target": "BKENT",
+      "severity": "low"
+    },
+    {
+      "room_id": "BKTE",
+      "type": "one_way_connection",
+      "description": "One-way connection east to BKBOX (no reverse west)",
+      "direction": "east",
+      "target": "BKBOX",
+      "severity": "low"
+    },
+    {
+      "room_id": "BKVW",
+      "type": "one_way_connection",
+      "description": "One-way connection south to BKENT (no reverse north)",
+      "direction": "south",
+      "target": "BKENT",
+      "severity": "low"
+    },
+    {
+      "room_id": "BKVE",
+      "type": "one_way_connection",
+      "description": "One-way connection south to BKENT (no reverse north)",
+      "direction": "south",
+      "target": "BKENT",
+      "severity": "low"
+    },
+    {
+      "room_id": "BKEXE",
+      "type": "one_way_connection",
+      "description": "One-way connection north to BKBOX (no reverse south)",
+      "direction": "north",
+      "target": "BKBOX",
+      "severity": "low"
+    },
+    {
+      "room_id": "CPOUT",
+      "type": "one_way_connection",
+      "description": "One-way connection north to CPANT (no reverse south)",
+      "direction": "north",
+      "target": "CPANT",
+      "severity": "low"
+    },
+    {
+      "room_id": "CPOUT",
+      "type": "one_way_connection",
+      "description": "One-way connection east to CP (no reverse west)",
+      "direction": "east",
+      "target": "CP",
+      "severity": "low"
+    },
+    {
+      "room_id": "SLID1",
+      "type": "one_way_connection",
+      "description": "One-way connection up to SLIDE (no reverse down)",
+      "direction": "up",
+      "target": "SLIDE",
+      "severity": "low"
+    },
+    {
+      "room_id": "SLID3",
+      "type": "one_way_connection",
+      "description": "One-way connection down to CELLA (no reverse up)",
+      "direction": "down",
+      "target": "CELLA",
+      "severity": "low"
+    },
+    {
+      "room_id": "SLID3",
+      "type": "one_way_connection",
+      "description": "One-way connection east to SLEDG (no reverse west)",
+      "direction": "east",
+      "target": "SLEDG",
+      "severity": "low"
+    },
+    {
+      "room_id": "SLEDG",
+      "type": "one_way_connection",
+      "description": "One-way connection down to CELLA (no reverse up)",
+      "direction": "down",
+      "target": "CELLA",
+      "severity": "low"
+    },
+    {
+      "room_id": "SLEDG",
+      "type": "one_way_connection",
+      "description": "One-way connection up to SLID2 (no reverse down)",
+      "direction": "up",
+      "target": "SLID2",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRCE",
+      "type": "one_way_connection",
+      "description": "One-way connection west to INMIR (no reverse east)",
+      "direction": "west",
+      "target": "INMIR",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRCE",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MRG (no reverse south)",
+      "direction": "north",
+      "target": "MRG",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRCE",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MRB (no reverse north)",
+      "direction": "south",
+      "target": "MRB",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRCW",
+      "type": "one_way_connection",
+      "description": "One-way connection east to INMIR (no reverse west)",
+      "direction": "east",
+      "target": "INMIR",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRCW",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MRG (no reverse south)",
+      "direction": "north",
+      "target": "MRG",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRCW",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MRB (no reverse north)",
+      "direction": "south",
+      "target": "MRB",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRBE",
+      "type": "one_way_connection",
+      "description": "One-way connection west to INMIR (no reverse east)",
+      "direction": "west",
+      "target": "INMIR",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRBE",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MRC (no reverse south)",
+      "direction": "north",
+      "target": "MRC",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRBE",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MRA (no reverse north)",
+      "direction": "south",
+      "target": "MRA",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRBW",
+      "type": "one_way_connection",
+      "description": "One-way connection east to INMIR (no reverse west)",
+      "direction": "east",
+      "target": "INMIR",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRBW",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MRC (no reverse south)",
+      "direction": "north",
+      "target": "MRC",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRBW",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MRA (no reverse north)",
+      "direction": "south",
+      "target": "MRA",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRAE",
+      "type": "one_way_connection",
+      "description": "One-way connection west to INMIR (no reverse east)",
+      "direction": "west",
+      "target": "INMIR",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRAE",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MRB (no reverse south)",
+      "direction": "north",
+      "target": "MRB",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRAE",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MREYE (no reverse north)",
+      "direction": "south",
+      "target": "MREYE",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRAW",
+      "type": "one_way_connection",
+      "description": "One-way connection east to INMIR (no reverse west)",
+      "direction": "east",
+      "target": "INMIR",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRAW",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MRB (no reverse south)",
+      "direction": "north",
+      "target": "MRB",
+      "severity": "low"
+    },
+    {
+      "room_id": "MRAW",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MREYE (no reverse north)",
+      "direction": "south",
+      "target": "MREYE",
+      "severity": "low"
+    },
+    {
+      "room_id": "INMIR",
+      "type": "one_way_connection",
+      "description": "One-way connection north to MRA (no reverse south)",
+      "direction": "north",
+      "target": "MRA",
+      "severity": "low"
+    },
+    {
+      "room_id": "INMIR",
+      "type": "one_way_connection",
+      "description": "One-way connection south to MRA (no reverse north)",
+      "direction": "south",
+      "target": "MRA",
+      "severity": "low"
+    },
+    {
+      "room_id": "INMIR",
+      "type": "one_way_connection",
+      "description": "One-way connection east to MRA (no reverse west)",
+      "direction": "east",
+      "target": "MRA",
+      "severity": "low"
+    },
+    {
+      "room_id": "INMIR",
+      "type": "one_way_connection",
+      "description": "One-way connection west to MRA (no reverse east)",
+      "direction": "west",
+      "target": "MRA",
+      "severity": "low"
+    },
+    {
+      "room_id": "TOMB",
+      "type": "one_way_connection",
+      "description": "One-way connection north to FDOOR (no reverse south)",
+      "direction": "north",
+      "target": "FDOOR",
+      "severity": "low"
+    },
+    {
+      "room_id": "CRYPT",
+      "type": "one_way_connection",
+      "description": "One-way connection south to FDOOR (no reverse north)",
+      "direction": "south",
+      "target": "FDOOR",
+      "severity": "low"
+    },
+    {
+      "room_id": "ECORR",
+      "type": "one_way_connection",
+      "description": "One-way connection north to NCORR (no reverse south)",
+      "direction": "north",
+      "target": "NCORR",
+      "severity": "low"
+    },
+    {
+      "room_id": "ECORR",
+      "type": "one_way_connection",
+      "description": "One-way connection south to SCORR (no reverse north)",
+      "direction": "south",
+      "target": "SCORR",
+      "severity": "low"
+    },
+    {
+      "room_id": "WCORR",
+      "type": "one_way_connection",
+      "description": "One-way connection north to NCORR (no reverse south)",
+      "direction": "north",
+      "target": "NCORR",
+      "severity": "low"
+    },
+    {
+      "room_id": "WCORR",
+      "type": "one_way_connection",
+      "description": "One-way connection south to SCORR (no reverse north)",
+      "direction": "south",
+      "target": "SCORR",
+      "severity": "low"
+    },
+    {
+      "room_id": "SCORR",
+      "type": "one_way_connection",
+      "description": "One-way connection west to WCORR (no reverse east)",
+      "direction": "west",
+      "target": "WCORR",
+      "severity": "low"
+    },
+    {
+      "room_id": "SCORR",
+      "type": "one_way_connection",
+      "description": "One-way connection east to ECORR (no reverse west)",
+      "direction": "east",
+      "target": "ECORR",
+      "severity": "low"
+    },
+    {
+      "room_id": "SCORR",
+      "type": "one_way_connection",
+      "description": "One-way connection north to FDOOR (no reverse south)",
+      "direction": "north",
+      "target": "FDOOR",
+      "severity": "low"
+    },
+    {
+      "room_id": "BDOOR",
+      "type": "one_way_connection",
+      "description": "One-way connection south to FDOOR (no reverse north)",
+      "direction": "south",
+      "target": "FDOOR",
+      "severity": "low"
+    },
+    {
+      "room_id": "FDOOR",
+      "type": "one_way_connection",
+      "description": "One-way connection north to FDOOR (no reverse south)",
+      "direction": "north",
+      "target": "FDOOR",
+      "severity": "low"
+    },
+    {
+      "room_id": "NCORR",
+      "type": "one_way_connection",
+      "description": "One-way connection east to ECORR (no reverse west)",
+      "direction": "east",
+      "target": "ECORR",
+      "severity": "low"
+    },
+    {
+      "room_id": "NCORR",
+      "type": "one_way_connection",
+      "description": "One-way connection west to WCORR (no reverse east)",
+      "direction": "west",
+      "target": "WCORR",
+      "severity": "low"
+    },
+    {
+      "room_id": "NCORR",
+      "type": "one_way_connection",
+      "description": "One-way connection south to FDOOR (no reverse north)",
+      "direction": "south",
+      "target": "FDOOR",
+      "severity": "low"
+    },
+    {
+      "room_id": "CELL",
+      "type": "one_way_connection",
+      "description": "One-way connection north to FDOOR (no reverse south)",
+      "direction": "north",
+      "target": "FDOOR",
+      "severity": "low"
+    },
+    {
+      "room_id": "CELL",
+      "type": "one_way_connection",
+      "description": "One-way connection south to FDOOR (no reverse north)",
+      "direction": "south",
+      "target": "FDOOR",
+      "severity": "low"
+    }
+  ],
+  "orphaned_rooms": [
+    {
+      "room_id": "VAIR1",
+      "room_name": "VAIR1",
+      "description": "You are about one hundred feet above the bottom of...",
+      "exits": []
+    },
+    {
+      "room_id": "VAIR3",
+      "room_name": "VAIR3",
+      "description": "You are high above the floor of the volcano. From ...",
+      "exits": []
+    },
+    {
+      "room_id": "CAGED",
+      "room_name": "CAGED",
+      "description": "You are trapped inside a steel cage.",
+      "exits": []
+    },
+    {
+      "room_id": "BKTWI",
+      "room_name": "BKTWI",
+      "description": "This is a small, bare room with no distinguishing ...",
+      "exits": []
+    },
+    {
+      "room_id": "BKVAU",
+      "room_name": "BKVAU",
+      "description": "This is the Vault of the Bank of Zork, in which th...",
+      "exits": []
+    },
+    {
+      "room_id": "BKEXE",
+      "room_name": "BKEXE",
+      "description": "This room was the office of the Chairman of the Ba...",
+      "exits": [
+        "north"
+      ]
+    },
+    {
+      "room_id": "CPOUT",
+      "room_name": "CPOUT",
+      "description": "CPOUT",
+      "exits": [
+        "north",
+        "east"
+      ]
+    },
+    {
+      "room_id": "PALAN",
+      "room_name": "PALAN",
+      "description": "PALAN",
+      "exits": []
+    },
+    {
+      "room_id": "MRDE",
+      "room_name": "MRDE",
+      "description": "MRDE",
+      "exits": []
+    },
+    {
+      "room_id": "MRDW",
+      "room_name": "MRDW",
+      "description": "MRDW",
+      "exits": []
+    },
+    {
+      "room_id": "MRGE",
+      "room_name": "MRGE",
+      "description": "MRGE",
+      "exits": []
+    },
+    {
+      "room_id": "MRGW",
+      "room_name": "MRGW",
+      "description": "MRGW",
+      "exits": []
+    },
+    {
+      "room_id": "MRCE",
+      "room_name": "MRCE",
+      "description": "MRCE",
+      "exits": [
+        "enter",
+        "west",
+        "north",
+        "south"
+      ]
+    },
+    {
+      "room_id": "MRCW",
+      "room_name": "MRCW",
+      "description": "MRCW",
+      "exits": [
+        "enter",
+        "east",
+        "north",
+        "south"
+      ]
+    },
+    {
+      "room_id": "MRBE",
+      "room_name": "MRBE",
+      "description": "MRBE",
+      "exits": [
+        "enter",
+        "west",
+        "north",
+        "south"
+      ]
+    },
+    {
+      "room_id": "MRBW",
+      "room_name": "MRBW",
+      "description": "MRBW",
+      "exits": [
+        "enter",
+        "east",
+        "north",
+        "south"
+      ]
+    },
+    {
+      "room_id": "MRAE",
+      "room_name": "MRAE",
+      "description": "MRAE",
+      "exits": [
+        "enter",
+        "west",
+        "north",
+        "south"
+      ]
+    },
+    {
+      "room_id": "MRAW",
+      "room_name": "MRAW",
+      "description": "MRAW",
+      "exits": [
+        "enter",
+        "east",
+        "north",
+        "south"
+      ]
+    },
+    {
+      "room_id": "CRYPT",
+      "room_name": "CRYPT",
+      "description": "CRYPT",
+      "exits": [
+        "south",
+        "leave"
+      ]
+    },
+    {
+      "room_id": "CELL",
+      "room_name": "CELL",
+      "description": "CELL",
+      "exits": [
+        "exit",
+        "north",
+        "south"
+      ]
+    },
+    {
+      "room_id": "PCELL",
+      "room_name": "PCELL",
+      "description": "PCELL",
+      "exits": []
+    },
+    {
+      "room_id": "NCELL",
+      "room_name": "NCELL",
+      "description": "NCELL",
+      "exits": []
+    },
+    {
+      "room_id": "NIRVA",
+      "room_name": "NIRVA",
+      "description": "This is a room of large size, richly appointed and...",
+      "exits": []
+    }
+  ],
+  "unreachable_rooms": [
+    "NCELL",
+    "MRAW",
+    "PALAN",
+    "NCORR",
+    "SAFE",
+    "MIRR2",
+    "CAGED",
+    "CRYPT",
+    "ALISM",
+    "MINE3",
+    "MINE2",
+    "SLID3",
+    "SMELL",
+    "TEMP2",
+    "MAGNE",
+    "ALICE",
+    "MRGE",
+    "LIBRA",
+    "MRBE",
+    "ALITR",
+    "MGRAI",
+    "SLEDG",
+    "BOOM",
+    "MRG",
+    "CAVE4",
+    "RIDDL",
+    "PASS4",
+    "SLID1",
+    "MRB",
+    "PARAP",
+    "MRDE",
+    "PCELL",
+    "CMACH",
+    "CRAW3",
+    "MINE6",
+    "DEAD7",
+    "MINE4",
+    "TIMBE",
+    "SLID2",
+    "VAIR2",
+    "MRCE",
+    "BDOOR",
+    "MRAE",
+    "CELL",
+    "VAIR4",
+    "SQUEE",
+    "TWELL",
+    "MRCW",
+    "TEMP1",
+    "BKVAU",
+    "MINE7",
+    "MINE5",
+    "MPEAR",
+    "MACHI",
+    "SPAL",
+    "LEDG2",
+    "MREYE",
+    "MRDW",
+    "MRBW",
+    "INMIR",
+    "VAIR3",
+    "BWELL",
+    "TLADD",
+    "LLD2",
+    "MRGW",
+    "WCORR",
+    "SCORR",
+    "CPOUT",
+    "TSTRS",
+    "TSHAF",
+    "BKTWI",
+    "ECORR",
+    "MRD",
+    "NIRVA",
+    "BKEXE",
+    "TUNNE",
+    "BSHAF",
+    "VAIR1",
+    "MRC",
+    "LEDG4",
+    "LLD1",
+    "ENTRA",
+    "MINE1",
+    "CAGER",
+    "CP",
+    "TOMB",
+    "BATS",
+    "FDOOR",
+    "BLADD",
+    "MRA",
+    "MRANT",
+    "CAVE2"
+  ],
+  "one_way_connections": [
+    {
+      "from_room": "WHOUS",
+      "from_name": "WHOUS",
+      "to_room": "NHOUS",
+      "to_name": "NHOUS",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "WHOUS",
+      "from_name": "WHOUS",
+      "to_room": "SHOUS",
+      "to_name": "SHOUS",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "WHOUS",
+      "from_name": "WHOUS",
+      "to_room": "FORE1",
+      "to_name": "FORE1",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "FORE3"
+    },
+    {
+      "from_room": "NHOUS",
+      "from_name": "NHOUS",
+      "to_room": "WHOUS",
+      "to_name": "WHOUS",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "NHOUS",
+      "from_name": "NHOUS",
+      "to_room": "EHOUS",
+      "to_name": "EHOUS",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "KITCH"
+    },
+    {
+      "from_room": "NHOUS",
+      "from_name": "NHOUS",
+      "to_room": "FORE3",
+      "to_name": "FORE3",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "CLEAR"
+    },
+    {
+      "from_room": "SHOUS",
+      "from_name": "SHOUS",
+      "to_room": "WHOUS",
+      "to_name": "WHOUS",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "SHOUS",
+      "from_name": "SHOUS",
+      "to_room": "EHOUS",
+      "to_name": "EHOUS",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "KITCH"
+    },
+    {
+      "from_room": "EHOUS",
+      "from_name": "EHOUS",
+      "to_room": "NHOUS",
+      "to_name": "NHOUS",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "EHOUS",
+      "from_name": "EHOUS",
+      "to_room": "SHOUS",
+      "to_name": "SHOUS",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "EHOUS",
+      "from_name": "EHOUS",
+      "to_room": "CLEAR",
+      "to_name": "CLEAR",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "FORE3"
+    },
+    {
+      "from_room": "FORE1",
+      "from_name": "FORE1",
+      "to_room": "FORE1",
+      "to_name": "FORE1",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "FORE2"
+    },
+    {
+      "from_room": "FORE1",
+      "from_name": "FORE1",
+      "to_room": "FORE3",
+      "to_name": "FORE3",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "NHOUS"
+    },
+    {
+      "from_room": "FORE1",
+      "from_name": "FORE1",
+      "to_room": "FORE2",
+      "to_name": "FORE2",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "SHOUS"
+    },
+    {
+      "from_room": "FORE1",
+      "from_name": "FORE1",
+      "to_room": "FORE1",
+      "to_name": "FORE1",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "FORE3"
+    },
+    {
+      "from_room": "FORE2",
+      "from_name": "FORE2",
+      "to_room": "CLEAR",
+      "to_name": "CLEAR",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "FORE3"
+    },
+    {
+      "from_room": "FORE2",
+      "from_name": "FORE2",
+      "to_room": "FORE4",
+      "to_name": "FORE4",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "FORE5"
+    },
+    {
+      "from_room": "FORE2",
+      "from_name": "FORE2",
+      "to_room": "FORE1",
+      "to_name": "FORE1",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "FORE3"
+    },
+    {
+      "from_room": "FORE3",
+      "from_name": "FORE3",
+      "to_room": "FORE2",
+      "to_name": "FORE2",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "FORE4"
+    },
+    {
+      "from_room": "FORE3",
+      "from_name": "FORE3",
+      "to_room": "CLEAR",
+      "to_name": "CLEAR",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "CLEAR"
+    },
+    {
+      "from_room": "FORE3",
+      "from_name": "FORE3",
+      "to_room": "NHOUS",
+      "to_name": "NHOUS",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "EHOUS"
+    },
+    {
+      "from_room": "FORE4",
+      "from_name": "FORE4",
+      "to_room": "CLTOP",
+      "to_name": "CLTOP",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "FORE5"
+    },
+    {
+      "from_room": "FORE4",
+      "from_name": "FORE4",
+      "to_room": "FORE4",
+      "to_name": "FORE4",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "FORE5"
+    },
+    {
+      "from_room": "FORE4",
+      "from_name": "FORE4",
+      "to_room": "FORE2",
+      "to_name": "FORE2",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "CLEAR"
+    },
+    {
+      "from_room": "FORE5",
+      "from_name": "FORE5",
+      "to_room": "FORE5",
+      "to_name": "FORE5",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "FORE4"
+    },
+    {
+      "from_room": "FORE5",
+      "from_name": "FORE5",
+      "to_room": "FORE2",
+      "to_name": "FORE2",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "CLEAR"
+    },
+    {
+      "from_room": "CLEAR",
+      "from_name": "CLEAR",
+      "to_room": "CLEAR",
+      "to_name": "CLEAR",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "FORE2"
+    },
+    {
+      "from_room": "CLEAR",
+      "from_name": "CLEAR",
+      "to_room": "CLEAR",
+      "to_name": "CLEAR",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "FORE3"
+    },
+    {
+      "from_room": "CLEAR",
+      "from_name": "CLEAR",
+      "to_room": "FORE2",
+      "to_name": "FORE2",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "SHOUS"
+    },
+    {
+      "from_room": "CELLA",
+      "from_name": "CELLA",
+      "to_room": "CHAS2",
+      "to_name": "CHAS2",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "CRAW4"
+    },
+    {
+      "from_room": "MTROL",
+      "from_name": "MTROL",
+      "to_room": "CRAW4",
+      "to_name": "CRAW4",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MTROL",
+      "from_name": "MTROL",
+      "to_room": "PASS1",
+      "to_name": "PASS1",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MTROL",
+      "from_name": "MTROL",
+      "to_room": "MAZE1",
+      "to_name": "MAZE1",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "MAZE1"
+    },
+    {
+      "from_room": "GALLE",
+      "from_name": "GALLE",
+      "to_room": "STUDI",
+      "to_name": "STUDI",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "GALLE",
+      "from_name": "GALLE",
+      "to_room": "BKENT",
+      "to_name": "BKENT",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZE1",
+      "from_name": "MAZE1",
+      "to_room": "MTROL",
+      "to_name": "MTROL",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "CRAW4"
+    },
+    {
+      "from_room": "MAZE1",
+      "from_name": "MAZE1",
+      "to_room": "MAZE1",
+      "to_name": "MAZE1",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "MAZE2"
+    },
+    {
+      "from_room": "MAZE1",
+      "from_name": "MAZE1",
+      "to_room": "MAZE2",
+      "to_name": "MAZE2",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "MAZE4"
+    },
+    {
+      "from_room": "MAZE1",
+      "from_name": "MAZE1",
+      "to_room": "MAZE4",
+      "to_name": "MAZE4",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "MAZE3"
+    },
+    {
+      "from_room": "MAZE2",
+      "from_name": "MAZE2",
+      "to_room": "MAZE1",
+      "to_name": "MAZE1",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "MAZE1"
+    },
+    {
+      "from_room": "MAZE2",
+      "from_name": "MAZE2",
+      "to_room": "MAZE4",
+      "to_name": "MAZE4",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZE3",
+      "from_name": "MAZE3",
+      "to_room": "MAZE4",
+      "to_name": "MAZE4",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZE3",
+      "from_name": "MAZE3",
+      "to_room": "MAZE5",
+      "to_name": "MAZE5",
+      "direction": "up",
+      "reverse_direction": "down",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZE4",
+      "from_name": "MAZE4",
+      "to_room": "MAZE3",
+      "to_name": "MAZE3",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZE4",
+      "from_name": "MAZE4",
+      "to_room": "MAZE1",
+      "to_name": "MAZE1",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "MAZE2"
+    },
+    {
+      "from_room": "MAZE4",
+      "from_name": "MAZE4",
+      "to_room": "DEAD1",
+      "to_name": "DEAD1",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "DEAD1",
+      "from_name": "DEAD1",
+      "to_room": "MAZE4",
+      "to_name": "MAZE4",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "MAZE1"
+    },
+    {
+      "from_room": "MAZE5",
+      "from_name": "MAZE5",
+      "to_room": "MAZE3",
+      "to_name": "MAZE3",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZE6",
+      "from_name": "MAZE6",
+      "to_room": "MAZE5",
+      "to_name": "MAZE5",
+      "direction": "down",
+      "reverse_direction": "up",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZE6",
+      "from_name": "MAZE6",
+      "to_room": "MAZE6",
+      "to_name": "MAZE6",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "MAZE7"
+    },
+    {
+      "from_room": "MAZE6",
+      "from_name": "MAZE6",
+      "to_room": "MAZE9",
+      "to_name": "MAZE9",
+      "direction": "up",
+      "reverse_direction": "down",
+      "has_reverse": true,
+      "reverse_target": "MAZ10"
+    },
+    {
+      "from_room": "MAZE7",
+      "from_name": "MAZE7",
+      "to_room": "MAZ14",
+      "to_name": "MAZ14",
+      "direction": "up",
+      "reverse_direction": "down",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZE7",
+      "from_name": "MAZE7",
+      "to_room": "MAZE8",
+      "to_name": "MAZE8",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "MAZE8"
+    },
+    {
+      "from_room": "MAZE7",
+      "from_name": "MAZE7",
+      "to_room": "MAZ15",
+      "to_name": "MAZ15",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZE8",
+      "from_name": "MAZE8",
+      "to_room": "MAZE8",
+      "to_name": "MAZE8",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "DEAD3",
+      "from_name": "DEAD3",
+      "to_room": "MAZE8",
+      "to_name": "MAZE8",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZE9",
+      "from_name": "MAZE9",
+      "to_room": "MAZE6",
+      "to_name": "MAZE6",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZE9",
+      "from_name": "MAZE9",
+      "to_room": "MAZ11",
+      "to_name": "MAZ11",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZE9",
+      "from_name": "MAZE9",
+      "to_room": "MAZ10",
+      "to_name": "MAZ10",
+      "direction": "down",
+      "reverse_direction": "up",
+      "has_reverse": true,
+      "reverse_target": "MAZ11"
+    },
+    {
+      "from_room": "MAZE9",
+      "from_name": "MAZE9",
+      "to_room": "MAZ13",
+      "to_name": "MAZ13",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZE9",
+      "from_name": "MAZE9",
+      "to_room": "MAZ12",
+      "to_name": "MAZ12",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "MAZ13"
+    },
+    {
+      "from_room": "MAZ10",
+      "from_name": "MAZ10",
+      "to_room": "MAZE9",
+      "to_name": "MAZE9",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "MAZ12"
+    },
+    {
+      "from_room": "MAZ10",
+      "from_name": "MAZ10",
+      "to_room": "MAZ13",
+      "to_name": "MAZ13",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "MAZE9"
+    },
+    {
+      "from_room": "MAZ12",
+      "from_name": "MAZ12",
+      "to_room": "MAZE5",
+      "to_name": "MAZE5",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "DEAD2"
+    },
+    {
+      "from_room": "MAZ12",
+      "from_name": "MAZ12",
+      "to_room": "MAZ13",
+      "to_name": "MAZ13",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "MAZ11"
+    },
+    {
+      "from_room": "MAZ12",
+      "from_name": "MAZ12",
+      "to_room": "MAZE9",
+      "to_name": "MAZE9",
+      "direction": "up",
+      "reverse_direction": "down",
+      "has_reverse": true,
+      "reverse_target": "MAZ10"
+    },
+    {
+      "from_room": "MAZ13",
+      "from_name": "MAZ13",
+      "to_room": "MAZE9",
+      "to_name": "MAZE9",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "MAZ12"
+    },
+    {
+      "from_room": "MAZ13",
+      "from_name": "MAZ13",
+      "to_room": "MAZ12",
+      "to_name": "MAZ12",
+      "direction": "down",
+      "reverse_direction": "up",
+      "has_reverse": true,
+      "reverse_target": "MAZE9"
+    },
+    {
+      "from_room": "MAZ13",
+      "from_name": "MAZ13",
+      "to_room": "MAZ10",
+      "to_name": "MAZ10",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZ13",
+      "from_name": "MAZ13",
+      "to_room": "MAZ11",
+      "to_name": "MAZ11",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZ14",
+      "from_name": "MAZ14",
+      "to_room": "MAZ15",
+      "to_name": "MAZ15",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZ14",
+      "from_name": "MAZ14",
+      "to_room": "MAZE7",
+      "to_name": "MAZE7",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZ15",
+      "from_name": "MAZ15",
+      "to_room": "MAZ14",
+      "to_name": "MAZ14",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MAZ15",
+      "from_name": "MAZ15",
+      "to_room": "MAZE7",
+      "to_name": "MAZE7",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CYCLO",
+      "from_name": "CYCLO",
+      "to_room": "MAZ15",
+      "to_name": "MAZ15",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "TREAS",
+      "from_name": "TREAS",
+      "to_room": "CPANT",
+      "to_name": "CPANT",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RAVI1",
+      "from_name": "RAVI1",
+      "to_room": "RESES",
+      "to_name": "RESES",
+      "direction": "down",
+      "reverse_direction": "up",
+      "has_reverse": true,
+      "reverse_target": "CANY1"
+    },
+    {
+      "from_room": "RAVI1",
+      "from_name": "RAVI1",
+      "to_room": "CHAS1",
+      "to_name": "CHAS1",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RAVI1",
+      "from_name": "RAVI1",
+      "to_room": "CRAW1",
+      "to_name": "CRAW1",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "DOME"
+    },
+    {
+      "from_room": "CRAW1",
+      "from_name": "CRAW1",
+      "to_room": "RAVI1",
+      "to_name": "RAVI1",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "CHAS1"
+    },
+    {
+      "from_room": "CRAW1",
+      "from_name": "CRAW1",
+      "to_room": "DOME",
+      "to_name": "DOME",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RESES",
+      "from_name": "RESES",
+      "to_room": "RAVI1",
+      "to_name": "RAVI1",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RESES",
+      "from_name": "RESES",
+      "to_room": "CANY1",
+      "to_name": "CANY1",
+      "direction": "up",
+      "reverse_direction": "down",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RESEN",
+      "from_name": "RESEN",
+      "to_room": "ATLAN",
+      "to_name": "ATLAN",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "STREA",
+      "from_name": "STREA",
+      "to_room": "ICY",
+      "to_name": "ICY",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "EGYPT",
+      "from_name": "EGYPT",
+      "to_room": "ICY",
+      "to_name": "ICY",
+      "direction": "up",
+      "reverse_direction": "down",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "EGYPT",
+      "from_name": "EGYPT",
+      "to_room": "LEDG3",
+      "to_name": "LEDG3",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "EGYPT",
+      "from_name": "EGYPT",
+      "to_room": "CRAW1",
+      "to_name": "CRAW1",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "RAVI1"
+    },
+    {
+      "from_room": "ICY",
+      "from_name": "ICY",
+      "to_room": "STREA",
+      "to_name": "STREA",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "ICY",
+      "from_name": "ICY",
+      "to_room": "EGYPT",
+      "to_name": "EGYPT",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "ICY",
+      "from_name": "ICY",
+      "to_room": "RUBYR",
+      "to_name": "RUBYR",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RUBYR",
+      "from_name": "RUBYR",
+      "to_room": "LAVA",
+      "to_name": "LAVA",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RUBYR",
+      "from_name": "RUBYR",
+      "to_room": "ICY",
+      "to_name": "ICY",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "STREA"
+    },
+    {
+      "from_room": "CANY1",
+      "from_name": "CANY1",
+      "to_room": "DAM",
+      "to_name": "DAM",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CANY1",
+      "from_name": "CANY1",
+      "to_room": "CAROU",
+      "to_name": "CAROU",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "ECHO",
+      "from_name": "ECHO",
+      "to_room": "CHAS3",
+      "to_name": "CHAS3",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "DEAD6"
+    },
+    {
+      "from_room": "ECHO",
+      "from_name": "ECHO",
+      "to_room": "PASS5",
+      "to_name": "PASS5",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "ECHO",
+      "from_name": "ECHO",
+      "to_room": "CAVE3",
+      "to_name": "CAVE3",
+      "direction": "up",
+      "reverse_direction": "down",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MIRR1",
+      "from_name": "MIRR1",
+      "to_room": "CAVE1",
+      "to_name": "CAVE1",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MIRR2",
+      "from_name": "MIRR2",
+      "to_room": "CRAW3",
+      "to_name": "CRAW3",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "CAVE2"
+    },
+    {
+      "from_room": "CAVE1",
+      "from_name": "CAVE1",
+      "to_room": "MIRR1",
+      "to_name": "MIRR1",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CRAW3",
+      "from_name": "CRAW3",
+      "to_room": "MGRAI",
+      "to_name": "MGRAI",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "PASS3",
+      "from_name": "PASS3",
+      "to_room": "SLIDE",
+      "to_name": "SLIDE",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "PASS3",
+      "from_name": "PASS3",
+      "to_room": "CRAW2",
+      "to_name": "CRAW2",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "MIRR1"
+    },
+    {
+      "from_room": "ENTRA",
+      "from_name": "ENTRA",
+      "to_room": "SLIDE",
+      "to_name": "SLIDE",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "SQUEE",
+      "from_name": "SQUEE",
+      "to_room": "ENTRA",
+      "to_name": "ENTRA",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "TSHAF",
+      "from_name": "TSHAF",
+      "to_room": "ENTRA",
+      "to_name": "ENTRA",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "BLADD",
+      "from_name": "BLADD",
+      "to_room": "TIMBE",
+      "to_name": "TIMBE",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "DEAD7",
+      "from_name": "DEAD7",
+      "to_room": "BLADD",
+      "to_name": "BLADD",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "BSHAF",
+      "from_name": "BSHAF",
+      "to_room": "MACHI",
+      "to_name": "MACHI",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MINE1",
+      "from_name": "MINE1",
+      "to_room": "TUNNE",
+      "to_name": "TUNNE",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "SMELL"
+    },
+    {
+      "from_room": "MINE2",
+      "from_name": "MINE2",
+      "to_room": "MINE1",
+      "to_name": "MINE1",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "MINE4"
+    },
+    {
+      "from_room": "MINE2",
+      "from_name": "MINE2",
+      "to_room": "MINE5",
+      "to_name": "MINE5",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "MINE4"
+    },
+    {
+      "from_room": "MINE2",
+      "from_name": "MINE2",
+      "to_room": "MINE3",
+      "to_name": "MINE3",
+      "direction": "up",
+      "reverse_direction": "down",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MINE3",
+      "from_name": "MINE3",
+      "to_room": "MINE2",
+      "to_name": "MINE2",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MINE3",
+      "from_name": "MINE3",
+      "to_room": "MINE5",
+      "to_name": "MINE5",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "MINE2"
+    },
+    {
+      "from_room": "MINE4",
+      "from_name": "MINE4",
+      "to_room": "MINE5",
+      "to_name": "MINE5",
+      "direction": "up",
+      "reverse_direction": "down",
+      "has_reverse": true,
+      "reverse_target": "MINE6"
+    },
+    {
+      "from_room": "MINE4",
+      "from_name": "MINE4",
+      "to_room": "MINE2",
+      "to_name": "MINE2",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MINE5",
+      "from_name": "MINE5",
+      "to_room": "MINE7",
+      "to_name": "MINE7",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "MINE6"
+    },
+    {
+      "from_room": "MINE5",
+      "from_name": "MINE5",
+      "to_room": "MINE2",
+      "to_name": "MINE2",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MINE5",
+      "from_name": "MINE5",
+      "to_room": "MINE3",
+      "to_name": "MINE3",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MINE5",
+      "from_name": "MINE5",
+      "to_room": "MINE3",
+      "to_name": "MINE3",
+      "direction": "up",
+      "reverse_direction": "down",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MINE5",
+      "from_name": "MINE5",
+      "to_room": "MINE4",
+      "to_name": "MINE4",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "MINE2"
+    },
+    {
+      "from_room": "MINE7",
+      "from_name": "MINE7",
+      "to_room": "MINE1",
+      "to_name": "MINE1",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MINE7",
+      "from_name": "MINE7",
+      "to_room": "MINE5",
+      "to_name": "MINE5",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "MINE4"
+    },
+    {
+      "from_room": "MINE7",
+      "from_name": "MINE7",
+      "to_room": "MINE6",
+      "to_name": "MINE6",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "DOME",
+      "from_name": "DOME",
+      "to_room": "CRAW1",
+      "to_name": "CRAW1",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "RAVI1"
+    },
+    {
+      "from_room": "DOME",
+      "from_name": "DOME",
+      "to_room": "MTORC",
+      "to_name": "MTORC",
+      "direction": "down",
+      "reverse_direction": "up",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MTORC",
+      "from_name": "MTORC",
+      "to_room": "CRAW4",
+      "to_name": "CRAW4",
+      "direction": "down",
+      "reverse_direction": "up",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CRAW4",
+      "from_name": "CRAW4",
+      "to_room": "CHAS2",
+      "to_name": "CHAS2",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "GALLE"
+    },
+    {
+      "from_room": "CRAW4",
+      "from_name": "CRAW4",
+      "to_room": "STUDI",
+      "to_name": "STUDI",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CRAW4",
+      "from_name": "CRAW4",
+      "to_room": "MTROL",
+      "to_name": "MTROL",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "CELLA"
+    },
+    {
+      "from_room": "CHAS2",
+      "from_name": "CHAS2",
+      "to_room": "CELLA",
+      "to_name": "CELLA",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "MTROL"
+    },
+    {
+      "from_room": "CHAS2",
+      "from_name": "CHAS2",
+      "to_room": "CRAW4",
+      "to_name": "CRAW4",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "STUDI"
+    },
+    {
+      "from_room": "PASS1",
+      "from_name": "PASS1",
+      "to_room": "CAROU",
+      "to_name": "CAROU",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "PASS1",
+      "from_name": "PASS1",
+      "to_room": "MTROL",
+      "to_name": "MTROL",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "CRAW4"
+    },
+    {
+      "from_room": "PASS1",
+      "from_name": "PASS1",
+      "to_room": "RAVI1",
+      "to_name": "RAVI1",
+      "direction": "down",
+      "reverse_direction": "up",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "PASS5",
+      "from_name": "PASS5",
+      "to_room": "CHAS1",
+      "to_name": "CHAS1",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "RAVI1"
+    },
+    {
+      "from_room": "PASS5",
+      "from_name": "PASS5",
+      "to_room": "CAROU",
+      "to_name": "CAROU",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CHAS1",
+      "from_name": "CHAS1",
+      "to_room": "RAVI1",
+      "to_name": "RAVI1",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CHAS1",
+      "from_name": "CHAS1",
+      "to_room": "PASS5",
+      "to_name": "PASS5",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CAVE3",
+      "from_name": "CAVE3",
+      "to_room": "ECHO",
+      "to_name": "ECHO",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CAVE3",
+      "from_name": "CAVE3",
+      "to_room": "DAM",
+      "to_name": "DAM",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CHAS3",
+      "from_name": "CHAS3",
+      "to_room": "ECHO",
+      "to_name": "ECHO",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CHAS3",
+      "from_name": "CHAS3",
+      "to_room": "TCAVE",
+      "to_name": "TCAVE",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CHAS3",
+      "from_name": "CHAS3",
+      "to_room": "DEAD5",
+      "to_name": "DEAD5",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CAVE4",
+      "from_name": "CAVE4",
+      "to_room": "CAROU",
+      "to_name": "CAROU",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RIDDL",
+      "from_name": "RIDDL",
+      "to_room": "CAVE4",
+      "to_name": "CAVE4",
+      "direction": "down",
+      "reverse_direction": "up",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MGRAI",
+      "from_name": "MGRAI",
+      "to_room": "CAROU",
+      "to_name": "CAROU",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MGRAI",
+      "from_name": "MGRAI",
+      "to_room": "CRAW3",
+      "to_name": "CRAW3",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "MGRAI",
+      "from_name": "MGRAI",
+      "to_room": "TEMP1",
+      "to_name": "TEMP1",
+      "direction": "up",
+      "reverse_direction": "down",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "TEMP1",
+      "from_name": "TEMP1",
+      "to_room": "MGRAI",
+      "to_name": "MGRAI",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "CRAW3"
+    },
+    {
+      "from_room": "DAM",
+      "from_name": "DAM",
+      "to_room": "CANY1",
+      "to_name": "CANY1",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "DAM",
+      "from_name": "DAM",
+      "to_room": "CAVE3",
+      "to_name": "CAVE3",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "DOCK",
+      "from_name": "DOCK",
+      "to_room": "DAM",
+      "to_name": "DAM",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "CANY1"
+    },
+    {
+      "from_room": "RIVR1",
+      "from_name": "RIVR1",
+      "to_room": "DOCK",
+      "to_name": "DOCK",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RIVR1",
+      "from_name": "RIVR1",
+      "to_room": "RIVR2",
+      "to_name": "RIVR2",
+      "direction": "down",
+      "reverse_direction": "up",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RIVR2",
+      "from_name": "RIVR2",
+      "to_room": "RIVR3",
+      "to_name": "RIVR3",
+      "direction": "down",
+      "reverse_direction": "up",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RIVR3",
+      "from_name": "RIVR3",
+      "to_room": "RIVR4",
+      "to_name": "RIVR4",
+      "direction": "down",
+      "reverse_direction": "up",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RIVR3",
+      "from_name": "RIVR3",
+      "to_room": "WCLF1",
+      "to_name": "WCLF1",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RIVR3",
+      "from_name": "RIVR3",
+      "to_room": "RCAVE",
+      "to_name": "RCAVE",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RIVR4",
+      "from_name": "RIVR4",
+      "to_room": "RIVR5",
+      "to_name": "RIVR5",
+      "direction": "down",
+      "reverse_direction": "up",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RIVR4",
+      "from_name": "RIVR4",
+      "to_room": "WCLF2",
+      "to_name": "WCLF2",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RIVR4",
+      "from_name": "RIVR4",
+      "to_room": "BEACH",
+      "to_name": "BEACH",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RIVR5",
+      "from_name": "RIVR5",
+      "to_room": "FCHMP",
+      "to_name": "FCHMP",
+      "direction": "down",
+      "reverse_direction": "up",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "TCAVE",
+      "from_name": "TCAVE",
+      "to_room": "RCAVE",
+      "to_name": "RCAVE",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "FALLS",
+      "from_name": "FALLS",
+      "to_room": "RAINB",
+      "to_name": "RAINB",
+      "direction": "up",
+      "reverse_direction": "down",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "RAINB",
+      "from_name": "RAINB",
+      "to_room": "POG",
+      "to_name": "POG",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CLBOT",
+      "from_name": "CLBOT",
+      "to_room": "POG",
+      "to_name": "POG",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CLTOP",
+      "from_name": "CLTOP",
+      "to_room": "FORE4",
+      "to_name": "FORE4",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "FORE5"
+    },
+    {
+      "from_room": "CLTOP",
+      "from_name": "CLTOP",
+      "to_room": "FORE5",
+      "to_name": "FORE5",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "VAIR2",
+      "from_name": "VAIR2",
+      "to_room": "LEDG2",
+      "to_name": "LEDG2",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "VAIR4",
+      "from_name": "VAIR4",
+      "to_room": "LEDG4",
+      "to_name": "LEDG4",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "LEDG3",
+      "from_name": "LEDG3",
+      "to_room": "EGYPT",
+      "to_name": "EGYPT",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "LAVA",
+      "from_name": "LAVA",
+      "to_room": "RUBYR",
+      "to_name": "RUBYR",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CMACH",
+      "from_name": "CMACH",
+      "to_room": "MAGNE",
+      "to_name": "MAGNE",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "BKENT",
+      "from_name": "BKENT",
+      "to_room": "GALLE",
+      "to_name": "GALLE",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "CHAS2"
+    },
+    {
+      "from_room": "BKTW",
+      "from_name": "BKTW",
+      "to_room": "BKVW",
+      "to_name": "BKVW",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "BKENT"
+    },
+    {
+      "from_room": "BKTW",
+      "from_name": "BKTW",
+      "to_room": "BKENT",
+      "to_name": "BKENT",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "BKTW",
+      "from_name": "BKTW",
+      "to_room": "BKBOX",
+      "to_name": "BKBOX",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "BKTE",
+      "from_name": "BKTE",
+      "to_room": "BKVE",
+      "to_name": "BKVE",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "BKENT"
+    },
+    {
+      "from_room": "BKTE",
+      "from_name": "BKTE",
+      "to_room": "BKENT",
+      "to_name": "BKENT",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "BKTE",
+      "from_name": "BKTE",
+      "to_room": "BKBOX",
+      "to_name": "BKBOX",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "BKVW",
+      "from_name": "BKVW",
+      "to_room": "BKENT",
+      "to_name": "BKENT",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "BKVE",
+      "from_name": "BKVE",
+      "to_room": "BKENT",
+      "to_name": "BKENT",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "BKEXE",
+      "from_name": "BKEXE",
+      "to_room": "BKBOX",
+      "to_name": "BKBOX",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CPOUT",
+      "from_name": "CPOUT",
+      "to_room": "CPANT",
+      "to_name": "CPANT",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "CPOUT",
+      "from_name": "CPOUT",
+      "to_room": "CP",
+      "to_name": "CP",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "SLID1",
+      "from_name": "SLID1",
+      "to_room": "SLIDE",
+      "to_name": "SLIDE",
+      "direction": "up",
+      "reverse_direction": "down",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "SLID3",
+      "from_name": "SLID3",
+      "to_room": "CELLA",
+      "to_name": "CELLA",
+      "direction": "down",
+      "reverse_direction": "up",
+      "has_reverse": true,
+      "reverse_target": "LROOM"
+    },
+    {
+      "from_room": "SLID3",
+      "from_name": "SLID3",
+      "to_room": "SLEDG",
+      "to_name": "SLEDG",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "SLEDG",
+      "from_name": "SLEDG",
+      "to_room": "CELLA",
+      "to_name": "CELLA",
+      "direction": "down",
+      "reverse_direction": "up",
+      "has_reverse": true,
+      "reverse_target": "LROOM"
+    },
+    {
+      "from_room": "SLEDG",
+      "from_name": "SLEDG",
+      "to_room": "SLID2",
+      "to_name": "SLID2",
+      "direction": "up",
+      "reverse_direction": "down",
+      "has_reverse": true,
+      "reverse_target": "SLID3"
+    },
+    {
+      "from_room": "MRCE",
+      "from_name": "MRCE",
+      "to_room": "INMIR",
+      "to_name": "INMIR",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "MRA"
+    },
+    {
+      "from_room": "MRCE",
+      "from_name": "MRCE",
+      "to_room": "MRG",
+      "to_name": "MRG",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "MRC"
+    },
+    {
+      "from_room": "MRCE",
+      "from_name": "MRCE",
+      "to_room": "MRB",
+      "to_name": "MRB",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "MRC"
+    },
+    {
+      "from_room": "MRCW",
+      "from_name": "MRCW",
+      "to_room": "INMIR",
+      "to_name": "INMIR",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "MRA"
+    },
+    {
+      "from_room": "MRCW",
+      "from_name": "MRCW",
+      "to_room": "MRG",
+      "to_name": "MRG",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "MRC"
+    },
+    {
+      "from_room": "MRCW",
+      "from_name": "MRCW",
+      "to_room": "MRB",
+      "to_name": "MRB",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "MRC"
+    },
+    {
+      "from_room": "MRBE",
+      "from_name": "MRBE",
+      "to_room": "INMIR",
+      "to_name": "INMIR",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "MRA"
+    },
+    {
+      "from_room": "MRBE",
+      "from_name": "MRBE",
+      "to_room": "MRC",
+      "to_name": "MRC",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "MRB"
+    },
+    {
+      "from_room": "MRBE",
+      "from_name": "MRBE",
+      "to_room": "MRA",
+      "to_name": "MRA",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "MRB"
+    },
+    {
+      "from_room": "MRBW",
+      "from_name": "MRBW",
+      "to_room": "INMIR",
+      "to_name": "INMIR",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "MRA"
+    },
+    {
+      "from_room": "MRBW",
+      "from_name": "MRBW",
+      "to_room": "MRC",
+      "to_name": "MRC",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "MRB"
+    },
+    {
+      "from_room": "MRBW",
+      "from_name": "MRBW",
+      "to_room": "MRA",
+      "to_name": "MRA",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "MRB"
+    },
+    {
+      "from_room": "MRAE",
+      "from_name": "MRAE",
+      "to_room": "INMIR",
+      "to_name": "INMIR",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": true,
+      "reverse_target": "MRA"
+    },
+    {
+      "from_room": "MRAE",
+      "from_name": "MRAE",
+      "to_room": "MRB",
+      "to_name": "MRB",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "MRA"
+    },
+    {
+      "from_room": "MRAE",
+      "from_name": "MRAE",
+      "to_room": "MREYE",
+      "to_name": "MREYE",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "MRA"
+    },
+    {
+      "from_room": "MRAW",
+      "from_name": "MRAW",
+      "to_room": "INMIR",
+      "to_name": "INMIR",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": true,
+      "reverse_target": "MRA"
+    },
+    {
+      "from_room": "MRAW",
+      "from_name": "MRAW",
+      "to_room": "MRB",
+      "to_name": "MRB",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "MRA"
+    },
+    {
+      "from_room": "MRAW",
+      "from_name": "MRAW",
+      "to_room": "MREYE",
+      "to_name": "MREYE",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "MRA"
+    },
+    {
+      "from_room": "INMIR",
+      "from_name": "INMIR",
+      "to_room": "MRA",
+      "to_name": "MRA",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "MREYE"
+    },
+    {
+      "from_room": "INMIR",
+      "from_name": "INMIR",
+      "to_room": "MRA",
+      "to_name": "MRA",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "MRB"
+    },
+    {
+      "from_room": "INMIR",
+      "from_name": "INMIR",
+      "to_room": "MRA",
+      "to_name": "MRA",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "INMIR",
+      "from_name": "INMIR",
+      "to_room": "MRA",
+      "to_name": "MRA",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "TOMB",
+      "from_name": "TOMB",
+      "to_room": "FDOOR",
+      "to_name": "FDOOR",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "MRD"
+    },
+    {
+      "from_room": "CRYPT",
+      "from_name": "CRYPT",
+      "to_room": "FDOOR",
+      "to_name": "FDOOR",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "FDOOR"
+    },
+    {
+      "from_room": "ECORR",
+      "from_name": "ECORR",
+      "to_room": "NCORR",
+      "to_name": "NCORR",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "FDOOR"
+    },
+    {
+      "from_room": "ECORR",
+      "from_name": "ECORR",
+      "to_room": "SCORR",
+      "to_name": "SCORR",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "FDOOR"
+    },
+    {
+      "from_room": "WCORR",
+      "from_name": "WCORR",
+      "to_room": "NCORR",
+      "to_name": "NCORR",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "FDOOR"
+    },
+    {
+      "from_room": "WCORR",
+      "from_name": "WCORR",
+      "to_room": "SCORR",
+      "to_name": "SCORR",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "FDOOR"
+    },
+    {
+      "from_room": "SCORR",
+      "from_name": "SCORR",
+      "to_room": "WCORR",
+      "to_name": "WCORR",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "SCORR",
+      "from_name": "SCORR",
+      "to_room": "ECORR",
+      "to_name": "ECORR",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "SCORR",
+      "from_name": "SCORR",
+      "to_room": "FDOOR",
+      "to_name": "FDOOR",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "MRD"
+    },
+    {
+      "from_room": "BDOOR",
+      "from_name": "BDOOR",
+      "to_room": "FDOOR",
+      "to_name": "FDOOR",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "FDOOR"
+    },
+    {
+      "from_room": "FDOOR",
+      "from_name": "FDOOR",
+      "to_room": "FDOOR",
+      "to_name": "FDOOR",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "MRD"
+    },
+    {
+      "from_room": "NCORR",
+      "from_name": "NCORR",
+      "to_room": "ECORR",
+      "to_name": "ECORR",
+      "direction": "east",
+      "reverse_direction": "west",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "NCORR",
+      "from_name": "NCORR",
+      "to_room": "WCORR",
+      "to_name": "WCORR",
+      "direction": "west",
+      "reverse_direction": "east",
+      "has_reverse": false,
+      "reverse_target": null
+    },
+    {
+      "from_room": "NCORR",
+      "from_name": "NCORR",
+      "to_room": "FDOOR",
+      "to_name": "FDOOR",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "FDOOR"
+    },
+    {
+      "from_room": "CELL",
+      "from_name": "CELL",
+      "to_room": "FDOOR",
+      "to_name": "FDOOR",
+      "direction": "north",
+      "reverse_direction": "south",
+      "has_reverse": true,
+      "reverse_target": "MRD"
+    },
+    {
+      "from_room": "CELL",
+      "from_name": "CELL",
+      "to_room": "FDOOR",
+      "to_name": "FDOOR",
+      "direction": "south",
+      "reverse_direction": "north",
+      "has_reverse": true,
+      "reverse_target": "FDOOR"
+    }
+  ],
+  "invalid_exits": [],
+  "connectivity_map": {
+    "total_rooms": 196,
+    "total_exits": 487,
+    "rooms_by_exit_count": {
+      "3": 55,
+      "5": 7,
+      "4": 27,
+      "1": 29,
+      "7": 3,
+      "0": 22,
+      "6": 4,
+      "2": 48,
+      "9": 1
+    },
+    "most_connected_rooms": [
+      {
+        "room_id": "INMIR",
+        "room_name": "INMIR",
+        "exit_count": 9,
+        "exits": {
+          "north": "MRA",
+          "south": "MRA",
+          "east": "MRA",
+          "west": "MRA",
+          "ne": "MRA",
+          "nw": "MRA",
+          "se": "MRA",
+          "sw": "MRA",
+          "exit": "MRA"
+        }
+      },
+      {
+        "room_id": "CLEAR",
+        "room_name": "CLEAR",
+        "exit_count": 7,
+        "exits": {
+          "sw": "EHOUS",
+          "se": "FORE5",
+          "north": "CLEAR",
+          "east": "CLEAR",
+          "west": "FORE3",
+          "south": "FORE2",
+          "down": "MGRAT"
+        }
+      },
+      {
+        "room_id": "MRC",
+        "room_name": "MRC",
+        "exit_count": 7,
+        "exits": {
+          "north": "MRG",
+          "nw": "MRG",
+          "ne": "MRG",
+          "enter": "INMIR",
+          "south": "MRB",
+          "sw": "MRB",
+          "se": "MRB"
+        }
+      },
+      {
+        "room_id": "MRB",
+        "room_name": "MRB",
+        "exit_count": 7,
+        "exits": {
+          "north": "MRC",
+          "nw": "MRC",
+          "ne": "MRC",
+          "enter": "INMIR",
+          "south": "MRA",
+          "sw": "MRA",
+          "se": "MRA"
+        }
+      },
+      {
+        "room_id": "MAZE9",
+        "room_name": "MAZE9",
+        "exit_count": 6,
+        "exits": {
+          "north": "MAZE6",
+          "east": "MAZ11",
+          "down": "MAZ10",
+          "south": "MAZ13",
+          "west": "MAZ12",
+          "nw": "MAZE9"
+        }
+      },
+      {
+        "room_id": "RESES",
+        "room_name": "RESES",
+        "exit_count": 6,
+        "exits": {
+          "south": "RAVI1",
+          "west": "STREA",
+          "cross": "RESER",
+          "north": "RESER",
+          "launc": "RESER",
+          "up": "CANY1"
+        }
+      },
+      {
+        "room_id": "MINE5",
+        "room_name": "MINE5",
+        "exit_count": 6,
+        "exits": {
+          "down": "MINE6",
+          "north": "MINE7",
+          "west": "MINE2",
+          "south": "MINE3",
+          "up": "MINE3",
+          "east": "MINE4"
+        }
+      },
+      {
+        "room_id": "MRD",
+        "room_name": "MRD",
+        "exit_count": 6,
+        "exits": {
+          "north": "FDOOR",
+          "ne": "FDOOR",
+          "nw": "FDOOR",
+          "south": "MRG",
+          "se": "MRG",
+          "sw": "MRG"
+        }
+      },
+      {
+        "room_id": "EHOUS",
+        "room_name": "EHOUS",
+        "exit_count": 5,
+        "exits": {
+          "north": "NHOUS",
+          "south": "SHOUS",
+          "east": "CLEAR",
+          "west": "KITCH",
+          "enter": "KITCH"
+        }
+      },
+      {
+        "room_id": "FORE3",
+        "room_name": "FORE3",
+        "exit_count": 5,
+        "exits": {
+          "up": "TREE",
+          "north": "FORE2",
+          "east": "CLEAR",
+          "south": "CLEAR",
+          "west": "NHOUS"
+        }
+      }
+    ],
+    "least_connected_rooms": [
+      {
+        "room_id": "CP",
+        "room_name": "CP",
+        "exit_count": 0,
+        "exits": {}
+      },
+      {
+        "room_id": "PALAN",
+        "room_name": "PALAN",
+        "exit_count": 0,
+        "exits": {}
+      },
+      {
+        "room_id": "SLIDE",
+        "room_name": "SLIDE",
+        "exit_count": 0,
+        "exits": {}
+      },
+      {
+        "room_id": "MRDE",
+        "room_name": "MRDE",
+        "exit_count": 0,
+        "exits": {}
+      },
+      {
+        "room_id": "MRDW",
+        "room_name": "MRDW",
+        "exit_count": 0,
+        "exits": {}
+      },
+      {
+        "room_id": "MRGE",
+        "room_name": "MRGE",
+        "exit_count": 0,
+        "exits": {}
+      },
+      {
+        "room_id": "MRGW",
+        "room_name": "MRGW",
+        "exit_count": 0,
+        "exits": {}
+      },
+      {
+        "room_id": "PCELL",
+        "room_name": "PCELL",
+        "exit_count": 0,
+        "exits": {}
+      },
+      {
+        "room_id": "NCELL",
+        "room_name": "NCELL",
+        "exit_count": 0,
+        "exits": {}
+      },
+      {
+        "room_id": "NIRVA",
+        "room_name": "NIRVA",
+        "exit_count": 0,
+        "exits": {}
+      }
+    ],
+    "average_connections": 2.4846938775510203
+  },
+  "major_areas": {
+    "House Area": [
+      "WHOUS",
+      "NHOUS",
+      "SHOUS",
+      "EHOUS",
+      "KITCH",
+      "ATTIC",
+      "LROOM"
+    ],
+    "Forest Area": [
+      "FORE1",
+      "FORE2",
+      "FORE3",
+      "FORE4",
+      "FORE5",
+      "TREE",
+      "CLEAR"
+    ],
+    "Cellar/Underground": [
+      "CELLA",
+      "MTROL",
+      "STUDI",
+      "GALLE"
+    ],
+    "Maze Complex": [
+      "MAZE1",
+      "MAZE2",
+      "MAZE3",
+      "MAZE4",
+      "MAZE5",
+      "MAZE6",
+      "MAZE7",
+      "MAZE8",
+      "MAZE9",
+      "MAZ10",
+      "MAZ11",
+      "MAZ12",
+      "MAZ13",
+      "MAZ14",
+      "MAZ15",
+      "DEAD1",
+      "DEAD2",
+      "DEAD3",
+      "DEAD4",
+      "DEAD5",
+      "DEAD6",
+      "DEAD7"
+    ],
+    "Cyclops/Treasure Area": [
+      "CYCLO",
+      "BLROO",
+      "TREAS",
+      "MGRAT"
+    ],
+    "River/Water Area": [
+      "RIVR1",
+      "RIVR2",
+      "RIVR3",
+      "RIVR4",
+      "RIVR5",
+      "DAM",
+      "LOBBY",
+      "MAINT",
+      "DOCK",
+      "FALLS",
+      "RAINB"
+    ],
+    "Cliff/Mountain Area": [
+      "CLBOT",
+      "CLMID",
+      "CLTOP",
+      "LEDG2",
+      "LEDG3",
+      "LEDG4"
+    ],
+    "Mirror Room Complex": [
+      "MIRR1",
+      "MIRR2",
+      "INMIR",
+      "MRANT",
+      "MREYE"
+    ],
+    "Temple/Egypt Area": [
+      "EGYPT",
+      "TEMP1",
+      "TEMP2"
+    ],
+    "Atlantis Area": [
+      "ATLAN"
+    ],
+    "Volcano/Lava Area": [
+      "VLBOT",
+      "VAIR1",
+      "VAIR2",
+      "VAIR3",
+      "VAIR4",
+      "LAVA",
+      "MAGNE"
+    ],
+    "Machine/Tech Area": [
+      "MACHI",
+      "CMACH"
+    ],
+    "Tomb/Crypt Area": [
+      "TOMB",
+      "CRYPT",
+      "TSTRS"
+    ],
+    "Corridor Complex": [
+      "ECORR",
+      "WCORR",
+      "SCORR",
+      "NCORR",
+      "BDOOR",
+      "FDOOR"
+    ],
+    "Prison/Cell Area": [
+      "PARAP",
+      "CELL",
+      "PCELL",
+      "NCELL"
+    ],
+    "Book/Library Area": [
+      "BKENT",
+      "BKTW",
+      "BKTE",
+      "BKVW",
+      "BKVE",
+      "BKTWI",
+      "BKVAU",
+      "BKBOX",
+      "BKEXE",
+      "ALICE",
+      "ALISM",
+      "ALITR",
+      "LIBRA"
+    ],
+    "Carousel Area": [
+      "CAROU",
+      "PASS1",
+      "PASS5"
+    ],
+    "Slide Area": [
+      "SLIDE",
+      "SLID1",
+      "SLID2",
+      "SLID3",
+      "SLEDG",
+      "SPAL"
+    ],
+    "Coal Mine": [
+      "MINE1",
+      "MINE2",
+      "MINE3",
+      "MINE4",
+      "MINE5",
+      "MINE6",
+      "MINE7",
+      "DOME",
+      "MTORC"
+    ],
+    "Shaft Areas": [
+      "TSHAF",
+      "BSHAF"
+    ]
+  }
+}

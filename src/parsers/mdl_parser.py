@@ -82,80 +82,32 @@ class MDLParser:
         long_description = ""
         short_name = room_id  # Default fallback
         
-        if len(quoted_strings) >= 2:
+        if len(quoted_strings) >= 3:
+            # Skip index 0 (room ID), get actual data
             # First string after ID is long description (can be empty)
-            long_description = quoted_strings[0].strip()
+            long_description = quoted_strings[1].strip()
             
-            # Second string is short name
-            short_name = quoted_strings[1].strip()
+            # Second string after ID is short name
+            short_name = quoted_strings[2].strip()
             
-            # If short name is empty, try to generate from long description or use fallback
+            # If short name is empty, generate from description or use fallback
             if not short_name:
-                if long_description:
-                    # Try to extract a reasonable name from description
-                    if "west of" in long_description.lower() and "house" in long_description.lower():
-                        short_name = "West of House"
-                    elif "north of" in long_description.lower() and "house" in long_description.lower():
-                        short_name = "North of House"
-                    elif "south of" in long_description.lower() and "house" in long_description.lower():
-                        short_name = "South of House"
-                    elif "behind" in long_description.lower() and "house" in long_description.lower():
-                        short_name = "Behind House"
-                    elif "east of" in long_description.lower() and "house" in long_description.lower():
-                        short_name = "East of House"
-                    elif "kitchen" in long_description.lower():
-                        short_name = "Kitchen"
-                    elif "attic" in long_description.lower():
-                        short_name = "Attic"
-                    elif "living room" in long_description.lower():
-                        short_name = "Living Room"
-                    else:
-                        # Use first few words of description as name
-                        words = long_description.split()[:3]
-                        short_name = " ".join(words).replace(",", "").replace(".", "")
-                else:
-                    short_name = room_id
-        elif len(quoted_strings) >= 1:
-            # Only one string - use as both description and name basis
-            long_description = quoted_strings[0].strip()
-            if long_description:
-                # Use description to infer name
-                if "west of" in long_description.lower():
-                    short_name = "West of House"
-                elif "north of" in long_description.lower():
-                    short_name = "North of House"
-                else:
-                    words = long_description.split()[:3]
-                    short_name = " ".join(words).replace(",", "").replace(".", "")
-            else:
-                short_name = room_id
+                short_name = self._generate_room_name(long_description, room_id)
+                
+        elif len(quoted_strings) >= 2:
+            # Only two strings - room ID and one other (use as description)
+            long_description = quoted_strings[1].strip()
+            short_name = self._generate_room_name(long_description, room_id)
 
-        # If we still don't have a good name, try some common ID mappings
+        # If we still don't have a good name, use ID mappings
         if short_name == room_id:
-            name_mappings = {
-                "WHOUS": "West of House",
-                "NHOUS": "North of House", 
-                "SHOUS": "South of House",
-                "EHOUS": "Behind House",  # Fixed: was "East of House", should be "Behind House" per .mud file
-                "KITCH": "Kitchen",
-                "ATTIC": "Attic",
-                "LROOM": "Living Room",
-                "CLEAR": "Clearing",
-                "MGRAT": "Grating Room",
-                "FORE1": "Forest Path",
-                "FORE2": "Forest",
-                "FORE3": "Forest",
-                "FORE4": "Forest",
-                "FORE5": "Forest",
-            }
-            short_name = name_mappings.get(room_id, room_id)
+            short_name = self._get_default_room_name(room_id)
 
-        # Extract exits from <EXIT ...> pattern
+        # Extract exits from <EXIT ...> pattern using proper bracket matching
         exits = {}
-        exit_match = re.search(r'<EXIT\s+([^>]*)>', room_text, re.DOTALL)
-        if exit_match:
-            exit_content = exit_match.group(1)
-            exits = self._parse_exits(exit_content)
+        exit_content = self._extract_balanced_brackets(room_text, "<EXIT")
+        if exit_content:
+            exits = self._parse_exits(exit_content, room_id)
         
         # Extract objects (items in parentheses)
         objects = []
@@ -174,14 +126,63 @@ class MDLParser:
         
         return RoomData(
             id=room_id,
-            long_description=short_name,  # Swap: was long_description
-            short_name=long_description,  # Swap: was short_name
+            long_description=long_description,  # Fixed: use actual long description
+            short_name=short_name,  # Fixed: use actual short name
             exits=exits,
             objects=objects,
             flags=flags
         )
 
-    def _parse_exits(self, exit_content: str) -> Dict[str, str]:
+    def _generate_room_name(self, long_description: str, room_id: str) -> str:
+        """Generate a room name from description text."""
+        if not long_description:
+            return room_id
+            
+        desc_lower = long_description.lower()
+        
+        # Try to extract a reasonable name from description
+        if "west of" in desc_lower and "house" in desc_lower:
+            return "West of House"
+        elif "north of" in desc_lower and "house" in desc_lower:
+            return "North of House"
+        elif "south of" in desc_lower and "house" in desc_lower:
+            return "South of House"
+        elif "behind" in desc_lower and "house" in desc_lower:
+            return "Behind House"
+        elif "east of" in desc_lower and "house" in desc_lower:
+            return "East of House"
+        elif "kitchen" in desc_lower:
+            return "Kitchen"
+        elif "attic" in desc_lower:
+            return "Attic"
+        elif "living room" in desc_lower:
+            return "Living Room"
+        else:
+            # Use first few words of description as name
+            words = long_description.split()[:3]
+            return " ".join(words).replace(",", "").replace(".", "")
+
+    def _get_default_room_name(self, room_id: str) -> str:
+        """Get default room name for common room IDs."""
+        name_mappings = {
+            "WHOUS": "West of House",
+            "NHOUS": "North of House", 
+            "SHOUS": "South of House",
+            "EHOUS": "Behind House",
+            "KITCH": "Kitchen",
+            "ATTIC": "Attic",
+            "LROOM": "Living Room",
+            "CLEAR": "Clearing",
+            "MGRAT": "Grating Room",
+            "FORE1": "Forest Path",
+            "FORE2": "Forest",
+            "FORE3": "Forest",
+            "FORE4": "Forest",
+            "FORE5": "Forest",
+        }
+        return name_mappings.get(room_id, room_id)
+
+    def _parse_exits(self, exit_content: str, room_id: str) -> Dict[str, str]:
         """Parse complex exit structures from MDL format."""
         exits = {}
         
@@ -222,7 +223,7 @@ class MDLParser:
                 elif exit_content[i] == '<':
                     # Complex structure (DOOR, CEXIT, etc.)
                     if exit_content[i:].startswith('<DOOR'):
-                        destination, i = self._parse_door_structure(exit_content, i)
+                        destination, i = self._parse_door_structure(exit_content, i, room_id)
                     elif exit_content[i:].startswith('<CEXIT'):
                         destination, i = self._parse_cexit_structure(exit_content, i)
                     else:
@@ -291,8 +292,9 @@ class MDLParser:
             
         return i
 
-    def _parse_door_structure(self, text: str, start: int) -> Tuple[Optional[str], int]:
-        """Parse a DOOR structure: <DOOR "object" "room1" "room2" "message">"""
+    def _parse_door_structure(self, text: str, start: int, current_room_id: str) -> Tuple[Optional[str], int]:
+        """Parse a DOOR structure: <DOOR "object" "room1" "room2" "message">
+        Returns the OTHER room in the door connection (not current_room_id)."""
         if not text[start:].startswith('<DOOR'):
             return None, start
             
@@ -319,8 +321,17 @@ class MDLParser:
         quoted_strings = re.findall(r'"([^"]*)"', door_content)
         
         if len(quoted_strings) >= 3:
-            # Use room1 as the primary destination (could be enhanced to be smarter)
-            return quoted_strings[1], i + 1
+            room1 = quoted_strings[1]  # First room in door
+            room2 = quoted_strings[2]  # Second room in door
+            
+            # Return the OTHER room (not the current one)
+            if current_room_id == room1:
+                return room2, i + 1
+            elif current_room_id == room2:
+                return room1, i + 1
+            else:
+                # Current room not in door - this might be an error, but return room1 as fallback
+                return room1, i + 1
             
         return None, i + 1
 
@@ -487,6 +498,39 @@ class MDLParser:
             all_rooms.update(file_rooms)
         
         return all_rooms
+
+
+    def _extract_balanced_brackets(self, text: str, start_pattern: str) -> Optional[str]:
+        """Extract content between balanced angle brackets starting with start_pattern."""
+        start_index = text.find(start_pattern)
+        if start_index == -1:
+            return None
+            
+        # Find the opening bracket
+        bracket_start = text.find('<', start_index)
+        if bracket_start == -1:
+            return None
+            
+        # Count brackets to find the matching closing bracket
+        bracket_count = 0
+        i = bracket_start
+        
+        while i < len(text):
+            if text[i] == '<':
+                bracket_count += 1
+            elif text[i] == '>':
+                bracket_count -= 1
+                if bracket_count == 0:
+                    # Found the matching closing bracket
+                    # Return content between the brackets (excluding the < >)
+                    content_start = bracket_start + len(start_pattern)
+                    while content_start < i and text[content_start].isspace():
+                        content_start += 1
+                    
+                    return text[content_start:i].strip()
+            i += 1
+            
+        return None
 
 
 def main():

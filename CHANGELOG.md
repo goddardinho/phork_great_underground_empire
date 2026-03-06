@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.2.2 (2026-03-06) 🏠 **Room Description & Object Recognition Fixes** 🏠
+
+- **🎯 Canonical room descriptions implemented:**
+  - **Behind House Fix**: Added proper "slightly ajar window" description from original EAST-HOUSE function
+  - **Key Room Descriptions**: Kitchen, Living Room, Cellar, Mirror Rooms, and other essential locations now have authentic descriptions
+  - **Fallback System**: Generic room descriptions replaced with canonical text from original .mud source files
+  - **Display Format Fix**: Removed redundant room names from gameplay descriptions (user request)
+
+- **🔧 Object loading and recognition system:**
+  - **GET-OBJ Parsing**: Implemented automatic object placement from .mud file room definitions  
+  - **Window Object**: Created interactive WINDO object with proper openable attributes
+  - **Object-Room Association**: Objects now properly placed in designated rooms (EHOUS, KITCH for window)
+  - **Interactive Gameplay**: "open window" command now works correctly with proper object recognition
+
+- **🧹 Project cleanup and organization:**
+  - **File Organization**: Moved debug scripts and validation files to tests/ directory
+  - **Directory Structure**: Cleaned up main project directory and organized development artifacts
+  - **Documentation Updates**: Updated TODO.md to reflect completed features and current project status
+
 ## v1.1.4 (2026-03-06) 🏆 **Canonical Zork Scoring System** 🏆
 
 - **📊 Authentic 1978 MIT Zork scoring mechanics implemented:**

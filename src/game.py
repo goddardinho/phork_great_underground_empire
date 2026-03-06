@@ -4,6 +4,7 @@ from typing import Dict, List, Optional, Tuple, Any
 import sys
 import json
 import datetime
+import re
 from pathlib import Path
 
 from .world.world import World
@@ -1274,14 +1275,14 @@ Use 'restore' without a filename to see available saves.
         
         # Determine how to show the description
         if force_verbose:
-            # "look" command - always show full description
-            print(current_room.get_description(force_verbose=True))
+            # "look" command - always show full description without room name
+            print(current_room.get_description(force_verbose=True, include_name=False))
         elif not current_room.visited:
-            # First visit - always show full description regardless of brief mode
-            print(current_room.get_description(force_verbose=True))
+            # First visit - always show full description regardless of brief mode, without room name
+            print(current_room.get_description(force_verbose=True, include_name=False))
         else:
-            # Subsequent visit - respect brief mode setting
-            print(current_room.get_description(force_brief=self.player.brief_mode))
+            # Subsequent visit - respect brief mode setting, without room name
+            print(current_room.get_description(force_brief=self.player.brief_mode, include_name=False))
         
         # Mark room as visited after showing description
         current_room.visited = True
@@ -1342,16 +1343,71 @@ Type 'help' for a list of commands.
         
         print(f"✓ Loaded {room_count} rooms from original Zork")
         
+        # Load objects from .mud files and place them in rooms
+        self._load_objects_from_mud_files(mud_directory)
+        
         # Set starting room to West of House (just like original Zork)
         starting_room = "WHOUS"
         if starting_room not in self.world.rooms:
             print("Warning: Starting room WHOUS not found. Using first available room.")
             starting_room = list(self.world.rooms.keys())[0] if self.world.rooms else "UNKNOWN"
         
-        self.player.current_room = starting_room
-        
         # Create some basic objects for the iconic starting area
         self._create_essential_objects()
+    
+    def _load_objects_from_mud_files(self, mud_directory: Path) -> None:
+        """Load and create objects from .mud files and place them in rooms."""
+        
+        # Create essential objects that rooms reference
+        self._create_mud_objects()
+        
+        # Process GET-OBJ references in each room and place objects accordingly
+        objects_placed = 0
+        for room_id, room in self.world.rooms.items():
+            # Get the original room data from parser to access object list
+            loader = ZorkRoomLoader(self.world)
+            parser = loader.parser
+            
+            # Re-parse to get object references for this room
+            for mud_file in mud_directory.glob("*.mud"):
+                try:
+                    content = mud_file.read_text()
+                    # Find this room's definition
+                    room_match = re.search(rf'<ROOM\s+"{room_id}"[^>]*>(.*?)(?=<ROOM|$)', content, re.DOTALL)
+                    if room_match:
+                        room_content = room_match.group(1)
+                        # Extract GET-OBJ references
+                        obj_refs = re.findall(r'<GET-OBJ\s+"([^"]+)">', room_content)
+                        for obj_id in obj_refs:
+                            if obj_id in self.objects:
+                                room.add_item(obj_id)
+                                objects_placed += 1
+                except Exception as e:
+                    pass  # Continue if file can't be processed
+        
+        print(f"✓ Placed {objects_placed} objects in rooms")
+    
+    def _create_mud_objects(self) -> None:
+        """Create key objects referenced in .mud files."""
+        
+        # Create window object (WINDO) - referenced in EHOUS and KITCH
+        window = GameObject(
+            id="WINDO",
+            name="small window", 
+            description="There is a small window here which is slightly ajar. The window appears to lead to the kitchen of the white house.",
+            aliases=["window"],
+            attributes={
+                "takeable": False,
+                "openable": True,
+                "open": False,  # starts slightly ajar, can be fully opened
+                "container": False,
+                "door": True  # acts as passage between rooms
+            }
+        )
+        self.objects["WINDO"] = window
+        
+        # Add more essential .mud objects as needed
+        # TODO: Parse OBJECT definitions from .mud files automatically
     
     def _create_essential_objects(self) -> None:
         """Create essential objects like the mailbox and leaflet for the starting area."""
