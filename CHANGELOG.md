@@ -1,5 +1,28 @@
 # Changelog
 
+## v1.1.2 (2026-03-06) 🔦 **Light Sources & Darkness Mechanics** 🔦
+
+- **🌟 Complete authentic Zork light source system implemented:**
+	- **Light Source Objects**: Brass torch (50 turns) and book of matches (10 uses) with proper attributes
+	- **Lighting Commands**: `light torch` and `extinguish torch` with match consumption mechanics
+	- **Dark Room Support**: Cave and Treacherous Chasm rooms with proper "dark" flags
+	- **Darkness Detection**: `_has_light_source()` and `_check_darkness()` methods for accurate state tracking
+	- **Grue Encounters**: Classic "It is pitch black. You are likely to be eaten by a grue." warnings
+	- **Room Visibility**: Darkness properly blocks room descriptions and item visibility
+	- **Authentic Experience**: Matches original Zork light mechanics with proper danger system
+
+- **🎮 Enhanced gameplay mechanics:**
+	- **Strategic Resource Management**: Players must manage limited matches and torch fuel
+	- **Environmental Awareness**: Dark areas require planning and light source acquisition
+	- **Classic Zork Atmosphere**: Authentic fear factor and exploration challenge
+	- **Seamless Integration**: Light system works with all existing container, inventory, and movement systems
+
+- **🧪 Comprehensive validation:**
+	- **Complete Testing**: All light mechanics validated through comprehensive test scenarios
+	- **Object Management**: Proper torch/matches placement and inventory handling
+	- **Edge Case Coverage**: Lighting without matches, extinguishing, darkness transitions
+	- **Production Ready**: Feature complete and ready for gameplay
+
 ## v1.1.1 (2026-03-05) 🎮 **Canonical Bulk Actions System** 🎮
 
 - **🎯 Authentic 1978 MIT Zork bulk actions implemented:**
