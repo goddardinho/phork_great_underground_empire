@@ -1,7 +1,9 @@
 """Main game engine - Coordinates all game systems."""
 
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 import sys
+import json
+import datetime
 from pathlib import Path
 
 from .world.world import World
@@ -145,6 +147,10 @@ class GameEngine:
             self._handle_pour_on(command)
         elif verb == "apply" or verb == "use":
             self._handle_use_tool(command)
+        elif verb == "save":
+            self._handle_save(command)
+        elif verb == "restore" or verb == "load":
+            self._handle_restore(command)
         else:
             # Check for special Easter egg commands first
             if self.responses.is_special_command(verb):
@@ -667,10 +673,14 @@ Available commands:
   Object Interaction: open <object>, close <object>, read <object>
   Container Operations: put <object> in <container>, get <object> from <container>
   Light Sources: light <object>, extinguish <object>
+  Object Combinations: heat <object>, cool <object>, combine <object> <object>
+  Tool Usage: break <object> with <tool>, use <tool> on <object>, apply <tool>
+  Game Management: save [filename], restore [filename], score
   Display: brief (short room descriptions), verbose (full room descriptions)
   Other: help, quit (or q)
 
 Shortcuts are available for most commands.
+Use 'restore' without a filename to see available saves.
 """
         print(help_text)
     
@@ -2037,3 +2047,216 @@ Type 'help' for a list of commands.
         dangerous_room.add_item("HOOK")  # Iron hook in dangerous area
         forest.add_item("CROWBAR")  # Crowbar in forest with tools
         temple.add_item("MIRROR")  # Ornate mirror in temple (can be broken)
+    
+    # ========== Save/Load System ==========
+    
+    def save_game(self, filename: str = None) -> bool:
+        """
+        Save the current game state to a file.
+        
+        Args:
+            filename: Optional filename. If not provided, generates timestamp-based name.
+            
+        Returns:
+            True if save was successful, False otherwise.
+        """
+        if filename is None:
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"zork_save_{timestamp}.json"
+        
+        try:
+            game_state = self._collect_game_state()
+            
+            # Ensure saves directory exists
+            saves_dir = Path("saves")
+            saves_dir.mkdir(exist_ok=True)
+            
+            save_path = saves_dir / filename
+            
+            with open(save_path, 'w', encoding='utf-8') as f:
+                json.dump(game_state, f, indent=2, ensure_ascii=False)
+            
+            print(f"Game saved as {save_path}")
+            return True
+            
+        except Exception as e:
+            print(f"Failed to save game: {e}")
+            return False
+    
+    def load_game(self, filename: str) -> bool:
+        """
+        Load a game state from a file.
+        
+        Args:
+            filename: Name of the save file to load.
+            
+        Returns:
+            True if load was successful, False otherwise.
+        """
+        try:
+            save_path = Path("saves") / filename
+            
+            if not save_path.exists():
+                print(f"Save file {filename} not found.")
+                return False
+            
+            with open(save_path, 'r', encoding='utf-8') as f:
+                game_state = json.load(f)
+            
+            self._restore_game_state(game_state)
+            print(f"Game loaded from {save_path}")
+            return True
+            
+        except Exception as e:
+            print(f"Failed to load game: {e}")
+            return False
+    
+    def _collect_game_state(self) -> Dict[str, Any]:
+        """Collect all game state that needs to be saved."""
+        
+        # Collect world state (rooms and their items)
+        world_state = {}
+        for room_id, room in self.world.rooms.items():
+            world_state[room_id] = {
+                "items": room.items.copy(),
+                "visited": room.visited,
+                "flags": list(room.flags)
+            }
+        
+        # Collect player state
+        player_state = {
+            "current_room": self.player.current_room,
+            "inventory": self.player.inventory.copy(),
+            "score": self.player.score,
+            "brief_mode": self.player.brief_mode,
+            "awaiting_disambiguation": self.player.awaiting_disambiguation,
+            "pending_command": self.player.pending_command
+        }
+        
+        # Collect score manager state
+        score_state = {}
+        if hasattr(self.score_manager, 'achievement_scores'):
+            score_state = {
+                "achievement_scores": self.score_manager.achievement_scores.copy(),
+                "moves": self.score_manager.moves,
+                "raw_score": self.score_manager.raw_score
+            }
+        
+        # Collect combination manager state
+        combination_state = {}
+        if hasattr(self, 'combination_manager') and self.combination_manager:
+            combination_state = self.combination_manager.save_interaction_state()
+        
+        # Collect puzzle manager state (if any)
+        puzzle_state = {}
+        if hasattr(self, 'puzzle_manager') and self.puzzle_manager:
+            if hasattr(self.puzzle_manager, 'save_state'):
+                puzzle_state = self.puzzle_manager.save_state()
+        
+        # Create complete game state
+        game_state = {
+            "version": "1.2.0",
+            "timestamp": datetime.datetime.now().isoformat(),
+            "world_state": world_state,
+            "player_state": player_state,
+            "score_state": score_state,
+            "combination_state": combination_state,
+            "puzzle_state": puzzle_state
+        }
+        
+        return game_state
+    
+    def _restore_game_state(self, game_state: Dict[str, Any]) -> None:
+        """Restore game state from saved data."""
+        
+        # Validate save version compatibility
+        saved_version = game_state.get("version", "unknown")
+        print(f"Loading save from version {saved_version}")
+        
+        # Restore world state
+        if "world_state" in game_state:
+            for room_id, room_data in game_state["world_state"].items():
+                room = self.world.get_room(room_id)
+                if room:
+                    room.items = room_data.get("items", [])
+                    room.visited = room_data.get("visited", False)
+                    room.flags = set(room_data.get("flags", []))
+        
+        # Restore player state
+        if "player_state" in game_state:
+            player_data = game_state["player_state"]
+            self.player.current_room = player_data.get("current_room", "WHOUS")
+            self.player.inventory = player_data.get("inventory", [])
+            self.player.score = player_data.get("score", 0)
+            self.player.brief_mode = player_data.get("brief_mode", False)
+            self.player.awaiting_disambiguation = player_data.get("awaiting_disambiguation", False)
+            self.player.pending_command = player_data.get("pending_command", None)
+        
+        # Restore score manager state
+        if "score_state" in game_state:
+            score_data = game_state["score_state"]
+            if hasattr(self.score_manager, 'achievement_scores'):
+                self.score_manager.achievement_scores = score_data.get("achievement_scores", {})
+                self.score_manager.moves = score_data.get("moves", 0)
+                self.score_manager.raw_score = score_data.get("raw_score", 0)
+        
+        # Restore combination manager state
+        if "combination_state" in game_state and self.combination_manager:
+            combination_data = game_state["combination_state"]
+            if combination_data:  # Only restore if there's data
+                self.combination_manager.restore_interaction_state(combination_data)
+        
+        # Restore puzzle manager state
+        if "puzzle_state" in game_state and self.puzzle_manager:
+            puzzle_data = game_state["puzzle_state"] 
+            if puzzle_data and hasattr(self.puzzle_manager, 'restore_state'):
+                self.puzzle_manager.restore_state(puzzle_data)
+        
+        print("Game state restored successfully!")
+    
+    def list_saves(self) -> List[str]:
+        """List all available save files."""
+        saves_dir = Path("saves")
+        if not saves_dir.exists():
+            return []
+        
+        save_files = []
+        for file_path in saves_dir.glob("*.json"):
+            save_files.append(file_path.name)
+        
+        return sorted(save_files, reverse=True)  # Most recent first
+    
+    def _handle_save(self, command: Command) -> None:
+        """Handle save command."""
+        filename = None
+        if command.noun:
+            filename = command.noun
+            if not filename.endswith('.json'):
+                filename += '.json'
+        
+        success = self.save_game(filename)
+        if not success:
+            print("Save failed. Please try again.")
+    
+    def _handle_restore(self, command: Command) -> None:
+        """Handle restore/load command."""
+        if not command.noun:
+            # Show available saves
+            saves = self.list_saves()
+            if not saves:
+                print("No saved games found.")
+                return
+            
+            print("Available saved games:")
+            for i, save_file in enumerate(saves, 1):
+                print(f"  {i}. {save_file}")
+            print("Use 'restore <filename>' to load a specific save.")
+            return
+        
+        filename = command.noun
+        if not filename.endswith('.json'):
+            filename += '.json'
+        
+        success = self.load_game(filename)
+        if success:
+            self._look_around()  # Show current location after loading
