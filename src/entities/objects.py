@@ -68,6 +68,14 @@ class GameObject:
         if capacity == 0:  # Unlimited capacity
             return False
         return len(self.get_contents()) >= capacity
+        
+    def is_bulk_action(self) -> bool:
+        """Check if this is a bulk action object (ALL, EVERYTHING, etc.)."""
+        return self.get_attribute("bulk_action", False)
+        
+    def get_bulk_type(self) -> str:
+        """Get the type of bulk action (all, valuables, possessions)."""
+        return self.get_attribute("bulk_type", "all")
     
     def is_readable(self) -> bool:
         """Check if this object can be read."""

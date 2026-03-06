@@ -36,10 +36,19 @@
 
 ### Objects & Puzzles  
 - [x] **Container objects (mailbox, chest, etc.)** - Enhanced container system with proper open/close mechanics ✅ **COMPLETE!**
-- [ ] Light sources and darkness mechanics
-- [ ] Multi-step puzzles 
+- [x] **Canonical bulk actions (take all, drop everything, etc.)** - Implemented authentic 1978 MIT Zork bulk action system using special meta-objects ✅ **COMPLETE!**
+- [x] **Light sources and darkness mechanics** - Full implementation with torch/matches, darkness detection, and authentic grue encounters ✅ **COMPLETE!** *v1.1.2*
+- [x] **Multi-step puzzles** - Complete puzzle system with authentic Zork patterns (mailbox tutorial, grate unlock, dam control, treasure collection) ✅ **COMPLETE!** *v1.1.3*
 - [ ] Score system
 - [ ] Object combinations and transformations
+
+### 🔍 **World Validation & Polish (v1.1.6)**
+- [ ] **Comprehensive room wiring audit** - Validate all 196 rooms have correct exits
+- [ ] **Full connectivity testing** - Automated traversal of entire game world  
+- [ ] **Full command and response testing** - Validation and testing of all commands and responses for canonical gameplay
+- [ ] **Edge case validation** - Dark rooms, dangerous areas, special exits
+- [ ] **Performance testing** - Large world navigation and object interaction
+- [ ] **Integration testing** - All systems working together seamlessly
 
 ### NPCs & Combat
 - [ ] Basic NPC conversations

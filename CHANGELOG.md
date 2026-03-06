@@ -1,5 +1,72 @@
 # Changelog
 
+## v1.1.3 (2026-03-06) 🧩 **Multi-Step Puzzle System** 🧩
+
+- **🎯 Complete authentic Zork puzzle mechanics implemented:**
+	- **Puzzle Framework**: PuzzleState enum, PuzzleStep dataclass, and PuzzleManager orchestration system
+	- **Authentic Patterns**: Mailbox tutorial, grate unlock sequence, dam control puzzle, treasure collection mechanics
+	- **State Management**: Persistent puzzle progress with proper state transitions and validation
+	- **GameEngine Integration**: Enhanced command processing with puzzle trigger detection and response handling
+	- **Command Extensions**: Added `unlock` and `lock` commands with special grate handling and container locking support
+
+- **🏆 Classic Zork puzzles fully functional:**
+	- **Mailbox Tutorial**: Step-by-step introduction using original leaflet and mailbox interaction patterns
+	- **Grate Access**: Multi-step sequence requiring key collection, grate location, and proper unlock mechanics
+	- **Dam Control**: Complex control panel puzzle with water level manipulation and machinery feedback
+	- **Treasure Collection**: Proper scoring system integration with treasure placement and point awards
+	- **Room Integration**: Added GRATE_ROOM and DAM_CONTROL areas with authentic descriptions
+
+- **🎮 Production-ready puzzle infrastructure:**
+	- **Comprehensive Testing**: Full validation of puzzle sequences, state persistence, and edge case handling
+	- **Score Integration**: Treasures properly award points (20+ points available from puzzle completion)
+	- **Robust Error Handling**: Graceful handling of invalid sequences, missing objects, and state conflicts
+	- **Authentic Experience**: True-to-original puzzle difficulty and feedback matching 1978 MIT Zork gameplay
+
+## v1.1.2 (2026-03-06) 🔦 **Light Sources & Darkness Mechanics** 🔦
+
+- **🌟 Complete authentic Zork light source system implemented:**
+	- **Light Source Objects**: Brass torch (50 turns) and book of matches (10 uses) with proper attributes
+	- **Lighting Commands**: `light torch` and `extinguish torch` with match consumption mechanics
+	- **Dark Room Support**: Cave and Treacherous Chasm rooms with proper "dark" flags
+	- **Darkness Detection**: `_has_light_source()` and `_check_darkness()` methods for accurate state tracking
+	- **Grue Encounters**: Classic "It is pitch black. You are likely to be eaten by a grue." warnings
+	- **Room Visibility**: Darkness properly blocks room descriptions and item visibility
+	- **Authentic Experience**: Matches original Zork light mechanics with proper danger system
+
+- **🎮 Enhanced gameplay mechanics:**
+	- **Strategic Resource Management**: Players must manage limited matches and torch fuel
+	- **Environmental Awareness**: Dark areas require planning and light source acquisition
+	- **Classic Zork Atmosphere**: Authentic fear factor and exploration challenge
+	- **Seamless Integration**: Light system works with all existing container, inventory, and movement systems
+
+- **🧪 Comprehensive validation:**
+	- **Complete Testing**: All light mechanics validated through comprehensive test scenarios
+	- **Object Management**: Proper torch/matches placement and inventory handling
+	- **Edge Case Coverage**: Lighting without matches, extinguishing, darkness transitions
+	- **Production Ready**: Feature complete and ready for gameplay
+
+## v1.1.1 (2026-03-05) 🎮 **Canonical Bulk Actions System** 🎮
+
+- **🎯 Authentic 1978 MIT Zork bulk actions implemented:**
+	- **Canonical Discovery**: Found original bulk action implementation in dung.mud and rooms.mud source files
+	- **Special Meta-Objects**: ALL, EVERYTHING, VALUABLES, POSSESSIONS are actual game objects with BUNCHBIT equivalent flags  
+	- **VALUABLES&C Logic**: Implemented authentic treasure detection using same filtering logic as original VALUABLES&C function
+	- **Smart Object Processing**: Bulk actions work seamlessly with room objects, inventory, and containers
+	- **Working Commands**: `take all`, `take everything`, `drop everything`, `take valuables`, `take possessions`
+	- **Authentic Experience**: Uses original "Done." confirmations and canonical error messages like "I couldn't find any valuables"
+
+- **🏠 Essential starting objects added:**
+	- **Mailbox & Leaflet**: Properly placed at South of House (SHOUS) with leaflet inside mailbox
+	- **Container Integration**: Mailbox works as openable container with authentic responses
+	- **Object Placement Fix**: Resolved issue where starting objects weren't accessible during gameplay
+	- **Live Testing**: All functionality validated with comprehensive gameplay scenarios
+
+- **🔧 Technical improvements:**
+	- **Responses Integration**: Fixed self.responses system integration across all game methods  
+	- **Enhanced Object Finding**: Improved object detection with proper bulk action recognition
+	- **Canonical Messages**: Authentic error responses from original parser.mud source
+	- **Seamless UX**: Bulk actions integrate perfectly with snarky response system and enhanced containers
+
 ## v1.1.0-dev (2026-03-05) 🎭 **Enhanced Container System** 🎭
 
 - **Enhanced container object system with robust mechanics:**
