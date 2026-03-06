@@ -10,7 +10,7 @@ from .world.room_loader import ZorkRoomLoader
 from .entities.player import Player
 from .entities.objects import GameObject
 from .parser.command_parser import CommandParser, Command
-from .responses import responses
+from .responses import ZorkResponses
 
 
 class GameEngine:
@@ -20,6 +20,7 @@ class GameEngine:
         self.world = World()
         self.player = Player()
         self.parser = CommandParser()
+        self.responses = ZorkResponses()
         self.objects: Dict[str, GameObject] = {}  # object_id -> GameObject
         self.running = True
         
@@ -109,10 +110,10 @@ class GameEngine:
             self._handle_extinguish(command)
         else:
             # Check for special Easter egg commands first
-            if responses.is_special_command(verb):
-                print(responses.get_special_command_response(verb))
+            if self.responses.is_special_command(verb):
+                print(self.responses.get_special_command_response(verb))
             else:
-                print(responses.get_unknown_command_response(user_input))
+                print(self.responses.get_unknown_command_response(user_input))
     
     def _handle_movement(self, direction: str) -> None:
         """Handle player movement."""
@@ -141,7 +142,7 @@ class GameEngine:
             else:
                 print("Error: That exit leads nowhere!")
         else:
-            print(responses.get_cant_go_response())
+            print(self.responses.get_cant_go_response())
     
     def _handle_look(self, command: Command) -> None:
         """Handle look command."""
@@ -176,7 +177,12 @@ class GameEngine:
                 self.player.pending_command = command
                 self._show_disambiguation_prompt()
             else:
-                print(responses.get_dont_see_object_response(command.noun))
+                print(self.responses.get_dont_see_object_response(command.noun))
+            return
+        
+        # Check if this is a bulk action object (ALL, EVERYTHING, etc.)
+        if target_obj.is_bulk_action():
+            self._handle_bulk_action("take", target_obj)
             return
         
         if not target_obj.is_takeable():
@@ -210,14 +216,37 @@ class GameEngine:
             elif container and not container.is_open():
                 print(f"The {container.name} is closed.")
             else:
-                print(responses.get_cant_do_that_response())
+                print(self.responses.get_cant_do_that_response())
         else:
             print(f"I cannot reach that.")
     
     def _handle_drop(self, command: Command) -> None:
-        """Handle drop command."""
+        """Handle drop command with bulk action support."""
         if not command.noun:
             print("Drop what?")
+            return
+        
+        target_obj = self._find_object(command.noun, check_inventory_only=True)
+        if not target_obj:
+            print(f"You don't have a {command.noun}.")
+            return
+            
+        # Check if this is a bulk action object
+        if target_obj.is_bulk_action():
+            self._handle_bulk_action("drop", target_obj)
+            return
+        
+        # Object is in inventory, drop it
+        self.player.remove_from_inventory(target_obj.id)
+        current_room = self.world.get_room(self.player.current_room)
+        if current_room:
+            current_room.add_item(target_obj.id)
+        print(f"Dropped: {target_obj.name}")
+    
+    def _handle_examine(self, command: Command) -> None:
+        """Handle examine command."""
+        if not command.noun:
+            print("Examine what?")
             return
         
         # Find object - this will handle disambiguation if needed
@@ -230,12 +259,12 @@ class GameEngine:
             return
         
         if not target_obj:
-            print(responses.get_dont_see_object_response(command.noun))
+            print(self.responses.get_dont_see_object_response(command.noun))
             return
         
         # Check if object is in inventory
         if target_obj.id not in self.player.inventory:
-            print(responses.get_inventory_response("dont_have"))
+            print(self.responses.get_inventory_response("dont_have"))
             return
         
         current_room = self.world.get_room(self.player.current_room)
@@ -256,7 +285,7 @@ class GameEngine:
                 self.player.pending_command = command
                 self._show_disambiguation_prompt()
             else:
-                print(responses.get_dont_see_object_response(command.noun))
+                print(self.responses.get_dont_see_object_response(command.noun))
             return
         
         # Show base description with dynamic updates
@@ -532,9 +561,9 @@ class GameEngine:
             # Regular get command (equivalent to take)
             self._handle_take(command)
     
-    def _find_object(self, noun: str) -> Optional['GameObject']:
+    def _find_object(self, noun: str, check_inventory_only: bool = False) -> Optional['GameObject']:
         """Find an object by name or alias. Handles disambiguation if multiple matches found."""
-        matches = self._find_all_objects(noun)
+        matches = self._find_all_objects(noun, check_inventory_only)
         
         if not matches:
             return None
@@ -668,37 +697,51 @@ Shortcuts are available for most commands.
         obj.set_attribute("lit", False)
         print(f"The {obj.name} is extinguished.")
     
-    def _find_all_objects(self, noun: str) -> List['GameObject']:
+    def _find_all_objects(self, noun: str, check_inventory_only: bool = False) -> List['GameObject']:
         """Find all objects matching the given noun in accessible locations."""
         matches = []
-        current_room = self.world.get_room(self.player.current_room)
         
-        # Check current room
-        if current_room:
-            for item_id in current_room.items:
+        # Always check bulk action objects first (they're globally available)
+        for obj_id, obj in self.objects.items():
+            if obj.is_bulk_action() and obj.matches(noun):
+                matches.append(obj)
+        
+        if check_inventory_only:
+            # Only check inventory (for drop command)
+            for item_id in self.player.inventory:
                 obj = self.objects.get(item_id)
-                if obj and obj.matches(noun):
+                if obj and obj.matches(noun) and not obj.is_bulk_action():
                     matches.append(obj)
-                    
-                # Also check inside open containers in the room
+        else:
+            # Check accessible locations
+            current_room = self.world.get_room(self.player.current_room)
+            
+            # Check current room
+            if current_room:
+                for item_id in current_room.items:
+                    obj = self.objects.get(item_id)
+                    if obj and obj.matches(noun) and not obj.is_bulk_action():
+                        matches.append(obj)
+                        
+                    # Also check inside open containers in the room
+                    if obj and obj.is_container() and obj.is_open():
+                        for contained_id in obj.get_contents():
+                            contained_obj = self.objects.get(contained_id)
+                            if contained_obj and contained_obj.matches(noun):
+                                matches.append(contained_obj)
+            
+            # Check inventory  
+            for item_id in self.player.inventory:
+                obj = self.objects.get(item_id)
+                if obj and obj.matches(noun) and not obj.is_bulk_action():
+                    matches.append(obj)
+                
+                # Also check inside open containers in inventory
                 if obj and obj.is_container() and obj.is_open():
                     for contained_id in obj.get_contents():
                         contained_obj = self.objects.get(contained_id)
                         if contained_obj and contained_obj.matches(noun):
                             matches.append(contained_obj)
-        
-        # Check inventory  
-        for item_id in self.player.inventory:
-            obj = self.objects.get(item_id)
-            if obj and obj.matches(noun):
-                matches.append(obj)
-            
-            # Also check inside open containers in inventory
-            if obj and obj.is_container() and obj.is_open():
-                for contained_id in obj.get_contents():
-                    contained_obj = self.objects.get(contained_id)
-                    if contained_obj and contained_obj.matches(noun):
-                        matches.append(contained_obj)
         
         return matches
     
@@ -978,14 +1021,6 @@ Type 'help' for a list of commands.
     def _create_essential_objects(self) -> None:
         """Create essential objects like the mailbox and leaflet for the starting area."""
         
-        # Only create objects if we have the WHOUS room
-        if "WHOUS" not in self.world.rooms:
-            return
-        
-        whous = self.world.get_room("WHOUS")
-        if not whous:
-            return
-        
         # Create the iconic mailbox and leaflet
         mailbox = GameObject(
             id="MAILBOX",
@@ -1024,9 +1059,201 @@ Type 'help' for a list of commands.
         self.objects["MAILBOX"] = mailbox
         self.objects["LEAFLET"] = leaflet
         
-        # Place mailbox at West of House
-        whous.add_item("MAILBOX")
+        # Place mailbox in South of House (SHOUS) - the canonical location
+        shous = self.world.get_room("SHOUS")
+        if shous:
+            shous.add_item("MAILBOX")
+        else:
+            # Fallback to WHOUS if SHOUS doesn't exist
+            whous = self.world.get_room("WHOUS")
+            if whous:
+                whous.add_item("MAILBOX")
+        
+        # Create canonical bulk action objects
+        self._create_bulk_action_objects()
         print("✓ Created essential starting objects")
+        
+    def _create_bulk_action_objects(self) -> None:
+        """Create canonical Zork bulk action objects (ALL, EVERYTHING, VALUABLES, etc.)."""
+        # "ALL" or "EVERYTHING" - takes all visible, takeable items
+        all_object = GameObject(
+            id="ALL",
+            name="everything",
+            description="A special command to act on multiple objects at once.",
+            aliases=["all", "everything"],
+            attributes={
+                "bulk_action": True,
+                "bulk_type": "all",
+                "takeable": True,  # So parser recognizes it as valid
+                "visible": True
+            }
+        )
+        
+        # "VALUABLES" or "TREASURES" - only items with treasure value > 0
+        valuables_object = GameObject(
+            id="VALUABLES",
+            name="valuables",
+            description="A special command to act on treasure items.",
+            aliases=["valuables", "treasures"],
+            attributes={
+                "bulk_action": True,
+                "bulk_type": "valuables",
+                "takeable": True,
+                "visible": True
+            }
+        )
+        
+        # "POSSESSIONS" - acts on items you're carrying
+        possessions_object = GameObject(
+            id="POSSESSIONS",
+            name="possessions",
+            description="A special command to act on items you're carrying.",
+            aliases=["possessions"],
+            attributes={
+                "bulk_action": True,
+                "bulk_type": "possessions",
+                "takeable": True,
+                "visible": True
+            }
+        )
+        
+        # Add to objects registry
+        self.objects["ALL"] = all_object
+        self.objects["VALUABLES"] = valuables_object
+        self.objects["POSSESSIONS"] = possessions_object
+        
+    def _handle_bulk_action(self, verb: str, bulk_obj: 'GameObject') -> None:
+        """Handle bulk actions like 'take all', 'drop valuables', etc. (canonical VALUABLES&C)."""
+        bulk_type = bulk_obj.get_bulk_type()
+        current_room = self.world.get_room(self.player.current_room)
+        
+        # Get the list of candidate objects based on bulk type
+        candidate_objects = []
+        
+        if bulk_type == "all":
+            # All visible, takeable objects in room (for TAKE) or inventory (for DROP)
+            if verb == "take":
+                if current_room:
+                    for item_id in current_room.items:
+                        obj = self.objects.get(item_id)
+                        if obj and obj.is_takeable() and not obj.is_bulk_action():
+                            candidate_objects.append(obj)
+                    # Also check open containers in room
+                    for item_id in current_room.items:
+                        container = self.objects.get(item_id)
+                        if container and container.is_container() and container.is_open():
+                            for contained_id in container.get_contents():
+                                contained_obj = self.objects.get(contained_id)
+                                if contained_obj and contained_obj.is_takeable():
+                                    candidate_objects.append(contained_obj)
+            elif verb == "drop":
+                for item_id in self.player.inventory:
+                    obj = self.objects.get(item_id)
+                    if obj and not obj.is_bulk_action():
+                        candidate_objects.append(obj)
+                        
+        elif bulk_type == "valuables":
+            # Only objects with treasure value > 0
+            if verb == "take" and current_room:
+                for item_id in current_room.items:
+                    obj = self.objects.get(item_id)
+                    if obj and obj.is_takeable() and obj.get_attribute("treasure_value", 0) > 0:
+                        candidate_objects.append(obj)
+            elif verb == "drop":
+                for item_id in self.player.inventory:
+                    obj = self.objects.get(item_id)
+                    if obj and obj.get_attribute("treasure_value", 0) > 0:
+                        candidate_objects.append(obj)
+                        
+        elif bulk_type == "possessions":
+            # Items you're carrying (mainly for DROP)
+            for item_id in self.player.inventory:
+                obj = self.objects.get(item_id)
+                if obj and not obj.is_bulk_action():
+                    candidate_objects.append(obj)
+        
+        # Check if we found any objects
+        if not candidate_objects:
+            if bulk_type == "all":
+                if verb == "take":
+                    print("I don't see anything to take.")
+                else:
+                    print("You aren't carrying anything.")
+            elif bulk_type == "valuables":
+                print("I couldn't find any valuables.")
+            else:
+                print("I couldn't find anything.")
+            return
+        
+        # Check for too many objects (canonical limit)
+        max_bulk_objects = 20  # Reasonable limit to prevent spam
+        if len(candidate_objects) > max_bulk_objects:
+            print("I can't do everything, because I ran out of room.")  # Canonical message
+            candidate_objects = candidate_objects[:max_bulk_objects]
+        
+        # Process each object
+        success_count = 0
+        for obj in candidate_objects:
+            if verb == "take":
+                if self._try_bulk_take(obj):
+                    success_count += 1
+            elif verb == "drop":
+                if self._try_bulk_drop(obj):
+                    success_count += 1
+        
+        # Summary message
+        if success_count == 0:
+            print("Nothing was accomplished.")
+        elif success_count == 1:
+            print("Done.")
+        else:
+            print(f"Done. ({success_count} objects affected)")
+            
+    def _try_bulk_take(self, obj: 'GameObject') -> bool:
+        """Try to take an object as part of bulk action. Returns True if successful."""
+        # Check if player can carry it
+        if self.player.is_inventory_full():
+            print(f"{obj.name}: Your load is too heavy.")
+            return False
+            
+        # Find where object is located
+        location_type, container_id = self._find_object_location(obj)
+        
+        if location_type == "inventory":
+            # Already have it
+            return False
+        elif location_type == "room":
+            # Take from room
+            current_room = self.world.get_room(self.player.current_room)
+            if current_room:
+                current_room.remove_item(obj.id)
+                self.player.add_to_inventory(obj.id)
+                print(f"{obj.name}: Taken.")
+                return True
+        elif location_type == "container":
+            # Take from container
+            container = self.objects.get(container_id) if container_id else None
+            if container and container.is_open():
+                container.remove_from_container(obj.id)
+                self.player.add_to_inventory(obj.id)
+                print(f"{obj.name}: Taken.")
+                return True
+            elif container and not container.is_open():
+                print(f"{obj.name}: The {container.name} is closed.")
+                return False
+                
+        return False
+        
+    def _try_bulk_drop(self, obj: 'GameObject') -> bool:
+        """Try to drop an object as part of bulk action. Returns True if successful."""
+        if obj.id in self.player.inventory:
+            current_room = self.world.get_room(self.player.current_room)
+            if current_room:
+                self.player.remove_from_inventory(obj.id)
+                current_room.add_item(obj.id)
+                print(f"{obj.name}: Dropped.")
+                return True
+        return False
 
     def _create_initial_world(self) -> None:
         """Create a simple starting world for testing."""
@@ -1242,7 +1469,7 @@ Type 'help' for a list of commands.
         self.objects["WOODEN_BOX"] = wooden_box
         self.objects["METAL_BOX"] = metal_box
         
-        # Place objects in rooms
+        # Place objects in rooms (for simple test world)
         west_house.add_item("MAILBOX")  # Mailbox at west of house (leaflet is inside it)
         house_entrance.add_item("WINDOW")  # Window at behind house
         forest.add_item("TORCH")  # Torch in the forest

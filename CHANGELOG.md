@@ -1,5 +1,27 @@
 # Changelog
 
+## v1.1.1 (2026-03-05) 🎮 **Canonical Bulk Actions System** 🎮
+
+- **🎯 Authentic 1978 MIT Zork bulk actions implemented:**
+	- **Canonical Discovery**: Found original bulk action implementation in dung.mud and rooms.mud source files
+	- **Special Meta-Objects**: ALL, EVERYTHING, VALUABLES, POSSESSIONS are actual game objects with BUNCHBIT equivalent flags  
+	- **VALUABLES&C Logic**: Implemented authentic treasure detection using same filtering logic as original VALUABLES&C function
+	- **Smart Object Processing**: Bulk actions work seamlessly with room objects, inventory, and containers
+	- **Working Commands**: `take all`, `take everything`, `drop everything`, `take valuables`, `take possessions`
+	- **Authentic Experience**: Uses original "Done." confirmations and canonical error messages like "I couldn't find any valuables"
+
+- **🏠 Essential starting objects added:**
+	- **Mailbox & Leaflet**: Properly placed at South of House (SHOUS) with leaflet inside mailbox
+	- **Container Integration**: Mailbox works as openable container with authentic responses
+	- **Object Placement Fix**: Resolved issue where starting objects weren't accessible during gameplay
+	- **Live Testing**: All functionality validated with comprehensive gameplay scenarios
+
+- **🔧 Technical improvements:**
+	- **Responses Integration**: Fixed self.responses system integration across all game methods  
+	- **Enhanced Object Finding**: Improved object detection with proper bulk action recognition
+	- **Canonical Messages**: Authentic error responses from original parser.mud source
+	- **Seamless UX**: Bulk actions integrate perfectly with snarky response system and enhanced containers
+
 ## v1.1.0-dev (2026-03-05) 🎭 **Enhanced Container System** 🎭
 
 - **Enhanced container object system with robust mechanics:**

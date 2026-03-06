@@ -36,6 +36,7 @@
 
 ### Objects & Puzzles  
 - [x] **Container objects (mailbox, chest, etc.)** - Enhanced container system with proper open/close mechanics ✅ **COMPLETE!**
+- [x] **Canonical bulk actions (take all, drop everything, etc.)** - Implemented authentic 1978 MIT Zork bulk action system using special meta-objects ✅ **COMPLETE!**
 - [ ] Light sources and darkness mechanics
 - [ ] Multi-step puzzles 
 - [ ] Score system
