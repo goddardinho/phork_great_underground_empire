@@ -1,5 +1,26 @@
 # Changelog
 
+## v1.1.4 (2026-03-06) 🏆 **Canonical Zork Scoring System** 🏆
+
+- **📊 Authentic 1978 MIT Zork scoring mechanics implemented:**
+  - **ScoreManager Class**: Complete OFVAL/OTVAL system matching original dung.mud treasure values
+  - **Canonical Treasures**: 12 authentic treasures with exact point values (JEWELED_EGG: 5/10, BAUBLE: 10/10, etc.)
+  - **Dual Scoring System**: OFVAL points for finding treasures, OTVAL points for depositing in trophy case
+  - **Move Tracking**: Accurate turn counter that increments for movement and action commands
+  - **Score Commands**: Full support for `score`, `status`, and `points` commands with canonical format
+
+- **🏅 Authentic ranking system from original rooms.mud:**
+  - **10 Ranking Tiers**: From "Beginner" (0%) to "Wizard" (95%+) with exact percentage thresholds
+  - **Score Report Format**: "Your score is X [total of Y points], in Z moves. This score gives you the rank of [RANK]."
+  - **Achievement Support**: Framework for puzzle-solving and exploration bonus points
+  - **Percentage Calculation**: Dynamic ranking based on current score vs. maximum possible score
+
+- **🎮 Production-ready scoring infrastructure:**
+  - **GameEngine Integration**: Seamless integration with treasure collection and command processing
+  - **Treasure Detection**: Automatic OFVAL scoring when treasures are picked up during gameplay
+  - **Comprehensive Testing**: Validated scoring mechanics, treasure values, and ranking calculations
+  - **Authentic Experience**: True-to-original scoring system matching 1978 MIT Zork gameplay
+
 ## v1.1.3 (2026-03-06) 🧩 **Multi-Step Puzzle System** 🧩
 
 - **🎯 Complete authentic Zork puzzle mechanics implemented:**
