@@ -88,6 +88,14 @@ class CommandParser:
             "extinguish": "extinguish", "put out": "extinguish", "douse": "extinguish",
             "blow out": "extinguish", "quench": "extinguish", "snuff": "extinguish",
             
+            # Object combinations and transformations
+            "combine": "combine", "mix": "combine", "merge": "combine", "join": "combine",
+            "heat": "heat", "warm": "heat", "cook": "heat", "boil": "heat",
+            "cool": "cool", "chill": "cool", "freeze": "cool", "ice": "cool",
+            "break": "break", "smash": "break", "shatter": "break", "destroy": "break",
+            "pour": "pour", "spill": "pour", "dump": "pour", "splash": "pour",
+            "apply": "apply", "use": "apply", "employ": "apply", "utilize": "apply",
+            
             # Eating and drinking
             "eat": "eat", "consume": "eat", "devour": "eat", "bite": "eat", "taste": "eat",
             "drink": "drink", "sip": "drink", "gulp": "drink", "swallow": "drink",

@@ -13,6 +13,7 @@ from .parser.command_parser import CommandParser, Command
 from .responses import ZorkResponses
 from .puzzles import integrate_puzzles_into_game
 from .score import ScoreManager
+from .combinations import integrate_combinations_into_game
 
 
 class GameEngine:
@@ -27,6 +28,7 @@ class GameEngine:
         self.running = True
         self.puzzle_manager = None  # Will be initialized after world creation
         self.score_manager = ScoreManager()
+        self.combination_manager = None  # Will be initialized after world creation
         
         # Initialize world from .mud files or create a basic test world
         if use_mud_files:
@@ -36,6 +38,9 @@ class GameEngine:
             
         # Initialize puzzle system after world creation
         self.puzzle_manager = integrate_puzzles_into_game(self)
+        
+        # Initialize object combination system after world creation  
+        self.combination_manager = integrate_combinations_into_game(self)
     
     def run(self) -> None:
         """Main game loop."""
@@ -128,6 +133,18 @@ class GameEngine:
             self._handle_lock(command)
         elif verb == "score":
             self._handle_score()
+        elif verb == "heat":
+            self._handle_heat(command)
+        elif verb == "cool":
+            self._handle_cool(command) 
+        elif verb == "combine":
+            self._handle_combine(command)
+        elif verb == "break":
+            self._handle_break_with(command)
+        elif verb == "pour":
+            self._handle_pour_on(command)
+        elif verb == "apply" or verb == "use":
+            self._handle_use_tool(command)
         else:
             # Check for special Easter egg commands first
             if self.responses.is_special_command(verb):
@@ -802,6 +819,208 @@ Shortcuts are available for most commands.
         """Handle score command - display current score and ranking."""
         # Display canonical score report (moves already tracked in _route_command)
         print(self.score_manager.get_score_report())
+    
+    def _handle_heat(self, command: Command) -> None:
+        """Handle heat command for object transformations."""
+        if not command.noun:
+            print("Heat what?")
+            return
+            
+        primary_obj = self._find_object(command.noun)
+        if not primary_obj:
+            print(f"I don't see a {command.noun} here.")
+            return
+            
+        # Look for heat source in inventory or room
+        heat_source = None
+        for item_id in self.player.inventory:
+            obj = self.objects.get(item_id)
+            if obj and obj.is_lit():  # Lit objects can provide heat
+                heat_source = obj
+                break
+        
+        if not heat_source:
+            print("You need a heat source.")
+            return
+            
+        # Attempt interaction
+        success, message, result_obj = self.combination_manager.perform_interaction(
+            primary_obj.id, heat_source.id, "heat", self.player.current_room, self.objects
+        )
+        
+        print(message)
+        
+        if success and result_obj:
+            # Handle object transformation
+            self._handle_object_transformation(primary_obj.id, result_obj)
+    
+    def _handle_cool(self, command: Command) -> None:
+        """Handle cool command for object transformations.""" 
+        if not command.noun:
+            print("Cool what?")
+            return
+            
+        primary_obj = self._find_object(command.noun)
+        if not primary_obj:
+            print(f"I don't see a {command.noun} here.")
+            return
+            
+        # For cooling, we might need water or cold conditions
+        print("You need something cold to cool it with.")
+    
+    def _handle_combine(self, command: Command) -> None:
+        """Handle combine command for object combinations."""
+        if not command.noun or not command.preposition_object:
+            print("Combine what with what?")
+            return
+            
+        obj1 = self._find_object(command.noun)
+        obj2 = self._find_object(command.preposition_object)
+        
+        if not obj1 or not obj2:
+            print("I can't find those objects.")
+            return
+            
+        # Attempt combination
+        success, message, result_obj = self.combination_manager.perform_interaction(
+            obj1.id, obj2.id, "combine", self.player.current_room, self.objects
+        )
+        
+        print(message)
+        
+        if success and result_obj:
+            self._handle_object_combination(obj1.id, obj2.id, result_obj)
+    
+    def _handle_break_with(self, command: Command) -> None:
+        """Handle break X with Y command."""
+        if not command.noun or not command.preposition_object:
+            print("Break what with what?") 
+            return
+            
+        target_obj = self._find_object(command.noun)
+        tool_obj = self._find_object(command.preposition_object)
+        
+        if not target_obj or not tool_obj:
+            print("I can't find those objects.")
+            return
+            
+        # Attempt breaking
+        success, message, result_obj = self.combination_manager.perform_interaction(
+            target_obj.id, tool_obj.id, "break", self.player.current_room, self.objects
+        )
+        
+        print(message)
+        
+        if success and result_obj:
+            self._handle_object_transformation(target_obj.id, result_obj)
+    
+    def _handle_pour_on(self, command: Command) -> None:
+        """Handle pour X on Y command."""
+        if not command.noun or not command.preposition_object:
+            print("Pour what on what?")
+            return
+            
+        liquid_obj = self._find_object(command.noun)
+        target_obj = self._find_object(command.preposition_object)
+        
+        if not liquid_obj or not target_obj:
+            print("I can't find those objects.")
+            return
+            
+        # Attempt pouring
+        success, message, result_obj = self.combination_manager.perform_interaction(
+            target_obj.id, liquid_obj.id, "pour", self.player.current_room, self.objects
+        )
+        
+        print(message)
+    
+    def _handle_use_tool(self, command: Command) -> None:
+        """Handle use/apply X on Y command."""
+        if not command.noun or not command.preposition_object:
+            print("Use what on what?")
+            return
+            
+        tool_obj = self._find_object(command.noun)  
+        target_obj = self._find_object(command.preposition_object)
+        
+        if not tool_obj or not target_obj:
+            print("I can't find those objects.")
+            return
+            
+        # Attempt tool usage
+        success, message, result_obj = self.combination_manager.perform_interaction(
+            target_obj.id, tool_obj.id, "use", self.player.current_room, self.objects
+        )
+        
+        print(message)
+    
+    def _handle_object_transformation(self, original_id: str, new_id: str) -> None:
+        """Handle when an object transforms into another object."""
+        # Remove original object from game
+        original_obj = self.objects.get(original_id)
+        if not original_obj:
+            return
+            
+        # Find where original object was located
+        location_type, container_id = self._find_object_location(original_obj)
+        
+        # Remove from current location
+        if location_type == "inventory":
+            self.player.remove_from_inventory(original_id)
+        elif location_type == "room":
+            current_room = self.world.get_room(self.player.current_room)
+            if current_room:
+                current_room.remove_item(original_id)
+        elif location_type == "container" and container_id:
+            container = self.objects.get(container_id)
+            if container:
+                container.remove_from_container(original_id)
+        
+        # Create and place new object (this would need the new object definition)
+        # For now, just update the ID mapping
+        if new_id in self.objects:
+            new_obj = self.objects[new_id]
+            
+            # Place in same location as original
+            if location_type == "inventory":
+                self.player.add_to_inventory(new_id)
+            elif location_type == "room":
+                current_room = self.world.get_room(self.player.current_room)
+                if current_room:
+                    current_room.add_item(new_id)
+            elif location_type == "container" and container_id:
+                container = self.objects.get(container_id)
+                if container:
+                    container.add_to_container(new_id)
+    
+    def _handle_object_combination(self, obj1_id: str, obj2_id: str, result_id: str) -> None:
+        """Handle when two objects are combined to create a new object."""
+        # Remove both original objects
+        self._remove_object_from_game(obj1_id)
+        self._remove_object_from_game(obj2_id)
+        
+        # Add result object to inventory (most logical place for combined objects)
+        if result_id in self.objects:
+            self.player.add_to_inventory(result_id)
+    
+    def _remove_object_from_game(self, obj_id: str) -> None:
+        """Remove an object from wherever it is in the game."""
+        obj = self.objects.get(obj_id)
+        if not obj:
+            return
+            
+        location_type, container_id = self._find_object_location(obj)
+        
+        if location_type == "inventory":
+            self.player.remove_from_inventory(obj_id)
+        elif location_type == "room":
+            current_room = self.world.get_room(self.player.current_room)
+            if current_room:
+                current_room.remove_item(obj_id)
+        elif location_type == "container" and container_id:
+            container = self.objects.get(container_id)
+            if container:
+                container.remove_from_container(obj_id)
     
     def _find_all_objects(self, noun: str, check_inventory_only: bool = False) -> List['GameObject']:
         """Find all objects matching the given noun in accessible locations."""
@@ -1689,6 +1908,106 @@ Type 'help' for a list of commands.
         self.objects["COIN"] = coin
         self.objects["PAINTING"] = painting
         
+        # Add combination objects for authentic Zork interactions
+        bell = GameObject(
+            id="BELL",
+            name="small brass bell",
+            description="A small brass bell with a clear, bright tone. It looks like it could be heated.",
+            aliases=["bell", "brass"],
+            attributes={
+                "takeable": True,
+                "weight": 1
+            }
+        )
+        
+        hot_bell = GameObject(
+            id="HBELL",
+            name="red hot brass bell",
+            description="The brass bell is now red hot and too dangerous to touch with bare hands.",
+            aliases=["bell", "hot", "red"],
+            attributes={
+                "takeable": False,  # Too hot to take
+                "weight": 1
+            }
+        )
+        
+        rope = GameObject(
+            id="ROPE",
+            name="sturdy rope",
+            description="A length of strong, braided rope. It could be useful for climbing or tying things.",
+            aliases=["rope", "cord", "line"],
+            attributes={
+                "takeable": True,
+                "weight": 2
+            }
+        )
+        
+        hook = GameObject(
+            id="HOOK",
+            name="iron hook",
+            description="A sturdy iron hook with a sharp point. It looks like it could be attached to something.",
+            aliases=["hook", "grapple", "iron"],
+            attributes={
+                "takeable": True,
+                "weight": 1
+            }
+        )
+        
+        grappling_hook = GameObject(
+            id="GRAPPLING_HOOK",
+            name="grappling hook",
+            description="A rope with an iron hook securely tied to the end. Perfect for climbing or reaching high places.",
+            aliases=["grappling", "hook", "rope"],
+            attributes={
+                "takeable": True,
+                "weight": 3
+            }
+        )
+        
+        crowbar = GameObject(
+            id="CROWBAR",
+            name="iron crowbar",
+            description="A heavy iron crowbar, useful for prying things open or breaking objects.",
+            aliases=["crowbar", "prybar", "bar", "iron"],
+            attributes={
+                "takeable": True,
+                "weight": 3,
+                "tool": True
+            }
+        )
+        
+        mirror = GameObject(
+            id="MIRROR",
+            name="ornate mirror",
+            description="A beautiful ornate mirror with an elaborate silver frame. Your reflection stares back ominously.",
+            aliases=["mirror", "glass", "looking"],
+            attributes={
+                "takeable": False,  # Too large/fragile
+                "weight": 10,
+                "breakable": True
+            }
+        )
+        
+        broken_mirror = GameObject(
+            id="BROKEN_MIRROR",
+            name="broken mirror",
+            description="The mirror lies in countless sharp fragments. Seven years of bad luck, indeed.",
+            aliases=["mirror", "glass", "shards", "pieces"],
+            attributes={
+                "takeable": False,
+                "weight": 10
+            }
+        )
+        
+        self.objects["BELL"] = bell
+        self.objects["HBELL"] = hot_bell
+        self.objects["ROPE"] = rope
+        self.objects["HOOK"] = hook
+        self.objects["GRAPPLING_HOOK"] = grappling_hook
+        self.objects["CROWBAR"] = crowbar
+        self.objects["MIRROR"] = mirror
+        self.objects["BROKEN_MIRROR"] = broken_mirror
+        
         # Place objects in rooms (for simple test world)
         west_house.add_item("MAILBOX")  # Mailbox at west of house (leaflet is inside it)
         house_entrance.add_item("WINDOW")  # Window at behind house
@@ -1711,3 +2030,10 @@ Type 'help' for a list of commands.
         cave.add_item("BRASS_LANTERN")  # Brass lantern in cave  
         house_entrance.add_item("COIN")  # Large coin behind house
         temple.add_item("PAINTING")  # Beautiful painting in temple
+        
+        # Place combination objects
+        north_house.add_item("BELL")  # Brass bell at north of house
+        cave.add_item("ROPE")  # Rope in cave with other equipment
+        dangerous_room.add_item("HOOK")  # Iron hook in dangerous area
+        forest.add_item("CROWBAR")  # Crowbar in forest with tools
+        temple.add_item("MIRROR")  # Ornate mirror in temple (can be broken)
