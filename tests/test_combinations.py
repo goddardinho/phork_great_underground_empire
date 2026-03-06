@@ -4,6 +4,9 @@ Test script for the object combination system
 """
 
 import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from io import StringIO
 from src.game import GameEngine
 from src.parser.command_parser import Command
