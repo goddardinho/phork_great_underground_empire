@@ -10,6 +10,7 @@ from .world.room_loader import ZorkRoomLoader
 from .entities.player import Player
 from .entities.objects import GameObject
 from .parser.command_parser import CommandParser, Command
+from .responses import responses
 
 
 class GameEngine:
@@ -57,9 +58,9 @@ class GameEngine:
             return
         
         # Route command to appropriate handler
-        self._route_command(command)
+        self._route_command(command, user_input)
     
-    def _route_command(self, command) -> None:
+    def _route_command(self, command, user_input: str) -> None:
         """Route a command to its appropriate handler (extracted from _process_command)."""
         verb = command.verb
         
@@ -107,7 +108,11 @@ class GameEngine:
         elif verb == "extinguish":
             self._handle_extinguish(command)
         else:
-            print(f"I don't understand that.")
+            # Check for special Easter egg commands first
+            if responses.is_special_command(verb):
+                print(responses.get_special_command_response(verb))
+            else:
+                print(responses.get_unknown_command_response(user_input))
     
     def _handle_movement(self, direction: str) -> None:
         """Handle player movement."""
@@ -136,7 +141,7 @@ class GameEngine:
             else:
                 print("Error: That exit leads nowhere!")
         else:
-            print("You can't go that way.")
+            print(responses.get_cant_go_response())
     
     def _handle_look(self, command: Command) -> None:
         """Handle look command."""
@@ -171,7 +176,7 @@ class GameEngine:
                 self.player.pending_command = command
                 self._show_disambiguation_prompt()
             else:
-                print(f"I don't see a {command.noun} here.")
+                print(responses.get_dont_see_object_response(command.noun))
             return
         
         if not target_obj.is_takeable():
@@ -205,7 +210,7 @@ class GameEngine:
             elif container and not container.is_open():
                 print(f"The {container.name} is closed.")
             else:
-                print("I can't do that.")
+                print(responses.get_cant_do_that_response())
         else:
             print(f"I cannot reach that.")
     
@@ -225,12 +230,12 @@ class GameEngine:
             return
         
         if not target_obj:
-            print(f"I don't see a {command.noun} here.")
+            print(responses.get_dont_see_object_response(command.noun))
             return
         
         # Check if object is in inventory
         if target_obj.id not in self.player.inventory:
-            print(f"You don't have that.")
+            print(responses.get_inventory_response("dont_have"))
             return
         
         current_room = self.world.get_room(self.player.current_room)
@@ -251,7 +256,7 @@ class GameEngine:
                 self.player.pending_command = command
                 self._show_disambiguation_prompt()
             else:
-                print(f"I don't see a {command.noun} here.")
+                print(responses.get_dont_see_object_response(command.noun))
             return
         
         # Show base description with dynamic updates
@@ -296,25 +301,29 @@ class GameEngine:
                 print("It is empty.")
     
     def _handle_open(self, command: Command) -> None:
-        """Handle open command."""
+        """Handle open command with enhanced container support."""
         if not command.noun:
-            print("Open what?")
+            print(self.responses.get_cant_do_that_response())
             return
         
         target_obj = self._find_object(command.noun)
         if not target_obj:
-            print(f"I don't see a {command.noun} here.")
+            print(self.responses.get_dont_see_object_response(command.noun))
             return
         
+        # Check if object can be opened
         if not target_obj.is_openable():
-            print(f"You cannot open that.")
+            print(self.responses.get_action_response("cant_open", target_obj.name))
             return
-        
+            
+        # Check if already open
         if target_obj.is_open():
-            if target_obj.id == "WINDOW":
-                print(f"The {target_obj.name} is already open.")
-            else:
-                print(f"The {target_obj.name} is already open.")
+            print(self.responses.get_action_response("already_open", target_obj.name))
+            return
+            
+        # Check if locked
+        if target_obj.is_locked():
+            print(f"The {target_obj.name} is locked.")
             return
         
         # Open the object
@@ -323,12 +332,14 @@ class GameEngine:
         # Custom messages for different object types
         if target_obj.id == "WINDOW":
             print(f"You open the {target_obj.name} wider. Fresh air flows in.")
-        else:
+        elif target_obj.id == "MAILBOX":
             print(f"You open the {target_obj.name}.")
+        else:
+            print(f"Opened.")
         
         # Show contents if it's a container
         if target_obj.is_container():
-            contents = target_obj.get_attribute("contents", [])
+            contents = target_obj.get_contents()
             if contents:
                 print("Inside you find:")
                 for item_id in contents:
@@ -339,22 +350,24 @@ class GameEngine:
                 print("It is empty.")
     
     def _handle_close(self, command: Command) -> None:
-        """Handle close command."""
+        """Handle close command with enhanced container support."""
         if not command.noun:
-            print("Close what?")
+            print(self.responses.get_cant_do_that_response())
             return
         
         target_obj = self._find_object(command.noun)
         if not target_obj:
-            print(f"I don't see a {command.noun} here.")
+            print(self.responses.get_dont_see_object_response(command.noun))
             return
         
+        # Check if object can be closed
         if not target_obj.is_openable():
-            print(f"You cannot close that.")
+            print(self.responses.get_action_response("cant_close", target_obj.name))
             return
         
+        # Check if already closed
         if not target_obj.is_open():
-            print(f"The {target_obj.name} is already closed.")
+            print(self.responses.get_action_response("already_closed", target_obj.name))
             return
         
         # Close the object
@@ -363,8 +376,10 @@ class GameEngine:
         # Custom messages for different object types
         if target_obj.id == "WINDOW":
             print(f"You close the {target_obj.name} tightly, shutting out the fresh air.")
-        else:
+        elif target_obj.id == "MAILBOX":
             print(f"You close the {target_obj.name}.")
+        else:
+            print(f"Closed.")
     
     def _handle_read(self, command: Command) -> None:
         """Handle read command."""
@@ -387,7 +402,7 @@ class GameEngine:
             print(f"How can I read a {target_obj.name}?")
 
     def _handle_put(self, command: Command) -> None:
-        """Handle put command (put X in Y)."""
+        """Handle put command (put X in Y) with enhanced container support."""
         if not command.noun:
             print("Put what?")
             return
@@ -403,23 +418,28 @@ class GameEngine:
         # Find the item to put
         item_obj = self._find_object(command.noun)
         if not item_obj:
-            print(f"I don't see a {command.noun} here.")
+            print(self.responses.get_dont_see_object_response(command.noun))
             return
         
         # Find the container
         container_obj = self._find_object(command.noun2)
         if not container_obj:
-            print(f"I don't see a {command.noun2} here.")
+            print(self.responses.get_dont_see_object_response(command.noun2))
             return
         
         # Check if target is a container
         if not container_obj.is_container():
-            print(f"I don't see how I can put anything in that.")
+            print(self.responses.get_action_response("not_container", container_obj.name))
             return
         
         # Check if container is openable and open
         if container_obj.is_openable() and not container_obj.is_open():
             print(f"The {container_obj.name} is closed.")
+            return
+            
+        # Check if container is at capacity
+        if container_obj.is_at_capacity():
+            print(f"The {container_obj.name} is full.")
             return
         
         # Make sure the item isn't the container itself
@@ -453,7 +473,7 @@ class GameEngine:
             print(f"You can't reach the {item_obj.name}.")
 
     def _handle_get(self, command: Command) -> None:
-        """Handle get command (get X from Y or just get X)."""
+        """Handle get command (get X from Y or just get X) with enhanced container support."""
         if not command.noun:
             print("Get what?")
             return
@@ -463,16 +483,21 @@ class GameEngine:
             # Find the container
             container_obj = self._find_object(command.noun2)
             if not container_obj:
-                print(f"I don't see a {command.noun2} here.")
+                print(self.responses.get_dont_see_object_response(command.noun2))
                 return
             
             if not container_obj.is_container():
-                print(f"I don't see how you can get anything from that.")
+                print(self.responses.get_action_response("not_container", container_obj.name))
                 return
             
             # Check if container is openable and open
             if container_obj.is_openable() and not container_obj.is_open():
                 print(f"The {container_obj.name} is closed.")
+                return
+                
+            # Check if container is empty
+            if not container_obj.get_contents():
+                print(self.responses.get_action_response("nothing_inside", container_obj.name))
                 return
             
             # Find the item in the container - use disambiguation
@@ -493,23 +518,18 @@ class GameEngine:
                 self.player.awaiting_disambiguation = True
                 self.player.disambiguation_options = container_items
                 self.player.pending_command = command
-                print("Which one do you mean?")
-                for i, obj in enumerate(container_items):
-                    print(f"  {i+1}. the {obj.name} (in the {container_obj.name})")
-                print("(Enter a number, or type 'cancel' to abort)")
+                print(f"Which {command.noun} do you mean:")
+                for i, obj in enumerate(container_items, 1):
+                    location_desc = f"in the {container_obj.name}"
+                    print(f"  {i}. The {obj.name} ({location_desc})")
                 return
             
-            # Check if player can carry it
-            if self.player.is_inventory_full():
-                print("Your load is too heavy.")
-                return
             # Remove from container and add to inventory
             container_obj.remove_from_container(item_obj.id)
             self.player.add_to_inventory(item_obj.id)
             print(f"You take the {item_obj.name} from the {container_obj.name}.")
-        
         else:
-            # Just "get X" - same as "take X"
+            # Regular get command (equivalent to take)
             self._handle_take(command)
     
     def _find_object(self, noun: str) -> Optional['GameObject']:

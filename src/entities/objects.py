@@ -45,6 +45,29 @@ class GameObject:
     def is_open(self) -> bool:
         """Check if this openable object is currently open."""
         return self.get_attribute("open", False)
+
+    def is_locked(self) -> bool:
+        """Check if this container is locked."""
+        return self.get_attribute("locked", False)
+        
+    def can_open(self) -> bool:
+        """Check if this container can currently be opened."""
+        return self.is_openable() and not self.is_locked() and not self.is_open()
+        
+    def can_close(self) -> bool:
+        """Check if this container can currently be closed."""
+        return self.is_openable() and self.is_open()
+        
+    def get_capacity(self) -> int:
+        """Get maximum number of items this container can hold (0 = unlimited)."""
+        return self.get_attribute("capacity", 0)
+        
+    def is_at_capacity(self) -> bool:
+        """Check if container is at maximum capacity."""
+        capacity = self.get_capacity()
+        if capacity == 0:  # Unlimited capacity
+            return False
+        return len(self.get_contents()) >= capacity
     
     def is_readable(self) -> bool:
         """Check if this object can be read."""
@@ -71,6 +94,10 @@ class GameObject:
     def add_to_container(self, item_id: str) -> bool:
         """Add an item to this container. Returns True if successful."""
         if not self.is_container():
+            return False
+        
+        # Check capacity before adding
+        if self.is_at_capacity():
             return False
         
         contents = self.get_attribute("contents", [])

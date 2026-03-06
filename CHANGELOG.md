@@ -1,6 +1,37 @@
 # Changelog
 
-## v0.7.0 (2026-03-05) 🏆 **v1.0 FOUNDATION MILESTONE ACHIEVED!** 🏆
+## v1.1.0-dev (2026-03-05) 🎭 **Enhanced Container System** 🎭
+
+- **Enhanced container object system with robust mechanics:**
+	- **Advanced container attributes**: Added `locked`, `capacity`, and state management methods
+	- **Capacity management**: Containers can have item limits (0 = unlimited like mailbox)
+	- **Lock system**: Containers can be locked/unlocked with proper validation
+	- **State checking**: `can_open()`, `can_close()`, `is_at_capacity()` methods for robust validation
+	- **Snarky response integration**: Container actions use authentic Zork response system
+	- **Enhanced open/close commands**: Better error handling and state management
+	- **Improved put/get commands**: Capacity checking, lock validation, and better feedback
+	- **Container content display**: Dynamic descriptions show open/closed state and contents
+	- **Comprehensive test suite**: [tests/test_enhanced_containers.py](tests/test_enhanced_containers.py) validates all functionality
+	- **Gameplay validation**: Tested mailbox, leaflet, and container interactions in live game
+
+- **Comprehensive snarky response system with authentic Zork personality:**
+	- 70+ varied witty responses to prevent repetitive "I don't understand" messages
+	- 15+ Easter egg commands with special responses: xyzzy, plugh, hello, curse, jump, scream, etc.
+	- Authentic Zork-style personality: snarky, witty, establishment-classy language
+	- Randomized response selection ensures variety in repeated invalid commands
+	- Context-aware responses that include object names when appropriate
+	- **Canonical validation against original Zork source code (parser.mud)**:
+		- "Huh?" and "What?" - parser.mud line 327 most common responses
+		- "I beg your pardon?" - parser.mud line 79 for empty input
+		- "That doesn't make sense!" - parser.mud line 377 exact original phrasing
+		- "I don't know how to do that." - act3.mud line 335 direct quote
+		- Response priority order matches original Zork parsing behavior
+	- Integrated throughout game engine for consistent personality across all interactions
+	- Comprehensive test suite created in [tests/test_responses.py](tests/test_responses.py)
+
+**v1.1 Development Phase Started:** Enhanced container object system is next priority
+
+## v1.0.0 (2026-03-05) 🏆 **FOUNDATION COMPLETE** 🏆
 
 - **Room wiring system completed:**
 	- Enhanced MDL parser to handle complex exit structures from original Zork files
