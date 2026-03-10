@@ -98,7 +98,9 @@ class ZorkRoomLoader:
             id=data.id,
             name=data.short_name or data.id,
             description=description,
-            exits=exits
+            exits=exits,
+            items=data.objects,  # Add objects from parser
+            flags=set(data.flags) if data.flags else set()  # Add flags from parser
         )
     
     def _standardize_direction(self, direction: str) -> str:
