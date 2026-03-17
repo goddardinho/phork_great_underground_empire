@@ -46,7 +46,7 @@
 - [x] **Comprehensive room wiring audit** - Validate all 196 rooms have correct exits ✅ **COMPLETE!** *v1.2.3* 
 - [x] **Full connectivity testing** - Automated traversal of entire game world ✅ **COMPLETE!** *v1.2.3*
 - [x] **Room connectivity completion** - **100% CONNECTIVITY ACHIEVED** - All 196/196 rooms reachable with 119 bidirectional connections (54x improvement from 9.2% to 100%) ✅ **COMPLETE!** *v1.2.4*
-- [x] **Canonical accuracy completion** - **100% CANONICAL ACCURACY ACHIEVED** - All 196/196 rooms now match original Zork specifications for names, descriptions, objects, and exits ✅ **COMPLETE!** *v1.2.5*
+- [x] **Canonical accuracy completion** - **100% CANONICAL ACCURACY ACHIEVED** - All 196/196 rooms now match original Zork specifications for names, descriptions, objects, and exits. Fixed room parsing failures (LROOM, CLEAR, CELLA, MGRAT) and enhanced canonical descriptions. ✅ **COMPLETE!** *v1.2.5*
 
 ### 🎮 **Final Gameplay Validation (v1.3.0)**
 - [ ] **Full command and response testing** - Validation and testing of all commands and responses for canonical gameplay
