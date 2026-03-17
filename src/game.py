@@ -344,6 +344,9 @@ class GameEngine:
                 print(self.responses.get_dont_see_object_response(command.noun))
             return
         
+        # Determine object location for context-appropriate description
+        location_type, container_id = self._find_object_location(target_obj)
+        
         # Show base description with dynamic updates
         description = target_obj.description
         
@@ -354,22 +357,32 @@ class GameEngine:
             else:
                 description = "A small window in the corner of the house. It is closed tightly."
         elif target_obj.is_container():
-            # For containers, update description based on contents and state
+            # For containers, update description based on contents, state, and location
             contents = target_obj.get_contents()
             
-            # Start with base description but remove state-specific parts
-            base_desc = target_obj.description
-            # Remove existing state indicators
-            base_desc = base_desc.replace("There appears to be something inside.", "")
-            base_desc = base_desc.replace("is closed.", "").replace("is open.", "")
-            
-            # Add appropriate state description
-            if target_obj.is_open():
-                description = base_desc.strip() + " It is open."
+            # Adjust description based on where the container is
+            if location_type == "inventory":
+                # Container is in player's inventory - use simpler description
+                if target_obj.is_open():
+                    description = f"The {target_obj.name} is open."
+                else:
+                    description = f"The {target_obj.name} is closed."
+                    if contents:
+                        description += " There appears to be something inside."
             else:
-                description = base_desc.strip() + " It is closed."
-                if contents:
-                    description += " There appears to be something inside."
+                # Container is in room or other location - use full description
+                base_desc = target_obj.description
+                # Remove existing state indicators
+                base_desc = base_desc.replace("There appears to be something inside.", "")
+                base_desc = base_desc.replace("is closed.", "").replace("is open.", "")
+                
+                # Add appropriate state description
+                if target_obj.is_open():
+                    description = base_desc.strip() + " It is open."
+                else:
+                    description = base_desc.strip() + " It is closed."
+                    if contents:
+                        description += " There appears to be something inside."
         
         print(description)
         
