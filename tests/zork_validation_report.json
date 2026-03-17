@@ -1,0 +1,1160 @@
+{
+  "validation_timestamp": "2026-03-06",
+  "total_issues": 146,
+  "issues": [
+    {
+      "category": "starting_location",
+      "severity": "high",
+      "room_id": "WHOUS",
+      "issue": "Missing expected exits: {'east'}",
+      "expected": "{'east', 'south', 'north'}",
+      "actual": "{'north', 'south', 'west'}"
+    },
+    {
+      "category": "room_descriptions",
+      "severity": "medium",
+      "room_id": "WHOUS",
+      "issue": "Missing expected keywords: ['closed', 'boarded up']",
+      "expected": "Description containing: ['west of', 'white house', 'closed', 'boarded up']",
+      "actual": "this is an open field west of a white house, with a boarded front door."
+    },
+    {
+      "category": "room_descriptions",
+      "severity": "medium",
+      "room_id": "NHOUS",
+      "issue": "Missing expected keywords: ['north of']",
+      "expected": "Description containing: ['north of', 'white house']",
+      "actual": "you are facing the north side of a white house. there is no door here, and all the windows are barre..."
+    },
+    {
+      "category": "room_descriptions",
+      "severity": "medium",
+      "room_id": "SHOUS",
+      "issue": "Missing expected keywords: ['south of']",
+      "expected": "Description containing: ['south of', 'white house']",
+      "actual": "you are facing the south side of a white house. there is no door here, and all the windows are barre..."
+    },
+    {
+      "category": "room_descriptions",
+      "severity": "medium",
+      "room_id": "EHOUS",
+      "issue": "Missing expected keywords: ['white house', 'window']",
+      "expected": "Description containing: ['behind', 'white house', 'window']",
+      "actual": "behind house"
+    },
+    {
+      "category": "room_descriptions",
+      "severity": "medium",
+      "room_id": "LROOM",
+      "issue": "Missing expected keywords: ['door', 'east']",
+      "expected": "Description containing: ['living room', 'door', 'east']",
+      "actual": "living room"
+    },
+    {
+      "category": "room_descriptions",
+      "severity": "medium",
+      "room_id": "KITCH",
+      "issue": "Missing expected keywords: ['table', 'food', 'window', 'passage', 'west', 'staircase', 'upward']",
+      "expected": "Description containing: ['kitchen', 'table', 'food', 'window', 'passage', 'west', 'staircase', 'upward']",
+      "actual": "kitchen"
+    },
+    {
+      "category": "room_descriptions",
+      "severity": "medium",
+      "room_id": "ATTIC",
+      "issue": "Missing expected keywords: ['dusty']",
+      "expected": "Description containing: ['attic', 'dusty']",
+      "actual": "this is the attic. the only exit is stairs that lead down."
+    },
+    {
+      "category": "room_descriptions",
+      "severity": "medium",
+      "room_id": "CELLA",
+      "issue": "Missing expected keywords: ['cellar', 'stone walls']",
+      "expected": "Description containing: ['cellar', 'stone walls']",
+      "actual": "cella"
+    },
+    {
+      "category": "room_descriptions",
+      "severity": "medium",
+      "room_id": "FORE1",
+      "issue": "Missing expected keywords: ['forest', 'path']",
+      "expected": "Description containing: ['forest', 'path']",
+      "actual": "up"
+    },
+    {
+      "category": "room_descriptions",
+      "severity": "medium",
+      "room_id": "FORE2",
+      "issue": "Missing expected keywords: ['forest']",
+      "expected": "Description containing: ['forest']",
+      "actual": "up"
+    },
+    {
+      "category": "room_descriptions",
+      "severity": "medium",
+      "room_id": "FORE3",
+      "issue": "Missing expected keywords: ['forest']",
+      "expected": "Description containing: ['forest']",
+      "actual": "up"
+    },
+    {
+      "category": "room_descriptions",
+      "severity": "medium",
+      "room_id": "CLEAR",
+      "issue": "Missing expected keywords: ['leaves']",
+      "expected": "Description containing: ['clearing', 'leaves']",
+      "actual": "clearing"
+    },
+    {
+      "category": "room_descriptions",
+      "severity": "medium",
+      "room_id": "MGRAT",
+      "issue": "Missing expected keywords: ['steel grating']",
+      "expected": "Description containing: ['grating', 'steel grating']",
+      "actual": "grating room"
+    },
+    {
+      "category": "room_descriptions",
+      "severity": "medium",
+      "room_id": "MAZE1",
+      "issue": "Missing expected keywords: ['maze', 'twisty', 'passages']",
+      "expected": "Description containing: ['maze', 'twisty', 'passages']",
+      "actual": "west"
+    },
+    {
+      "category": "room_contents",
+      "severity": "high",
+      "room_id": "WHOUS",
+      "issue": "Missing expected object: MAILX",
+      "expected": "['MAILX']",
+      "actual": "[]"
+    },
+    {
+      "category": "room_contents",
+      "severity": "high",
+      "room_id": "LROOM",
+      "issue": "Missing expected object: LAMP",
+      "expected": "['LAMP', 'RUG', 'TCASE', 'SWORD', 'DOOR']",
+      "actual": "[]"
+    },
+    {
+      "category": "room_contents",
+      "severity": "high",
+      "room_id": "LROOM",
+      "issue": "Missing expected object: RUG",
+      "expected": "['LAMP', 'RUG', 'TCASE', 'SWORD', 'DOOR']",
+      "actual": "[]"
+    },
+    {
+      "category": "room_contents",
+      "severity": "high",
+      "room_id": "LROOM",
+      "issue": "Missing expected object: TCASE",
+      "expected": "['LAMP', 'RUG', 'TCASE', 'SWORD', 'DOOR']",
+      "actual": "[]"
+    },
+    {
+      "category": "room_contents",
+      "severity": "high",
+      "room_id": "LROOM",
+      "issue": "Missing expected object: SWORD",
+      "expected": "['LAMP', 'RUG', 'TCASE', 'SWORD', 'DOOR']",
+      "actual": "[]"
+    },
+    {
+      "category": "room_contents",
+      "severity": "high",
+      "room_id": "LROOM",
+      "issue": "Missing expected object: DOOR",
+      "expected": "['LAMP', 'RUG', 'TCASE', 'SWORD', 'DOOR']",
+      "actual": "[]"
+    },
+    {
+      "category": "room_contents",
+      "severity": "high",
+      "room_id": "KITCH",
+      "issue": "Missing expected object: BOTTL",
+      "expected": "['BOTTL', 'SBAG']",
+      "actual": "[]"
+    },
+    {
+      "category": "room_contents",
+      "severity": "high",
+      "room_id": "KITCH",
+      "issue": "Missing expected object: SBAG",
+      "expected": "['BOTTL', 'SBAG']",
+      "actual": "[]"
+    },
+    {
+      "category": "room_contents",
+      "severity": "high",
+      "room_id": "ATTIC",
+      "issue": "Missing expected object: ROPE",
+      "expected": "['ROPE', 'KNIFE']",
+      "actual": "[]"
+    },
+    {
+      "category": "room_contents",
+      "severity": "high",
+      "room_id": "ATTIC",
+      "issue": "Missing expected object: KNIFE",
+      "expected": "['ROPE', 'KNIFE']",
+      "actual": "[]"
+    },
+    {
+      "category": "room_contents",
+      "severity": "high",
+      "room_id": "MGRAT",
+      "issue": "Missing expected object: GRATE",
+      "expected": "['GRATE', 'KEYS']",
+      "actual": "[]"
+    },
+    {
+      "category": "room_contents",
+      "severity": "high",
+      "room_id": "MGRAT",
+      "issue": "Missing expected object: KEYS",
+      "expected": "['GRATE', 'KEYS']",
+      "actual": "[]"
+    },
+    {
+      "category": "room_contents",
+      "severity": "critical",
+      "room_id": "GLOBAL",
+      "issue": "Critical object LAMP not found anywhere in world",
+      "expected": "Object LAMP should exist",
+      "actual": "Object missing"
+    },
+    {
+      "category": "room_contents",
+      "severity": "critical",
+      "room_id": "GLOBAL",
+      "issue": "Critical object SWORD not found anywhere in world",
+      "expected": "Object SWORD should exist",
+      "actual": "Object missing"
+    },
+    {
+      "category": "room_contents",
+      "severity": "critical",
+      "room_id": "GLOBAL",
+      "issue": "Critical object MAILX not found anywhere in world",
+      "expected": "Object MAILX should exist",
+      "actual": "Object missing"
+    },
+    {
+      "category": "room_contents",
+      "severity": "critical",
+      "room_id": "GLOBAL",
+      "issue": "Critical object GRATE not found anywhere in world",
+      "expected": "Object GRATE should exist",
+      "actual": "Object missing"
+    },
+    {
+      "category": "room_exits",
+      "severity": "high",
+      "room_id": "WHOUS",
+      "issue": "Missing exit: east -> EHOUS",
+      "expected": "east: EHOUS",
+      "actual": "No east exit"
+    },
+    {
+      "category": "room_exits",
+      "severity": "high",
+      "room_id": "NHOUS",
+      "issue": "Missing exit: south -> WHOUS",
+      "expected": "south: WHOUS",
+      "actual": "No south exit"
+    },
+    {
+      "category": "room_exits",
+      "severity": "high",
+      "room_id": "SHOUS",
+      "issue": "Missing exit: north -> WHOUS",
+      "expected": "north: WHOUS",
+      "actual": "No north exit"
+    },
+    {
+      "category": "room_exits",
+      "severity": "high",
+      "room_id": "EHOUS",
+      "issue": "Wrong exit target: west",
+      "expected": "west: WHOUS",
+      "actual": "west: KITCH"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "WHOUS",
+      "issue": "One-way connection: west to FORE1",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: WHOUS->FORE1 but FORE1 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "NHOUS",
+      "issue": "One-way connection: east to EHOUS",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: NHOUS->EHOUS but EHOUS doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "NHOUS",
+      "issue": "One-way connection: north to FORE3",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: NHOUS->FORE3 but FORE3 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "SHOUS",
+      "issue": "One-way connection: east to EHOUS",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: SHOUS->EHOUS but EHOUS doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "EHOUS",
+      "issue": "One-way connection: east to CLEAR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: EHOUS->CLEAR but CLEAR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FORE1",
+      "issue": "One-way connection: north to FORE1",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FORE1->FORE1 but FORE1 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FORE1",
+      "issue": "One-way connection: east to FORE3",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FORE1->FORE3 but FORE3 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FORE1",
+      "issue": "One-way connection: south to FORE2",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FORE1->FORE2 but FORE2 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FORE1",
+      "issue": "One-way connection: west to FORE1",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FORE1->FORE1 but FORE1 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FORE2",
+      "issue": "One-way connection: east to CLEAR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FORE2->CLEAR but CLEAR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FORE2",
+      "issue": "One-way connection: south to FORE4",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FORE2->FORE4 but FORE4 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FORE2",
+      "issue": "One-way connection: west to FORE1",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FORE2->FORE1 but FORE1 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FORE3",
+      "issue": "One-way connection: north to FORE2",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FORE3->FORE2 but FORE2 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FORE3",
+      "issue": "One-way connection: south to CLEAR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FORE3->CLEAR but CLEAR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FORE3",
+      "issue": "One-way connection: west to NHOUS",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FORE3->NHOUS but NHOUS doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FORE4",
+      "issue": "One-way connection: east to CLTOP",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FORE4->CLTOP but CLTOP doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FORE4",
+      "issue": "One-way connection: south to FORE4",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FORE4->FORE4 but FORE4 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FORE4",
+      "issue": "One-way connection: west to FORE2",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FORE4->FORE2 but FORE2 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FORE5",
+      "issue": "One-way connection: north to FORE5",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FORE5->FORE5 but FORE5 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FORE5",
+      "issue": "One-way connection: west to FORE2",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FORE5->FORE2 but FORE2 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "CLEAR",
+      "issue": "One-way connection: north to CLEAR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: CLEAR->CLEAR but CLEAR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "CLEAR",
+      "issue": "One-way connection: east to CLEAR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: CLEAR->CLEAR but CLEAR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "CLEAR",
+      "issue": "One-way connection: south to FORE2",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: CLEAR->FORE2 but FORE2 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "CELLA",
+      "issue": "One-way connection: south to CHAS2",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: CELLA->CHAS2 but CHAS2 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MTROL",
+      "issue": "One-way connection: south to MAZE1",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MTROL->MAZE1 but MAZE1 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZE1",
+      "issue": "One-way connection: west to MTROL",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZE1->MTROL but MTROL doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZE1",
+      "issue": "One-way connection: north to MAZE1",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZE1->MAZE1 but MAZE1 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZE1",
+      "issue": "One-way connection: south to MAZE2",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZE1->MAZE2 but MAZE2 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZE1",
+      "issue": "One-way connection: east to MAZE4",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZE1->MAZE4 but MAZE4 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZE2",
+      "issue": "One-way connection: south to MAZE1",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZE2->MAZE1 but MAZE1 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZE4",
+      "issue": "One-way connection: north to MAZE1",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZE4->MAZE1 but MAZE1 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "DEAD1",
+      "issue": "One-way connection: south to MAZE4",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: DEAD1->MAZE4 but MAZE4 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZE6",
+      "issue": "One-way connection: west to MAZE6",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZE6->MAZE6 but MAZE6 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZE6",
+      "issue": "One-way connection: up to MAZE9",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZE6->MAZE9 but MAZE9 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZE7",
+      "issue": "One-way connection: east to MAZE8",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZE7->MAZE8 but MAZE8 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZE9",
+      "issue": "One-way connection: down to MAZ10",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZE9->MAZ10 but MAZ10 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZE9",
+      "issue": "One-way connection: west to MAZ12",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZE9->MAZ12 but MAZ12 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZ10",
+      "issue": "One-way connection: east to MAZE9",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZ10->MAZE9 but MAZE9 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZ10",
+      "issue": "One-way connection: west to MAZ13",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZ10->MAZ13 but MAZ13 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZ12",
+      "issue": "One-way connection: west to MAZE5",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZ12->MAZE5 but MAZE5 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZ12",
+      "issue": "One-way connection: east to MAZ13",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZ12->MAZ13 but MAZ13 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZ12",
+      "issue": "One-way connection: up to MAZE9",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZ12->MAZE9 but MAZE9 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZ13",
+      "issue": "One-way connection: east to MAZE9",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZ13->MAZE9 but MAZE9 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MAZ13",
+      "issue": "One-way connection: down to MAZ12",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MAZ13->MAZ12 but MAZ12 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "RAVI1",
+      "issue": "One-way connection: down to RESES",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: RAVI1->RESES but RESES doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "RAVI1",
+      "issue": "One-way connection: west to CRAW1",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: RAVI1->CRAW1 but CRAW1 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "CRAW1",
+      "issue": "One-way connection: west to RAVI1",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: CRAW1->RAVI1 but RAVI1 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "EGYPT",
+      "issue": "One-way connection: east to CRAW1",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: EGYPT->CRAW1 but CRAW1 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "RUBYR",
+      "issue": "One-way connection: south to ICY",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: RUBYR->ICY but ICY doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "ECHO",
+      "issue": "One-way connection: east to CHAS3",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: ECHO->CHAS3 but CHAS3 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MIRR2",
+      "issue": "One-way connection: north to CRAW3",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MIRR2->CRAW3 but CRAW3 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "PASS3",
+      "issue": "One-way connection: north to CRAW2",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: PASS3->CRAW2 but CRAW2 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MINE1",
+      "issue": "One-way connection: east to TUNNE",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MINE1->TUNNE but TUNNE doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MINE2",
+      "issue": "One-way connection: south to MINE1",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MINE2->MINE1 but MINE1 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MINE2",
+      "issue": "One-way connection: west to MINE5",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MINE2->MINE5 but MINE5 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MINE3",
+      "issue": "One-way connection: east to MINE5",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MINE3->MINE5 but MINE5 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MINE4",
+      "issue": "One-way connection: up to MINE5",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MINE4->MINE5 but MINE5 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MINE5",
+      "issue": "One-way connection: north to MINE7",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MINE5->MINE7 but MINE7 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MINE5",
+      "issue": "One-way connection: east to MINE4",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MINE5->MINE4 but MINE4 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MINE7",
+      "issue": "One-way connection: west to MINE5",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MINE7->MINE5 but MINE5 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "DOME",
+      "issue": "One-way connection: east to CRAW1",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: DOME->CRAW1 but CRAW1 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "CRAW4",
+      "issue": "One-way connection: north to CHAS2",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: CRAW4->CHAS2 but CHAS2 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "CRAW4",
+      "issue": "One-way connection: east to MTROL",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: CRAW4->MTROL but MTROL doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "CHAS2",
+      "issue": "One-way connection: west to CELLA",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: CHAS2->CELLA but CELLA doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "CHAS2",
+      "issue": "One-way connection: north to CRAW4",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: CHAS2->CRAW4 but CRAW4 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "PASS1",
+      "issue": "One-way connection: west to MTROL",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: PASS1->MTROL but MTROL doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "PASS5",
+      "issue": "One-way connection: north to CHAS1",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: PASS5->CHAS1 but CHAS1 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "TEMP1",
+      "issue": "One-way connection: west to MGRAI",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: TEMP1->MGRAI but MGRAI doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "DOCK",
+      "issue": "One-way connection: north to DAM",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: DOCK->DAM but DAM doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "CLTOP",
+      "issue": "One-way connection: south to FORE4",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: CLTOP->FORE4 but FORE4 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "BKENT",
+      "issue": "One-way connection: south to GALLE",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: BKENT->GALLE but GALLE doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "BKTW",
+      "issue": "One-way connection: north to BKVW",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: BKTW->BKVW but BKVW doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "BKTE",
+      "issue": "One-way connection: north to BKVE",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: BKTE->BKVE but BKVE doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "SLID3",
+      "issue": "One-way connection: down to CELLA",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: SLID3->CELLA but CELLA doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "SLEDG",
+      "issue": "One-way connection: down to CELLA",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: SLEDG->CELLA but CELLA doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "SLEDG",
+      "issue": "One-way connection: up to SLID2",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: SLEDG->SLID2 but SLID2 doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRCE",
+      "issue": "One-way connection: west to INMIR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRCE->INMIR but INMIR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRCE",
+      "issue": "One-way connection: north to MRG",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRCE->MRG but MRG doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRCE",
+      "issue": "One-way connection: south to MRB",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRCE->MRB but MRB doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRCW",
+      "issue": "One-way connection: east to INMIR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRCW->INMIR but INMIR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRCW",
+      "issue": "One-way connection: north to MRG",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRCW->MRG but MRG doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRCW",
+      "issue": "One-way connection: south to MRB",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRCW->MRB but MRB doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRBE",
+      "issue": "One-way connection: west to INMIR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRBE->INMIR but INMIR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRBE",
+      "issue": "One-way connection: north to MRC",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRBE->MRC but MRC doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRBE",
+      "issue": "One-way connection: south to MRA",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRBE->MRA but MRA doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRBW",
+      "issue": "One-way connection: east to INMIR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRBW->INMIR but INMIR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRBW",
+      "issue": "One-way connection: north to MRC",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRBW->MRC but MRC doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRBW",
+      "issue": "One-way connection: south to MRA",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRBW->MRA but MRA doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRAE",
+      "issue": "One-way connection: west to INMIR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRAE->INMIR but INMIR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRAE",
+      "issue": "One-way connection: north to MRB",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRAE->MRB but MRB doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRAE",
+      "issue": "One-way connection: south to MREYE",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRAE->MREYE but MREYE doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRAW",
+      "issue": "One-way connection: east to INMIR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRAW->INMIR but INMIR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRAW",
+      "issue": "One-way connection: north to MRB",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRAW->MRB but MRB doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "MRAW",
+      "issue": "One-way connection: south to MREYE",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: MRAW->MREYE but MREYE doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "INMIR",
+      "issue": "One-way connection: north to MRA",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: INMIR->MRA but MRA doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "INMIR",
+      "issue": "One-way connection: south to MRA",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: INMIR->MRA but MRA doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "TOMB",
+      "issue": "One-way connection: north to FDOOR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: TOMB->FDOOR but FDOOR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "CRYPT",
+      "issue": "One-way connection: south to FDOOR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: CRYPT->FDOOR but FDOOR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "ECORR",
+      "issue": "One-way connection: north to NCORR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: ECORR->NCORR but NCORR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "ECORR",
+      "issue": "One-way connection: south to SCORR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: ECORR->SCORR but SCORR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "WCORR",
+      "issue": "One-way connection: north to NCORR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: WCORR->NCORR but NCORR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "WCORR",
+      "issue": "One-way connection: south to SCORR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: WCORR->SCORR but SCORR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "SCORR",
+      "issue": "One-way connection: north to FDOOR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: SCORR->FDOOR but FDOOR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "BDOOR",
+      "issue": "One-way connection: south to FDOOR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: BDOOR->FDOOR but FDOOR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "FDOOR",
+      "issue": "One-way connection: north to FDOOR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: FDOOR->FDOOR but FDOOR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "NCORR",
+      "issue": "One-way connection: south to FDOOR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: NCORR->FDOOR but FDOOR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "CELL",
+      "issue": "One-way connection: north to FDOOR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: CELL->FDOOR but FDOOR doesn't lead back"
+    },
+    {
+      "category": "room_exits",
+      "severity": "low",
+      "room_id": "CELL",
+      "issue": "One-way connection: south to FDOOR",
+      "expected": "Bidirectional connection",
+      "actual": "One-way: CELL->FDOOR but FDOOR doesn't lead back"
+    },
+    {
+      "category": "canonical_gameplay",
+      "severity": "critical",
+      "room_id": "WHOUS",
+      "issue": "Exception during movement test: 'GameEngine' object has no attribute 'handle_command'",
+      "expected": "Successful movement",
+      "actual": "Exception: 'GameEngine' object has no attribute 'handle_command'"
+    },
+    {
+      "category": "canonical_gameplay",
+      "severity": "critical",
+      "room_id": 

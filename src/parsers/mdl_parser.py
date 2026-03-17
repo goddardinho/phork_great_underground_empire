@@ -361,7 +361,7 @@ class MDLParser:
                 elif exit_content[i] == '<':
                     # Complex structure (DOOR, CEXIT, etc.)
                     if exit_content[i:].startswith('<DOOR'):
-                        destination, i = self._parse_door_structure(exit_content, i)
+                        destination, i = self._parse_door_structure(exit_content, i, room_id)
                     elif exit_content[i:].startswith('<CEXIT'):
                         destination, i = self._parse_cexit_structure(exit_content, i)
                     else:
@@ -430,8 +430,9 @@ class MDLParser:
             
         return i
 
-    def _parse_door_structure(self, text: str, start: int) -> Tuple[Optional[str], int]:
-        """Parse a DOOR structure: <DOOR "object" "room1" "room2" "message">"""
+    def _parse_door_structure(self, text: str, start: int, current_room_id: str) -> Tuple[Optional[str], int]:
+        """Parse a DOOR structure: <DOOR "object" "room1" "room2" "message">
+        Returns the OTHER room in the door connection (not current_room_id)."""
         if not text[start:].startswith('<DOOR'):
             return None, start
             
@@ -656,6 +657,39 @@ class MDLParser:
             all_rooms.update(file_rooms)
         
         return all_rooms
+
+
+    def _extract_balanced_brackets(self, text: str, start_pattern: str) -> Optional[str]:
+        """Extract content between balanced angle brackets starting with start_pattern."""
+        start_index = text.find(start_pattern)
+        if start_index == -1:
+            return None
+            
+        # Find the opening bracket
+        bracket_start = text.find('<', start_index)
+        if bracket_start == -1:
+            return None
+            
+        # Count brackets to find the matching closing bracket
+        bracket_count = 0
+        i = bracket_start
+        
+        while i < len(text):
+            if text[i] == '<':
+                bracket_count += 1
+            elif text[i] == '>':
+                bracket_count -= 1
+                if bracket_count == 0:
+                    # Found the matching closing bracket
+                    # Return content between the brackets (excluding the < >)
+                    content_start = bracket_start + len(start_pattern)
+                    while content_start < i and text[content_start].isspace():
+                        content_start += 1
+                    
+                    return text[content_start:i].strip()
+            i += 1
+            
+        return None
 
 
 def main():

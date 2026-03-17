@@ -53,14 +53,15 @@
 - [ ] **Edge case validation** - Dark rooms, dangerous areas, special exits
 - [ ] **Performance testing** - Large world navigation and object interaction
 - [ ] **Integration testing** - All systems working together seamlessly
+- [x] **Cleanup** - Cleanup of files and directory structure ✅ **COMPLETE!** *v1.2.2*
 
-### NPCs & Combat
+### **NPCs & Combat (v1.3.0)**
 - [ ] Basic NPC conversations
 - [ ] Thief, Troll, and other iconic characters  
 - [ ] Simple combat system
 - [ ] NPC movement and behaviors
 
-### Game State
+### **Game State (v1.4.0)**
 - [x] **Save/load functionality** - Complete JSON-based save/load system with timestamp tracking, version compatibility, and comprehensive state persistence (player, world, score, combinations) ✅ **COMPLETE!** *v1.2.1*
 - [ ] Death and restart mechanics  
 - [ ] Inventory size limits and object weight
