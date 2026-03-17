@@ -1490,7 +1490,7 @@ Type 'help' for a list of commands.
                 "weight": 1,
                 "container": True,
                 "openable": True, 
-                "open": False,
+                "open": True,  # Bird's nest starts open so egg is visible
                 "contents": ["EGG"],  # Contains the egg initially
                 "capacity": 1  # Only holds one item (the egg)
             }
