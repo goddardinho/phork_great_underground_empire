@@ -357,32 +357,16 @@ class GameEngine:
             else:
                 description = "A small window in the corner of the house. It is closed tightly."
         elif target_obj.is_container():
-            # For containers, update description based on contents, state, and location
+            # For containers, always focus on container state/contents regardless of location
+            # "look in X" should be about the container, not its room description
             contents = target_obj.get_contents()
             
-            # Adjust description based on where the container is
-            if location_type == "inventory":
-                # Container is in player's inventory - use simpler description
-                if target_obj.is_open():
-                    description = f"The {target_obj.name} is open."
-                else:
-                    description = f"The {target_obj.name} is closed."
-                    if contents:
-                        description += " There appears to be something inside."
+            if target_obj.is_open():
+                description = f"The {target_obj.name} is open."
             else:
-                # Container is in room or other location - use full description
-                base_desc = target_obj.description
-                # Remove existing state indicators
-                base_desc = base_desc.replace("There appears to be something inside.", "")
-                base_desc = base_desc.replace("is closed.", "").replace("is open.", "")
-                
-                # Add appropriate state description
-                if target_obj.is_open():
-                    description = base_desc.strip() + " It is open."
-                else:
-                    description = base_desc.strip() + " It is closed."
-                    if contents:
-                        description += " There appears to be something inside."
+                description = f"The {target_obj.name} is closed."
+                if contents:
+                    description += " There appears to be something inside."
         
         print(description)
         
