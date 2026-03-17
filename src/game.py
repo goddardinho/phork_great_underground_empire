@@ -1472,7 +1472,7 @@ Type 'help' for a list of commands.
             attributes={
                 "takeable": False,
                 "openable": True,
-                "open": False,  # starts slightly ajar, can be fully opened
+                "open": True,  # Starts slightly ajar (canonically open)
                 "container": False,
                 "door": True  # acts as passage between rooms
             }
@@ -1528,6 +1528,150 @@ Type 'help' for a list of commands.
             }
         )
         self.objects["TTREE"] = tree
+        
+        # Create Living Room objects (LROOM) - canonical Zork starting items
+        trophy_case = GameObject(
+            id="TCASE",
+            name="trophy case",
+            description="A large trophy case, displaying various trophies.",
+            aliases=["case", "trophy", "trophies", "display"],
+            attributes={
+                "takeable": False,
+                "container": True,
+                "openable": True,
+                "open": False,  # Starts closed
+                "contents": [],
+                "capacity": 10,  # Can hold many treasures
+                "weight": 100
+            }
+        )
+        self.objects["TCASE"] = trophy_case
+        
+        rug = GameObject(
+            id="RUG",
+            name="large oriental rug",
+            description="A large oriental rug with beautiful patterns.",
+            aliases=["rug", "carpet", "oriental", "large"],
+            attributes={
+                "takeable": False,  # Too large to pick up
+                "weight": 50,
+                "moveable": True  # Can be moved to reveal things underneath
+            }
+        )
+        self.objects["RUG"] = rug
+        
+        sword = GameObject(
+            id="SWORD", 
+            name="elvish sword",
+            description="A beautiful elvish sword of ancient make. The blade is gleaming and sharp.",
+            aliases=["sword", "blade", "elvish", "weapon"],
+            attributes={
+                "takeable": True,
+                "weight": 3,
+                "weapon": True,
+                "treasure": True,
+                "treasure_value": 10
+            }
+        )
+        self.objects["SWORD"] = sword
+        
+        brass_lamp = GameObject(
+            id="LAMP",
+            name="brass lamp",
+            description="A brass lamp of ancient design.",
+            aliases=["lamp", "light", "brass", "lantern"],
+            attributes={
+                "takeable": True,
+                "weight": 2,
+                "light_source": True,
+                "lit": False,
+                "light_turns": 330,  # Canonical lamp duration
+                "treasure": True,
+                "treasure_value": 10
+            }
+        )
+        self.objects["LAMP"] = brass_lamp
+        
+        # Create Kitchen objects (KITCH)
+        bottle = GameObject(
+            id="BOTTL",
+            name="glass bottle",
+            description="A clear glass bottle.",
+            aliases=["bottle", "glass", "container"],
+            attributes={
+                "takeable": True,
+                "weight": 1,
+                "container": True,
+                "openable": False,  # Open top
+                "open": True,
+                "contents": [],
+                "capacity": 1
+            }
+        )
+        self.objects["BOTTL"] = bottle
+        
+        sack = GameObject(
+            id="SBAG",
+            name="brown sack",
+            description="A large brown bag.",
+            aliases=["sack", "bag", "brown", "large"],
+            attributes={
+                "takeable": True,
+                "weight": 1,
+                "container": True,
+                "openable": True,
+                "open": False,
+                "contents": ["GARLIC"],  # Often contains garlic
+                "capacity": 5
+            }
+        )
+        self.objects["SBAG"] = sack
+        
+        # Create grate object (MGRAT)
+        grate = GameObject(
+            id="GRATE",
+            name="metal grate",
+            description="A metal grate set into the ground.",
+            aliases=["grate", "grating", "metal", "grid"],
+            attributes={
+                "takeable": False,
+                "openable": True,
+                "open": False,  # Starts closed/locked
+                "locked": True,  # Needs keys to open
+                "weight": 100,
+                "door": True  # Acts as passage when open
+            }
+        )
+        self.objects["GRATE"] = grate
+        
+        # Create torch object - moveable light source
+        torch = GameObject(
+            id="TORCH", 
+            name="wooden torch",
+            description="A wooden torch with an oil-soaked rag at one end.",
+            aliases=["torch", "wooden", "light"],
+            attributes={
+                "takeable": True,
+                "weight": 1,
+                "light_source": True,
+                "lit": False,
+                "light_turns": 50  # Shorter duration than lamp
+            }
+        )
+        self.objects["TORCH"] = torch
+        
+        # Create garlic (often in sack)
+        garlic = GameObject(
+            id="GARLIC",
+            name="clove of garlic",
+            description="A pungent clove of garlic.",
+            aliases=["garlic", "clove"],
+            attributes={
+                "takeable": True,
+                "weight": 1
+            }
+        )
+        self.objects["GARLIC"] = garlic
         
         # Place nest in TREE room (nest contains egg by default)
         tree_room = self.world.get_room("TREE")
