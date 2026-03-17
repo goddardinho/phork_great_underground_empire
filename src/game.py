@@ -1482,6 +1482,63 @@ Type 'help' for a list of commands.
         )
         self.objects["WINDO"] = window
         
+        # Create nest object (NEST) - referenced in TREE room
+        nest = GameObject(
+            id="NEST",
+            name="birds nest",
+            description="There is a small birds nest here.",
+            aliases=["nest", "bird", "birds", "small"],
+            attributes={
+                "takeable": True,
+                "weight": 1,
+                "container": True,
+                "openable": True, 
+                "open": False,
+                "contents": ["EGG"],  # Contains the egg initially
+                "capacity": 1  # Only holds one item (the egg)
+            }
+        )
+        self.objects["NEST"] = nest
+        
+        # Create egg object (EGG) - contained in nest in TREE room
+        egg = GameObject(
+            id="EGG",
+            name="jewel-encrusted egg",
+            description="There is a jewel-encrusted egg here.",
+            aliases=["egg", "jewel", "encrusted", "birds", "bird"],
+            attributes={
+                "takeable": True,
+                "weight": 1,
+                "treasure": True,
+                "treasure_value": 5,  # Original OFVAL 5
+                "container": True,
+                "openable": True,
+                "open": False,
+                "contents": []  # Can contain other items when opened
+            }
+        )
+        self.objects["EGG"] = egg
+        
+        # Create tree object (TTREE) - referenced in TREE room, not takeable
+        tree = GameObject(
+            id="TTREE", 
+            name="large tree",
+            description="A large tree with sturdy, climbable branches.",
+            aliases=["tree", "large", "big", "tall"],
+            attributes={
+                "takeable": False,
+                "weight": 1000  # Very heavy, cannot be moved
+            }
+        )
+        self.objects["TTREE"] = tree
+        
+        # Place nest in TREE room (nest contains egg by default)
+        tree_room = self.world.get_room("TREE")
+        if tree_room:
+            tree_room.add_item("NEST")
+            tree_room.add_item("TTREE")  # Tree is also in the tree room
+            print("✓ Placed birds nest and tree in TREE room")
+        
         # Add more essential .mud objects as needed
         # TODO: Parse OBJECT definitions from .mud files automatically
     
