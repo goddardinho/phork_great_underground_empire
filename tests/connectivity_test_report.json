@@ -1,0 +1,2399 @@
+{
+  "test_timestamp": 1773162394.295485,
+  "statistics": {
+    "total_rooms": 196,
+    "reachable_rooms": 196,
+    "unreachable_rooms": 0,
+    "total_exits": 565,
+    "working_exits": 564,
+    "broken_exits": 1,
+    "max_depth": 20,
+    "traversal_time": 0.0006952285766601562
+  },
+  "connectivity_map": {
+    "metadata": {
+      "timestamp": 1773162394.295486,
+      "total_rooms": 196,
+      "reachable_rooms": 196,
+      "traversal_time": 0.0006952285766601562
+    },
+    "reachable_rooms": {
+      "CHAS1": {
+        "name": "CHAS1",
+        "depth": 8,
+        "visited_from": "CHAS2",
+        "direction_taken": "south",
+        "exits": {
+          "south": "RAVI1",
+          "east": "PASS5",
+          "north": "CHAS2"
+        },
+        "path_length": 8
+      },
+      "MGRAI": {
+        "name": "MGRAI",
+        "depth": 13,
+        "visited_from": "CRAW3",
+        "direction_taken": "north",
+        "exits": {
+          "west": "CAROU",
+          "east": "CRAW3",
+          "up": "TEMP1"
+        },
+        "path_length": 13
+      },
+      "CRYPT": {
+        "name": "CRYPT",
+        "depth": 15,
+        "visited_from": "TOMB",
+        "direction_taken": "down",
+        "exits": {
+          "south": "FDOOR",
+          "leave": "FDOOR",
+          "up": "TOMB",
+          "north": "TSTRS"
+        },
+        "path_length": 15
+      },
+      "MIRR2": {
+        "name": "MIRR2",
+        "depth": 12,
+        "visited_from": "CAVE2",
+        "direction_taken": "west",
+        "exits": {
+          "west": "PASS4",
+          "north": "CRAW3",
+          "east": "CAVE2"
+        },
+        "path_length": 12
+      },
+      "CMACH": {
+        "name": "CMACH",
+        "depth": 18,
+        "visited_from": "MAGNE",
+        "direction_taken": "east",
+        "exits": {
+          "west": "MAGNE",
+          "south": "CAGER"
+        },
+        "path_length": 18
+      },
+      "LIBRA": {
+        "name": "LIBRA",
+        "depth": 19,
+        "visited_from": "LEDG2",
+        "direction_taken": "east",
+        "exits": {
+          "north": "LEDG2",
+          "out": "LEDG2",
+          "west": "LEDG2"
+        },
+        "path_length": 19
+      },
+      "MINE6": {
+        "name": "MINE6",
+        "depth": 13,
+        "visited_from": "MINE7",
+        "direction_taken": "south",
+        "exits": {
+          "se": "MINE4",
+          "up": "MINE5",
+          "nw": "MINE7"
+        },
+        "path_length": 13
+      },
+      "INMIR": {
+        "name": "INMIR",
+        "depth": 19,
+        "visited_from": "MRC",
+        "direction_taken": "enter",
+        "exits": {
+          "north": "MRA",
+          "south": "MRA",
+          "east": "MRDE",
+          "west": "MRBW",
+          "ne": "MRA",
+          "nw": "MRA",
+          "se": "MRA",
+          "sw": "MRA",
+          "exit": "MRDE"
+        },
+        "path_length": 19
+      },
+      "FCHMP": {
+        "name": "FCHMP",
+        "depth": 14,
+        "visited_from": "RIVR5",
+        "direction_taken": "down",
+        "exits": {
+          "east": "FANTE"
+        },
+        "path_length": 14
+      },
+      "ALITR": {
+        "name": "ALITR",
+        "depth": 18,
+        "visited_from": "ALISM",
+        "direction_taken": "east",
+        "exits": {
+          "exit": "ALISM",
+          "west": "ALISM"
+        },
+        "path_length": 18
+      },
+      "CAGED": {
+        "name": "CAGED",
+        "depth": 20,
+        "visited_from": "CAGER",
+        "direction_taken": "down",
+        "exits": {
+          "up": "CAGER"
+        },
+        "path_length": 20
+      },
+      "CYCLO": {
+        "name": "CYCLO",
+        "depth": 6,
+        "visited_from": "BLROO",
+        "direction_taken": "south",
+        "exits": {
+          "west": "MAZ15",
+          "north": "BLROO",
+          "up": "TREAS"
+        },
+        "path_length": 6
+      },
+      "CHAS2": {
+        "name": "CHAS2",
+        "depth": 7,
+        "visited_from": "CRAW4",
+        "direction_taken": "north",
+        "exits": {
+          "west": "CELLA",
+          "north": "CRAW4",
+          "south": "CHAS1",
+          "east": "CHAS3"
+        },
+        "path_length": 7
+      },
+      "NHOUS": {
+        "name": "NHOUS",
+        "depth": 1,
+        "visited_from": "WHOUS",
+        "direction_taken": "north",
+        "exits": {
+          "west": "WHOUS",
+          "east": "EHOUS",
+          "north": "FORE3"
+        },
+        "path_length": 1
+      },
+      "MRGW": {
+        "name": "MRGW",
+        "depth": 18,
+        "visited_from": "MRG",
+        "direction_taken": "north",
+        "exits": {
+          "south": "MRG"
+        },
+        "path_length": 18
+      },
+      "MAZE4": {
+        "name": "MAZE4",
+        "depth": 9,
+        "visited_from": "MAZE3",
+        "direction_taken": "north",
+        "exits": {
+          "west": "MAZE3",
+          "north": "MAZE1",
+          "east": "DEAD1"
+        },
+        "path_length": 9
+      },
+      "BDOOR": {
+        "name": "BDOOR",
+        "depth": 20,
+        "visited_from": "SCORR",
+        "direction_taken": "south",
+        "exits": {
+          "north": "SCORR",
+          "south": "FDOOR"
+        },
+        "path_length": 20
+      },
+      "FANTE": {
+        "name": "FANTE",
+        "depth": 14,
+        "visited_from": "RIVR5",
+        "direction_taken": "land",
+        "exits": {
+          "launc": "RIVR5",
+          "north": "BEACH",
+          "south": "FALLS",
+          "west": "FCHMP"
+        },
+        "path_length": 14
+      },
+      "MPEAR": {
+        "name": "MPEAR",
+        "depth": 13,
+        "visited_from": "RIDDL",
+        "direction_taken": "south",
+        "exits": {
+          "east": "BWELL",
+          "west": "RIDDL",
+          "north": "RIDDL"
+        },
+        "path_length": 13
+      },
+      "SMELL": {
+        "name": "SMELL",
+        "depth": 16,
+        "visited_from": "TUNNE",
+        "direction_taken": "west",
+        "exits": {
+          "down": "BOOM",
+          "east": "TUNNE",
+          "up": "TUNNE"
+        },
+        "path_length": 16
+      },
+      "MAZ12": {
+        "name": "MAZ12",
+        "depth": 6,
+        "visited_from": "MAZ11",
+        "direction_taken": "sw",
+        "exits": {
+          "west": "MAZE5",
+          "sw": "MAZ11",
+          "east": "MAZ13",
+          "up": "MAZE9",
+          "north": "DEAD4"
+        },
+        "path_length": 6
+      },
+      "PASS1": {
+        "name": "PASS1",
+        "depth": 10,
+        "visited_from": "RAVI1",
+        "direction_taken": "south",
+        "exits": {
+          "east": "CAROU",
+          "west": "MTROL",
+          "down": "RAVI1",
+          "north": "RAVI1"
+        },
+        "path_length": 10
+      },
+      "TSTRS": {
+        "name": "TSTRS",
+        "depth": 16,
+        "visited_from": "CRYPT",
+        "direction_taken": "north",
+        "exits": {
+          "north": "MRANT",
+          "down": "MRANT",
+          "south": "CRYPT"
+        },
+        "path_length": 16
+      },
+      "PCELL": {
+        "name": "PCELL",
+        "depth": 17,
+        "visited_from": "CELL",
+        "direction_taken": "north",
+        "exits": {
+          "south": "CELL",
+          "north": "NCELL"
+        },
+        "path_length": 17
+      },
+      "RIVR2": {
+        "name": "RIVR2",
+        "depth": 14,
+        "visited_from": "RIVR1",
+        "direction_taken": "down",
+        "exits": {
+          "down": "RIVR3"
+        },
+        "path_length": 14
+      },
+      "MRG": {
+        "name": "MRG",
+        "depth": 17,
+        "visited_from": "MRD",
+        "direction_taken": "se",
+        "exits": {
+          "north": "MRGW",
+          "south": "MRGE",
+          "west": "MRCW"
+        },
+        "path_length": 17
+      },
+      "CLBOT": {
+        "name": "CLBOT",
+        "depth": 6,
+        "visited_from": "CLMID",
+        "direction_taken": "down",
+        "exits": {
+          "up": "CLMID",
+          "north": "POG"
+        },
+        "path_length": 6
+      },
+      "BKBOX": {
+        "name": "BKBOX",
+        "depth": 9,
+        "visited_from": "BKTW",
+        "direction_taken": "west",
+        "exits": {
+          "there is a curtain of light there.": "WEST",
+          "frobozz": "BKTW",
+          "south": "BKEXE"
+        },
+        "path_length": 9
+      },
+      "DEAD4": {
+        "name": "DEAD4",
+        "depth": 7,
+        "visited_from": "MAZ12",
+        "direction_taken": "north",
+        "exits": {
+          "south": "MAZ12"
+        },
+        "path_length": 7
+      },
+      "VAIR2": {
+        "name": "VAIR2",
+        "depth": 19,
+        "visited_from": "LEDG2",
+        "direction_taken": "launc",
+        "exits": {
+          "west": "LEDG2",
+          "land": "LEDG2",
+          "down": "VAIR1",
+          "up": "VAIR3"
+        },
+        "path_length": 19
+      },
+      "MAZ14": {
+        "name": "MAZ14",
+        "depth": 8,
+        "visited_from": "MAZ15",
+        "direction_taken": "west",
+        "exits": {
+          "west": "MAZ15",
+          "nw": "MAZ14",
+          "ne": "MAZE7",
+          "south": "MAZE7"
+        },
+        "path_length": 8
+      },
+      "LAVA": {
+        "name": "LAVA",
+        "depth": 17,
+        "visited_from": "RUBYR",
+        "direction_taken": "west",
+        "exits": {
+          "south": "VLBOT",
+          "west": "RUBYR",
+          "down": "MAGNE"
+        },
+        "path_length": 17
+      },
+      "TREAS": {
+        "name": "TREAS",
+        "depth": 7,
+        "visited_from": "CYCLO",
+        "direction_taken": "up",
+        "exits": {
+          "down": "CYCLO",
+          "east": "CPANT"
+        },
+        "path_length": 7
+      },
+      "TEMP2": {
+        "name": "TEMP2",
+        "depth": 15,
+        "visited_from": "TEMP1",
+        "direction_taken": "east",
+        "exits": {
+          "west": "TEMP1"
+        },
+        "path_length": 15
+      },
+      "BKENT": {
+        "name": "BKENT",
+        "depth": 7,
+        "visited_from": "GALLE",
+        "direction_taken": "west",
+        "exits": {
+          "nw": "BKTW",
+          "ne": "BKTE",
+          "south": "GALLE"
+        },
+        "path_length": 7
+      },
+      "CAROU": {
+        "name": "CAROU",
+        "depth": 10,
+        "visited_from": "PASS5",
+        "direction_taken": "south",
+        "exits": {
+          "south": "CAVE4"
+        },
+        "path_length": 10
+      },
+      "BKTE": {
+        "name": "BKTE",
+        "depth": 8,
+        "visited_from": "BKENT",
+        "direction_taken": "ne",
+        "exits": {
+          "north": "BKTWI",
+          "south": "BKENT",
+          "east": "BKBOX"
+        },
+        "path_length": 8
+      },
+      "SLID2": {
+        "name": "SLID2",
+        "depth": 10,
+        "visited_from": "SLID3",
+        "direction_taken": "up",
+        "exits": {
+          "down": "SLID3",
+          "up": "SLID1"
+        },
+        "path_length": 10
+      },
+      "FORE4": {
+        "name": "FORE4",
+        "depth": 3,
+        "visited_from": "FORE2",
+        "direction_taken": "south",
+        "exits": {
+          "east": "CLTOP",
+          "north": "FORE5",
+          "south": "FORE4",
+          "west": "FORE2"
+        },
+        "path_length": 3
+      },
+      "WCORR": {
+        "name": "WCORR",
+        "depth": 18,
+        "visited_from": "NCORR",
+        "direction_taken": "west",
+        "exits": {
+          "north": "NCORR",
+          "south": "SCORR",
+          "east": "SCORR"
+        },
+        "path_length": 18
+      },
+      "VAIR3": {
+        "name": "VAIR3",
+        "depth": 20,
+        "visited_from": "VAIR2",
+        "direction_taken": "up",
+        "exits": {
+          "down": "VAIR2",
+          "up": "VAIR4"
+        },
+        "path_length": 20
+      },
+      "DEAD5": {
+        "name": "DEAD5",
+        "depth": 9,
+        "visited_from": "CHAS3",
+        "direction_taken": "north",
+        "exits": {
+          "sw": "CHAS3"
+        },
+        "path_length": 9
+      },
+      "VAIR1": {
+        "name": "VAIR1",
+        "depth": 19,
+        "visited_from": "VLBOT",
+        "direction_taken": "up",
+        "exits": {
+          "down": "VLBOT",
+          "up": "VAIR2"
+        },
+        "path_length": 19
+      },
+      "TOMB": {
+        "name": "TOMB",
+        "depth": 14,
+        "visited_from": "LLD2",
+        "direction_taken": "east",
+        "exits": {
+          "west": "LLD2",
+          "north": "FDOOR",
+          "enter": "FDOOR",
+          "down": "CRYPT"
+        },
+        "path_length": 14
+      },
+      "PASS3": {
+        "name": "PASS3",
+        "depth": 13,
+        "visited_from": "SLIDE",
+        "direction_taken": "east",
+        "exits": {
+          "east": "MIRR1",
+          "west": "SLIDE",
+          "north": "CRAW2"
+        },
+        "path_length": 13
+      },
+      "FDOOR": {
+        "name": "FDOOR",
+        "depth": 15,
+        "visited_from": "TOMB",
+        "direction_taken": "north",
+        "exits": {
+          "north": "PARAP",
+          "enter": "CELL",
+          "south": "MRD",
+          "se": "MRD",
+          "sw": "MRD",
+          "exit": "PARAP"
+        },
+        "path_length": 15
+      },
+      "MINE2": {
+        "name": "MINE2",
+        "depth": 13,
+        "visited_from": "MINE1",
+        "direction_taken": "sw",
+        "exits": {
+          "south": "MINE1",
+          "west": "MINE5",
+          "up": "MINE3",
+          "ne": "MINE4",
+          "north": "MINE1"
+        },
+        "path_length": 13
+      },
+      "PASS4": {
+        "name": "PASS4",
+        "depth": 13,
+        "visited_from": "MIRR2",
+        "direction_taken": "west",
+        "exits": {
+          "east": "MIRR2"
+        },
+        "path_length": 13
+      },
+      "BKTW": {
+        "name": "BKTW",
+        "depth": 8,
+        "visited_from": "BKENT",
+        "direction_taken": "nw",
+        "exits": {
+          "north": "BKVW",
+          "south": "BKENT",
+          "west": "BKBOX"
+        },
+        "path_length": 8
+      },
+      "DEAD2": {
+        "name": "DEAD2",
+        "depth": 8,
+        "visited_from": "MAZE5",
+        "direction_taken": "east",
+        "exits": {
+          "west": "MAZE5"
+        },
+        "path_length": 8
+      },
+      "RIDDL": {
+        "name": "RIDDL",
+        "depth": 12,
+        "visited_from": "CAVE4",
+        "direction_taken": "se",
+        "exits": {
+          "down": "CAVE4",
+          "south": "MPEAR"
+        },
+        "path_length": 12
+      },
+      "TCAVE": {
+        "name": "TCAVE",
+        "depth": 9,
+        "visited_from": "CHAS3",
+        "direction_taken": "east",
+        "exits": {
+          "south": "RCAVE",
+          "nw": "CHAS3"
+        },
+        "path_length": 9
+      },
+      "RESEN": {
+        "name": "RESEN",
+        "depth": 11,
+        "visited_from": "ATLAN",
+        "direction_taken": "se",
+        "exits": {
+          "north": "ATLAN",
+          "launc": "RESER"
+        },
+        "path_length": 11
+      },
+      "RAINB": {
+        "name": "RAINB",
+        "depth": 8,
+        "visited_from": "POG",
+        "direction_taken": "west",
+        "exits": {
+          "east": "POG",
+          "west": "FALLS"
+        },
+        "path_length": 8
+      },
+      "MIRR1": {
+        "name": "MIRR1",
+        "depth": 13,
+        "visited_from": "CAVE1",
+        "direction_taken": "west",
+        "exits": {
+          "west": "PASS3",
+          "north": "CRAW2",
+          "east": "CAVE1"
+        },
+        "path_length": 13
+      },
+      "MAZE5": {
+        "name": "MAZE5",
+        "depth": 7,
+        "visited_from": "MAZ12",
+        "direction_taken": "west",
+        "exits": {
+          "east": "DEAD2",
+          "north": "MAZE3",
+          "sw": "MAZE6"
+        },
+        "path_length": 7
+      },
+      "MRAW": {
+        "name": "MRAW",
+        "depth": 19,
+        "visited_from": "MREYE",
+        "direction_taken": "west",
+        "exits": {
+          "enter": "INMIR",
+          "east": "MRB",
+          "north": "MRB",
+          "south": "MREYE"
+        },
+        "path_length": 19
+      },
+      "MRCW": {
+        "name": "MRCW",
+        "depth": 18,
+        "visited_from": "MRG",
+        "direction_taken": "west",
+        "exits": {
+          "enter": "INMIR",
+          "east": "INMIR",
+          "north": "MRG",
+          "south": "MRB"
+        },
+        "path_length": 18
+      },
+      "MINE1": {
+        "name": "MINE1",
+        "depth": 12,
+        "visited_from": "DOME",
+        "direction_taken": "west",
+        "exits": {
+          "north": "MINE4",
+          "sw": "MINE2",
+          "east": "DOME",
+          "south": "MINE2"
+        },
+        "path_length": 12
+      },
+      "MAZE1": {
+        "name": "MAZE1",
+        "depth": 8,
+        "visited_from": "MTROL",
+        "direction_taken": "east",
+        "exits": {
+          "west": "MTROL",
+          "north": "MAZE1",
+          "south": "MAZE2",
+          "east": "MAZE4"
+        },
+        "path_length": 8
+      },
+      "BKVW": {
+        "name": "BKVW",
+        "depth": 9,
+        "visited_from": "BKTW",
+        "direction_taken": "north",
+        "exits": {
+          "south": "BKENT",
+          "east": "BKVE"
+        },
+        "path_length": 9
+      },
+      "RESES": {
+        "name": "RESES",
+        "depth": 13,
+        "visited_from": "RESER",
+        "direction_taken": "south",
+        "exits": {},
+        "path_length": 13
+      },
+      "FORE1": {
+        "name": "FORE1",
+        "depth": 1,
+        "visited_from": "WHOUS",
+        "direction_taken": "west",
+        "exits": {
+          "north": "FORE1",
+          "east": "FORE3",
+          "south": "FORE2",
+          "west": "FORE1"
+        },
+        "path_length": 1
+      },
+      "CAVE2": {
+        "name": "CAVE2",
+        "depth": 11,
+        "visited_from": "CAVE3",
+        "direction_taken": "west",
+        "exits": {
+          "north": "CRAW3",
+          "west": "MIRR2",
+          "down": "LLD1",
+          "south": "CAVE1",
+          "east": "CAVE3"
+        },
+        "path_length": 11
+      },
+      "MREYE": {
+        "name": "MREYE",
+        "depth": 18,
+        "visited_from": "MRANT",
+        "direction_taken": "north",
+        "exits": {
+          "north": "MRAE",
+          "nw": "MRA",
+          "ne": "MRA",
+          "south": "MRANT",
+          "west": "MRAW"
+        },
+        "path_length": 18
+      },
+      "LEDG2": {
+        "name": "LEDG2",
+        "depth": 18,
+        "visited_from": "LEDG3",
+        "direction_taken": "north",
+        "exits": {
+          "launc": "VAIR2",
+          "south": "LEDG3",
+          "east": "LIBRA"
+        },
+        "path_length": 18
+      },
+      "EGYPT": {
+        "name": "EGYPT",
+        "depth": 16,
+        "visited_from": "ICY",
+        "direction_taken": "east",
+        "exits": {
+          "up": "ICY",
+          "south": "LEDG3"
+        },
+        "path_length": 16
+      },
+      "TWELL": {
+        "name": "TWELL",
+        "depth": 15,
+        "visited_from": "BWELL",
+        "direction_taken": "up",
+        "exits": {
+          "east": "ALICE",
+          "down": "BWELL"
+        },
+        "path_length": 15
+      },
+      "WCLF1": {
+        "name": "WCLF1",
+        "depth": 12,
+        "visited_from": "RIVR3",
+        "direction_taken": "east",
+        "exits": {
+          "south": "RIVR4",
+          "north": "WCLF2"
+        },
+        "path_length": 12
+      },
+      "CANY1": {
+        "name": "CANY1",
+        "depth": 10,
+        "visited_from": "ECHO",
+        "direction_taken": "north",
+        "exits": {
+          "south": "ECHO"
+        },
+        "path_length": 10
+      },
+      "SLEDG": {
+        "name": "SLEDG",
+        "depth": 10,
+        "visited_from": "SLID3",
+        "direction_taken": "east",
+        "exits": {
+          "down": "CELLA",
+          "up": "SLID2",
+          "south": "SPAL"
+        },
+        "path_length": 10
+      },
+      "MINE7": {
+        "name": "MINE7",
+        "depth": 12,
+        "visited_from": "DOME",
+        "direction_taken": "east",
+        "exits": {
+          "east": "MINE1",
+          "west": "DOME",
+          "down": "TLADD",
+          "south": "MINE6",
+          "north": "BATS"
+        },
+        "path_length": 12
+      },
+      "CLEAR": {
+        "name": "CLEAR",
+        "depth": 3,
+        "visited_from": "EHOUS",
+        "direction_taken": "east",
+        "exits": {
+          "sw": "EHOUS",
+          "se": "FORE5",
+          "north": "CLEAR",
+          "east": "CLEAR",
+          "west": "FORE3",
+          "south": "FORE2",
+          "down": "MGRAT"
+        },
+        "path_length": 3
+      },
+      "BOOM": {
+        "name": "BOOM",
+        "depth": 17,
+        "visited_from": "SMELL",
+        "direction_taken": "down",
+        "exits": {
+          "up": "SMELL"
+        },
+        "path_length": 17
+      },
+      "DEAD3": {
+        "name": "DEAD3",
+        "depth": 10,
+        "visited_from": "MAZE8",
+        "direction_taken": "se",
+        "exits": {
+          "north": "MAZE8"
+        },
+        "path_length": 10
+      },
+      "DEAD1": {
+        "name": "DEAD1",
+        "depth": 9,
+        "visited_from": "MAZE7",
+        "direction_taken": "ne",
+        "exits": {
+          "south": "MAZE4"
+        },
+        "path_length": 9
+      },
+      "KITCH": {
+        "name": "KITCH",
+        "depth": 3,
+        "visited_from": "EHOUS",
+        "direction_taken": "west",
+        "exits": {
+          "east": "EHOUS",
+          "west": "LROOM",
+          "exit": "EHOUS",
+          "up": "ATTIC"
+        },
+        "path_length": 3
+      },
+      "MGRAT": {
+        "name": "MGRAT",
+        "depth": 4,
+        "visited_from": "CLEAR",
+        "direction_taken": "down",
+        "exits": {
+          "sw": "MAZ11",
+          "up": "CLEAR"
+        },
+        "path_length": 4
+      },
+      "STUDI": {
+        "name": "STUDI",
+        "depth": 5,
+        "visited_from": "ATTIC",
+        "direction_taken": "east",
+        "exits": {
+          "north": "CRAW4",
+          "nw": "GALLE",
+          "west": "ATTIC"
+        },
+        "path_length": 5
+      },
+      "CHAS3": {
+        "name": "CHAS3",
+        "depth": 8,
+        "visited_from": "CHAS2",
+        "direction_taken": "east",
+        "exits": {
+          "south": "ECHO",
+          "east": "TCAVE",
+          "north": "DEAD5",
+          "west": "DEAD6"
+        },
+        "path_length": 8
+      },
+      "SHOUS": {
+        "name": "SHOUS",
+        "depth": 1,
+        "visited_from": "WHOUS",
+        "direction_taken": "south",
+        "exits": {
+          "west": "WHOUS",
+          "east": "EHOUS",
+          "south": "FORE2"
+        },
+        "path_length": 1
+      },
+      "BLROO": {
+        "name": "BLROO",
+        "depth": 5,
+        "visited_from": "LROOM",
+        "direction_taken": "west",
+        "exits": {
+          "south": "CYCLO",
+          "east": "LROOM"
+        },
+        "path_length": 5
+      },
+      "CAVE3": {
+        "name": "CAVE3",
+        "depth": 10,
+        "visited_from": "ECHO",
+        "direction_taken": "up",
+        "exits": {
+          "south": "ECHO",
+          "east": "DAM",
+          "west": "CAVE2"
+        },
+        "path_length": 10
+      },
+      "CRAW1": {
+        "name": "CRAW1",
+        "depth": 10,
+        "visited_from": "RAVI1",
+        "direction_taken": "east",
+        "exits": {
+          "west": "RAVI1",
+          "east": "DOME"
+        },
+        "path_length": 10
+      },
+      "MRDW": {
+        "name": "MRDW",
+        "depth": 17,
+        "visited_from": "MRD",
+        "direction_taken": "south",
+        "exits": {
+          "north": "MRD",
+          "south": "MRC"
+        },
+        "path_length": 17
+      },
+      "BKTWI": {
+        "name": "BKTWI",
+        "depth": 9,
+        "visited_from": "BKTE",
+        "direction_taken": "north",
+        "exits": {
+          "south": "BKTE"
+        },
+        "path_length": 9
+      },
+      "CLTOP": {
+        "name": "CLTOP",
+        "depth": 4,
+        "visited_from": "FORE4",
+        "direction_taken": "east",
+        "exits": {
+          "down": "CLMID",
+          "south": "FORE4",
+          "west": "FORE5"
+        },
+        "path_length": 4
+      },
+      "TUNNE": {
+        "name": "TUNNE",
+        "depth": 15,
+        "visited_from": "TSHAF",
+        "direction_taken": "north",
+        "exits": {
+          "south": "TSHAF",
+          "west": "SMELL",
+          "ne": "MINE1",
+          "north": "TSHAF",
+          "down": "SMELL"
+        },
+        "path_length": 15
+      },
+      "TSHAF": {
+        "name": "TSHAF",
+        "depth": 14,
+        "visited_from": "ENTRA",
+        "direction_taken": "ne",
+        "exits": {
+          "west": "ENTRA",
+          "north": "TUNNE",
+          "up": "SQUEE",
+          "south": "TUNNE"
+        },
+        "path_length": 14
+      },
+      "RIVR4": {
+        "name": "RIVR4",
+        "depth": 12,
+        "visited_from": "RIVR3",
+        "direction_taken": "down",
+        "exits": {
+          "down": "RIVR5",
+          "east": "WCLF2",
+          "west": "BEACH",
+          "north": "WCLF1"
+        },
+        "path_length": 12
+      },
+      "ENTRA": {
+        "name": "ENTRA",
+        "depth": 13,
+        "visited_from": "SLIDE",
+        "direction_taken": "north",
+        "exits": {
+          "south": "SLIDE",
+          "nw": "SQUEE",
+          "ne": "TSHAF",
+          "north": "SQUEE"
+        },
+        "path_length": 13
+      },
+      "MRANT": {
+        "name": "MRANT",
+        "depth": 17,
+        "visited_from": "TSTRS",
+        "direction_taken": "north",
+        "exits": {
+          "south": "TSTRS",
+          "up": "TSTRS",
+          "north": "MREYE"
+        },
+        "path_length": 17
+      },
+      "RIVR1": {
+        "name": "RIVR1",
+        "depth": 13,
+        "visited_from": "DOCK",
+        "direction_taken": "launc",
+        "exits": {
+          "west": "DOCK",
+          "land": "DOCK",
+          "down": "RIVR2",
+          "south": "DAM"
+        },
+        "path_length": 13
+      },
+      "PARAP": {
+        "name": "PARAP",
+        "depth": 16,
+        "visited_from": "FDOOR",
+        "direction_taken": "north",
+        "exits": {
+          "south": "FDOOR",
+          "north": "NCORR",
+          "enter": "FDOOR"
+        },
+        "path_length": 16
+      },
+      "SLIDE": {
+        "name": "SLIDE",
+        "depth": 12,
+        "visited_from": "SLID1",
+        "direction_taken": "up",
+        "exits": {
+          "east": "PASS3",
+          "north": "ENTRA",
+          "down": "SLID1"
+        },
+        "path_length": 12
+      },
+      "CELL": {
+        "name": "CELL",
+        "depth": 16,
+        "visited_from": "FDOOR",
+        "direction_taken": "enter",
+        "exits": {
+          "exit": "FDOOR",
+          "north": "PCELL",
+          "south": "FDOOR"
+        },
+        "path_length": 16
+      },
+      "TREE": {
+        "name": "TREE",
+        "depth": 3,
+        "visited_from": "FORE3",
+        "direction_taken": "up",
+        "exits": {
+          "down": "FORE3"
+        },
+        "path_length": 3
+      },
+      "DOCK": {
+        "name": "DOCK",
+        "depth": 12,
+        "visited_from": "DAM",
+        "direction_taken": "down",
+        "exits": {
+          "north": "DAM",
+          "up": "DAM",
+          "launc": "RIVR1"
+        },
+        "path_length": 12
+      },
+      "MAZE9": {
+        "name": "MAZE9",
+        "depth": 7,
+        "visited_from": "MAZ10",
+        "direction_taken": "east",
+        "exits": {
+          "north": "MAZE6",
+          "east": "MAZ11",
+          "down": "MAZ10",
+          "south": "MAZ13",
+          "west": "MAZ12",
+          "nw": "MAZE9"
+        },
+        "path_length": 7
+      },
+      "INSTR": {
+        "name": "INSTR",
+        "depth": 13,
+        "visited_from": "RESER",
+        "direction_taken": "up",
+        "exits": {
+          "land": "STREA",
+          "down": "RESER"
+        },
+        "path_length": 13
+      },
+      "BLADD": {
+        "name": "BLADD",
+        "depth": 14,
+        "visited_from": "TLADD",
+        "direction_taken": "down",
+        "exits": {
+          "ne": "DEAD7",
+          "south": "TIMBE",
+          "up": "TLADD",
+          "down": "TLADD"
+        },
+        "path_length": 14
+      },
+      "MRGE": {
+        "name": "MRGE",
+        "depth": 18,
+        "visited_from": "MRG",
+        "direction_taken": "south",
+        "exits": {
+          "north": "MRG",
+          "south": "MRC"
+        },
+        "path_length": 18
+      },
+      "MTROL": {
+        "name": "MTROL",
+        "depth": 7,
+        "visited_from": "CRAW4",
+        "direction_taken": "east",
+        "exits": {
+          "west": "CELLA",
+          "north": "CELLA",
+          "east": "MAZE1"
+        },
+        "path_length": 7
+      },
+      "MAZE6": {
+        "name": "MAZE6",
+        "depth": 8,
+        "visited_from": "MAZE9",
+        "direction_taken": "north",
+        "exits": {
+          "down": "MAZE5",
+          "east": "MAZE7",
+          "west": "MAZE6",
+          "up": "MAZE9"
+        },
+        "path_length": 8
+      },
+      "SCORR": {
+        "name": "SCORR",
+        "depth": 19,
+        "visited_from": "ECORR",
+        "direction_taken": "south",
+        "exits": {
+          "west": "WCORR",
+          "east": "ECORR",
+          "north": "ECORR",
+          "south": "BDOOR"
+        },
+        "path_length": 19
+      },
+      "FORE2": {
+        "name": "FORE2",
+        "depth": 2,
+        "visited_from": "SHOUS",
+        "direction_taken": "south",
+        "exits": {
+          "north": "SHOUS",
+          "east": "CLEAR",
+          "south": "FORE4",
+          "west": "FORE1"
+        },
+        "path_length": 2
+      },
+      "MRBW": {
+        "name": "MRBW",
+        "depth": 20,
+        "visited_from": "INMIR",
+        "direction_taken": "west",
+        "exits": {
+          "enter": "INMIR",
+          "east": "INMIR",
+          "north": "MRC",
+          "south": "MRA"
+        },
+        "path_length": 20
+      },
+      "BKVAU": {
+        "name": "BKVAU",
+        "depth": 11,
+        "visited_from": "BKVE",
+        "direction_taken": "north",
+        "exits": {
+          "south": "BKVE"
+        },
+        "path_length": 11
+      },
+      "CP": {
+        "name": "CP",
+        "depth": 10,
+        "visited_from": "CPOUT",
+        "direction_taken": "east",
+        "exits": {
+          "west": "CPOUT"
+        },
+        "path_length": 10
+      },
+      "MRBE": {
+        "name": "MRBE",
+        "depth": 19,
+        "visited_from": "MRC",
+        "direction_taken": "south",
+        "exits": {
+          "enter": "INMIR",
+          "west": "INMIR",
+          "north": "MRC",
+          "south": "MRA"
+        },
+        "path_length": 19
+      },
+      "CPOUT": {
+        "name": "CPOUT",
+        "depth": 9,
+        "visited_from": "CPANT",
+        "direction_taken": "south",
+        "exits": {
+          "north": "CPANT",
+          "west": "CPANT",
+          "east": "CP"
+        },
+        "path_length": 9
+      },
+      "ICY": {
+        "name": "ICY",
+        "depth": 15,
+        "visited_from": "STREA",
+        "direction_taken": "north",
+        "exits": {
+          "north": "RUBYR",
+          "east": "EGYPT"
+        },
+        "path_length": 15
+      },
+      "MRB": {
+        "name": "MRB",
+        "depth": 19,
+        "visited_from": "MRC",
+        "direction_taken": "sw",
+        "exits": {
+          "north": "MRCE",
+          "nw": "MRC",
+          "ne": "MRC",
+          "enter": "INMIR",
+          "south": "MRAE",
+          "sw": "MRA",
+          "se": "MRA",
+          "west": "MRCW"
+        },
+        "path_length": 19
+      },
+      "CELLA": {
+        "name": "CELLA",
+        "depth": 8,
+        "visited_from": "CHAS2",
+        "direction_taken": "west",
+        "exits": {
+          "east": "CHAS2",
+          "south": "MTROL",
+          "up": "SLID3"
+        },
+        "path_length": 8
+      },
+      "TIMBE": {
+        "name": "TIMBE",
+        "depth": 15,
+        "visited_from": "BLADD",
+        "direction_taken": "south",
+        "exits": {
+          "north": "BSHAF"
+        },
+        "path_length": 15
+      },
+      "WCLF2": {
+        "name": "WCLF2",
+        "depth": 13,
+        "visited_from": "RIVR4",
+        "direction_taken": "east",
+        "exits": {
+          "south": "WCLF1"
+        },
+        "path_length": 13
+      },
+      "TLADD": {
+        "name": "TLADD",
+        "depth": 13,
+        "visited_from": "MINE7",
+        "direction_taken": "down",
+        "exits": {
+          "down": "BLADD",
+          "up": "BLADD"
+        },
+        "path_length": 13
+      },
+      "VLBOT": {
+        "name": "VLBOT",
+        "depth": 18,
+        "visited_from": "LAVA",
+        "direction_taken": "south",
+        "exits": {
+          "north": "LAVA",
+          "up": "VAIR1"
+        },
+        "path_length": 18
+      },
+      "RESER": {
+        "name": "RESER",
+        "depth": 12,
+        "visited_from": "RESEN",
+        "direction_taken": "launc",
+        "exits": {
+          "north": "DAM",
+          "south": "RESES",
+          "up": "INSTR"
+        },
+        "path_length": 12
+      },
+      "PASS5": {
+        "name": "PASS5",
+        "depth": 9,
+        "visited_from": "CHAS1",
+        "direction_taken": "east",
+        "exits": {
+          "north": "CHAS1",
+          "ne": "ECHO",
+          "south": "CAROU"
+        },
+        "path_length": 9
+      },
+      "MINE3": {
+        "name": "MINE3",
+        "depth": 14,
+        "visited_from": "MINE2",
+        "direction_taken": "up",
+        "exits": {
+          "west": "MINE2",
+          "ne": "MINE5",
+          "east": "MINE5"
+        },
+        "path_length": 14
+      },
+      "DEAD7": {
+        "name": "DEAD7",
+        "depth": 15,
+        "visited_from": "BLADD",
+        "direction_taken": "ne",
+        "exits": {
+          "south": "BLADD"
+        },
+        "path_length": 15
+      },
+      "CAVE1": {
+        "name": "CAVE1",
+        "depth": 12,
+        "visited_from": "CAVE2",
+        "direction_taken": "south",
+        "exits": {
+          "north": "CAVE2",
+          "down": "ATLAN",
+          "west": "MIRR1"
+        },
+        "path_length": 12
+      },
+      "CAVE4": {
+        "name": "CAVE4",
+        "depth": 11,
+        "visited_from": "CAROU",
+        "direction_taken": "south",
+        "exits": {
+          "north": "CAROU",
+          "se": "RIDDL"
+        },
+        "path_length": 11
+      },
+      "CRAW3": {
+        "name": "CRAW3",
+        "depth": 12,
+        "visited_from": "CAVE2",
+        "direction_taken": "north",
+        "exits": {
+          "south": "CAVE2",
+          "sw": "MIRR2",
+          "north": "MGRAI"
+        },
+        "path_length": 12
+      },
+      "EHOUS": {
+        "name": "EHOUS",
+        "depth": 2,
+        "visited_from": "NHOUS",
+        "direction_taken": "east",
+        "exits": {
+          "north": "NHOUS",
+          "south": "SHOUS",
+          "east": "CLEAR",
+          "west": "KITCH",
+          "enter": "KITCH"
+        },
+        "path_length": 2
+      },
+      "MAZ11": {
+        "name": "MAZ11",
+        "depth": 5,
+        "visited_from": "MGRAT",
+        "direction_taken": "sw",
+        "exits": {
+          "ne": "MGRAT",
+          "down": "MAZ10",
+          "nw": "MAZ13",
+          "sw": "MAZ12"
+        },
+        "path_length": 5
+      },
+      "FORE3": {
+        "name": "FORE3",
+        "depth": 2,
+        "visited_from": "NHOUS",
+        "direction_taken": "north",
+        "exits": {
+          "up": "TREE",
+          "north": "FORE2",
+          "east": "CLEAR",
+          "south": "CLEAR",
+          "west": "NHOUS"
+        },
+        "path_length": 2
+      },
+      "BEACH": {
+        "name": "BEACH",
+        "depth": 13,
+        "visited_from": "RIVR4",
+        "direction_taken": "west",
+        "exits": {
+          "launc": "RIVR4",
+          "south": "FANTE"
+        },
+        "path_length": 13
+      },
+      "CRAW2": {
+        "name": "CRAW2",
+        "depth": 14,
+        "visited_from": "PASS3",
+        "direction_taken": "north",
+        "exits": {
+          "south": "MIRR1",
+          "sw": "PASS3"
+        },
+        "path_length": 14
+      },
+      "ALICE": {
+        "name": "ALICE",
+        "depth": 16,
+        "visited_from": "TWELL",
+        "direction_taken": "east",
+        "exits": {
+          "west": "ALISM",
+          "nw": "MAGNE"
+        },
+        "path_length": 16
+      },
+      "MACHI": {
+        "name": "MACHI",
+        "depth": 17,
+        "visited_from": "BSHAF",
+        "direction_taken": "east",
+        "exits": {
+          "nw": "BSHAF",
+          "north": "BSHAF"
+        },
+        "path_length": 17
+      },
+      "VAIR4": {
+        "name": "VAIR4",
+        "depth": 19,
+        "visited_from": "LEDG4",
+        "direction_taken": "launc",
+        "exits": {
+          "land": "LEDG4",
+          "east": "LEDG4",
+          "down": "VAIR3"
+        },
+        "path_length": 19
+      },
+      "ECHO": {
+        "name": "ECHO",
+        "depth": 9,
+        "visited_from": "CHAS3",
+        "direction_taken": "south",
+        "exits": {
+          "east": "CHAS3",
+          "west": "PASS5",
+          "up": "CAVE3",
+          "north": "CANY1"
+        },
+        "path_length": 9
+      },
+      "PALAN": {
+        "name": "PALAN",
+        "depth": 9,
+        "visited_from": "PRM",
+        "direction_taken": "up",
+        "exits": {
+          "down": "PRM"
+        },
+        "path_length": 9
+      },
+      "RIVR5": {
+        "name": "RIVR5",
+        "depth": 13,
+        "visited_from": "RIVR4",
+        "direction_taken": "down",
+        "exits": {
+          "down": "FCHMP",
+          "land": "FANTE"
+        },
+        "path_length": 13
+      },
+      "MAZE3": {
+        "name": "MAZE3",
+        "depth": 8,
+        "visited_from": "MAZE5",
+        "direction_taken": "north",
+        "exits": {
+          "west": "MAZE2",
+          "north": "MAZE4",
+          "up": "MAZE5"
+        },
+        "path_length": 8
+      },
+      "SQUEE": {
+        "name": "SQUEE",
+        "depth": 14,
+        "visited_from": "ENTRA",
+        "direction_taken": "nw",
+        "exits": {
+          "west": "BATS",
+          "south": "ENTRA",
+          "down": "TSHAF"
+        },
+        "path_length": 14
+      },
+      "CPANT": {
+        "name": "CPANT",
+        "depth": 8,
+        "visited_from": "TREAS",
+        "direction_taken": "east",
+        "exits": {
+          "south": "CPOUT",
+          "west": "TREAS",
+          "east": "CPOUT"
+        },
+        "path_length": 8
+      },
+      "DEAD6": {
+        "name": "DEAD6",
+        "depth": 9,
+        "visited_from": "CHAS3",
+        "direction_taken": "west",
+        "exits": {
+          "east": "CHAS3"
+        },
+        "path_length": 9
+      },
+      "DAM": {
+        "name": "DAM",
+        "depth": 11,
+        "visited_from": "CAVE3",
+        "direction_taken": "east",
+        "exits": {
+          "south": "MAINT",
+          "down": "DOCK",
+          "east": "CAVE3",
+          "north": "LOBBY"
+        },
+        "path_length": 11
+      },
+      "LEDG4": {
+        "name": "LEDG4",
+        "depth": 18,
+        "visited_from": "LEDG3",
+        "direction_taken": "south",
+        "exits": {
+          "launc": "VAIR4",
+          "south": "SAFE",
+          "north": "LEDG3",
+          "west": "SAFE"
+        },
+        "path_length": 18
+      },
+      "RAVI1": {
+        "name": "RAVI1",
+        "depth": 9,
+        "visited_from": "CHAS1",
+        "direction_taken": "south",
+        "exits": {
+          "south": "PASS1",
+          "east": "CRAW1"
+        },
+        "path_length": 9
+      },
+      "MAZ10": {
+        "name": "MAZ10",
+        "depth": 6,
+        "visited_from": "MAZ11",
+        "direction_taken": "down",
+        "exits": {
+          "east": "MAZE9",
+          "west": "MAZ13",
+          "up": "MAZ11"
+        },
+        "path_length": 6
+      },
+      "CLMID": {
+        "name": "CLMID",
+        "depth": 5,
+        "visited_from": "CLTOP",
+        "direction_taken": "down",
+        "exits": {
+          "up": "CLTOP",
+          "down": "CLBOT"
+        },
+        "path_length": 5
+      },
+      "PRM": {
+        "name": "PRM",
+        "depth": 8,
+        "visited_from": "MTORC",
+        "direction_taken": "west",
+        "exits": {
+          "east": "MTORC",
+          "up": "PALAN"
+        },
+        "path_length": 8
+      },
+      "STREA": {
+        "name": "STREA",
+        "depth": 14,
+        "visited_from": "INSTR",
+        "direction_taken": "land",
+        "exits": {
+          "launc": "INSTR",
+          "east": "RESES",
+          "north": "ICY"
+        },
+        "path_length": 14
+      },
+      "LOBBY": {
+        "name": "LOBBY",
+        "depth": 12,
+        "visited_from": "DAM",
+        "direction_taken": "north",
+        "exits": {
+          "south": "DAM",
+          "north": "MAINT",
+          "east": "MAINT"
+        },
+        "path_length": 12
+      },
+      "BKVE": {
+        "name": "BKVE",
+        "depth": 10,
+        "visited_from": "BKVW",
+        "direction_taken": "east",
+        "exits": {
+          "south": "BKENT",
+          "north": "BKVAU",
+          "west": "BKVW"
+        },
+        "path_length": 10
+      },
+      "MRDE": {
+        "name": "MRDE",
+        "depth": 20,
+        "visited_from": "INMIR",
+        "direction_taken": "east",
+        "exits": {
+          "enter": "INMIR",
+          "west": "INMIR",
+          "north": "MRD",
+          "south": "MRC"
+        },
+        "path_length": 20
+      },
+      "MRD": {
+        "name": "MRD",
+        "depth": 16,
+        "visited_from": "FDOOR",
+        "direction_taken": "south",
+        "exits": {
+          "north": "FDOOR",
+          "ne": "FDOOR",
+          "nw": "FDOOR",
+          "south": "MRDW",
+          "se": "MRG",
+          "sw": "MRG"
+        },
+        "path_length": 16
+      },
+      "MAZE7": {
+        "name": "MAZE7",
+        "depth": 8,
+        "visited_from": "MAZ15",
+        "direction_taken": "south",
+        "exits": {
+          "up": "MAZ14",
+          "west": "MAZE6",
+          "ne": "DEAD1",
+          "east": "MAZE8",
+          "south": "MAZ15"
+        },
+        "path_length": 8
+      },
+      "FORE5": {
+        "name": "FORE5",
+        "depth": 4,
+        "visited_from": "CLEAR",
+        "direction_taken": "se",
+        "exits": {
+          "north": "FORE5",
+          "se": "CLTOP",
+          "south": "FORE4",
+          "west": "FORE2"
+        },
+        "path_length": 4
+      },
+      "ATLAN": {
+        "name": "ATLAN",
+        "depth": 10,
+        "visited_from": "FALLS",
+        "direction_taken": "down",
+        "exits": {
+          "se": "RESEN",
+          "up": "FALLS"
+        },
+        "path_length": 10
+      },
+      "WHOUS": {
+        "name": "WHOUS",
+        "depth": 0,
+        "visited_from": null,
+        "direction_taken": null,
+        "exits": {
+          "north": "NHOUS",
+          "south": "SHOUS",
+          "west": "FORE1"
+        },
+        "path_length": 0
+      },
+      "MRA": {
+        "name": "MRA",
+        "depth": 19,
+        "visited_from": "MREYE",
+        "direction_taken": "nw",
+        "exits": {
+          "north": "MRBE",
+          "nw": "MRB",
+          "ne": "MRB",
+          "enter": "INMIR",
+          "south": "MREYE"
+        },
+        "path_length": 19
+      },
+      "GALLE": {
+        "name": "GALLE",
+        "depth": 6,
+        "visited_from": "STUDI",
+        "direction_taken": "nw",
+        "exits": {
+          "north": "CYCLO",
+          "south": "STUDI",
+          "west": "BKENT"
+        },
+        "path_length": 6
+      },
+      "CAGER": {
+        "name": "CAGER",
+        "depth": 19,
+        "visited_from": "CMACH",
+        "direction_taken": "south",
+        "exits": {
+          "north": "CMACH",
+          "down": "CAGED"
+        },
+        "path_length": 19
+      },
+      "ATTIC": {
+        "name": "ATTIC",
+        "depth": 4,
+        "visited_from": "KITCH",
+        "direction_taken": "up",
+        "exits": {
+          "down": "KITCH",
+          "east": "STUDI"
+        },
+        "path_length": 4
+      },
+      "MAZ13": {
+        "name": "MAZ13",
+        "depth": 6,
+        "visited_from": "MAZ11",
+        "direction_taken": "nw",
+        "exits": {
+          "east": "MAZE9",
+          "down": "MAZ12",
+          "south": "MAZ10",
+          "west": "MAZ11"
+        },
+        "path_length": 6
+      },
+      "SLID3": {
+        "name": "SLID3",
+        "depth": 9,
+        "visited_from": "CELLA",
+        "direction_taken": "up",
+        "exits": {
+          "down": "CELLA",
+          "up": "SLID2",
+          "east": "SLEDG"
+        },
+        "path_length": 9
+      },
+      "LLD2": {
+        "name": "LLD2",
+        "depth": 13,
+        "visited_from": "LLD1",
+        "direction_taken": "enter",
+        "exits": {
+          "east": "TOMB",
+          "exit": "LLD1",
+          "west": "LLD1"
+        },
+        "path_length": 13
+      },
+      "MAZE8": {
+        "name": "MAZE8",
+        "depth": 9,
+        "visited_from": "MAZE7",
+        "direction_taken": "east",
+        "exits": {
+          "ne": "MAZE7",
+          "west": "MAZE8",
+          "se": "DEAD3"
+        },
+        "path_length": 9
+      },
+      "NIRVA": {
+        "name": "NIRVA",
+        "depth": 19,
+        "visited_from": "NCELL",
+        "direction_taken": "up",
+        "exits": {
+          "down": "NCELL"
+        },
+        "path_length": 19
+      },
+      "MAZE2": {
+        "name": "MAZE2",
+        "depth": 9,
+        "visited_from": "MAZE3",
+        "direction_taken": "west",
+        "exits": {
+          "south": "MAZE1",
+          "north": "MAZE4",
+          "east": "MAZE3"
+        },
+        "path_length": 9
+      },
+      "BWELL": {
+        "name": "BWELL",
+        "depth": 14,
+        "visited_from": "MPEAR",
+        "direction_taken": "east",
+        "exits": {
+          "west": "MPEAR",
+          "up": "TWELL"
+        },
+        "path_length": 14
+      },
+      "MINE5": {
+        "name": "MINE5",
+        "depth": 14,
+        "visited_from": "MINE6",
+        "direction_taken": "up",
+        "exits": {
+          "down": "MINE6",
+          "north": "MINE7",
+          "west": "MINE2",
+          "south": "MINE3",
+          "up": "MINE3",
+          "east": "MINE4"
+        },
+        "path_length": 14
+      },
+      "SAFE": {
+        "name": "SAFE",
+        "depth": 19,
+        "visited_from": "LEDG4",
+        "direction_taken": "south",
+        "exits": {
+          "north": "LEDG4",
+          "east": "LEDG4"
+        },
+        "path_length": 19
+      },
+      "BSHAF": {
+        "name": "BSHAF",
+        "depth": 16,
+        "visited_from": "TIMBE",
+        "direction_taken": "north",
+        "exits": {
+          "east": "MACHI",
+          "south": "TIMBE"
+        },
+        "path_length": 16
+      },
+      "NCORR": {
+        "name": "NCORR",
+        "depth": 17,
+        "visited_from": "PARAP",
+        "direction_taken": "north",
+        "exits": {
+          "east": "ECORR",
+          "west": "WCORR",
+          "north": "PARAP",
+          "south": "PARAP",
+          "enter": "FDOOR"
+        },
+        "path_length": 17
+      },
+      "BATS": {
+        "name": "BATS",
+        "depth": 13,
+        "visited_from": "MINE7",
+        "direction_taken": "north",
+        "exits": {
+          "east": "SQUEE",
+          "south": "MINE7"
+        },
+        "path_length": 13
+      },
+      "DOME": {
+        "name": "DOME",
+        "depth": 11,
+        "visited_from": "CRAW1",
+        "direction_taken": "east",
+        "exits": {
+          "east": "MINE7",
+          "west": "MINE1"
+        },
+        "path_length": 11
+      },
+      "BKEXE": {
+        "name": "BKEXE",
+        "depth": 10,
+        "visited_from": "BKBOX",
+        "direction_taken": "south",
+        "exits": {
+          "north": "BKBOX"
+        },
+        "path_length": 10
+      },
+      "MINE4": {
+        "name": "MINE4",
+        "depth": 13,
+        "visited_from": "MINE1",
+        "direction_taken": "north",
+        "exits": {
+          "up": "MINE5",
+          "ne": "MINE6",
+          "south": "MINE1",
+          "west": "MINE2"
+        },
+        "path_length": 13
+      },
+      "SLID1": {
+        "name": "SLID1",
+        "depth": 11,
+        "visited_from": "SLID2",
+        "direction_taken": "up",
+        "exits": {
+          "down": "SLID2",
+          "up": "SLIDE"
+        },
+        "path_length": 11
+      },
+      "SPAL": {
+        "name": "SPAL",
+        "depth": 11,
+        "visited_from": "SLEDG",
+        "direction_taken": "south",
+        "exits": {
+          "north": "SLEDG"
+        },
+        "path_length": 11
+      },
+      "ECORR": {
+        "name": "ECORR",
+        "depth": 18,
+        "visited_from": "NCORR",
+        "direction_taken": "east",
+        "exits": {
+          "north": "NCORR",
+          "south": "SCORR",
+          "west": "NCORR"
+        },
+        "path_length": 18
+      },
+      "ALISM": {
+        "name": "ALISM",
+        "depth": 17,
+        "visited_from": "ALICE",
+        "direction_taken": "west",
+        "exits": {
+          "east": "ALITR"
+        },
+        "path_length": 17
+      },
+      "MTORC": {
+        "name": "MTORC",
+        "depth": 7,
+        "visited_from": "CRAW4",
+        "direction_taken": "up",
+        "exits": {
+          "west": "PRM",
+          "down": "CRAW4"
+        },
+        "path_length": 7
+      },
+      "TEMP1": {
+        "name": "TEMP1",
+        "depth": 14,
+        "visited_from": "MGRAI",
+        "direction_taken": "up",
+        "exits": {
+          "west": "MGRAI",
+          "east": "TEMP2"
+        },
+        "path_length": 14
+      },
+      "NCELL": {
+        "name": "NCELL",
+        "depth": 18,
+        "visited_from": "PCELL",
+        "direction_taken": "north",
+        "exits": {
+          "south": "PCELL",
+          "up": "NIRVA"
+        },
+        "path_length": 18
+      },
+      "MRCE": {
+        "name": "MRCE",
+        "depth": 20,
+        "visited_from": "MRB",
+        "direction_taken": "north",
+        "exits": {
+          "enter": "INMIR",
+          "west": "INMIR",
+          "north": "MRG",
+          "south": "MRB"
+        },
+        "path_length": 20
+      },
+      "MAZ15": {
+        "name": "MAZ15",
+        "depth": 7,
+        "visited_from": "CYCLO",
+        "direction_taken": "west",
+        "exits": {
+          "west": "MAZ14",
+          "south": "MAZE7",
+          "ne": "CYCLO"
+        },
+        "path_length": 7
+      },
+      "FALLS": {
+        "name": "FALLS",
+        "depth": 9,
+        "visited_from": "RAINB",
+        "direction_taken": "west",
+        "exits": {
+          "down": "ATLAN"
+        },
+        "path_length": 9
+      },
+      "POG": {
+        "name": "POG",
+        "depth": 7,
+        "visited_from": "CLBOT",
+        "direction_taken": "north",
+        "exits": {
+          "se": "CLBOT",
+          "west": "RAINB"
+        },
+        "path_length": 7
+      },
+      "MRC": {
+        "name": "MRC",
+        "depth": 18,
+        "visited_from": "MRDW",
+        "direction_taken": "south",
+        "exits": {
+          "north": "MRDW",
+          "nw": "MRG",
+          "ne": "MRG",
+          "enter": "INMIR",
+          "south": "MRBE",
+          "sw": "MRB",
+          "se": "MRB"
+        },
+        "path_length": 18
+      },
+      "LEDG3": {
+        "name": "LEDG3",
+        "depth": 17,
+        "visited_from": "EGYPT",
+        "direction_taken": "south",
+        "exits": {
+          "east": "EGYPT",
+          "north": "LEDG2",
+          "south": "LEDG4"
+        },
+        "path_length": 17
+      },
+      "MAINT": {
+        "name": "MAINT",
+        "depth": 12,
+        "visited_from": "DAM",
+        "direction_taken": "south",
+        "exits": {
+          "south": "LOBBY",
+          "west": "LOBBY",
+          "north": "DAM"
+        },
+        "path_length": 12
+      },
+      "LROOM": {
+        "name": "LROOM",
+        "depth": 4,
+        "visited_from": "KITCH",
+        "direction_taken": "west",
+        "exits": {
+          "east": "KITCH",
+          "west": "BLROO"
+        },
+        "path_length": 4
+      },
+      "MAGNE": {
+        "name": "MAGNE",
+        "depth": 17,
+        "visited_from": "ALICE",
+        "direction_taken": "nw",
+        "exits": {
+          "up": "LAVA",
+          "east": "CMACH"
+        },
+        "path_length": 17
+      },
+      "LLD1": {
+        "name": "LLD1",
+        "depth": 12,
+        "visited_from": "CAVE2",
+        "direction_taken": "down",
+        "exits": {
+          "enter": "LLD2",
+          "east": "LLD2"
+        },
+        "path_length": 12
+      },
+      "RCAVE": {
+        "name": "RCAVE",
+        "depth": 10,
+        "visited_from": "TCAVE",
+        "direction_taken": "south",
+        "exits": {
+          "launc": "RIVR3",
+          "nw": "TCAVE"
+        },
+        "path_length": 10
+      },
+      "MRAE": {
+        "name": "MRAE",
+        "depth": 19,
+        "visited_from": "MREYE",
+        "direction_taken": "north",
+        "exits": {
+          "enter": "INMIR",
+          "west": "INMIR",
+          "north": "MRB",
+          "south": "MREYE"
+        },
+        "path_length": 19
+      },
+      "RUBYR": {
+        "name": "RUBYR",
+        "depth": 16,
+        "visited_from": "ICY",
+        "direction_taken": "north",
+        "exits": {
+          "west": "LAVA",
+          "south": "ICY"
+        },
+        "path_length": 16
+      },
+      "CRAW4": {
+        "name": "CRAW4",
+        "depth": 6,
+        "visited_from": "STUDI",
+        "direction_taken": "north",
+        "exits": {
+          "north": "CHAS2",
+          "south": "STUDI",
+          "east": "MTROL",
+          "up": "MTORC"
+        },
+        "path_length": 6
+      },
+      "RIVR3": {
+        "name": "RIVR3",
+        "depth": 11,
+        "visited_from": "RCAVE",
+        "direction_taken": "launc",
+        "exits": {
+          "down": "RIVR4",
+          "east": "WCLF1",
+          "west": "RCAVE"
+        },
+        "path_length": 11
+      }
+    },
+    "unreachable_rooms": [],
+    "broken_exits": [
+      {
+        "from_room": "BKBOX",
+        "direction": "there is a curtain of light there.",
+        "target_room": "WEST"
+      },
+      {
+        "from_room": "BKBOX",
+        "direction": "there is a curtain of light there.",
+        "target_room": "WEST"
+      }
+    ],
+    "depth_analysis": {
+      "8": 14,
+      "13": 18,
+      "15": 8,
+      "12": 14,
+      "18": 13,
+      "19": 14,
+      "14": 13,
+      "20": 6,
+      "6": 7,
+      "7": 10,
+      "1": 3,
+      "9": 17,
+      "16": 9,
+      "10": 13,
+      "17": 11,
+      "3": 4,
+      "11": 9,
+      "4": 5,
+      "5": 4,
+      "2": 3,
+      "0": 1
+    }
+  },
+  "room_details": {
+    "WHOUS": {
+      "name": "WHOUS",
+      "depth": 0,
+      "reachable": true,
+      "visited_from": null,
+      "direction_taken": null,
+      "exits": {
+        "north": "NHOUS",
+        "south": "SHOUS",
+        "west": "FORE1"
+      },
+      "flags": 

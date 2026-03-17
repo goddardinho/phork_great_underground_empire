@@ -1,0 +1,273 @@
+🔍 ZORK CONNECTIVITY GAP ANALYZER
+==================================================
+📚 Loading world...
+Loading Zork world from zork_mtl_source...
+Loading Zork rooms from zork_mtl_source...
+Parsing act4.mud...
+Parsing typhak.mud...
+Parsing act2.mud...
+Parsing act3.mud...
+Parsing sr.mud...
+Parsing act1.mud...
+Parsing prim.mud...
+Parsing disp1.mud...
+Parsing syntax.mud...
+Parsing melee.mud...
+Parsing parser.mud...
+Parsing tell.mud...
+Parsing dung.mud...
+Parsed room: WHOUS - WHOUS
+Parsed room: NHOUS - NHOUS
+Parsed room: SHOUS - SHOUS
+Parsed room: EHOUS - EHOUS
+Parsed room: KITCH - KITCH
+Parsed room: ATTIC - ATTIC
+Parsed room: LROOM - LROOM
+Parsed room: FORE1 - FORE1
+Parsed room: FORE2 - FORE2
+Parsed room: FORE3 - FORE3
+Parsed room: TREE - TREE
+Parsed room: FORE4 - FORE4
+Parsed room: FORE5 - FORE5
+Parsed room: CLEAR - CLEAR
+Parsed room: CELLA - CELLA
+Parsed room: MTROL - MTROL
+Parsed room: STUDI - STUDI
+Parsed room: GALLE - GALLE
+Parsed room: MAZE1 - MAZE1
+Parsed room: MAZE2 - MAZE2
+Parsed room: MAZE3 - MAZE3
+Parsed room: MAZE4 - MAZE4
+Parsed room: DEAD1 - DEAD1
+Parsed room: MAZE5 - MAZE5
+Parsed room: DEAD2 - DEAD2
+Parsed room: MAZE6 - MAZE6
+Parsed room: MAZE7 - MAZE7
+Parsed room: MAZE8 - MAZE8
+Parsed room: DEAD3 - DEAD3
+Parsed room: MAZE9 - MAZE9
+Parsed room: MAZ10 - MAZ10
+Parsed room: MAZ11 - MAZ11
+Parsed room: MGRAT - MGRAT
+Parsed room: MAZ12 - MAZ12
+Parsed room: DEAD4 - DEAD4
+Parsed room: MAZ13 - MAZ13
+Parsed room: MAZ14 - MAZ14
+Parsed room: MAZ15 - MAZ15
+Parsed room: CYCLO - CYCLO
+Parsed room: BLROO - BLROO
+Parsed room: TREAS - TREAS
+Parsed room: RAVI1 - RAVI1
+Parsed room: CRAW1 - CRAW1
+Parsed room: RESES - RESES
+Parsed room: RESER - RESER
+Parsed room: RESEN - RESEN
+Parsed room: STREA - STREA
+Parsed room: INSTR - INSTR
+Parsed room: EGYPT - EGYPT
+Parsed room: ICY - ICY
+Parsed room: RUBYR - RUBYR
+Parsed room: ATLAN - ATLAN
+Parsed room: CANY1 - CANY1
+Parsed room: ECHO - ECHO
+Parsed room: MIRR1 - MIRR1
+Parsed room: MIRR2 - MIRR2
+Parsed room: CAVE1 - CAVE1
+Parsed room: CAVE2 - CAVE2
+Parsed room: CRAW2 - CRAW2
+Parsed room: CRAW3 - CRAW3
+Parsed room: PASS3 - PASS3
+Parsed room: PASS4 - PASS4
+Parsed room: ENTRA - ENTRA
+Parsed room: SQUEE - SQUEE
+Parsed room: TSHAF - TSHAF
+Parsed room: TUNNE - TUNNE
+Parsed room: SMELL - SMELL
+Parsed room: BOOM - BOOM
+Parsed room: TLADD - TLADD
+Parsed room: BLADD - BLADD
+Parsed room: DEAD7 - DEAD7
+Parsed room: TIMBE - TIMBE
+Parsed room: BSHAF - BSHAF
+Parsed room: MACHI - MACHI
+Parsed room: BATS - BATS
+Parsed room: MINE1 - MINE1
+Parsed room: MINE2 - MINE2
+Parsed room: MINE3 - MINE3
+Parsed room: MINE4 - MINE4
+Parsed room: MINE5 - MINE5
+Parsed room: MINE6 - MINE6
+Parsed room: MINE7 - MINE7
+Parsed room: DOME - DOME
+Parsed room: MTORC - MTORC
+Parsed room: CRAW4 - CRAW4
+Parsed room: CHAS2 - CHAS2
+Parsed room: PASS1 - PASS1
+Parsed room: CAROU - CAROU
+Parsed room: PASS5 - PASS5
+Parsed room: CHAS1 - CHAS1
+Parsed room: CAVE3 - CAVE3
+Parsed room: CHAS3 - CHAS3
+Parsed room: DEAD5 - DEAD5
+Parsed room: DEAD6 - DEAD6
+Parsed room: CAVE4 - CAVE4
+Parsed room: RIDDL - RIDDL
+Parsed room: MPEAR - MPEAR
+Parsed room: LLD1 - LLD1
+Parsed room: LLD2 - LLD2
+Parsed room: MGRAI - MGRAI
+Parsed room: TEMP1 - TEMP1
+Parsed room: TEMP2 - TEMP2
+Parsed room: DAM - DAM
+Parsed room: LOBBY - LOBBY
+Parsed room: MAINT - MAINT
+Parsed room: DOCK - DOCK
+Parsed room: RIVR1 - RIVR1
+Parsed room: RIVR2 - RIVR2
+Parsed room: RIVR3 - RIVR3
+Parsed room: WCLF1 - WCLF1
+Parsed room: WCLF2 - WCLF2
+Parsed room: RIVR4 - RIVR4
+Parsed room: RIVR5 - RIVR5
+Parsed room: FCHMP - FCHMP
+Parsed room: FANTE - FANTE
+Parsed room: BEACH - BEACH
+Parsed room: RCAVE - RCAVE
+Parsed room: TCAVE - TCAVE
+Parsed room: FALLS - FALLS
+Parsed room: RAINB - RAINB
+Parsed room: POG - POG
+Parsed room: CLBOT - CLBOT
+Parsed room: CLMID - CLMID
+Parsed room: CLTOP - CLTOP
+Parsed room: VLBOT - VLBOT
+Parsed room: VAIR1 - VAIR1
+Parsed room: VAIR2 - VAIR2
+Parsed room: VAIR3 - VAIR3
+Parsed room: VAIR4 - VAIR4
+Parsed room: LEDG2 - LEDG2
+Parsed room: LIBRA - LIBRA
+Parsed room: LEDG3 - LEDG3
+Parsed room: LEDG4 - LEDG4
+Parsed room: SAFE - SAFE
+Parsed room: LAVA - LAVA
+Parsed room: MAGNE - MAGNE
+Parsed room: CMACH - CMACH
+Parsed room: CAGER - CAGER
+Parsed room: CAGED - CAGED
+Parsed room: TWELL - TWELL
+Parsed room: BWELL - BWELL
+Parsed room: ALICE - ALICE
+Parsed room: ALISM - ALISM
+Parsed room: ALITR - ALITR
+Parsed room: BKENT - BKENT
+Parsed room: BKTW - BKTW
+Parsed room: BKTE - BKTE
+Parsed room: BKVW - BKVW
+Parsed room: BKVE - BKVE
+Parsed room: BKTWI - BKTWI
+Parsed room: BKVAU - BKVAU
+Parsed room: BKBOX - BKBOX
+Parsed room: BKEXE - BKEXE
+Parsed room: CPANT - CPANT
+Parsed room: CPOUT - CPOUT
+Parsed room: CP - CP
+Parsed room: PALAN - PALAN
+Parsed room: PRM - PRM
+Parsed room: SLIDE - SLIDE
+Parsed room: SLID1 - SLID1
+Parsed room: SLID2 - SLID2
+Parsed room: SLID3 - SLID3
+Parsed room: SLEDG - SLEDG
+Parsed room: SPAL - SPAL
+Parsed room: MRD - MRD
+Parsed room: MRG - MRG
+Parsed room: MRC - MRC
+Parsed room: MRB - MRB
+Parsed room: MRA - MRA
+Parsed room: MRDE - MRDE
+Parsed room: MRDW - MRDW
+Parsed room: MRGE - MRGE
+Parsed room: MRGW - MRGW
+Parsed room: MRCE - MRCE
+Parsed room: MRCW - MRCW
+Parsed room: MRBE - MRBE
+Parsed room: MRBW - MRBW
+Parsed room: MRAE - MRAE
+Parsed room: MRAW - MRAW
+Parsed room: INMIR - INMIR
+Parsed room: MRANT - MRANT
+Parsed room: MREYE - MREYE
+Parsed room: TOMB - TOMB
+Parsed room: CRYPT - CRYPT
+Parsed room: TSTRS - TSTRS
+Parsed room: ECORR - ECORR
+Parsed room: WCORR - WCORR
+Parsed room: SCORR - SCORR
+Parsed room: BDOOR - BDOOR
+Parsed room: FDOOR - FDOOR
+Parsed room: NCORR - NCORR
+Parsed room: PARAP - PARAP
+Parsed room: CELL - CELL
+Parsed room: PCELL - PCELL
+Parsed room: NCELL - NCELL
+Parsed room: NIRVA - NIRVA
+Parsing defs.mud...
+Parsing b.mud...
+Parsing util.mud...
+Parsing rooms.mud...
+Parsing makstr.mud...
+Parsing impl.mud...
+Successfully loaded 196 rooms from 196 parsed
+Warning: Found 1 invalid exits:
+  BKBOX -> there is a curtain of light there. -> WEST (room not found)
+🔧 Fixing connectivity gaps...
+🔧 Adding remaining blocked connections...
+🔧 Connecting remaining isolated clusters...
+🔧 Adding final connections for 100% room connectivity...
+✅ Added 114 bidirectional connections
+🎯 Connectivity fixes complete - testing massive improvement...
+✓ Loaded 196 rooms from original Zork
+✓ Created essential starting objects
+✅ Loaded 196 rooms
+🔍 CONNECTIVITY GAP ANALYSIS
+========================================
+
+📊 **CONNECTIVITY ANALYSIS RESULTS**
+   Reachable rooms:    192
+   Unreachable rooms:  4
+   Connectivity rate:  98.0%
+
+🏝️  **UNREACHABLE CLUSTERS** (3 found):
+   Cluster 1: 1 rooms
+      Entry points: 0
+      External exits: 4
+      Sample rooms: MRAW
+   Cluster 2: 2 rooms
+      Entry points: 0
+      External exits: 1
+      Sample rooms: BKVAU, BKVE
+   Cluster 3: 1 rooms
+      Entry points: 0
+      External exits: 4
+      Sample rooms: MRCW
+
+🌉 **POTENTIAL BRIDGES** (9 found):
+   Reachable → Unreachable: 0
+   Unreachable → Reachable: 9
+      MRAW --enter--> INMIR (blocked_connection)
+      MRAW --east--> INMIR (blocked_connection)
+      MRAW --north--> MRB (blocked_connection)
+
+💡 **RECOMMENDATIONS** (2 items):
+   [HIGH] Connect cluster of 2 rooms
+      Action: Add bidirectional exits between reachable and unreachable areas
+   [MEDIUM] Enable 0 potential bridge connections
+      Action: Check if exits should be bidirectional or add return paths
+
+📄 Gap analysis saved to: /Users/randy.goddard/Documents/phork_great_underground_empire/tests/connectivity_gap_analysis.json
+
+🎯 **GAP ANALYSIS COMPLETE**
+   Connectivity: 98.0%
+   Clusters: 3
+   Bridges: 9

@@ -1,0 +1,697 @@
+{
+  "reachable_rooms": [
+    "DEAD7",
+    "SLID1",
+    "FDOOR",
+    "LOBBY",
+    "LEDG3",
+    "DOME",
+    "ALISM",
+    "MINE5",
+    "LLD2",
+    "CLMID",
+    "CPOUT",
+    "SCORR",
+    "RIVR1",
+    "PALAN",
+    "MRCE",
+    "MAZE7",
+    "RIDDL",
+    "MAZ15",
+    "TEMP1",
+    "MAZE4",
+    "TWELL",
+    "VAIR2",
+    "PASS3",
+    "LLD1",
+    "VAIR3",
+    "RIVR4",
+    "CAVE3",
+    "CAROU",
+    "VLBOT",
+    "RAVI1",
+    "TLADD",
+    "CHAS2",
+    "TEMP2",
+    "LEDG4",
+    "CPANT",
+    "MIRR1",
+    "RAINB",
+    "RIVR2",
+    "CLEAR",
+    "TREE",
+    "CHAS3",
+    "MRBE",
+    "WCLF1",
+    "BKTW",
+    "PASS5",
+    "CLTOP",
+    "ATLAN",
+    "CRAW1",
+    "TUNNE",
+    "MRA",
+    "CAVE1",
+    "MAZ13",
+    "MAZE2",
+    "BWELL",
+    "MINE4",
+    "DEAD5",
+    "FORE3",
+    "BKEXE",
+    "MINE2",
+    "DEAD1",
+    "RIVR5",
+    "ENTRA",
+    "CRAW3",
+    "SPAL",
+    "CELL",
+    "MRANT",
+    "RESER",
+    "MAZ11",
+    "MAZE8",
+    "MTROL",
+    "INMIR",
+    "MAINT",
+    "MRDW",
+    "CELLA",
+    "DEAD4",
+    "RIVR3",
+    "RESES",
+    "MRD",
+    "NCELL",
+    "MAZ14",
+    "BKENT",
+    "MGRAI",
+    "PARAP",
+    "SLID2",
+    "CAGED",
+    "PASS1",
+    "MAZE5",
+    "STUDI",
+    "SHOUS",
+    "TSTRS",
+    "EGYPT",
+    "BKTE",
+    "BKVW",
+    "ALICE",
+    "WCORR",
+    "MREYE",
+    "DEAD6",
+    "BKTWI",
+    "ICY",
+    "WHOUS",
+    "MINE1",
+    "BOOM",
+    "SLEDG",
+    "ALITR",
+    "CRYPT",
+    "SMELL",
+    "CP",
+    "CYCLO",
+    "MRB",
+    "SQUEE",
+    "FORE5",
+    "DEAD3",
+    "MINE3",
+    "CMACH",
+    "LROOM",
+    "EHOUS",
+    "STREA",
+    "GALLE",
+    "POG",
+    "MAGNE",
+    "ECORR",
+    "FORE2",
+    "MACHI",
+    "PRM",
+    "MRAE",
+    "SLID3",
+    "MINE7",
+    "CAVE2",
+    "MPEAR",
+    "MAZE1",
+    "MRGW",
+    "INSTR",
+    "MAZE6",
+    "CAGER",
+    "BKBOX",
+    "FCHMP",
+    "FANTE",
+    "PASS4",
+    "KITCH",
+    "RUBYR",
+    "MAZ10",
+    "MAZE9",
+    "TOMB",
+    "FORE1",
+    "TCAVE",
+    "RESEN",
+    "DEAD2",
+    "NCORR",
+    "BSHAF",
+    "WCLF2",
+    "MRDE",
+    "VAIR1",
+    "VAIR4",
+    "FORE4",
+    "BLADD",
+    "MRBW",
+    "MAZE3",
+    "MRG",
+    "DAM",
+    "ECHO",
+    "MRC",
+    "CRAW4",
+    "CRAW2",
+    "DOCK",
+    "MGRAT",
+    "SLIDE",
+    "CANY1",
+    "BLROO",
+    "MRGE",
+    "TIMBE",
+    "BEACH",
+    "LIBRA",
+    "MINE6",
+    "CHAS1",
+    "BATS",
+    "FALLS",
+    "CAVE4",
+    "MAZ12",
+    "MIRR2",
+    "TSHAF",
+    "NHOUS",
+    "MTORC",
+    "NIRVA",
+    "BDOOR",
+    "LEDG2",
+    "ATTIC",
+    "RCAVE",
+    "SAFE",
+    "LAVA",
+    "TREAS",
+    "CLBOT",
+    "PCELL"
+  ],
+  "unreachable_rooms": [
+    "MRAW",
+    "BKVAU",
+    "BKVE",
+    "MRCW"
+  ],
+  "potential_bridges": [
+    {
+      "type": "unreachable_to_reachable",
+      "from": "MRAW",
+      "direction": "enter",
+      "to": "INMIR",
+      "status": "blocked_connection"
+    },
+    {
+      "type": "unreachable_to_reachable",
+      "from": "MRAW",
+      "direction": "east",
+      "to": "INMIR",
+      "status": "blocked_connection"
+    },
+    {
+      "type": "unreachable_to_reachable",
+      "from": "MRAW",
+      "direction": "north",
+      "to": "MRB",
+      "status": "blocked_connection"
+    },
+    {
+      "type": "unreachable_to_reachable",
+      "from": "MRAW",
+      "direction": "south",
+      "to": "MREYE",
+      "status": "blocked_connection"
+    },
+    {
+      "type": "unreachable_to_reachable",
+      "from": "BKVE",
+      "direction": "south",
+      "to": "BKENT",
+      "status": "blocked_connection"
+    },
+    {
+      "type": "unreachable_to_reachable",
+      "from": "MRCW",
+      "direction": "enter",
+      "to": "INMIR",
+      "status": "blocked_connection"
+    },
+    {
+      "type": "unreachable_to_reachable",
+      "from": "MRCW",
+      "direction": "east",
+      "to": "INMIR",
+      "status": "blocked_connection"
+    },
+    {
+      "type": "unreachable_to_reachable",
+      "from": "MRCW",
+      "direction": "north",
+      "to": "MRG",
+      "status": "blocked_connection"
+    },
+    {
+      "type": "unreachable_to_reachable",
+      "from": "MRCW",
+      "direction": "south",
+      "to": "MRB",
+      "status": "blocked_connection"
+    }
+  ],
+  "missing_connections": [],
+  "room_details": {
+    "DEAD7": {
+      "reachable": true,
+      "exits": {
+        "south": "BLADD"
+      }
+    },
+    "SLID1": {
+      "reachable": true,
+      "exits": {
+        "down": "SLID2",
+        "up": "SLIDE"
+      }
+    },
+    "FDOOR": {
+      "reachable": true,
+      "exits": {
+        "north": "PARAP",
+        "enter": "CELL",
+        "south": "MRD",
+        "se": "MRD",
+        "sw": "MRD",
+        "exit": "PARAP"
+      }
+    },
+    "LOBBY": {
+      "reachable": true,
+      "exits": {
+        "south": "DAM",
+        "north": "MAINT",
+        "east": "MAINT"
+      }
+    },
+    "LEDG3": {
+      "reachable": true,
+      "exits": {
+        "east": "EGYPT",
+        "north": "LEDG2",
+        "south": "LEDG4"
+      }
+    },
+    "DOME": {
+      "reachable": true,
+      "exits": {
+        "east": "MINE7",
+        "west": "MINE1"
+      }
+    },
+    "ALISM": {
+      "reachable": true,
+      "exits": {
+        "east": "ALITR"
+      }
+    },
+    "MINE5": {
+      "reachable": true,
+      "exits": {
+        "down": "MINE6",
+        "north": "MINE7",
+        "west": "MINE2",
+        "south": "MINE3",
+        "up": "MINE3",
+        "east": "MINE4"
+      }
+    },
+    "LLD2": {
+      "reachable": true,
+      "exits": {
+        "east": "TOMB",
+        "exit": "LLD1",
+        "west": "LLD1"
+      }
+    },
+    "CLMID": {
+      "reachable": true,
+      "exits": {
+        "up": "CLTOP",
+        "down": "CLBOT"
+      }
+    },
+    "CPOUT": {
+      "reachable": true,
+      "exits": {
+        "north": "CPANT",
+        "west": "CPANT",
+        "east": "CP"
+      }
+    },
+    "SCORR": {
+      "reachable": true,
+      "exits": {
+        "west": "WCORR",
+        "east": "ECORR",
+        "north": "ECORR",
+        "south": "BDOOR"
+      }
+    },
+    "RIVR1": {
+      "reachable": true,
+      "exits": {
+        "west": "DOCK",
+        "land": "DOCK",
+        "down": "RIVR2",
+        "south": "DAM"
+      }
+    },
+    "PALAN": {
+      "reachable": true,
+      "exits": {
+        "down": "PRM"
+      }
+    },
+    "MRCE": {
+      "reachable": true,
+      "exits": {
+        "enter": "INMIR",
+        "west": "INMIR",
+        "north": "MRG",
+        "south": "MRB"
+      }
+    },
+    "MAZE7": {
+      "reachable": true,
+      "exits": {
+        "up": "MAZ14",
+        "west": "MAZE6",
+        "ne": "DEAD1",
+        "east": "MAZE8",
+        "south": "MAZ15"
+      }
+    },
+    "RIDDL": {
+      "reachable": true,
+      "exits": {
+        "down": "CAVE4",
+        "south": "MPEAR"
+      }
+    },
+    "MAZ15": {
+      "reachable": true,
+      "exits": {
+        "west": "MAZ14",
+        "south": "MAZE7",
+        "ne": "CYCLO"
+      }
+    },
+    "TEMP1": {
+      "reachable": true,
+      "exits": {
+        "west": "MGRAI",
+        "east": "TEMP2"
+      }
+    },
+    "MAZE4": {
+      "reachable": true,
+      "exits": {
+        "west": "MAZE3",
+        "north": "MAZE1",
+        "east": "DEAD1"
+      }
+    },
+    "TWELL": {
+      "reachable": true,
+      "exits": {
+        "east": "ALICE",
+        "down": "BWELL"
+      }
+    },
+    "VAIR2": {
+      "reachable": true,
+      "exits": {
+        "west": "LEDG2",
+        "land": "LEDG2",
+        "down": "VAIR1",
+        "up": "VAIR3"
+      }
+    },
+    "PASS3": {
+      "reachable": true,
+      "exits": {
+        "east": "MIRR1",
+        "west": "SLIDE",
+        "north": "CRAW2"
+      }
+    },
+    "LLD1": {
+      "reachable": true,
+      "exits": {
+        "enter": "LLD2",
+        "east": "LLD2"
+      }
+    },
+    "VAIR3": {
+      "reachable": true,
+      "exits": {
+        "down": "VAIR2",
+        "up": "VAIR4"
+      }
+    },
+    "RIVR4": {
+      "reachable": true,
+      "exits": {
+        "down": "RIVR5",
+        "east": "WCLF2",
+        "west": "BEACH",
+        "north": "WCLF1"
+      }
+    },
+    "CAVE3": {
+      "reachable": true,
+      "exits": {
+        "south": "ECHO",
+        "east": "DAM",
+        "west": "CAVE2"
+      }
+    },
+    "CAROU": {
+      "reachable": true,
+      "exits": {
+        "south": "CAVE4"
+      }
+    },
+    "VLBOT": {
+      "reachable": true,
+      "exits": {
+        "north": "LAVA",
+        "up": "VAIR1"
+      }
+    },
+    "RAVI1": {
+      "reachable": true,
+      "exits": {
+        "south": "PASS1",
+        "east": "CRAW1"
+      }
+    },
+    "TLADD": {
+      "reachable": true,
+      "exits": {
+        "down": "BLADD",
+        "up": "BLADD"
+      }
+    },
+    "CHAS2": {
+      "reachable": true,
+      "exits": {
+        "west": "CELLA",
+        "north": "CRAW4",
+        "south": "CHAS1",
+        "east": "CHAS3"
+      }
+    },
+    "TEMP2": {
+      "reachable": true,
+      "exits": {
+        "west": "TEMP1"
+      }
+    },
+    "LEDG4": {
+      "reachable": true,
+      "exits": {
+        "launc": "VAIR4",
+        "south": "SAFE",
+        "north": "LEDG3",
+        "west": "SAFE"
+      }
+    },
+    "CPANT": {
+      "reachable": true,
+      "exits": {
+        "south": "CPOUT",
+        "west": "TREAS",
+        "east": "CPOUT"
+      }
+    },
+    "MIRR1": {
+      "reachable": true,
+      "exits": {
+        "west": "PASS3",
+        "north": "CRAW2",
+        "east": "CAVE1"
+      }
+    },
+    "RAINB": {
+      "reachable": true,
+      "exits": {
+        "east": "POG",
+        "west": "FALLS"
+      }
+    },
+    "RIVR2": {
+      "reachable": true,
+      "exits": {
+        "down": "RIVR3"
+      }
+    },
+    "CLEAR": {
+      "reachable": true,
+      "exits": {
+        "sw": "EHOUS",
+        "se": "FORE5",
+        "north": "CLEAR",
+        "east": "CLEAR",
+        "west": "FORE3",
+        "south": "FORE2",
+        "down": "MGRAT"
+      }
+    },
+    "TREE": {
+      "reachable": true,
+      "exits": {
+        "down": "FORE3"
+      }
+    },
+    "CHAS3": {
+      "reachable": true,
+      "exits": {
+        "south": "ECHO",
+        "east": "TCAVE",
+        "north": "DEAD5",
+        "west": "DEAD6"
+      }
+    },
+    "MRBE": {
+      "reachable": true,
+      "exits": {
+        "enter": "INMIR",
+        "west": "INMIR",
+        "north": "MRC",
+        "south": "MRA"
+      }
+    },
+    "WCLF1": {
+      "reachable": true,
+      "exits": {
+        "south": "RIVR4",
+        "north": "WCLF2"
+      }
+    },
+    "BKTW": {
+      "reachable": true,
+      "exits": {
+        "north": "BKVW",
+        "south": "BKENT",
+        "west": "BKBOX"
+      }
+    },
+    "PASS5": {
+      "reachable": true,
+      "exits": {
+        "north": "CHAS1",
+        "ne": "ECHO",
+        "south": "CAROU"
+      }
+    },
+    "CLTOP": {
+      "reachable": true,
+      "exits": {
+        "down": "CLMID",
+        "south": "FORE4",
+        "west": "FORE5"
+      }
+    },
+    "ATLAN": {
+      "reachable": true,
+      "exits": {
+        "se": "RESEN",
+        "up": "FALLS"
+      }
+    },
+    "CRAW1": {
+      "reachable": true,
+      "exits": {
+        "west": "RAVI1",
+        "east": "DOME"
+      }
+    },
+    "TUNNE": {
+      "reachable": true,
+      "exits": {
+        "south": "TSHAF",
+        "west": "SMELL",
+        "ne": "MINE1",
+        "north": "TSHAF",
+        "down": "SMELL"
+      }
+    },
+    "MRA": {
+      "reachable": true,
+      "exits": {
+        "north": "MRBE",
+        "nw": "MRB",
+        "ne": "MRB",
+        "enter": "INMIR",
+        "south": "MREYE"
+      }
+    },
+    "MRAW": {
+      "reachable": false,
+      "exits": {
+        "enter": "INMIR",
+        "east": "INMIR",
+        "north": "MRB",
+        "south": "MREYE"
+      }
+    },
+    "BKVAU": {
+      "reachable": false,
+      "exits": {
+        "south": "BKVE"
+      }
+    },
+    "BKVE": {
+      "reachable": false,
+      "exits": {
+        "south": "BKENT",
+        "north": "BKVAU"
+      }
+    },
+    "MRCW": {
+      "reachable": false,
+      "exits": {
+        "enter": "INMIR",
+        "east": "INMIR",
+        "north": "MRG",
+        "south": "MRB"
+      }
+    }
+  }
+}
