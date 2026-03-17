@@ -148,6 +148,8 @@ class GameEngine:
             self._handle_pour_on(command)
         elif verb == "apply" or verb == "use":
             self._handle_use_tool(command)
+        elif verb == "climb":
+            self._handle_climb(command)
         elif verb == "save":
             self._handle_save(command)
         elif verb == "restore" or verb == "load":
@@ -382,6 +384,80 @@ class GameEngine:
                         print(f"  {item.name}")
             else:
                 print("It is empty.")
+    
+    def _handle_climb(self, command: Command) -> None:
+        """Handle climb command - context-dependent movement."""
+        if not command.noun:
+            print("Climb what?")
+            return
+        
+        current_room = self.world.get_room(self.player.current_room)
+        if not current_room:
+            print("Error: You are in an unknown location!")
+            return
+        
+        # Normalize potential climb targets
+        climb_target = command.noun.lower().strip()
+        
+        # Check for tree climbing in forest room
+        if climb_target in ["tree", "large tree", "big tree", "trees"]:
+            # Check if we're in a room with a tree we can climb
+            room_desc = current_room.description.lower()
+            if "tree" in room_desc and "up" in current_room.exits:
+                # This room has a tree and an up exit - climb the tree!
+                print("You climb up the tree.")
+                self._handle_movement("up")
+                return
+            else:
+                print("There's nothing here you can climb.")
+                return
+        
+        # Check for ladder climbing
+        elif climb_target in ["ladder", "stairs", "steps", "staircase", "stairway"]:
+            if "up" in current_room.exits:
+                print(f"You climb up the {climb_target}.")
+                self._handle_movement("up") 
+                return
+            elif "down" in current_room.exits:
+                print(f"You climb down the {climb_target}.")
+                self._handle_movement("down")
+                return
+            else:
+                print(f"There's no {climb_target} here to climb.")
+                return
+        
+        # Check for rope climbing (if rope is present)
+        elif climb_target in ["rope", "cord", "line"]:
+            # Look for rope in room or inventory
+            rope_obj = None
+            for obj_id in self.player.inventory + current_room.items:
+                obj = self.objects.get(obj_id)
+                if obj and obj.matches("rope"):
+                    rope_obj = obj
+                    break
+            
+            if rope_obj:
+                if "up" in current_room.exits:
+                    print("You climb up the rope.")
+                    self._handle_movement("up")
+                    return
+                elif "down" in current_room.exits:
+                    print("You climb down the rope.")
+                    self._handle_movement("down") 
+                    return
+                else:
+                    print("The rope doesn't lead anywhere useful.")
+                    return
+            else:
+                print("I don't see any rope here to climb.")
+                return
+        
+        # Generic climbing - check if there's an "up" direction 
+        elif "up" in current_room.exits:
+            print(f"You can't climb the {climb_target}.")
+            return
+        else:
+            print("There's nothing here you can climb.")
     
     def _handle_open(self, command: Command) -> None:
         """Handle open command with enhanced container support."""
