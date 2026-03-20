@@ -261,8 +261,8 @@ def _create_mailbox_puzzle() -> Puzzle:
     def can_open_mailbox(game, command_verb, target_object, **kwargs):
         return (command_verb == "open" and 
                 target_object and 
-                any(obj.id == "MAILBOX" and obj.matches(target_object) 
-                    for obj in game.objects.values()))
+                target_object.lower() in ["mailbox", "box"] and
+                "MAILBOX" in game.object_manager.get_all_objects())
     
     def open_mailbox_action(game, puzzle_manager, **kwargs):
         # Mailbox opening is handled by normal game mechanics
@@ -294,16 +294,16 @@ def _create_grate_key_puzzle() -> Puzzle:
     def has_keys_and_at_grate(game, command_verb, target_object, **kwargs):
         # Check if player has keys and is at the grate location
         has_keys = "KEYS" in game.player.inventory
-        at_grate = game.player.current_room == "GRATE_ROOM"  # Need to add this room
-        is_unlock_cmd = command_verb == "unlock" and target_object == "grate"
+        at_grate = game.player.current_room == "MGRAT"  # Grating Room
+        is_unlock_cmd = command_verb == "unlock" and target_object and "grate" in target_object.lower()
         return has_keys and at_grate and is_unlock_cmd
     
     def unlock_grate_action(game, puzzle_manager, **kwargs):
         # Unlock the grate - modify room exits
-        grate_room = game.world.get_room("GRATE_ROOM") 
+        grate_room = game.world.get_room("MGRAT")  # Grating Room
         if grate_room:
             # Add new exit down to underground
-            grate_room.exits["down"] = "CAVE"  # Connect to existing cave
+            grate_room.exits["down"] = "CELLA"  # Connect to Cellar
             puzzle_manager.set_flag("grate_unlocked", True)
             return True
         return False
@@ -313,7 +313,7 @@ def _create_grate_key_puzzle() -> Puzzle:
         id="find_keys",
         description="Find the rusty keys",  
         trigger_condition=lambda game, command_verb, target_object, **kwargs: (
-            command_verb == "take" and "KEYS" in game.player.inventory
+            command_verb == "take" and target_object and "key" in target_object.lower()
         ),
         action=lambda **kwargs: True,
         score_reward=5,
@@ -327,7 +327,7 @@ def _create_grate_key_puzzle() -> Puzzle:
         trigger_condition=has_keys_and_at_grate,
         action=unlock_grate_action,
         required_objects=["KEYS"],
-        required_room="GRATE_ROOM",
+        required_room="MGRAT",
         score_reward=10,
         completion_message="The grate creaks open, revealing a dark passage below!",
         failure_message="The grate won't budge."
@@ -336,7 +336,7 @@ def _create_grate_key_puzzle() -> Puzzle:
     return Puzzle(
         id="grate_unlock",
         name="Grate Access",
-        description="Unlock underground access with the rusty keys", 
+        description="Unlock underground access with the rusty keys",
         steps=[find_keys_step, unlock_step]
     )
 

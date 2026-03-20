@@ -1,8 +1,18 @@
 import io
 import sys
-import pytest
-from entities import Room, Player
-from main import Game
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent / "src"))
+
+try:
+    import pytest
+    HAS_PYTEST = True
+except ImportError:
+    HAS_PYTEST = False
+    
+import unittest
+from src.world.room import Room
+from src.entities.player import Player
+from src.game import GameEngine as Game
 
 class DummyPlayer(Player):
     def __init__(self):

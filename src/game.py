@@ -6,12 +6,13 @@ import json
 import datetime
 import re
 from pathlib import Path
-
 from .world.world import World
 from .world.room import Room
 from .world.room_loader import ZorkRoomLoader
 from .entities.player import Player
 from .entities.objects import GameObject
+from .entities.object_manager import ObjectManager
+from .entities.object_loader import ZorkObjectLoader
 from .parser.command_parser import CommandParser, Command
 from .responses import ZorkResponses
 from .puzzles import integrate_puzzles_into_game
@@ -27,7 +28,7 @@ class GameEngine:
         self.player = Player()
         self.parser = CommandParser()
         self.responses = ZorkResponses()
-        self.objects: Dict[str, GameObject] = {}  # object_id -> GameObject
+        self.object_manager = ObjectManager()  # Central object registry
         self.running = True
         self.puzzle_manager = None  # Will be initialized after world creation
         self.score_manager = ScoreManager()
@@ -206,7 +207,7 @@ class GameEngine:
         else:
             print("You are carrying:")
             for item_id in self.player.inventory:
-                obj = self.objects.get(item_id)
+                obj = self.object_manager.get_object(item_id)
                 if obj:
                     print(f"  {obj.name}")
     
@@ -259,7 +260,7 @@ class GameEngine:
                     print(f"(You have found a treasure worth {points_awarded} points!)")
         elif location_type == "container":
             # Take from container
-            container = self.objects.get(container_id) if container_id else None
+            container = self.object_manager.get_object(container_id) if container_id else None
             if container and container.is_open():
                 container.remove_from_container(target_obj.id)
                 self.player.add_to_inventory(target_obj.id)
@@ -376,7 +377,7 @@ class GameEngine:
             if contents:
                 print("It contains:")
                 for item_id in contents:
-                    item = self.objects.get(item_id)
+                    item = self.object_manager.get_object(item_id)
                     if item:
                         print(f"  {item.name}")
             else:
@@ -428,7 +429,7 @@ class GameEngine:
             # Look for rope in room or inventory
             rope_obj = None
             for obj_id in self.player.inventory + current_room.items:
-                obj = self.objects.get(obj_id)
+                obj = self.object_manager.get_object(obj_id)
                 if obj and obj.matches("rope"):
                     rope_obj = obj
                     break
@@ -499,7 +500,7 @@ class GameEngine:
             if contents:
                 print("Inside you find:")
                 for item_id in contents:
-                    item = self.objects.get(item_id)
+                    item = self.object_manager.get_object(item_id)
                     if item:
                         print(f"  {item.name}")
             else:
@@ -620,7 +621,7 @@ class GameEngine:
                 print(f"You put the {item_obj.name} in the {container_obj.name}.")
         elif location_type == "container":
             # Move from one container to another
-            current_container = self.objects.get(current_container_id) if current_container_id else None
+            current_container = self.object_manager.get_object(current_container_id) if current_container_id else None
             if current_container:
                 current_container.remove_from_container(item_obj.id)
                 container_obj.add_to_container(item_obj.id)
@@ -660,7 +661,7 @@ class GameEngine:
             # Temporarily switch scope to just this container for finding
             container_items = []
             for item_id in container_obj.get_contents():
-                obj = self.objects.get(item_id)
+                obj = self.object_manager.get_object(item_id)
                 if obj and obj.matches(command.noun):
                     container_items.append(obj)
             
@@ -718,13 +719,13 @@ class GameEngine:
         # Check if in containers in current room
         if current_room:
             for item_id in current_room.items:
-                container = self.objects.get(item_id)
+                container = self.object_manager.get_object(item_id)
                 if container and container.is_container() and obj.id in container.get_contents():
                     return ("container", container.id)
         
         # Check if in containers in inventory
         for item_id in self.player.inventory:
-            container = self.objects.get(item_id)
+            container = self.object_manager.get_object(item_id)
             if container and container.is_container() and obj.id in container.get_contents():
                 return ("container", container.id)
         
@@ -790,7 +791,7 @@ Use 'restore' without a filename to see available saves.
         # Check if player has matches or other lighting source
         has_matches = False
         for item_id in self.player.inventory:
-            match_obj = self.objects.get(item_id)
+            match_obj = self.object_manager.get_object(item_id)
             if match_obj and "matches" in match_obj.name.lower():
                 uses = match_obj.get_attribute("uses_remaining", 0)
                 if uses > 0:
@@ -918,7 +919,7 @@ Use 'restore' without a filename to see available saves.
         # Look for heat source in inventory or room
         heat_source = None
         for item_id in self.player.inventory:
-            obj = self.objects.get(item_id)
+            obj = self.object_manager.get_object(item_id)
             if obj and obj.is_lit():  # Lit objects can provide heat
                 heat_source = obj
                 break
@@ -929,7 +930,7 @@ Use 'restore' without a filename to see available saves.
             
         # Attempt interaction
         success, message, result_obj = self.combination_manager.perform_interaction(
-            primary_obj.id, heat_source.id, "heat", self.player.current_room, self.objects
+            primary_obj.id, heat_source.id, "heat", self.player.current_room, self.object_manager
         )
         
         print(message)
@@ -967,7 +968,7 @@ Use 'restore' without a filename to see available saves.
             
         # Attempt combination
         success, message, result_obj = self.combination_manager.perform_interaction(
-            obj1.id, obj2.id, "combine", self.player.current_room, self.objects
+            obj1.id, obj2.id, "combine", self.player.current_room, self.object_manager
         )
         
         print(message)
@@ -990,7 +991,7 @@ Use 'restore' without a filename to see available saves.
             
         # Attempt breaking
         success, message, result_obj = self.combination_manager.perform_interaction(
-            target_obj.id, tool_obj.id, "break", self.player.current_room, self.objects
+            target_obj.id, tool_obj.id, "break", self.player.current_room, self.object_manager
         )
         
         print(message)
@@ -1013,7 +1014,7 @@ Use 'restore' without a filename to see available saves.
             
         # Attempt pouring
         success, message, result_obj = self.combination_manager.perform_interaction(
-            target_obj.id, liquid_obj.id, "pour", self.player.current_room, self.objects
+            target_obj.id, liquid_obj.id, "pour", self.player.current_room, self.object_manager
         )
         
         print(message)
@@ -1033,7 +1034,7 @@ Use 'restore' without a filename to see available saves.
             
         # Attempt tool usage
         success, message, result_obj = self.combination_manager.perform_interaction(
-            target_obj.id, tool_obj.id, "use", self.player.current_room, self.objects
+            target_obj.id, tool_obj.id, "use", self.player.current_room, self.object_manager
         )
         
         print(message)
@@ -1041,7 +1042,7 @@ Use 'restore' without a filename to see available saves.
     def _handle_object_transformation(self, original_id: str, new_id: str) -> None:
         """Handle when an object transforms into another object."""
         # Remove original object from game
-        original_obj = self.objects.get(original_id)
+        original_obj = self.object_manager.get_object(original_id)
         if not original_obj:
             return
             
@@ -1056,14 +1057,14 @@ Use 'restore' without a filename to see available saves.
             if current_room:
                 current_room.remove_item(original_id)
         elif location_type == "container" and container_id:
-            container = self.objects.get(container_id)
+            container = self.object_manager.get_object(container_id)
             if container:
                 container.remove_from_container(original_id)
         
         # Create and place new object (this would need the new object definition)
         # For now, just update the ID mapping
-        if new_id in self.objects:
-            new_obj = self.objects[new_id]
+        if new_id in self.object_manager.objects:
+            new_obj = self.object_manager.get_object(new_id)
             
             # Place in same location as original
             if location_type == "inventory":
@@ -1073,7 +1074,7 @@ Use 'restore' without a filename to see available saves.
                 if current_room:
                     current_room.add_item(new_id)
             elif location_type == "container" and container_id:
-                container = self.objects.get(container_id)
+                container = self.object_manager.get_object(container_id)
                 if container:
                     container.add_to_container(new_id)
     
@@ -1084,12 +1085,12 @@ Use 'restore' without a filename to see available saves.
         self._remove_object_from_game(obj2_id)
         
         # Add result object to inventory (most logical place for combined objects)
-        if result_id in self.objects:
+        if result_id in self.object_manager.objects:
             self.player.add_to_inventory(result_id)
     
     def _remove_object_from_game(self, obj_id: str) -> None:
         """Remove an object from wherever it is in the game."""
-        obj = self.objects.get(obj_id)
+        obj = self.object_manager.get_object(obj_id)
         if not obj:
             return
             
@@ -1102,7 +1103,7 @@ Use 'restore' without a filename to see available saves.
             if current_room:
                 current_room.remove_item(obj_id)
         elif location_type == "container" and container_id:
-            container = self.objects.get(container_id)
+            container = self.object_manager.get_object(container_id)
             if container:
                 container.remove_from_container(obj_id)
     
@@ -1111,14 +1112,14 @@ Use 'restore' without a filename to see available saves.
         matches = []
         
         # Always check bulk action objects first (they're globally available)
-        for obj_id, obj in self.objects.items():
+        for obj_id, obj in self.object_manager.objects.items():
             if obj.is_bulk_action() and obj.matches(noun):
                 matches.append(obj)
         
         if check_inventory_only:
             # Only check inventory (for drop command)
             for item_id in self.player.inventory:
-                obj = self.objects.get(item_id)
+                obj = self.object_manager.get_object(item_id)
                 if obj and obj.matches(noun) and not obj.is_bulk_action():
                     matches.append(obj)
         else:
@@ -1128,27 +1129,27 @@ Use 'restore' without a filename to see available saves.
             # Check current room
             if current_room:
                 for item_id in current_room.items:
-                    obj = self.objects.get(item_id)
+                    obj = self.object_manager.get_object(item_id)
                     if obj and obj.matches(noun) and not obj.is_bulk_action():
                         matches.append(obj)
                         
                     # Also check inside open containers in the room
                     if obj and obj.is_container() and obj.is_open():
                         for contained_id in obj.get_contents():
-                            contained_obj = self.objects.get(contained_id)
+                            contained_obj = self.object_manager.get_object(contained_id)
                             if contained_obj and contained_obj.matches(noun):
                                 matches.append(contained_obj)
             
             # Check inventory  
             for item_id in self.player.inventory:
-                obj = self.objects.get(item_id)
+                obj = self.object_manager.get_object(item_id)
                 if obj and obj.matches(noun) and not obj.is_bulk_action():
                     matches.append(obj)
                 
                 # Also check inside open containers in inventory
                 if obj and obj.is_container() and obj.is_open():
                     for contained_id in obj.get_contents():
-                        contained_obj = self.objects.get(contained_id)
+                        contained_obj = self.object_manager.get_object(contained_id)
                         if contained_obj and contained_obj.matches(noun):
                             matches.append(contained_obj)
         
@@ -1259,7 +1260,7 @@ Use 'restore' without a filename to see available saves.
         elif location_type == "room":
             return "here"
         elif location_type == "container" and container_id:
-            container = self.objects.get(container_id)
+            container = self.object_manager.get_object(container_id)
             if container:
                 return f"in the {container.name}"
         
@@ -1269,7 +1270,7 @@ Use 'restore' without a filename to see available saves.
         """Check if player has any active light source."""
         # Check inventory for lit light sources
         for item_id in self.player.inventory:
-            obj = self.objects.get(item_id)
+            obj = self.object_manager.get_object(item_id)
             if obj and obj.is_lit():
                 return True
         
@@ -1277,7 +1278,7 @@ Use 'restore' without a filename to see available saves.
         current_room = self.world.get_room(self.player.current_room)
         if current_room:
             for item_id in current_room.items:
-                obj = self.objects.get(item_id)
+                obj = self.object_manager.get_object(item_id)
                 if obj and obj.is_lit():
                     return True
         
@@ -1363,7 +1364,7 @@ Use 'restore' without a filename to see available saves.
         # Show items in room
         items_here = []
         for item_id in current_room.items:
-            obj = self.objects.get(item_id)
+            obj = self.object_manager.get_object(item_id)
             if obj:
                 items_here.append(obj.name)
         
@@ -1406,8 +1407,8 @@ Type 'help' for a list of commands.
         print(f"Loading Zork world from {mud_directory}...")
         
         # Load rooms from .mud files
-        loader = ZorkRoomLoader(self.world)
-        room_count = loader.load_from_mud_files(mud_directory)
+        room_loader = ZorkRoomLoader(self.world)
+        room_count = room_loader.load_from_mud_files(mud_directory)
         
         if room_count == 0:
             print("Failed to load rooms from .mud files. Creating simple test world instead.")
@@ -1416,8 +1417,11 @@ Type 'help' for a list of commands.
         
         print(f"✓ Loaded {room_count} rooms from original Zork")
         
-        # Load objects from .mud files and place them in rooms
-        self._load_objects_from_mud_files(mud_directory)
+        # Load objects using new object loader
+        object_loader = ZorkObjectLoader(self.object_manager, self.world)
+        object_count = object_loader.load_from_mud_files(mud_directory)
+        
+        print(f"✓ Loaded {object_count} objects from canonical definitions")
         
         # Set starting room to West of House (just like original Zork)
         starting_room = "WHOUS"
@@ -1425,8 +1429,7 @@ Type 'help' for a list of commands.
             print("Warning: Starting room WHOUS not found. Using first available room.")
             starting_room = list(self.world.rooms.keys())[0] if self.world.rooms else "UNKNOWN"
         
-        # Create some basic objects for the iconic starting area
-        self._create_essential_objects()
+        self.player.current_room = starting_room
     
     def _load_objects_from_mud_files(self, mud_directory: Path) -> None:
         """Load and create objects from .mud files and place them in rooms."""
@@ -1452,7 +1455,7 @@ Type 'help' for a list of commands.
                         # Extract GET-OBJ references
                         obj_refs = re.findall(r'<GET-OBJ\s+"([^"]+)">', room_content)
                         for obj_id in obj_refs:
-                            if obj_id in self.objects:
+                            if obj_id in self.object_manager.objects:
                                 room.add_item(obj_id)
                                 objects_placed += 1
                 except Exception as e:
@@ -1460,284 +1463,10 @@ Type 'help' for a list of commands.
         
         print(f"✓ Placed {objects_placed} objects in rooms")
     
-    def _create_mud_objects(self) -> None:
-        """Create key objects referenced in .mud files."""
-        
-        # Create window object (WINDO) - referenced in EHOUS and KITCH
-        window = GameObject(
-            id="WINDO",
-            name="small window", 
-            description="There is a small window here which is slightly ajar. The window appears to lead to the kitchen of the white house.",
-            aliases=["window"],
-            attributes={
-                "takeable": False,
-                "openable": True,
-                "open": True,  # Starts slightly ajar (canonically open)
-                "container": False,
-                "door": True  # acts as passage between rooms
-            }
-        )
-        self.objects["WINDO"] = window
-        
-        # Create nest object (NEST) - referenced in TREE room
-        nest = GameObject(
-            id="NEST",
-            name="birds nest",
-            description="There is a small birds nest here.",
-            aliases=["nest", "bird", "birds", "small"],
-            attributes={
-                "takeable": True,
-                "weight": 1,
-                "container": True,
-                "openable": True, 
-                "open": True,  # Bird's nest starts open so egg is visible
-                "contents": ["EGG"],  # Contains the egg initially
-                "capacity": 1  # Only holds one item (the egg)
-            }
-        )
-        self.objects["NEST"] = nest
-        
-        # Create egg object (EGG) - contained in nest in TREE room
-        egg = GameObject(
-            id="EGG",
-            name="jewel-encrusted egg",
-            description="There is a jewel-encrusted egg here.",
-            aliases=["egg", "jewel", "encrusted", "birds", "bird"],
-            attributes={
-                "takeable": True,
-                "weight": 1,
-                "treasure": True,
-                "treasure_value": 5,  # Original OFVAL 5
-                "container": True,
-                "openable": True,
-                "open": False,
-                "contents": []  # Can contain other items when opened
-            }
-        )
-        self.objects["EGG"] = egg
-        
-        # Create tree object (TTREE) - referenced in TREE room, not takeable
-        tree = GameObject(
-            id="TTREE", 
-            name="large tree",
-            description="A large tree with sturdy, climbable branches.",
-            aliases=["tree", "large", "big", "tall"],
-            attributes={
-                "takeable": False,
-                "weight": 1000  # Very heavy, cannot be moved
-            }
-        )
-        self.objects["TTREE"] = tree
-        
-        # Create Living Room objects (LROOM) - canonical Zork starting items
-        trophy_case = GameObject(
-            id="TCASE",
-            name="trophy case",
-            description="A large trophy case, displaying various trophies.",
-            aliases=["case", "trophy", "trophies", "display"],
-            attributes={
-                "takeable": False,
-                "container": True,
-                "openable": True,
-                "open": False,  # Starts closed
-                "contents": [],
-                "capacity": 10,  # Can hold many treasures
-                "weight": 100
-            }
-        )
-        self.objects["TCASE"] = trophy_case
-        
-        rug = GameObject(
-            id="RUG",
-            name="large oriental rug",
-            description="A large oriental rug with beautiful patterns.",
-            aliases=["rug", "carpet", "oriental", "large"],
-            attributes={
-                "takeable": False,  # Too large to pick up
-                "weight": 50,
-                "moveable": True  # Can be moved to reveal things underneath
-            }
-        )
-        self.objects["RUG"] = rug
-        
-        sword = GameObject(
-            id="SWORD", 
-            name="elvish sword",
-            description="A beautiful elvish sword of ancient make. The blade is gleaming and sharp.",
-            aliases=["sword", "blade", "elvish", "weapon"],
-            attributes={
-                "takeable": True,
-                "weight": 3,
-                "weapon": True,
-                "treasure": True,
-                "treasure_value": 10
-            }
-        )
-        self.objects["SWORD"] = sword
-        
-        brass_lamp = GameObject(
-            id="LAMP",
-            name="brass lamp",
-            description="A brass lamp of ancient design.",
-            aliases=["lamp", "light", "brass", "lantern"],
-            attributes={
-                "takeable": True,
-                "weight": 2,
-                "light_source": True,
-                "lit": False,
-                "light_turns": 330,  # Canonical lamp duration
-                "treasure": True,
-                "treasure_value": 10
-            }
-        )
-        self.objects["LAMP"] = brass_lamp
-        
-        # Create Kitchen objects (KITCH)
-        bottle = GameObject(
-            id="BOTTL",
-            name="glass bottle",
-            description="A clear glass bottle.",
-            aliases=["bottle", "glass", "container"],
-            attributes={
-                "takeable": True,
-                "weight": 1,
-                "container": True,
-                "openable": False,  # Open top
-                "open": True,
-                "contents": [],
-                "capacity": 1
-            }
-        )
-        self.objects["BOTTL"] = bottle
-        
-        sack = GameObject(
-            id="SBAG",
-            name="brown sack",
-            description="A large brown bag.",
-            aliases=["sack", "bag", "brown", "large"],
-            attributes={
-                "takeable": True,
-                "weight": 1,
-                "container": True,
-                "openable": True,
-                "open": False,
-                "contents": ["GARLIC"],  # Often contains garlic
-                "capacity": 5
-            }
-        )
-        self.objects["SBAG"] = sack
-        
-        # Create grate object (MGRAT)
-        grate = GameObject(
-            id="GRATE",
-            name="metal grate",
-            description="A metal grate set into the ground.",
-            aliases=["grate", "grating", "metal", "grid"],
-            attributes={
-                "takeable": False,
-                "openable": True,
-                "open": False,  # Starts closed/locked
-                "locked": True,  # Needs keys to open
-                "weight": 100,
-                "door": True  # Acts as passage when open
-            }
-        )
-        self.objects["GRATE"] = grate
-        
-        # Create torch object - moveable light source
-        torch = GameObject(
-            id="TORCH", 
-            name="wooden torch",
-            description="A wooden torch with an oil-soaked rag at one end.",
-            aliases=["torch", "wooden", "light"],
-            attributes={
-                "takeable": True,
-                "weight": 1,
-                "light_source": True,
-                "lit": False,
-                "light_turns": 50  # Shorter duration than lamp
-            }
-        )
-        self.objects["TORCH"] = torch
-        
-        # Create garlic (often in sack)
-        garlic = GameObject(
-            id="GARLIC",
-            name="clove of garlic",
-            description="A pungent clove of garlic.",
-            aliases=["garlic", "clove"],
-            attributes={
-                "takeable": True,
-                "weight": 1
-            }
-        )
-        self.objects["GARLIC"] = garlic
-        
-        # Place nest in TREE room (nest contains egg by default)
-        tree_room = self.world.get_room("TREE")
-        if tree_room:
-            tree_room.add_item("NEST")
-            tree_room.add_item("TTREE")  # Tree is also in the tree room
-            print("✓ Placed birds nest and tree in TREE room")
-        
-        # Add more essential .mud objects as needed
-        # TODO: Parse OBJECT definitions from .mud files automatically
+    # These methods are now replaced by the ObjectManager and ZorkObjectLoader system
+    # The old object creation code has been removed and replaced with modular architecture
+    # Old object creation methods removed - now using ObjectManager and ZorkObjectLoader
     
-    def _create_essential_objects(self) -> None:
-        """Create essential objects like the mailbox and leaflet for the starting area."""
-        
-        # Create the iconic mailbox and leaflet
-        mailbox = GameObject(
-            id="MAILBOX",
-            name="small mailbox",
-            description="The small mailbox is a sturdy metal box with a hinged lid.",
-            aliases=["mailbox", "box", "mail"],
-            attributes={
-                "takeable": False, 
-                "container": True, 
-                "openable": True, 
-                "open": False,
-                "contents": ["LEAFLET"]  # Contains the leaflet initially
-            }
-        )
-        
-        leaflet = GameObject(
-            id="LEAFLET",
-            name="leaflet", 
-            description="A small promotional leaflet with faded text.",
-            aliases=["pamphlet", "brochure", "paper", "advertisement"],
-            attributes={
-                "takeable": True, 
-                "weight": 1,
-                "readable": True,
-                "readable_text": (
-                    "WELCOME TO ZORK!\n\n"
-                    "Zork is a game of adventure, danger, and low cunning. In it you will "
-                    "explore some of the most amazing territory ever seen by mortals. No "
-                    "computer should be without one!\n\n"
-                    "This leaflet was found in a small mailbox."
-                )
-            }
-        )
-        
-        # Add objects to world
-        self.objects["MAILBOX"] = mailbox
-        self.objects["LEAFLET"] = leaflet
-        
-        # Place mailbox in South of House (SHOUS) - the canonical location
-        shous = self.world.get_room("SHOUS")
-        if shous:
-            shous.add_item("MAILBOX")
-        else:
-            # Fallback to WHOUS if SHOUS doesn't exist
-            whous = self.world.get_room("WHOUS")
-            if whous:
-                whous.add_item("MAILBOX")
-        
-        # Create canonical bulk action objects
-        self._create_bulk_action_objects()
-        print("✓ Created essential starting objects")
-        
     def _create_bulk_action_objects(self) -> None:
         """Create canonical Zork bulk action objects (ALL, EVERYTHING, VALUABLES, etc.)."""
         # "ALL" or "EVERYTHING" - takes all visible, takeable items
@@ -1783,9 +1512,9 @@ Type 'help' for a list of commands.
         )
         
         # Add to objects registry
-        self.objects["ALL"] = all_object
-        self.objects["VALUABLES"] = valuables_object
-        self.objects["POSSESSIONS"] = possessions_object
+        self.object_manager.add_object(all_object)
+        self.object_manager.add_object(valuables_object)
+        self.object_manager.add_object(possessions_object)
         
     def _handle_bulk_action(self, verb: str, bulk_obj: 'GameObject') -> None:
         """Handle bulk actions like 'take all', 'drop valuables', etc. (canonical VALUABLES&C)."""
@@ -1800,20 +1529,20 @@ Type 'help' for a list of commands.
             if verb == "take":
                 if current_room:
                     for item_id in current_room.items:
-                        obj = self.objects.get(item_id)
+                        obj = self.object_manager.get_object(item_id)
                         if obj and obj.is_takeable() and not obj.is_bulk_action():
                             candidate_objects.append(obj)
                     # Also check open containers in room
                     for item_id in current_room.items:
-                        container = self.objects.get(item_id)
+                        container = self.object_manager.get_object(item_id)
                         if container and container.is_container() and container.is_open():
                             for contained_id in container.get_contents():
-                                contained_obj = self.objects.get(contained_id)
+                                contained_obj = self.object_manager.get_object(contained_id)
                                 if contained_obj and contained_obj.is_takeable():
                                     candidate_objects.append(contained_obj)
             elif verb == "drop":
                 for item_id in self.player.inventory:
-                    obj = self.objects.get(item_id)
+                    obj = self.object_manager.get_object(item_id)
                     if obj and not obj.is_bulk_action():
                         candidate_objects.append(obj)
                         
@@ -1821,19 +1550,19 @@ Type 'help' for a list of commands.
             # Only objects with treasure value > 0
             if verb == "take" and current_room:
                 for item_id in current_room.items:
-                    obj = self.objects.get(item_id)
+                    obj = self.object_manager.get_object(item_id)
                     if obj and obj.is_takeable() and obj.get_attribute("treasure_value", 0) > 0:
                         candidate_objects.append(obj)
             elif verb == "drop":
                 for item_id in self.player.inventory:
-                    obj = self.objects.get(item_id)
+                    obj = self.object_manager.get_object(item_id)
                     if obj and obj.get_attribute("treasure_value", 0) > 0:
                         candidate_objects.append(obj)
                         
         elif bulk_type == "possessions":
             # Items you're carrying (mainly for DROP)
             for item_id in self.player.inventory:
-                obj = self.objects.get(item_id)
+                obj = self.object_manager.get_object(item_id)
                 if obj and not obj.is_bulk_action():
                     candidate_objects.append(obj)
         
@@ -1897,7 +1626,7 @@ Type 'help' for a list of commands.
                 return True
         elif location_type == "container":
             # Take from container
-            container = self.objects.get(container_id) if container_id else None
+            container = self.object_manager.get_object(container_id) if container_id else None
             if container and container.is_open():
                 container.remove_from_container(obj.id)
                 self.player.add_to_inventory(obj.id)
@@ -1921,465 +1650,29 @@ Type 'help' for a list of commands.
         return False
 
     def _create_initial_world(self) -> None:
-        """Create a simple starting world for testing."""
-        # Create West of House
+        """Create minimal fallback world if .mud files fail to load."""
+        print("Creating minimal fallback world...")
+        
+        # Create basic West of House for fallback
         west_house = Room(
-            id="WHOUS",
+            id="WHOUS", 
             name="West of House",
             description="You are standing in an open field west of a white house, with a boarded front door.",
-            exits={"north": "NHOUS", "east": "HOUSE", "south": "SHOUS"}
+            exits={}
         )
-        
-        # Create a few connected rooms
-        north_house = Room(
-            id="NHOUS",
-            name="North of House", 
-            description="You are facing the north side of a white house. There is no door here, and all the windows are boarded up.",
-            exits={"south": "WHOUS"}
-        )
-        
-        south_house = Room(
-            id="SHOUS",
-            name="South of House",
-            description="You are facing the south side of a white house. There is no door here, and all the windows are boarded up.",
-            exits={"north": "WHOUS"}
-        )
-        
-        house_entrance = Room(
-            id="HOUSE",
-            name="Behind House", 
-            description="You are behind the white house. A path leads into the forest to the east. In one corner of the house there is a small window which is slightly ajar.",
-            exits={"west": "WHOUS", "east": "FOREST"}
-        )
-        
-        # Add some test rooms with flags
-        forest = Room(
-            id="FOREST",
-            name="Forest Path",
-            description="You are on a winding path through an ancient forest. Tall trees block most of the sunlight.",
-            exits={"west": "HOUSE", "down": "CAVE", "south": "TEMPLE", "southeast": "GRATE_ROOM"},
-            flags={"outdoor", "noisy"}
-        )
-        
-        cave = Room(
-            id="CAVE",
-            name="Dark Cave",
-            description="You are in a pitch-black cave. The air is damp and cold, and you can hear water dripping somewhere in the darkness.",
-            exits={"up": "FOREST", "north": "DANGER"},
-            flags={"dark", "cold"}
-        )
-        
-        temple = Room(
-            id="TEMPLE",
-            name="Ancient Temple",
-            description="You stand before an ancient temple, its weathered stones covered in mystical symbols that seem to glow faintly.",
-            exits={"north": "FOREST"},
-            flags={"sacred", "outdoor"}
-        )
-        
-        dangerous_room = Room(
-            id="DANGER",
-            name="Treacherous Chasm",
-            description="You are on the edge of a deep, crumbling chasm. Loose rocks fall away into the darkness below at the slightest movement.",
-            exits={"south": "CAVE"},
-            flags={"dangerous", "dark"}
-        )
-        
-        # Add puzzle-specific rooms
-        grate_room = Room(
-            id="GRATE_ROOM",
-            name="Grate Clearing",
-            description="You are in a small clearing. In the center is a heavy metal grate set into the ground. It appears to be locked.",
-            exits={"east": "FOREST"},
-            flags={"outdoor"}
-        )
-        
-        dam_control = Room(
-            id="DAM_CONTROL",
-            name="Dam Control Room", 
-            description="You are in the control room of Flood Control Dam #3. There is a control panel with a large metal bolt and a green plastic bubble.",
-            exits={"north": "GRATE_ROOM"},
-            flags={"indoor"}
-        )
-        
-        # Add rooms to world
         self.world.add_room(west_house)
-        self.world.add_room(north_house)
-        self.world.add_room(south_house)
-        self.world.add_room(house_entrance)
-        self.world.add_room(forest)
-        self.world.add_room(cave)
-        self.world.add_room(temple)
-        self.world.add_room(dangerous_room)
-        self.world.add_room(grate_room)
-        self.world.add_room(dam_control)
         
-        # Create some basic objects
-        mailbox = GameObject(
-            id="MAILBOX",
-            name="small mailbox",
-            description="The small mailbox.",
-            aliases=["mailbox", "box", "mail"],
-            attributes={
-                "takeable": False, 
-                "container": True, 
-                "openable": True, 
-                "open": False,
-                "contents": ["LEAFLET"]  # Contains the leaflet initially
-            }
-        )
+        # Create basic objects via ObjectLoader even in fallback
+        object_loader = ZorkObjectLoader(self.object_manager, self.world)
+        object_loader._create_canonical_objects()
+        object_count = len(self.object_manager.objects)
+        print(f"✓ Created {object_count} fallback objects")
         
-        leaflet = GameObject(
-            id="LEAFLET",
-            name="leaflet", 
-            description="A small promotional leaflet.",
-            aliases=["pamphlet", "brochure", "paper", "advertisement"],
-            attributes={
-                "takeable": True, 
-                "weight": 1,
-                "readable": True,
-                "readable_text": (
-                    "WELCOME TO ZORK!\n\n"
-                    "Zork is a game of adventure, danger, and low cunning. In it you will "
-                    "explore some of the most amazing territory ever seen by mortals. No "
-                    "computer should be without one!\n\n"
-                    "This leaflet was found in a small mailbox."
-                )
-            }
-        )
-        
-        # Window at Behind House
-        window = GameObject(
-            id="WINDOW",
-            name="small window",
-            description="A small window in the corner of the house. It is slightly ajar and looks like it could be opened wider or closed.",
-            aliases=["window", "aperture"],
-            attributes={
-                "takeable": False,
-                "openable": True,
-                "open": True,  # Initially slightly ajar (open)
-            }
-        )
-        
-        # Add a torch for light source testing
-        torch = GameObject(
-            id="TORCH",
-            name="brass torch",
-            description="A sturdy brass torch with oil-soaked rags wrapped around one end. It could provide light if lit.",
-            aliases=["torch", "light", "lantern"],
-            attributes={
-                "takeable": True,
-                "weight": 2,
-                "light_source": True,
-                "lit": False,  # Initially unlit
-                "light_turns": 50  # 50 turns of light when lit
-            }
-        )
-        
-        # Add matches to light the torch
-        matches = GameObject(
-            id="MATCHES",
-            name="book of matches",
-            description="A small book of wooden matches. There are several left.",
-            aliases=["matches", "match", "book"],
-            attributes={
-                "takeable": True,
-                "weight": 1,
-                "uses_remaining": 10
-            }
-        )
-        
-        # Add test objects for disambiguation
-        rusty_knife = GameObject(
-            id="RUSTY_KNIFE",
-            name="rusty knife",
-            description="An old rusty knife with a chipped blade. It looks like it hasn't been used in years.",
-            aliases=["knife", "blade", "rusty blade"],
-            attributes={
-                "takeable": True,
-                "weight": 1
-            }
-        )
-        
-        silver_knife = GameObject(
-            id="SILVER_KNIFE",
-            name="silver knife",
-            description="A gleaming silver knife with an ornate handle. The blade is perfectly sharp.",
-            aliases=["knife", "blade", "silver blade"],
-            attributes={
-                "takeable": True,
-                "weight": 1
-            }
-        )
-        
-        wooden_box = GameObject(
-            id="WOODEN_BOX",
-            name="wooden box",
-            description="A simple wooden box with iron hinges. It appears to be handcrafted.",
-            aliases=["box", "container", "wooden container"],
-            attributes={
-                "takeable": True,
-                "container": True,
-                "openable": True,
-                "open": False,
-                "contents": [],
-                "weight": 2
-            }
-        )
-        
-        metal_box = GameObject(
-            id="METAL_BOX",
-            name="metal box",
-            description="A sturdy metal box with a complex lock mechanism. It looks very secure.",
-            aliases=["box", "container", "metal container"],
-            attributes={
-                "takeable": True,
-                "container": True,
-                "openable": True,
-                "open": False,
-                "contents": [],
-                "weight": 3
-            }
-        )
-        
-        # Add objects to world
-        self.objects["MAILBOX"] = mailbox
-        self.objects["LEAFLET"] = leaflet
-        self.objects["WINDOW"] = window
-        self.objects["TORCH"] = torch
-        self.objects["MATCHES"] = matches
-        self.objects["RUSTY_KNIFE"] = rusty_knife
-        self.objects["SILVER_KNIFE"] = silver_knife
-        self.objects["WOODEN_BOX"] = wooden_box
-        self.objects["METAL_BOX"] = metal_box
-        
-        # Add puzzle-specific objects
-        rusty_keys = GameObject(
-            id="KEYS",
-            name="rusty keys",
-            description="A small ring of old, rusty keys. They look like they might unlock something important.",
-            aliases=["keys", "key", "ring"],
-            attributes={
-                "takeable": True,
-                "weight": 1
-            }
-        )
-        
-        brass_lamp = GameObject(
-            id="BRASS_LAMP",
-            name="brass lamp",
-            description="An elegant brass lamp with intricate engravings. It appears to be valuable.",
-            aliases=["lamp", "light", "lantern"],
-            attributes={
-                "takeable": True,
-                "weight": 3,
-                "treasure": True,  # This is a treasure
-                "treasure_value": 20
-            }
-        )
-        
-        jeweled_egg = GameObject(
-            id="JEWELED_EGG",
-            name="jeweled egg",
-            description="A beautiful egg encrusted with precious gems. It gleams in the light.",
-            aliases=["egg", "jewel", "gems"],
-            attributes={
-                "takeable": True,
-                "weight": 1,
-                "treasure": True,
-                "treasure_value": 30
-            }
-        )
-        
-        # Additional canonical treasures from original Zork
-        bauble = GameObject(
-            id="BAUBLE",
-            name="beautiful bauble",
-            description="A delicate ornamental bauble that sparkles with inner light.",
-            aliases=["bauble", "ornament"],
-            attributes={
-                "takeable": True,
-                "weight": 1,
-                "treasure": True
-            }
-        )
-        
-        brass_lantern = GameObject(
-            id="BRASS_LANTERN", 
-            name="brass lantern",
-            description="An ornate brass lantern with intricate engravings. It's quite valuable.",
-            aliases=["lantern", "brass"],
-            attributes={
-                "takeable": True,
-                "weight": 2,
-                "treasure": True
-            }
-        )
-        
-        coin = GameObject(
-            id="COIN",
-            name="large coin",
-            description="A heavy gold coin with ancient inscriptions around the edge.",
-            aliases=["coin", "gold"],
-            attributes={
-                "takeable": True,
-                "weight": 1,
-                "treasure": True
-            }
-        )
-        
-        painting = GameObject(
-            id="PAINTING",
-            name="beautiful painting",
-            description="An exquisite oil painting in an ornate gold frame.",
-            aliases=["painting", "picture", "art"],
-            attributes={
-                "takeable": True,  
-                "weight": 3,
-                "treasure": True
-            }
-        )
-        
-        self.objects["KEYS"] = rusty_keys
-        self.objects["BRASS_LAMP"] = brass_lamp  
-        self.objects["JEWELED_EGG"] = jeweled_egg
-        self.objects["BAUBLE"] = bauble
-        self.objects["BRASS_LANTERN"] = brass_lantern
-        self.objects["COIN"] = coin
-        self.objects["PAINTING"] = painting
-        
-        # Add combination objects for authentic Zork interactions
-        bell = GameObject(
-            id="BELL",
-            name="small brass bell",
-            description="A small brass bell with a clear, bright tone. It looks like it could be heated.",
-            aliases=["bell", "brass"],
-            attributes={
-                "takeable": True,
-                "weight": 1
-            }
-        )
-        
-        hot_bell = GameObject(
-            id="HBELL",
-            name="red hot brass bell",
-            description="The brass bell is now red hot and too dangerous to touch with bare hands.",
-            aliases=["bell", "hot", "red"],
-            attributes={
-                "takeable": False,  # Too hot to take
-                "weight": 1
-            }
-        )
-        
-        rope = GameObject(
-            id="ROPE",
-            name="sturdy rope",
-            description="A length of strong, braided rope. It could be useful for climbing or tying things.",
-            aliases=["rope", "cord", "line"],
-            attributes={
-                "takeable": True,
-                "weight": 2
-            }
-        )
-        
-        hook = GameObject(
-            id="HOOK",
-            name="iron hook",
-            description="A sturdy iron hook with a sharp point. It looks like it could be attached to something.",
-            aliases=["hook", "grapple", "iron"],
-            attributes={
-                "takeable": True,
-                "weight": 1
-            }
-        )
-        
-        grappling_hook = GameObject(
-            id="GRAPPLING_HOOK",
-            name="grappling hook",
-            description="A rope with an iron hook securely tied to the end. Perfect for climbing or reaching high places.",
-            aliases=["grappling", "hook", "rope"],
-            attributes={
-                "takeable": True,
-                "weight": 3
-            }
-        )
-        
-        crowbar = GameObject(
-            id="CROWBAR",
-            name="iron crowbar",
-            description="A heavy iron crowbar, useful for prying things open or breaking objects.",
-            aliases=["crowbar", "prybar", "bar", "iron"],
-            attributes={
-                "takeable": True,
-                "weight": 3,
-                "tool": True
-            }
-        )
-        
-        mirror = GameObject(
-            id="MIRROR",
-            name="ornate mirror",
-            description="A beautiful ornate mirror with an elaborate silver frame. Your reflection stares back ominously.",
-            aliases=["mirror", "glass", "looking"],
-            attributes={
-                "takeable": False,  # Too large/fragile
-                "weight": 10,
-                "breakable": True
-            }
-        )
-        
-        broken_mirror = GameObject(
-            id="BROKEN_MIRROR",
-            name="broken mirror",
-            description="The mirror lies in countless sharp fragments. Seven years of bad luck, indeed.",
-            aliases=["mirror", "glass", "shards", "pieces"],
-            attributes={
-                "takeable": False,
-                "weight": 10
-            }
-        )
-        
-        self.objects["BELL"] = bell
-        self.objects["HBELL"] = hot_bell
-        self.objects["ROPE"] = rope
-        self.objects["HOOK"] = hook
-        self.objects["GRAPPLING_HOOK"] = grappling_hook
-        self.objects["CROWBAR"] = crowbar
-        self.objects["MIRROR"] = mirror
-        self.objects["BROKEN_MIRROR"] = broken_mirror
-        
-        # Place objects in rooms (for simple test world)
-        west_house.add_item("MAILBOX")  # Mailbox at west of house (leaflet is inside it)
-        house_entrance.add_item("WINDOW")  # Window at behind house
-        forest.add_item("TORCH")  # Torch in the forest
-        forest.add_item("MATCHES")  # Matches in the forest
-        
-        # Place ambiguous objects for testing
-        temple.add_item("RUSTY_KNIFE")  # Rusty knife in temple
-        temple.add_item("SILVER_KNIFE")  # Silver knife in temple  
-        cave.add_item("WOODEN_BOX")  # Wooden box in cave
-        cave.add_item("METAL_BOX")  # Metal box in cave
-        
-        # Place puzzle objects
-        north_house.add_item("KEYS")  # Keys at north of house
-        temple.add_item("BRASS_LAMP")  # Treasure lamp in temple
-        dangerous_room.add_item("JEWELED_EGG")  # Valuable egg in dangerous area
-        
-        # Place additional treasures around the world
-        forest.add_item("BAUBLE")  # Beautiful bauble in forest
-        cave.add_item("BRASS_LANTERN")  # Brass lantern in cave  
-        house_entrance.add_item("COIN")  # Large coin behind house
-        temple.add_item("PAINTING")  # Beautiful painting in temple
-        
-        # Place combination objects
-        north_house.add_item("BELL")  # Brass bell at north of house
-        cave.add_item("ROPE")  # Rope in cave with other equipment
-        dangerous_room.add_item("HOOK")  # Iron hook in dangerous area
-        forest.add_item("CROWBAR")  # Crowbar in forest with tools
-        temple.add_item("MIRROR")  # Ornate mirror in temple (can be broken)
-    
+        # Delete this massive method content and replace with simple fallback
+        # Since the rest of the method is 450+ lines of old test world code
+
     # ========== Save/Load System ==========
-    
+
     def save_game(self, filename: str = None) -> bool:
         """
         Save the current game state to a file.

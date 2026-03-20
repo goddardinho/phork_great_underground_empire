@@ -76,6 +76,8 @@
 ## Long-term Vision (v2.0+)
 
 ### Enhanced Features
+- [ ] **Colorization** - addition of colorization for QoL update
+- [ ] **Icons** - addition of icons for QoL update
 - [ ] Rich text descriptions and formatting
 - [ ] Sound effects and multimedia (optional)
 - [ ] Hint system

@@ -219,6 +219,8 @@ class MDLParser:
             "DOME": "This is a large room with a prominent doorway leading to a down staircase. To the west is a narrow twisting tunnel, covered with a thin layer of dust. Above you is a large dome painted with scenes depicting elfin hacking rites. Up around the edge of the dome (20 feet up) is a wooden railing. In the center of the room there is a white marble pedestal.",
             
             "LLD2": "You have entered the Land of the Living Dead, a large desolate room. Although it is apparently uninhabited, you can hear the sounds of thousands of lost souls weeping and moaning. In the east corner are stacked the remains of dozens of previous adventurers who were less fortunate than yourself. To the east is an ornate passage, apparently recently constructed. A passage exits to the west.",
+            
+            "EHOUS": "You are behind the white house.  A path runs around the house to the north and south.  A slight noise can be heard coming from inside.  On the east is a window which is slightly ajar.",
         }
         
         # Handle room type patterns

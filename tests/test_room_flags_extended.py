@@ -1,5 +1,9 @@
 import unittest
-from entities import Room
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent / "src"))
+
+from src.world.room import Room
 from main import load_rooms
 import pickle
 
