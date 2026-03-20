@@ -174,7 +174,7 @@ class MDLParser:
             long_description = self._get_canonical_description(room_id)
         
         # Parse exits
-        exits = self._parse_exits(room_text)
+        exits = self._parse_exits(room_text, room_id)
         
         # Parse objects
         objects = self._parse_objects(room_text)
@@ -209,10 +209,18 @@ class MDLParser:
             
             "MIRR2": "You are in a large square room with tall ceilings.  On the south wall is an enormous mirror which fills the entire wall.  There are exits on the other three sides of the room.",
             
+            "TREE": "You are about 10 feet above the ground nestled among some large branches. The nearest branch above you is above your reach.",
+            
+            "CLEAR": "You are in a clearing in a forest of white trees. Paths lead off in all directions.",
+            
+            "MGRAT": "You are in a clearing, with a grating visible on the ground. Leaves are piled by the grating; it looks like it has been recently opened.",
+            
             # Add more canonical descriptions as needed...
             "DOME": "This is a large room with a prominent doorway leading to a down staircase. To the west is a narrow twisting tunnel, covered with a thin layer of dust. Above you is a large dome painted with scenes depicting elfin hacking rites. Up around the edge of the dome (20 feet up) is a wooden railing. In the center of the room there is a white marble pedestal.",
             
             "LLD2": "You have entered the Land of the Living Dead, a large desolate room. Although it is apparently uninhabited, you can hear the sounds of thousands of lost souls weeping and moaning. In the east corner are stacked the remains of dozens of previous adventurers who were less fortunate than yourself. To the east is an ornate passage, apparently recently constructed. A passage exits to the west.",
+            
+            "EHOUS": "You are behind the white house.  A path runs around the house to the north and south.  A slight noise can be heard coming from inside.  On the east is a window which is slightly ajar.",
         }
         
         # Handle room type patterns
@@ -263,7 +271,7 @@ class MDLParser:
             name = " ".join(words).replace(",", "").replace(".", "")
             return name if name else room_id
     
-    def _parse_exits(self, room_text: str) -> Dict[str, str]:
+    def _parse_exits(self, room_text: str, room_id: str) -> Dict[str, str]:
         """Parse exits from <EXIT ...> pattern."""
         exits = {}
         
@@ -290,7 +298,7 @@ class MDLParser:
         if exit_end != -1:
             # Extract content between <EXIT and closing >
             exit_content = room_text[exit_start + 5:exit_end].strip()
-            exits = self._parse_exit_content(exit_content)
+            exits = self._parse_exit_content(exit_content, room_id)
         
         return exits
     
@@ -320,7 +328,7 @@ class MDLParser:
         flags.extend(flag_patterns)
         return flags
 
-    def _parse_exit_content(self, exit_content: str) -> Dict[str, str]:
+    def _parse_exit_content(self, exit_content: str, room_id: str) -> Dict[str, str]:
         """Parse complex exit structures from MDL format."""
         exits = {}
         

@@ -1,16 +1,20 @@
 import unittest
 import pickle
-from entities import Room
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent / "src"))
+
+from src.world.room import Room
 
 class TestRoomSerialization(unittest.TestCase):
     def test_flags_serialization(self):
         room = Room(
             id="SERIAL",
-            desc_long="Serialization test room.",
-            desc_short="Serial Room",
+            description="Serialization test room.",
+            name="Serial Room",
             exits={},
-            objects=[],
-            flags=Room.ROOM_DARK | Room.ROOM_DEADLY,
+            items=[],
+            flags={Room.ROOM_DARK, Room.ROOM_DEADLY},
         )
         data = pickle.dumps(room)
         loaded_room = pickle.loads(data)

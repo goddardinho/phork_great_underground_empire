@@ -1,15 +1,19 @@
 import unittest
-from entities import Room
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent / "src"))
+
+from src.world.room import Room
 
 class TestRoomFlags(unittest.TestCase):
     def setUp(self):
         self.room = Room(
             id="TEST",
-            desc_long="Test room long description.",
-            desc_short="Test room short description.",
+            description="Test room long description.",
+            name="Test Room",
             exits={},
-            objects=[],
-            flags=0,
+            items=[],
+            flags=set(),
         )
 
     def test_initial_flags(self):

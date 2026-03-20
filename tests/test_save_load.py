@@ -142,7 +142,7 @@ def test_save_load_system():
             print("✓ Bell found in inventory after load")
             
             # Try to heat the bell (if torch available or simulate)
-            bell = new_game.objects.get("BELL")
+            bell = new_game.object_manager.get_object("BELL")
             if bell:
                 print(f"✓ Bell object available: {bell.name}")
             

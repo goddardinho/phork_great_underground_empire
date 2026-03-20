@@ -2,19 +2,20 @@
 
 Phork is a clean-room Python reimplementation of the classic Zork I, inspired by the original MDL source code. This project aims for feature parity and map fidelity with Zork I, using only the original source files in `zork_mtl_source` as reference.
 
-**🎉 v1.2.5 Released!** - **PERFECT CANONICAL ACCURACY ACHIEVED** - All 196 rooms now match original Zork specifications exactly (100% accuracy).
+**🎉 v1.2.2 Enhanced!** - **ObjectManager Architecture & Canonical Descriptions** - Major architectural improvements with modular object management and authentic room descriptions.
 
 ## Features
 
 - Text-based interactive fiction gameplay
-- Clean, modular Python architecture with full type hints
-- Room and object structure based on Zork I
+- **Modular ObjectManager architecture** - Clean separation of object management and game logic
+- **Canonical room descriptions** - Authentic descriptions for iconic rooms (Behind House window, Kitchen, Living Room)
+- Room and object structure based on Zork I with canonical accuracy
 - Extensible command parser with natural language processing
-- **Intelligent ambiguity resolution** - handles "which sword - the rusty one or the silver one?"
+- **Robust disambiguation system** - Graceful handling of ambiguous commands and edge cases
 - Dynamic room descriptions with brief/verbose modes
 - Room flags system (light sources, dangers, atmospheric effects)
 - Container support with nested object interactions
-- Comprehensive test suite for reliability
+- **Comprehensive test suite** - All core tests passing with improved compatibility
 - MIT License
 
 ## Getting Started

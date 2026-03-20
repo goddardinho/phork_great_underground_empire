@@ -25,8 +25,8 @@ def test_combination_system():
                           "CROWBAR", "MIRROR", "BROKEN_MIRROR"]
     
     for obj_id in combination_objects:
-        if obj_id in game.objects:
-            obj = game.objects[obj_id]
+        if obj_id in game.object_manager.objects:
+            obj = game.object_manager.get_object(obj_id)
             print(f"✓ {obj_id}: {obj.name}")
         else:
             print(f"✗ {obj_id}: NOT FOUND")
@@ -109,8 +109,8 @@ def test_combination_system():
     game.player.move_to_room("NHOUS") 
     
     # Manually put bell in inventory for testing
-    if "BELL" in game.objects:
-        bell = game.objects["BELL"]
+    if "BELL" in game.object_manager.objects:
+        bell = game.object_manager.get_object("BELL")
         game.player.add_to_inventory(bell.id)
         print("✓ Bell added to inventory for testing")
         
@@ -125,7 +125,7 @@ def test_combination_system():
                 
                 # Try to perform the interaction
                 interaction_result = game.combination_manager.perform_interaction(
-                    "BELL", "TORCH", "heat", game.player, game.objects
+                    "BELL", "TORCH", "heat", game.player, game.object_manager
                 )
                 
                 if interaction_result:
