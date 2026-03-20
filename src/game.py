@@ -23,13 +23,14 @@ from .combinations import integrate_combinations_into_game
 class GameEngine:
     """Main game engine that coordinates all game systems."""
     
-    def __init__(self, use_mud_files: bool = False, mud_directory: Optional[Path] = None) -> None:
+    def __init__(self, use_mud_files: bool = False, mud_directory: Optional[Path] = None, debug_mode: bool = False) -> None:
         self.world = World()
         self.player = Player()
         self.parser = CommandParser()
         self.responses = ZorkResponses()
         self.object_manager = ObjectManager()  # Central object registry
         self.running = True
+        self.debug_mode = debug_mode  # Store debug mode setting
         self.puzzle_manager = None  # Will be initialized after world creation
         self.score_manager = ScoreManager()
         self.combination_manager = None  # Will be initialized after world creation
@@ -48,6 +49,9 @@ class GameEngine:
     
     def run(self) -> None:
         """Main game loop."""
+        # Add completion message for loading process
+        if not self.debug_mode:
+            print("Everything is ready. The grue is hungry...\n")
         self._show_welcome()
         self._look_around()
         
@@ -1389,11 +1393,20 @@ Use 'restore' without a filename to see available saves.
     
     def _show_welcome(self) -> None:
         """Show the welcome message."""
-        welcome_text = """
+        if self.debug_mode:
+            welcome_text = """
 ZORK I: The Great Underground Empire
 A clean Python implementation
 
 Type 'help' for a list of commands.
+"""
+        else:
+            # Canonical Zork introduction - minimal and true to original
+            welcome_text = """ZORK I: The Great Underground Empire
+Copyright (c) 1981, 1982, 1983 Infocom, Inc. All rights reserved.
+ZORK is a registered trademark of Infocom, Inc.
+Revision 88 / Serial number 840726
+
 """
         print(welcome_text)
     
@@ -1403,36 +1416,58 @@ Type 'help' for a list of commands.
             mud_directory = Path("zork_mtl_source")
         
         if not mud_directory.exists():
-            print(f"Warning: {mud_directory} not found. Creating simple test world instead.")
+            if self.debug_mode:
+                print(f"Warning: {mud_directory} not found. Creating simple test world instead.")
+            else:
+                print("Hmm, the original scrolls seem to be missing. Conjuring a basic world...")
             self._create_initial_world()
             return
         
-        print(f"Loading Zork world from {mud_directory}...")
+        if self.debug_mode:
+            print(f"Loading Zork world from {mud_directory}...")
+        else:
+            print("The Implementers are consulting the ancient scrolls...")
         
         # Load rooms from .mud files
-        room_loader = ZorkRoomLoader(self.world)
+        room_loader = ZorkRoomLoader(self.world, debug_mode=self.debug_mode)
         room_count = room_loader.load_from_mud_files(mud_directory)
         
         if room_count == 0:
-            print("Failed to load rooms from .mud files. Creating simple test world instead.")
+            if self.debug_mode:
+                print("Failed to load rooms from .mud files. Creating simple test world instead.")
+            else:
+                print("The scrolls are written in an ancient tongue. Improvising...")
             self._create_initial_world()
             return
         
-        print(f"✓ Loaded {room_count} rooms from original Zork")
+        if not self.debug_mode:
+            print("The maze of twisty passages is taking shape...")
+            
+        if self.debug_mode:
+            print(f"✓ Loaded {room_count} rooms from original Zork")
         
         # Load objects using new object loader
-        object_loader = ZorkObjectLoader(self.object_manager, self.world)
+        object_loader = ZorkObjectLoader(self.object_manager, self.world, debug_mode=self.debug_mode)
         object_count = object_loader.load_from_mud_files(mud_directory)
         
-        print(f"✓ Loaded {object_count} objects from canonical definitions")
+        if not self.debug_mode:
+            print("Scattering treasures and hiding rusty swords...")
+            
+        if self.debug_mode:
+            print(f"✓ Loaded {object_count} objects from canonical definitions")
         
         # Set starting room to West of House (just like original Zork)
         starting_room = "WHOUS"
         if starting_room not in self.world.rooms:
-            print("Warning: Starting room WHOUS not found. Using first available room.")
+            if self.debug_mode:
+                print("Warning: Starting room WHOUS not found. Using first available room.")
             starting_room = list(self.world.rooms.keys())[0] if self.world.rooms else "UNKNOWN"
         
         self.player.current_room = starting_room
+        
+        # Add a subtle completion hint for non-debug mode
+        if not self.debug_mode:
+            print("Ready to explore the Great Underground Empire!")
     
     def _load_objects_from_mud_files(self, mud_directory: Path) -> None:
         """Load and create objects from .mud files and place them in rooms."""
@@ -1654,7 +1689,10 @@ Type 'help' for a list of commands.
 
     def _create_initial_world(self) -> None:
         """Create minimal fallback world if .mud files fail to load."""
-        print("Creating minimal fallback world...")
+        if self.debug_mode:
+            print("Creating minimal fallback world...")
+        else:
+            print("The Implementers are improvising a simple realm...")
         
         # Create basic West of House for fallback
         west_house = Room(

@@ -1,0 +1,23 @@
+{
+  "traversal": {
+    "mean_time": 8.854866027832031e-05,
+    "median_time": 8.797645568847656e-05,
+    "std_dev": 4.846997525806255e-06,
+    "min_time": 8.296966552734375e-05,
+    "max_time": 9.489059448242188e-05,
+    "mean_rooms": 196,
+    "rooms_per_second": 2213472.224017232
+  },
+  "pathfinding": {
+    "mean_time": 6.1492919921875e-05,
+    "success_rate": 1.0,
+    "mean_path_length": 8.88,
+    "pathfinding_speed": 16262.034739454093
+  },
+  "large_scale": {
+    "total_time": 2.002716064453125e-05,
+    "mean_move_time": 1.0013580322265625e-07,
+    "moves_per_second": 9986438.095238095,
+    "success_rate": 1.0
+  }
+}

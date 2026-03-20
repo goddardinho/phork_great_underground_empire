@@ -26,8 +26,9 @@ class RoomData:
 class MDLParser:
     """Parser for MDL (.mud) files containing Zork room definitions."""
     
-    def __init__(self):
+    def __init__(self, debug_mode: bool = False):
         self.rooms: Dict[str, RoomData] = {}
+        self.debug_mode = debug_mode
         self.variables: Dict[str, str] = {}  # Variable name -> value lookup
         
     def parse_room_block(self, text: str, start_pos: int) -> Tuple[Optional[RoomData], int]:
@@ -420,19 +421,17 @@ class MDLParser:
 
     def _skip_nexit(self, text: str, start: int) -> int:
         """Skip a #NEXIT structure."""
-        # Skip until we find the end of the message
         i = start
-        while i < len(text) and text[i:i+6] != '#NEXIT':
-            i += 1
-            
-        if i < len(text):
+        
+        # Skip all #NEXIT tokens (there can be multiple)
+        while i < len(text) and text[i:i+6] == '#NEXIT':
             i += 6  # Skip '#NEXIT'
             
-        # Skip whitespace
-        while i < len(text) and text[i].isspace():
-            i += 1
-            
-        # Skip the quoted message if present
+            # Skip whitespace after #NEXIT
+            while i < len(text) and text[i].isspace():
+                i += 1
+        
+        # Skip the optional quoted message if present
         if i < len(text) and text[i] == '"':
             _, i = self._extract_quoted_string(text, i)
             
@@ -644,7 +643,8 @@ class MDLParser:
             
             if room_data:
                 rooms[room_data.id] = room_data
-                print(f"Parsed room: {room_data.id} - {room_data.short_name}")
+                if self.debug_mode:
+                    print(f"Parsed room: {room_data.id} - {room_data.short_name}")
             
             # Advance position
             if new_pos <= pos:
@@ -660,7 +660,8 @@ class MDLParser:
         all_rooms = {}
         
         for mud_file in directory_path.glob("*.mud"):
-            print(f"Parsing {mud_file.name}...")
+            if self.debug_mode:
+                print(f"Parsing {mud_file.name}...")
             file_rooms = self.parse_file(mud_file)
             all_rooms.update(file_rooms)
         
