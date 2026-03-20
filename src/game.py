@@ -89,16 +89,19 @@ class GameEngine:
             self.score_manager.increment_moves()
         
         if verb in ["north", "south", "east", "west", "northeast", "northwest", 
-                   "southeast", "southwest", "up", "down"]:
+                   "southeast", "southwest", "up", "down", "in", "out", "enter", "exit"]:
             self._handle_movement(verb)
         elif verb == "go" and command.noun:
             # Handle "go north", "go east", etc.
             direction = command.noun
             if direction in ["north", "south", "east", "west", "northeast", "northwest",
-                           "southeast", "southwest", "up", "down", "in", "out"]:
+                           "southeast", "southwest", "up", "down", "in", "out", "enter", "exit"]:
                 self._handle_movement(direction)
             else:
                 print(f"I don't know how to go {direction}.")
+        elif verb == "climb":
+            # Handle climb command
+            self._handle_climb(command)
         elif verb == "look":
             self._handle_look(command)
         elif verb == "examine":
@@ -300,14 +303,14 @@ class GameEngine:
             current_room.add_item(target_obj.id)
         print(f"Dropped: {target_obj.name}")
     
-    def _handle_examine(self, command: Command) -> None:
-        """Handle examine command."""
+    def _handle_drop(self, command: Command) -> None:
+        """Handle drop command."""
         if not command.noun:
-            print("Examine what?")
+            print("Drop what?")
             return
         
         # Find object - this will handle disambiguation if needed
-        target_obj = self._find_object(command.noun)
+        target_obj = self._find_object(command.noun, check_inventory_only=True)
         
         # If disambiguation is in progress, save command for later execution
         if self.player.awaiting_disambiguation:
@@ -1304,8 +1307,8 @@ Use 'restore' without a filename to see available saves.
             if random.random() < 0.1:  # 10% chance per turn in darkness
                 return "You are likely to be eaten by a grue."
         
-        # Check for explicitly dangerous rooms
-        if current_room.has_flag("dangerous"):
+        # Check for explicitly dangerous/deadly rooms
+        if current_room.has_flag("dangerous") or current_room.has_flag("deadly"):
             import random
             if random.random() < 0.05:  # 5% chance per turn in dangerous areas
                 return "You have died from the treacherous conditions here."
