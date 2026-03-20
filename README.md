@@ -16,6 +16,7 @@ Phork is a clean-room Python reimplementation of the classic Zork I, inspired by
 - Room flags system (light sources, dangers, atmospheric effects)
 - Container support with nested object interactions
 - **Comprehensive test suite** - All core tests passing with improved compatibility
+- **Security hardened** - Path traversal prevention, input validation, secure error handling
 - MIT License
 
 ## Getting Started
