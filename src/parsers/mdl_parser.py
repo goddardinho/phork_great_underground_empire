@@ -420,19 +420,17 @@ class MDLParser:
 
     def _skip_nexit(self, text: str, start: int) -> int:
         """Skip a #NEXIT structure."""
-        # Skip until we find the end of the message
         i = start
-        while i < len(text) and text[i:i+6] != '#NEXIT':
-            i += 1
-            
-        if i < len(text):
+        
+        # Skip all #NEXIT tokens (there can be multiple)
+        while i < len(text) and text[i:i+6] == '#NEXIT':
             i += 6  # Skip '#NEXIT'
             
-        # Skip whitespace
-        while i < len(text) and text[i].isspace():
-            i += 1
-            
-        # Skip the quoted message if present
+            # Skip whitespace after #NEXIT
+            while i < len(text) and text[i].isspace():
+                i += 1
+        
+        # Skip the optional quoted message if present
         if i < len(text) and text[i] == '"':
             _, i = self._extract_quoted_string(text, i)
             
