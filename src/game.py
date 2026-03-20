@@ -5,6 +5,7 @@ import sys
 import json
 import datetime
 import re
+import logging
 from pathlib import Path
 from .world.world import World
 from .world.room import Room
@@ -1497,9 +1498,8 @@ Revision 88 / Serial number 840726
                                 room.add_item(obj_id)
                                 objects_placed += 1
                 except Exception as e:
-                    pass  # Continue if file can't be processed
-        
-        print(f"✓ Placed {objects_placed} objects in rooms")
+                        logging.warning(f"Failed to process object file: {type(e).__name__}")
+                        continue  # Continue if file can't be processed
     
     # These methods are now replaced by the ObjectManager and ZorkObjectLoader system
     # The old object creation code has been removed and replaced with modular architecture
@@ -1728,6 +1728,12 @@ Revision 88 / Serial number 840726
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"zork_save_{timestamp}.json"
         
+        # Sanitize filename to prevent path traversal attacks
+        sanitized_filename = self._sanitize_filename(filename)
+        if not sanitized_filename:
+            print("Invalid filename provided.")
+            return False
+        
         try:
             game_state = self._collect_game_state()
             
@@ -1735,7 +1741,13 @@ Revision 88 / Serial number 840726
             saves_dir = Path("saves")
             saves_dir.mkdir(exist_ok=True)
             
-            save_path = saves_dir / filename
+            # Use sanitized filename and ensure it resolves within saves directory
+            save_path = saves_dir / sanitized_filename
+            
+            # Security check: ensure resolved path is within saves directory
+            if not self._is_safe_path(save_path, saves_dir):
+                print("Invalid save path detected.")
+                return False
             
             with open(save_path, 'w', encoding='utf-8') as f:
                 json.dump(game_state, f, indent=2, ensure_ascii=False)
@@ -1743,8 +1755,17 @@ Revision 88 / Serial number 840726
             print(f"Game saved as {save_path}")
             return True
             
+        except (IOError, OSError) as e:
+            logging.warning(f"IO error saving game: {type(e).__name__}")
+            print("Failed to save game: IO error.")
+            return False
+        except json.JSONEncodeError as e:
+            logging.warning(f"JSON encoding error saving game: {type(e).__name__}")
+            print("Failed to save game: encoding error.")
+            return False
         except Exception as e:
-            print(f"Failed to save game: {e}")
+            logging.warning(f"Unexpected error saving game: {type(e).__name__}")
+            print("Failed to save game: unexpected error.")
             return False
     
     def load_game(self, filename: str) -> bool:
@@ -1757,24 +1778,146 @@ Revision 88 / Serial number 840726
         Returns:
             True if load was successful, False otherwise.
         """
+        # Sanitize filename to prevent path traversal attacks
+        sanitized_filename = self._sanitize_filename(filename)
+        if not sanitized_filename:
+            print("Invalid filename provided.")
+            return False
+            
         try:
-            save_path = Path("saves") / filename
+            saves_dir = Path("saves")
+            save_path = saves_dir / sanitized_filename
+            
+            # Security check: ensure resolved path is within saves directory
+            if not self._is_safe_path(save_path, saves_dir):
+                print("Invalid save path detected.")
+                return False
             
             if not save_path.exists():
-                print(f"Save file {filename} not found.")
+                print(f"Save file {sanitized_filename} not found.")
+                return False
+            
+            # Additional security: check file size to prevent memory exhaustion
+            if save_path.stat().st_size > 10 * 1024 * 1024:  # 10MB limit
+                print("Save file too large.")
                 return False
             
             with open(save_path, 'r', encoding='utf-8') as f:
                 game_state = json.load(f)
             
+            # Validate loaded data structure
+            if not self._validate_game_state(game_state):
+                print("Invalid save file format.")
+                return False
+            
             self._restore_game_state(game_state)
             print(f"Game loaded from {save_path}")
             return True
             
+        except (IOError, OSError) as e:
+            logging.warning(f"IO error loading game: {type(e).__name__}")
+            print("Failed to load game: file access error.")
+            return False
+        except json.JSONDecodeError as e:
+            logging.warning(f"JSON decode error loading game: {type(e).__name__}")
+            print("Failed to load game: invalid file format.")
+            return False
         except Exception as e:
-            print(f"Failed to load game: {e}")
+            logging.warning(f"Unexpected error loading game: {type(e).__name__}")
+            print("Failed to load game: unexpected error.")
             return False
     
+    def _sanitize_filename(self, filename: str) -> str:
+        """
+        Sanitize filename to prevent path traversal and other security issues.
+        
+        Args:
+            filename: Raw filename from user input
+            
+        Returns:
+            Sanitized filename, or empty string if invalid
+        """
+        if not filename or not isinstance(filename, str):
+            return ""
+        
+        # Remove any directory separators and path traversal attempts
+        filename = filename.replace('/', '').replace('\\', '')
+        filename = filename.replace('..', '').replace('~', '')
+        
+        # Remove null bytes and other dangerous characters
+        filename = ''.join(c for c in filename if ord(c) > 31 and c not in '<>:"|?*')
+        
+        # Ensure filename doesn't start with dots or dashes
+        filename = filename.lstrip('.-')
+        
+        # Limit length
+        filename = filename[:100]
+        
+        # Ensure it has valid extension
+        if not filename.endswith('.json'):
+            if '.' in filename:
+                filename = filename.split('.')[0] + '.json'
+            else:
+                filename = filename + '.json'
+        
+        # Final validation - only allow alphanumeric, underscore, dash, and dots
+        if not re.match(r'^[a-zA-Z0-9_.-]+\.json$', filename):
+            return ""
+            
+        return filename
+    
+    def _is_safe_path(self, path: Path, base_dir: Path) -> bool:
+        """
+        Check if a path is safe (within the expected directory).
+        
+        Args:
+            path: Path to check
+            base_dir: Base directory that path should be within
+            
+        Returns:
+            True if path is safe, False otherwise
+        """
+        try:
+            # Resolve both paths to handle any symlinks or relative components
+            resolved_path = path.resolve()
+            resolved_base = base_dir.resolve()
+            
+            # Check if the resolved path is within the base directory
+            return str(resolved_path).startswith(str(resolved_base))
+        except (OSError, ValueError):
+            return False
+    
+    def _validate_game_state(self, game_state: Dict[str, Any]) -> bool:
+        """
+        Validate that loaded game state has expected structure and safe content.
+        
+        Args:
+            game_state: Loaded game state data
+            
+        Returns:
+            True if valid, False otherwise
+        """
+        if not isinstance(game_state, dict):
+            return False
+        
+        # Check for required top-level keys
+        required_keys = ['player', 'world_state', 'score_system', 'combinations']
+        if not all(key in game_state for key in required_keys):
+            return False
+        
+        # Basic validation of player data
+        if not isinstance(game_state.get('player'), dict):
+            return False
+        
+        # Check for dangerous content that shouldn't be in save files
+        game_str = json.dumps(game_state)
+        dangerous_patterns = ['__import__', 'eval(', 'exec(', 'os.system', '__reduce__', '__call__']
+        if any(pattern in game_str for pattern in dangerous_patterns):
+            logging.warning("Dangerous content detected in save file")
+            return False
+        
+        return True
+
     def _collect_game_state(self) -> Dict[str, Any]:
         """Collect all game state that needs to be saved."""
         
