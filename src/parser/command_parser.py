@@ -70,7 +70,7 @@ class CommandParser:
             
             # Manipulation commands
             "turn": "turn", "rotate": "turn", "twist": "turn", "spin": "turn",
-            "push": "push", "press": "push", "shove": "push", "move": "push",
+            "push": "push", "press": "push", "shove": "push",
             "pull": "pull", "drag": "pull", "yank": "pull", "tug": "pull",
             "touch": "touch", "feel": "touch", "handle": "touch", "finger": "touch",
             "rub": "rub", "polish": "rub", "clean": "rub", "wipe": "rub",
@@ -101,7 +101,7 @@ class CommandParser:
             "drink": "drink", "sip": "drink", "gulp": "drink", "swallow": "drink",
             
             # Game control
-            "quit": "quit", "q": "quit", "exit": "quit", "bye": "quit", "goodbye": "quit",
+            "quit": "quit", "q": "quit", "bye": "quit", "goodbye": "quit",
             "save": "save", "restore": "restore", "load": "restore", 
             "restart": "restart", "again": "again", "g": "again",
             "undo": "undo", "oops": "oops", "o": "oops",
