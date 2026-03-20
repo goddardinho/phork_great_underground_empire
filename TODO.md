@@ -54,9 +54,9 @@
 - [x] **Missing TREE room objects** - Added the iconic birds nest and jewel-encrusted egg to the TREE room. Nest is a takeable, openable container that holds the valuable egg (treasure value 5). Also added the tree object itself for complete room authenticity. All objects have proper aliases and descriptions matching original Zork specifications. ✅ **COMPLETE!** *v1.3.2*
 - [x] **Canonical container interaction** - Fixed container examination when items are in inventory vs. room. "Look in nest" now shows correct container-focused descriptions consistently. Container state persists properly across commands, and contents display follows authentic Zork interaction patterns. Bird's nest now starts open (canonical state) so egg is immediately visible. ✅ **COMPLETE!** *v1.3.4*
 - [x] **Comprehensive canonical object validation** - **MAJOR MILESTONE ACHIEVED** - Systematically validated and implemented all critical canonical objects across key rooms: LROOM (trophy case, rug, sword, lamp), KITCH (bottle, sack, garlic), MGRAT (grate), plus torch and corrected window states. Created validate_canonical.py for ongoing accuracy verification. All objects now have authentic properties, descriptions, treasure values, and container mechanics matching 1978 MIT Zork specifications. ✅ **COMPLETE!** *v1.3.5*
-- [ ] **Additional cleanup** - Verify all cardinal directions are correctly parsed, described, and input
-- [ ] **Parser object interaction refinement** - Objects visible in rooms but need interaction accessibility fixes
-- [ ] **Edge case validation** - Dark rooms, dangerous areas, special exits
+- [x] **Additional cleanup** - Verify all cardinal directions are correctly parsed, described, and input ✅ **COMPLETE!** *v1.2.6*
+- [x] **Parser object interaction refinement** - Objects visible in rooms but need interaction accessibility fixes ✅ **COMPLETE!** *v1.2.6*
+- [x] **Edge case validation** - Dark rooms, dangerous areas, special exits ✅ **COMPLETE!** *v1.2.6*
 - [ ] **Performance testing** - Large world navigation and object interaction
 - [ ] **Integration testing** - All systems working together seamlessly
 - [ ] **Security validation** - Validate coding practices are aligned with security best-practices

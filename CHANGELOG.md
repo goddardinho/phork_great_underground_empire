@@ -1,5 +1,29 @@
 # Changelog
 
+## v1.2.6 (2026-03-20) 🔧 **Edge Case Validation & Parser Improvements** 🔧
+
+- **🎮 CARDINAL DIRECTION ENHANCEMENTS:**
+  - **Movement Command Fixes**: Resolved parser conflicts where "exit" mapped to "quit" instead of movement
+  - **Direction Synonym Cleanup**: Fixed "move east" parsing as "push east" instead of "go east" 
+  - **Complete Direction Support**: Added proper handling for "enter", "exit", "in", "out" as movement commands
+  - **Enhanced Navigation**: All cardinal and intermediate directions now parse correctly with shortcuts
+
+- **🔧 OBJECT INTERACTION FIXES:**
+  - **Critical Examine Bug**: Fixed duplicate `_handle_examine()` method that was incorrectly dropping items instead of examining them
+  - **Accessibility Improvements**: Objects visible in rooms can now be properly interacted with
+  - **Command Processing**: Cleaner separation between examine and drop functionality
+
+- **⚠️ DANGER & EDGE CASE VALIDATION:**
+  - **Room Flag Consistency**: Fixed dangerous/deadly room flag mismatch for proper death condition detection
+  - **Dark Room Mechanics**: Validated grue encounter system and light source detection
+  - **Special Exit Handling**: Enhanced climb, ladder, and rope interaction edge cases
+  - **Error Handling**: Improved graceful handling of invalid commands and edge conditions
+
+- **🧪 QUALITY ASSURANCE:**
+  - **Test Suite**: All 28 tests continue passing with enhanced edge case coverage
+  - **Parser Reliability**: Comprehensive validation of direction and object command parsing
+  - **Game Stability**: Eliminated crashes and unexpected behaviors in edge scenarios
+
 ## v1.2.2 (2026-03-20) 🏗️ **ObjectManager Architecture & Test Compatibility** 🏗️
 
 - **🏗️ MAJOR ARCHITECTURAL IMPROVEMENTS:**
