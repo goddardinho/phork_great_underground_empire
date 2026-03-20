@@ -54,11 +54,13 @@
 - [x] **Missing TREE room objects** - Added the iconic birds nest and jewel-encrusted egg to the TREE room. Nest is a takeable, openable container that holds the valuable egg (treasure value 5). Also added the tree object itself for complete room authenticity. All objects have proper aliases and descriptions matching original Zork specifications. ✅ **COMPLETE!** *v1.3.2*
 - [x] **Canonical container interaction** - Fixed container examination when items are in inventory vs. room. "Look in nest" now shows correct container-focused descriptions consistently. Container state persists properly across commands, and contents display follows authentic Zork interaction patterns. Bird's nest now starts open (canonical state) so egg is immediately visible. ✅ **COMPLETE!** *v1.3.4*
 - [x] **Comprehensive canonical object validation** - **MAJOR MILESTONE ACHIEVED** - Systematically validated and implemented all critical canonical objects across key rooms: LROOM (trophy case, rug, sword, lamp), KITCH (bottle, sack, garlic), MGRAT (grate), plus torch and corrected window states. Created validate_canonical.py for ongoing accuracy verification. All objects now have authentic properties, descriptions, treasure values, and container mechanics matching 1978 MIT Zork specifications. ✅ **COMPLETE!** *v1.3.5*
-- [ ] **Parser object interaction refinement** - Objects visible in rooms but need interaction accessibility fixes 
+- [ ] **Additional cleanup** - Verify all cardinal directions are correctly parsed, described, and input
+- [ ] **Parser object interaction refinement** - Objects visible in rooms but need interaction accessibility fixes
 - [ ] **Edge case validation** - Dark rooms, dangerous areas, special exits
 - [ ] **Performance testing** - Large world navigation and object interaction
 - [ ] **Integration testing** - All systems working together seamlessly
 - [ ] **Security validation** - Validate coding practices are aligned with security best-practices
+- [ ] **Documentation completion** - Validate all project documentation is complete and correct, including test documentation
 - [x] **Cleanup** - Cleanup of files and directory structure ✅ **COMPLETE!** *v1.2.2*
 
 ### **NPCs & Combat (v1.3.0)**
@@ -72,17 +74,19 @@
 - [ ] Death and restart mechanics  
 - [ ] Inventory size limits and object weight
 - [ ] Time-based events
+- [ ] **User Acceptance** - Complete run through of the game by user(s) and acceptance
 
 ## Long-term Vision (v2.0+)
 
 ### Enhanced Features
-- [ ] **Colorization** - addition of colorization for QoL update
-- [ ] **Icons** - addition of icons for QoL update
+- [ ] **Colorization** - Addition of colorization for QoL update
+- [ ] **Icons** - Addition of icons for QoL update
 - [ ] Rich text descriptions and formatting
 - [ ] Sound effects and multimedia (optional)
 - [ ] Hint system
 - [ ] Multiple difficulty levels
 - [ ] Procedural content expansion
+- [ ] **Maps** - Creation and display of maps as rooms are discovered
 
 ### Technical Improvements  
 - [ ] Performance optimization for large worlds

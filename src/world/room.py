@@ -8,6 +8,14 @@ from dataclasses import dataclass, field
 class Room:
     """Represents a single location in the game world."""
     
+    # Room flag constants for backward compatibility
+    ROOM_DARK = "dark"
+    ROOM_VISITED = "visited" 
+    ROOM_DEADLY = "deadly"
+    ROOM_SACRED = "sacred"
+    ROOM_OUTDOOR = "outdoor"
+    ROOM_WATER = "water"
+    
     id: str
     name: str
     description: str
@@ -36,6 +44,14 @@ class Room:
     def has_flag(self, flag: str) -> bool:
         """Check if room has a specific flag."""
         return flag in self.flags
+    
+    def set_flag(self, flag: str) -> None:
+        """Set a flag on this room."""
+        self.flags.add(flag)
+    
+    def clear_flag(self, flag: str) -> None:
+        """Clear a flag from this room."""
+        self.flags.discard(flag)
     
     def get_description(self, force_brief: bool = False, force_verbose: bool = False, include_name: bool = True) -> str:
         """

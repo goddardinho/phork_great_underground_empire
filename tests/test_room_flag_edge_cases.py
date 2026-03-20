@@ -9,13 +9,13 @@ class TestRoomFlagEdgeCases(unittest.TestCase):
     def test_undefined_flag(self):
         room = Room(
             id="EDGE",
-            desc_long="Edge case room.",
-            desc_short="Edge Room",
+            description="Edge case room.",
+            name="Edge Room",
             exits={},
-            objects=[],
-            flags=0,
+            items=[],
+            flags=set(),
         )
-        UNDEFINED_FLAG = 0x1000
+        UNDEFINED_FLAG = "undefined_flag"
         room.set_flag(UNDEFINED_FLAG)
         self.assertTrue(room.has_flag(UNDEFINED_FLAG))
         room.clear_flag(UNDEFINED_FLAG)
@@ -24,16 +24,21 @@ class TestRoomFlagEdgeCases(unittest.TestCase):
     def test_multiple_flags(self):
         room = Room(
             id="MULTI",
-            desc_long="Multiple flags room.",
-            desc_short="Multi Room",
+            description="Multiple flags room.",
+            name="Multi Room",
             exits={},
-            objects=[],
-            flags=0,
+            items=[],
+            flags=set(),
         )
-        room.set_flag(Room.ROOM_DARK | Room.ROOM_DEADLY)
+        # Set multiple flags using individual calls
+        room.set_flag(Room.ROOM_DARK)
+        room.set_flag(Room.ROOM_DEADLY)
         self.assertTrue(room.has_flag(Room.ROOM_DARK))
         self.assertTrue(room.has_flag(Room.ROOM_DEADLY))
-        room.clear_flag(Room.ROOM_DARK | Room.ROOM_DEADLY)
+        
+        # Clear multiple flags
+        room.clear_flag(Room.ROOM_DARK)
+        room.clear_flag(Room.ROOM_DEADLY)
         self.assertFalse(room.has_flag(Room.ROOM_DARK))
         self.assertFalse(room.has_flag(Room.ROOM_DEADLY))
 
