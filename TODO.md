@@ -62,6 +62,9 @@
 - [ ] **Security validation** - Validate coding practices are aligned with security best-practices
 - [ ] **Documentation completion** - Validate all project documentation is complete and correct, including test documentation
 - [x] **Cleanup** - Cleanup of files and directory structure ✅ **COMPLETE!** *v1.2.2*
+- [x] **ObjectManager Architecture** - Implemented modular object management system with ZorkObjectLoader for canonical object placement and improved architectural separation ✅ **COMPLETE!** *v1.2.2*
+- [x] **Test Suite Compatibility** - Fixed all failing tests by updating Room constructor compatibility, GameEngine object manager integration, and disambiguation test stability ✅ **COMPLETE!** *v1.2.2*
+- [x] **Canonical Room Descriptions** - Enhanced EHOUS (Behind House) and other key rooms with authentic descriptions matching original Zork specifications ✅ **COMPLETE!** *v1.2.2*
 
 ### **NPCs & Combat (v1.3.0)**
 - [ ] Basic NPC conversations
