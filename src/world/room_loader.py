@@ -23,22 +23,25 @@ except ImportError:
 class ZorkRoomLoader:
     """Loads rooms from original Zork .mud files into our World system."""
     
-    def __init__(self, world: World):
+    def __init__(self, world: World, debug_mode: bool = False):
         self.world = world
-        self.parser = MDLParser()
+        self.parser = MDLParser(debug_mode=debug_mode)
+        self.debug_mode = debug_mode
         
     def load_from_mud_files(self, mud_directory: Path) -> int:
         """
         Load all rooms from .mud files in the specified directory.
         Returns the number of rooms loaded.
         """
-        print(f"Loading Zork rooms from {mud_directory}...")
+        if self.debug_mode:
+            print(f"Loading Zork rooms from {mud_directory}...")
         
         # Parse all .mud files
         room_data = self.parser.parse_directory(mud_directory)
         
         if not room_data:
-            print("No rooms found in .mud files")
+            if self.debug_mode:
+                print("No rooms found in .mud files")
             return 0
         
         # Convert to our Room objects and add to world
@@ -50,9 +53,11 @@ class ZorkRoomLoader:
                 self.world.add_room(room)
                 loaded_count += 1
             except Exception as e:
-                print(f"Warning: Failed to load room {room_id}: {e}")
+                if self.debug_mode:
+                    print(f"Warning: Failed to load room {room_id}: {e}")
         
-        print(f"Successfully loaded {loaded_count} rooms from {len(room_data)} parsed")
+        if self.debug_mode:
+            print(f"Successfully loaded {loaded_count} rooms from {len(room_data)} parsed")
         
         # Validate exits point to existing rooms
         self._validate_exits()
@@ -169,13 +174,15 @@ class ZorkRoomLoader:
                     invalid_exits.append((room_id, direction, target_id))
         
         if invalid_exits:
-            print(f"Warning: Found {len(invalid_exits)} invalid exits:")
-            for room_id, direction, target_id in invalid_exits[:10]:  # Show first 10
-                print(f"  {room_id} -> {direction} -> {target_id} (room not found)")
-            if len(invalid_exits) > 10:
-                print(f"  ... and {len(invalid_exits) - 10} more")
+            if self.debug_mode:
+                print(f"Warning: Found {len(invalid_exits)} invalid exits:")
+                for room_id, direction, target_id in invalid_exits[:10]:  # Show first 10
+                    print(f"  {room_id} -> {direction} -> {target_id} (room not found)")
+                if len(invalid_exits) > 10:
+                    print(f"  ... and {len(invalid_exits) - 10} more")
         else:
-            print("✓ All room exits validated successfully")
+            if self.debug_mode:
+                print("✓ All room exits validated successfully")
     
     def _add_bidirectional_connection(self, room1_id: str, direction1: str, 
                                     room2_id: str, direction2: str) -> bool:
@@ -203,7 +210,8 @@ class ZorkRoomLoader:
     def _fix_connectivity_gaps(self):
         """Fix critical connectivity issues identified by automated testing."""
         
-        print("🔧 Fixing connectivity gaps...")
+        if self.debug_mode:
+            print("🔧 Fixing connectivity gaps...")
         
         connections_added = 0
         
@@ -332,7 +340,8 @@ class ZorkRoomLoader:
         # === ADDITIONAL CONNECTIONS FOR COMPLETE CONNECTIVITY ===
         
         # Fix blocked connections identified by gap analysis
-        print("🔧 Adding remaining blocked connections...")
+        if self.debug_mode:
+            print("🔧 Adding remaining blocked connections...")
         
         # Mirror/Cave system connections
         if self._add_bidirectional_connection("CAVE1", "west", "MIRR1", "east"):
@@ -386,7 +395,8 @@ class ZorkRoomLoader:
             connections_added += 1
         
         # Additional major area connections to reach isolated clusters
-        print("🔧 Connecting remaining isolated clusters...")
+        if self.debug_mode:
+            print("🔧 Connecting remaining isolated clusters...")
         
         # Connect Atlantis room to main areas
         if self._add_bidirectional_connection("ATLAN", "up", "FALLS", "down"):
@@ -531,7 +541,8 @@ class ZorkRoomLoader:
             connections_added += 1
         
         # === FINAL CONNECTIONS FOR 100% CONNECTIVITY ===
-        print("🔧 Adding final connections for 100% room connectivity...")
+        if self.debug_mode:
+            print("🔧 Adding final connections for 100% room connectivity...")
         
         # Mirror maze - connect all unreachable mirror rooms to INMIR
         if self._add_bidirectional_connection("MRAW", "enter", "INMIR", "exit"):
@@ -630,7 +641,8 @@ class ZorkRoomLoader:
             connections_added += 1
         
         # === FINAL 100% CONNECTIVITY FIXES ===
-        print("🔧 Adding final critical connections for 100% connectivity...")
+        if self.debug_mode:
+            print("🔧 Adding final critical connections for 100% connectivity...")
         
         # Direct connection fixes for remaining unreachable rooms
         # These are the specific connections identified by gap analysis
@@ -653,8 +665,9 @@ class ZorkRoomLoader:
         if self._add_bidirectional_connection("BKVE", "west", "BKVW", "east"):
             connections_added += 1
         
-        print(f"✅ Added {connections_added} bidirectional connections")
-        print(f"🎯 Connectivity fixes complete - testing massive improvement...")
+        if self.debug_mode:
+            print(f"✅ Added {connections_added} bidirectional connections")
+            print(f"🎯 Connectivity fixes complete - testing massive improvement...")
         
         return connections_added
 

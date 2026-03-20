@@ -9,9 +9,10 @@ from .object_manager import ObjectManager
 class ZorkObjectLoader:
     """Loads objects from Zork .mud files and creates canonical objects."""
     
-    def __init__(self, object_manager: ObjectManager, world=None) -> None:
+    def __init__(self, object_manager: ObjectManager, world=None, debug_mode: bool = False) -> None:
         self.object_manager = object_manager
         self.world = world
+        self.debug_mode = debug_mode
     
     def load_from_mud_files(self, mud_directory: Path) -> int:
         """Load objects from .mud files. Returns number of objects loaded."""
@@ -345,4 +346,5 @@ class ZorkObjectLoader:
                 room.add_item(obj_id)
                 objects_placed += 1
         
-        print(f"✓ Placed {objects_placed} canonical objects in rooms")
+        if self.debug_mode:
+            print(f"✓ Placed {objects_placed} canonical objects in rooms")

@@ -31,26 +31,35 @@ def main() -> None:
         action="store_true",
         help="Run a quick demo showing the disambiguation system"
     )
+    parser.add_argument(
+        "--debug",
+        action="store_true", 
+        help="Show detailed loading and parsing information"
+    )
     
     args = parser.parse_args()
     
-    print("Welcome to Zork!")
-    print("==================")
+    # Only show loading messages in debug mode
+    if args.debug:
+        print("Welcome to Zork!")
+        print("==================")
+        if args.test:
+            print("Using simple test world...")
+        else:
+            print("Loading from original 1978 MIT Zork source files...")
+        print()
     
     if args.demo_disambiguation:
-        print("Running disambiguation demo...")
+        if args.debug:
+            print("Running disambiguation demo...")
+        else:
+            print("Welcome to Zork!")
+            print("Running disambiguation demo...")
         print()
         demo_disambiguation()
         return
     
-    if args.test:
-        print("Using simple test world...")
-    else:
-        print("Loading from original 1978 MIT Zork source files...")
-    
-    print()
-    
-    game = GameEngine(use_mud_files=not args.test, mud_directory=args.mud_dir)
+    game = GameEngine(use_mud_files=not args.test, mud_directory=args.mud_dir, debug_mode=args.debug)
     game.run()
 
 
@@ -62,7 +71,7 @@ def demo_disambiguation() -> None:
     print("When multiple objects match your command, the game will")
     print("ask you to choose which one you mean.\n")
     
-    game = GameEngine(use_mud_files=False)
+    game = GameEngine(use_mud_files=False, debug_mode=True)  # Use debug mode for demo
     
     print("Moving to the Ancient Temple which contains two knives...")
     game.player.move_to_room("TEMPLE")
