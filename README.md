@@ -87,6 +87,27 @@ mypy src/
 black src/ tests/
 ```
 
+## 🚀 **Automated Development Workflow**
+
+This project includes automation tools for streamlined development:
+
+### **Quick Commands**
+```bash
+# Create new feature branch with documentation template
+./scripts/new-feature.sh security-validation
+
+# Interactive version tagging with changelog validation  
+./scripts/create-version.sh
+```
+
+### **Automatic Features**
+- ✅ **Auto-push tags**: Tags automatically push with commits
+- ✅ **Documentation checks**: Pre-push hook validates CHANGELOG.md updates
+- ✅ **Version suggestions**: Smart version number recommendations
+- ✅ **Feature planning**: Auto-generated planning templates
+
+📖 **Full workflow guide**: See [WORKFLOW.md](WORKFLOW.md)
+
 ## Roadmap
 
 - [x] Extract and implement all rooms and connections from `rooms.mud`
