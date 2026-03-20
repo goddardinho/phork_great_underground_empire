@@ -1,5 +1,25 @@
 # Changelog
 
+## v1.3.7 (2026-03-20) 🎭 **Fun Loading Experience & User Feedback** 🎭
+
+- **🎮 ENHANCED STARTUP EXPERIENCE:**
+  - **Snarky Loading Indicators**: Authentic Zork-style loading messages with personality
+    - "Waking up the grues and dusting off the treasure..."
+    - "The Implementers are consulting the ancient scrolls..."
+    - "The maze of twisty passages is taking shape..."
+    - "Scattering treasures and hiding rusty swords..."
+    - "Ready to explore the Great Underground Empire!"
+    - "Everything is ready. The grue is hungry..."
+  - **User Feedback**: Clear progress indication during world loading
+  - **Maintained Debug Mode**: Technical loading info preserved for developers
+  - **Fallback Scenarios**: Appropriate messages for test mode and missing files
+
+- **🎯 USER EXPERIENCE IMPROVEMENTS:**
+  - **No More Loading Confusion**: Users know the game is working, not hanging
+  - **Authentic Personality**: Loading messages match Zork's witty, snarky tone
+  - **Consistent Experience**: All loading scenarios have entertaining feedback
+  - **Developer Friendly**: --debug flag preserves full technical output
+
 ## v1.3.6 (2026-03-20) 🚀 **Performance Validation & Debug System** 🚀
 
 - **✅ PERFORMANCE TESTING COMPLETE:**

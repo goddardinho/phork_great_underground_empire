@@ -48,6 +48,11 @@ def main() -> None:
         else:
             print("Loading from original 1978 MIT Zork source files...")
         print()
+    else:
+        # Show fun loading indicator for normal users
+        if not args.test:
+            print("Welcome to Zork!")
+            print("Waking up the grues and dusting off the treasure...")
     
     if args.demo_disambiguation:
         if args.debug:

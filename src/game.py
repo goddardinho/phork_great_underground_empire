@@ -49,6 +49,9 @@ class GameEngine:
     
     def run(self) -> None:
         """Main game loop."""
+        # Add completion message for loading process
+        if not self.debug_mode:
+            print("Everything is ready. The grue is hungry...\n")
         self._show_welcome()
         self._look_around()
         
@@ -1415,11 +1418,15 @@ Revision 88 / Serial number 840726
         if not mud_directory.exists():
             if self.debug_mode:
                 print(f"Warning: {mud_directory} not found. Creating simple test world instead.")
+            else:
+                print("Hmm, the original scrolls seem to be missing. Conjuring a basic world...")
             self._create_initial_world()
             return
         
         if self.debug_mode:
             print(f"Loading Zork world from {mud_directory}...")
+        else:
+            print("The Implementers are consulting the ancient scrolls...")
         
         # Load rooms from .mud files
         room_loader = ZorkRoomLoader(self.world, debug_mode=self.debug_mode)
@@ -1428,9 +1435,14 @@ Revision 88 / Serial number 840726
         if room_count == 0:
             if self.debug_mode:
                 print("Failed to load rooms from .mud files. Creating simple test world instead.")
+            else:
+                print("The scrolls are written in an ancient tongue. Improvising...")
             self._create_initial_world()
             return
         
+        if not self.debug_mode:
+            print("The maze of twisty passages is taking shape...")
+            
         if self.debug_mode:
             print(f"✓ Loaded {room_count} rooms from original Zork")
         
@@ -1438,6 +1450,9 @@ Revision 88 / Serial number 840726
         object_loader = ZorkObjectLoader(self.object_manager, self.world, debug_mode=self.debug_mode)
         object_count = object_loader.load_from_mud_files(mud_directory)
         
+        if not self.debug_mode:
+            print("Scattering treasures and hiding rusty swords...")
+            
         if self.debug_mode:
             print(f"✓ Loaded {object_count} objects from canonical definitions")
         
@@ -1449,6 +1464,10 @@ Revision 88 / Serial number 840726
             starting_room = list(self.world.rooms.keys())[0] if self.world.rooms else "UNKNOWN"
         
         self.player.current_room = starting_room
+        
+        # Add a subtle completion hint for non-debug mode
+        if not self.debug_mode:
+            print("Ready to explore the Great Underground Empire!")
     
     def _load_objects_from_mud_files(self, mud_directory: Path) -> None:
         """Load and create objects from .mud files and place them in rooms."""
@@ -1670,7 +1689,10 @@ Revision 88 / Serial number 840726
 
     def _create_initial_world(self) -> None:
         """Create minimal fallback world if .mud files fail to load."""
-        print("Creating minimal fallback world...")
+        if self.debug_mode:
+            print("Creating minimal fallback world...")
+        else:
+            print("The Implementers are improvising a simple realm...")
         
         # Create basic West of House for fallback
         west_house = Room(
