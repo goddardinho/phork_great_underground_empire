@@ -40,6 +40,9 @@ python3 main.py --test
 python3 main.py --demo-disambiguation
 ```
 
+### New to Text Adventures?
+📖 **[Read the Player's Guide](PLAYER_GUIDE.md)** for complete gameplay instructions, command reference, tips, and strategies.
+
 ### Manual Setup
 1. Clone this repository
 2. Ensure you have Python 3.8+ installed
@@ -108,6 +111,20 @@ This project includes automation tools for streamlined development:
 - ✅ **Feature planning**: Auto-generated planning templates
 
 📖 **Full workflow guide**: See [WORKFLOW.md](WORKFLOW.md)
+
+## Documentation
+
+### For Players
+- 📖 **[Player's Guide](PLAYER_GUIDE.md)** - Complete gameplay instructions and command reference
+
+### For Developers  
+- 🛠️ **[Coding Standards](CODING_STANDARDS.md)** - Development conventions and best practices
+- 🔒 **[Security Report](SECURITY_REPORT.md)** - Comprehensive security assessment and measures
+- 📋 **[Workflow Guide](WORKFLOW.md)** - Automated development workflow and tools
+
+### Coverage & Quality
+- 🧪 **Test Coverage**: HTML coverage report available in `htmlcov/index.html`
+- 🔍 **Static Analysis**: Security scanning with Bandit, dependency checks with Safety
 
 ## Roadmap
 
