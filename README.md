@@ -46,8 +46,10 @@ python3 main.py --demo-disambiguation
 ### Debug Mode Features
 When running with `--debug`, additional commands become available:
 - `debug npc` - Comprehensive NPC system testing and interaction
+- `debug combat` - Complete combat system testing and validation
 - `debug menu` - Show all available debug commands  
 - `debug world` - Display world and room information
+- `debug objects` - Show object information and locations
 - `debug objects` - Show object system details
 
 ### New to Text Adventures?

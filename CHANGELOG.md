@@ -27,6 +27,11 @@
   - Phase 1 of 6-phase canonical NPCs implementation plan
   - Modular combat system ready for Thief, Troll, and other canonical NPCs
   - Authentic Zork combat mechanics with damage calculation and status effects
+- **DOCUMENTATION UPDATES:**
+  - **NPC Implementation Status**: Clarified current status - only 2 test NPCs exist (Hermit, Oracle)
+  - **Combat Integration**: All existing NPCs fully combat-ready with working attack/defend/flee
+  - **Canonical NPCs**: 6 major NPCs still needed in phases 2-6 (Thief, Troll, Cyclops, Master, Woodsman, Sailor)
+  - **Phase 1 Complete**: Combat foundation ready for authentic canonical NPC implementation
 
 ## v1.4.0 (2026-03-23) 🗣️ **NPC Conversation System & Debug Integration** 🗣️
 
