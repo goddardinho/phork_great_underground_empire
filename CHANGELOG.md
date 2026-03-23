@@ -1,42 +1,32 @@
 # Changelog
 
-## v1.5.1-dev (2026-03-23) 🏴‍☠️ **Canonical Thief NPC - Phase 2** 🏴‍☠️
+## v1.5.1-dev (2026-03-23) 🏴‍☠️ **Phase 2 Complete: Canonical Thief NPC** 🏴‍☠️
 
-- **NEW FEATURE:** Complete canonical Thief NPC implementation
-  - **Thief NPC**: Authentic Zork Thief with enhanced combat stats (100 HP, 18 Attack, 85% Accuracy)
-  - **Object theft mechanics**: Steals treasures from player with 60% success rate and cooldown system
-  - **Intelligent targeting**: Prioritizes treasures > weapons > tools > other items for theft
-  - **Movement behavior**: Roams between safe rooms every 45 seconds, avoids deadly areas
-  - **Loot dropping**: Drops all stolen items when defeated in combat
-  - **Dialogue system**: Complete dialogue tree with encounter/negotiation/combat options
-  - **Combat integration**: Enhanced combat with flee behavior when critically injured
-  - **Room presence**: Appears in room descriptions with authentic Zork description
+- **MILESTONE:** Phase 2 of Canonical NPCs feature officially complete
+- **NEW FEATURE:** Complete canonical Thief NPC implementation with authentic Zork behaviors
+  - **Thief NPC**: Enhanced combat stats (100 HP, 18 Attack Power, 85% Accuracy, 25% Dodge)
+  - **Object theft mechanics**: Intelligent targeting system stealing player treasures with 60% success rate
+  - **Behavioral AI**: Movement between rooms (45s intervals), combat flee logic, cooldown management (30s theft cooldown)
+  - **Loot dropping system**: Drops all stolen items when defeated in combat
+  - **Complete dialogue tree**: Encounter/negotiation/combat dialogue paths with authentic Zork responses
+  - **Room integration**: Appears in room descriptions: "A ruthless thief lurks here, fingering a wicked-looking knife."
   - **Multiple aliases**: Responds to "thief", "robber", "bandit", "rogue"
 - **THEFT MECHANICS:**
-  - **Priority system**: Analyzes object attributes to determine theft preference
-  - **Cooldown management**: 30-second theft cooldown prevents spam stealing
-  - **Authentic messages**: Classic Zork theft responses and player notifications
-  - **Inventory integration**: Seamlessly removes items from player inventory
-  - **Success probability**: Balanced theft mechanics with failure states
-- **BEHAVIORAL SYSTEMS:**
-  - **ThiefBehavior class**: Encapsulates all theft, movement, and combat logic
-  - **Smart pathing**: Movement system respects room connections and hazards
-  - **Combat tactics**: Flee decision based on health percentage and random factors
-  - **Game engine integration**: Enhanced command processing with theft attempt hooks
-- **TESTING & VALIDATION:**
-  - **Comprehensive test suite**: 11/11 tests passing in `tests/test_thief_npc.py`
-  - **Debug tools**: Full validation script `debug_thief_npc.py` with interactive testing
-  - **Live gameplay validation**: All theft, combat, and movement mechanics verified
-  - **Integration testing**: Proper game engine integration with existing systems
+  - **Priority-based targeting**: Treasures > weapons > tools > other items
+  - **Authentic theft messages**: "The thief quickly snatches your [item] and grins wickedly!"
+  - **Inventory integration**: Seamless item removal from player inventory
+  - **Success/failure states**: Balanced mechanics with random success probability
 - **TECHNICAL IMPLEMENTATION:**
-  - Phase 2 of 6-phase canonical NPCs feature (Thief, Troll, Cyclops, Master, Woodsman, Sailor)
-  - Foundation established for remaining canonical NPCs with proven patterns
-  - Enhanced NPC death handling with loot dropping mechanics
-  - Modular behavior system ready for extension to other NPCs
-- **DOCUMENTATION:**
-  - **Phase 2 completion report**: Comprehensive achievement and validation documentation
-  - **Implementation patterns**: Established framework for remaining canonical NPCs
-  - **Test coverage**: 100% test coverage with unit and integration validation
+  - **ThiefBehavior class**: Modular behavior system encapsulating theft, movement, combat logic
+  - **Game engine integration**: Enhanced command processing with theft attempt hooks
+  - **Enhanced NPC death handling**: Special loot dropping mechanics for defeated NPCs
+  - **Foundation for remaining NPCs**: Established patterns for Phase 3+ (Troll, Cyclops, etc.)
+- **COMPREHENSIVE TESTING & VALIDATION:**
+  - **Unit test suite**: 11/11 tests passing in `tests/test_thief_npc.py`
+  - **Integration validation**: Live gameplay testing of all theft, combat, movement mechanics
+  - **Debug tools**: `tests/debug_thief_npc.py` comprehensive validation script
+  - **Interactive testing**: `tests/test_thief_interactive.py` for real gameplay scenarios
+- **READY FOR PHASE 3:** Troll NPC implementation with bridge-guarding behavior and riddle system
 
 ## v1.5.0-dev (2026-03-23) ⚔️ **Combat Foundation - Phase 1** ⚔️
 

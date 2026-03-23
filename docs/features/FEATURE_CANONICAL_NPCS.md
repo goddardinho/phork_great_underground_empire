@@ -53,10 +53,19 @@ Implement all canonical Non-Player Characters from original Zork I with authenti
 ✅ **Combat Commands** - attack, defend, flee commands with proper game integration  
 ✅ **Debug & Testing** - Combat debug system and comprehensive test suite  
 
+### **Phase 2 Complete** (v1.5.1-dev)  
+✅ **Canonical Thief NPC** - Complete Thief implementation with authentic Zork behaviors
+✅ **Theft Mechanics** - Intelligent object stealing with priority targeting system
+✅ **Behavioral AI** - Movement between rooms, combat flee logic, cooldown management
+✅ **Loot System** - Drops stolen items when defeated, enhancing combat rewards
+✅ **Dialogue Integration** - Complete dialogue tree with encounter/negotiation/combat paths
+✅ **Testing Complete** - 11/11 tests passing with comprehensive validation
+
 ### **Current NPCs Status**
 ✅ **Test NPCs** - Hermit (simple) and Oracle (complex dialogue) in West of House  
 ✅ **Combat Ready** - Both NPCs fully integrated with combat system  
-❌ **Canonical NPCs** - None implemented yet (Thief, Troll, Cyclops, Master, Woodsman, Sailor)  
+✅ **Canonical Thief** - Complete implementation with theft, combat, movement, dialogue  
+❌ **Remaining Canonical NPCs** - 5 still needed (Troll, Cyclops, Master, Woodsman, Sailor)  
 
 ### **New Components Still Needed**
 - [ ] **NPC AI** - MovementManager for NPC pathfinding and behaviors
@@ -72,11 +81,11 @@ Implement all canonical Non-Player Characters from original Zork I with authenti
 - [x] Add combat commands (attack, defend, flee)
 - [x] Create basic combat testing framework
 
-### **Phase 2: Thief Implementation**
-- [ ] Create Thief NPC with theft behaviors
-- [ ] Implement object stealing mechanics
-- [ ] Add Thief combat interactions
-- [ ] Test Thief integration with existing systems
+### **Phase 2: Thief Implementation** ✅ **COMPLETE**
+- [x] Create Thief NPC with theft behaviors
+- [x] Implement object stealing mechanics
+- [x] Add Thief combat interactions
+- [x] Test Thief integration with existing systems
 
 ### **Phase 3: Troll & Bridge Puzzle**
 - [ ] Implement Troll NPC with bridge guarding behavior
@@ -109,12 +118,11 @@ Implement all canonical Non-Player Characters from original Zork I with authenti
 - [x] **Combat Tests**: Fight mechanics and damage calculations ✅ **COMPLETE** (6 passing tests)
 - [x] **Integration Tests**: NPC interactions with existing systems ✅ **COMPLETE** (combat integration validated)
 - [x] **Live Testing**: Real gameplay validation ✅ **COMPLETE** (attack/defend/flee commands working)
-- [ ] **Canonical NPC Tests**: Thief theft mechanics, Troll bridge guarding, etc.
+- [x] **Canonical NPC Tests**: Thief theft mechanics comprehensive testing ✅ **COMPLETE** (test_thief_npc.py - 11/11 tests passing)
+- [ ] **Remaining Canonical Tests**: Troll bridge guarding, Cyclops, Master, Woodsman, Sailor
 - [ ] **Performance Tests**: Multiple NPCs active simultaneously
 - [ ] **Save/Load Tests**: NPC state persistence validation
 - [ ] **Gameplay Tests**: Full canonical scenario validation
-- [ ] **Performance Tests**: Multiple NPCs active simultaneously
-- [ ] **Save/Load Tests**: NPC state persistence validation
 
 ## 🎮 **Success Criteria**
 

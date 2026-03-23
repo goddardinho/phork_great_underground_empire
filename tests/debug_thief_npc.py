@@ -15,10 +15,15 @@ import sys
 import time
 from pathlib import Path
 
-# Add src to Python path
-src_path = Path(__file__).parent / "src"
+# Add src to Python path (from tests directory, go up one level to find src)
+src_path = Path(__file__).parent.parent / "src"
 if str(src_path) not in sys.path:
     sys.path.insert(0, str(src_path))
+
+# Alternative: add root directory to path for src module access
+root_path = Path(__file__).parent.parent
+if str(root_path) not in sys.path:
+    sys.path.insert(0, str(root_path))
 
 from src.game import GameEngine
 from src.entities.objects import GameObject
@@ -317,10 +322,9 @@ def main():
         
         print("\n🎮 Ready for interactive testing!")
         print("   Try commands like:")
-        print("   - 'go maze' (find the Thief)")
-        print("   - 'talk to thief' (dialogue)")
-        print("   - 'attack thief' (combat)")
-        print("   - 'debug thief' (live stats)")
+        print("   - Run from tests directory: cd ../; python tests/debug_thief_npc.py")
+        print("   - Or in game: python main.py --debug, then 'debug thief'")
+        print("   - Interactive: python tests/test_thief_interactive.py")
         
         return 0 if success else 1
     

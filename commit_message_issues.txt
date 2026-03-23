@@ -1,0 +1,40 @@
+feat: Create structured issue tracking system - organize bug reports in dedicated directory
+
+**Establish professional issue documentation organization:**
+
+## New Directory Structure
+- `docs/issues/` - Centralized issue tracking and bug documentation
+- `docs/issues/active/` - Currently open/unresolved issues
+- `docs/issues/resolved/` - Fixed/closed issues (historical reference)
+- `docs/issues/templates/` - Standardized issue reporting templates
+
+## Bug Reports Relocated
+### From tests/ to docs/issues/
+- `BUG_REPORT_Navigation.md` → `docs/issues/resolved/BUG_REPORT_Navigation.md`
+- `BUG_EGG_OPENABLE_TOO_EARLY.md` → `docs/issues/active/BUG_EGG_OPENABLE_TOO_EARLY.md`
+
+## Documentation Created
+### Issue Management System
+- `docs/issues/README.md` - Comprehensive issue tracking guidelines with lifecycle workflow
+- `docs/issues/templates/bug-report-template.md` - Standardized bug report template
+- `docs/issues/templates/feature-request-template.md` - Feature request template
+
+### Navigation Updates
+- Updated `docs/README.md` with issues section in navigation and directory structure
+- Added contributing guidelines for issue documentation placement
+
+## Key Improvements
+- **Separation of concerns**: Tests directory now contains only executable test code
+- **Professional structure**: Follows open-source project standards for issue tracking  
+- **Clear lifecycle**: Active → resolved workflow with proper categorization
+- **Standardized reporting**: Templates ensure consistent issue documentation
+- **Historical context**: Resolved issues preserved for development context
+- **Scalable organization**: Structure supports growth without directory clutter
+
+## Impact
+- **Developer experience**: Clear process for reporting and tracking issues
+- **Maintainability**: Centralized issue documentation with consistent formatting
+- **Project presentation**: Professional issue management following industry best practices
+- **Workflow integration**: Issues link to tests, changelog entries, and development process
+
+This establishes a professional foundation for issue tracking and bug documentation management.

@@ -2,7 +2,7 @@
 
 Phork is a clean-room Python reimplementation of the classic Zork I, inspired by the original MDL source code. This project aims for feature parity and map fidelity with Zork I, using only the original source files in `zork_mtl_source` as reference.
 
-**🎉 v1.2.2 Enhanced!** - **ObjectManager Architecture & Canonical Descriptions** - Major architectural improvements with modular object management and authentic room descriptions.
+**🎉 v1.5.1 Enhanced!** - **Canonical Thief NPC Complete** - Phase 2 of Canonical NPCs feature complete with authentic Thief implementation featuring theft mechanics, combat integration, and behavioral AI.
 
 ## Features
 
@@ -47,13 +47,13 @@ python3 main.py --demo-disambiguation
 When running with `--debug`, additional commands become available:
 - `debug npc` - Comprehensive NPC system testing and interaction
 - `debug combat` - Complete combat system testing and validation
+- `debug thief` - Thief NPC behavior debugging and live stats
 - `debug menu` - Show all available debug commands  
 - `debug world` - Display world and room information
 - `debug objects` - Show object information and locations
-- `debug objects` - Show object system details
 
 ### New to Text Adventures?
-📖 **[Read the Player's Guide](PLAYER_GUIDE.md)** for complete gameplay instructions, command reference, tips, and strategies.
+📖 **[Read the Player's Guide](docs/PLAYER_GUIDE.md)** for complete gameplay instructions, command reference, tips, and strategies.
 
 ### Manual Setup
 1. Clone this repository
@@ -122,17 +122,18 @@ This project includes automation tools for streamlined development:
 - ✅ **Version suggestions**: Smart version number recommendations
 - ✅ **Feature planning**: Auto-generated planning templates
 
-📖 **Full workflow guide**: See [WORKFLOW.md](WORKFLOW.md)
+📖 **Full workflow guide**: See [WORKFLOW.md](docs/development/WORKFLOW.md)
 
 ## Documentation
 
 ### For Players
-- 📖 **[Player's Guide](PLAYER_GUIDE.md)** - Complete gameplay instructions and command reference
+- 📖 **[Player's Guide](docs/PLAYER_GUIDE.md)** - Complete gameplay instructions and command reference
 
 ### For Developers  
-- 🛠️ **[Coding Standards](CODING_STANDARDS.md)** - Development conventions and best practices
-- 🔒 **[Security Report](SECURITY_REPORT.md)** - Comprehensive security assessment and measures
-- 📋 **[Workflow Guide](WORKFLOW.md)** - Automated development workflow and tools
+- � **[Documentation Guide](docs/README.md)** - Complete documentation organization and navigation
+- 🛠️ **[Coding Standards](docs/development/CODING_STANDARDS.md)** - Development conventions and best practices
+- 🔒 **[Security Report](docs/reports/SECURITY_REPORT.md)** - Comprehensive security assessment and measures
+- 📋 **[Workflow Guide](docs/development/WORKFLOW.md)** - Automated development workflow and tools
 
 ### Coverage & Quality
 - 🧪 **Test Coverage**: HTML coverage report available in `htmlcov/index.html`

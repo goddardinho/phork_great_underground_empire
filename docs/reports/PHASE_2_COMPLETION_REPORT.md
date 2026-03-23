@@ -52,7 +52,7 @@ The canonical Thief NPC has been successfully implemented with all core function
 - `src/entities/thief.py` - Complete Thief NPC implementation
 - `src/game.py` - Game engine integration and combat enhancement  
 - `tests/test_thief_npc.py` - Comprehensive test suite
-- `debug_thief_npc.py` - Full validation and testing script
+- `tests/debug_thief_npc.py` - Full validation and testing script
 
 ### Architecture Highlights:
 - **ThiefBehavior Class**: Encapsulates all theft and movement logic

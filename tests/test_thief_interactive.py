@@ -4,10 +4,15 @@
 import sys
 from pathlib import Path
 
-# Add src to Python path
-src_path = Path(__file__).parent / "src"
+# Add src to Python path (from tests directory, go up one level to find src)
+src_path = Path(__file__).parent.parent / "src"
 if str(src_path) not in sys.path:
     sys.path.insert(0, str(src_path))
+
+# Alternative: add root directory to path for src module access
+root_path = Path(__file__).parent.parent
+if str(root_path) not in sys.path:
+    sys.path.insert(0, str(root_path))
 
 from src.game import GameEngine
 
@@ -79,6 +84,9 @@ def test_thief_interaction():
         print("❌ Thief NPC not found!")
     
     print("\\n✨ Interactive test complete!")
+    print("\\n💡 Usage note:")
+    print("   Run from project root: cd ../; python tests/test_thief_interactive.py")
+    print("   Or run comprehensive debug: python tests/debug_thief_npc.py")
 
 
 if __name__ == "__main__":
