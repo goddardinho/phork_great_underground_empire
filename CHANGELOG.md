@@ -1,5 +1,66 @@
 # Changelog
 
+## v1.5.1-dev (2026-03-23) 🏴‍☠️ **Phase 2 Complete: Canonical Thief NPC** 🏴‍☠️
+
+- **MILESTONE:** Phase 2 of Canonical NPCs feature officially complete
+- **NEW FEATURE:** Complete canonical Thief NPC implementation with authentic Zork behaviors
+  - **Thief NPC**: Enhanced combat stats (100 HP, 18 Attack Power, 85% Accuracy, 25% Dodge)
+  - **Object theft mechanics**: Intelligent targeting system stealing player treasures with 60% success rate
+  - **Behavioral AI**: Movement between rooms (45s intervals), combat flee logic, cooldown management (30s theft cooldown)
+  - **Loot dropping system**: Drops all stolen items when defeated in combat
+  - **Complete dialogue tree**: Encounter/negotiation/combat dialogue paths with authentic Zork responses
+  - **Room integration**: Appears in room descriptions: "A ruthless thief lurks here, fingering a wicked-looking knife."
+  - **Multiple aliases**: Responds to "thief", "robber", "bandit", "rogue"
+- **THEFT MECHANICS:**
+  - **Priority-based targeting**: Treasures > weapons > tools > other items
+  - **Authentic theft messages**: "The thief quickly snatches your [item] and grins wickedly!"
+  - **Inventory integration**: Seamless item removal from player inventory
+  - **Success/failure states**: Balanced mechanics with random success probability
+- **TECHNICAL IMPLEMENTATION:**
+  - **ThiefBehavior class**: Modular behavior system encapsulating theft, movement, combat logic
+  - **Game engine integration**: Enhanced command processing with theft attempt hooks
+  - **Enhanced NPC death handling**: Special loot dropping mechanics for defeated NPCs
+  - **Foundation for remaining NPCs**: Established patterns for Phase 3+ (Troll, Cyclops, etc.)
+- **COMPREHENSIVE TESTING & VALIDATION:**
+  - **Unit test suite**: 11/11 tests passing in `tests/test_thief_npc.py`
+  - **Integration validation**: Live gameplay testing of all theft, combat, movement mechanics
+  - **Debug tools**: `tests/debug_thief_npc.py` comprehensive validation script
+  - **Interactive testing**: `tests/test_thief_interactive.py` for real gameplay scenarios
+- **READY FOR PHASE 3:** Troll NPC implementation with bridge-guarding behavior and riddle system
+
+## v1.5.0-dev (2026-03-23) ⚔️ **Combat Foundation - Phase 1** ⚔️
+
+- **NEW FEATURE:** Complete combat system foundation
+  - **CombatManager**: Full combat orchestration with turn-based mechanics
+  - **CombatStats**: Health, attack power, defense, accuracy, dodge, block, and critical hit stats
+  - **Combat commands**: `attack <target>`, `defend`, `flee` with full NPC integration
+  - **Weapon system**: WeaponType enum and weapon effectiveness calculations
+  - **Combat actions**: Detailed action logging with hit/miss/dodge/block/critical results
+  - **Player combat stats**: 100 health, enhanced starting combat abilities
+  - **NPC combat integration**: All NPCs now have combat stats and can fight
+  - **Combat state management**: Room-based combat tracking with participant management
+  - **Death mechanics**: Player and NPC death handling with proper game-over states
+  - **Flee system**: Escape mechanics with success/failure and room movement
+- **DEBUG MODE ENHANCEMENTS:**
+  - **Combat debugging**: `debug combat` command for comprehensive combat testing
+  - **Combat stats display**: Real-time health, damage, and combat status monitoring
+  - **Combat history**: Action logging and recent combat events tracking
+  - **Debug healing**: Automatic health restoration for testing purposes
+- **TESTING & VALIDATION:**
+  - **Comprehensive test suite**: `tests/test_combat_system.py` with unit and integration tests
+  - **Command parser integration**: All combat commands properly routed through parser
+  - **Game integration testing**: Full combat system validation with existing NPCs
+  - **Debug functionality validation**: Combat debug commands fully operational
+- **TECHNICAL FOUNDATION:**
+  - Phase 1 of 6-phase canonical NPCs implementation plan
+  - Modular combat system ready for Thief, Troll, and other canonical NPCs
+  - Authentic Zork combat mechanics with damage calculation and status effects
+- **DOCUMENTATION UPDATES:**
+  - **NPC Implementation Status**: Clarified current status - only 2 test NPCs exist (Hermit, Oracle)
+  - **Combat Integration**: All existing NPCs fully combat-ready with working attack/defend/flee
+  - **Canonical NPCs**: 6 major NPCs still needed in phases 2-6 (Thief, Troll, Cyclops, Master, Woodsman, Sailor)
+  - **Phase 1 Complete**: Combat foundation ready for authentic canonical NPC implementation
+
 ## v1.4.0 (2026-03-23) 🗣️ **NPC Conversation System & Debug Integration** 🗣️
 
 - **NEW FEATURE:** Complete NPC conversation system with interactive NPCs

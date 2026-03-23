@@ -66,11 +66,13 @@
 - [x] **Test Suite Compatibility** - Fixed all failing tests by updating Room constructor compatibility, GameEngine object manager integration, and disambiguation test stability ✅ **COMPLETE!** *v1.2.2*
 - [x] **Canonical Room Descriptions** - Enhanced EHOUS (Behind House) and other key rooms with authentic descriptions matching original Zork specifications ✅ **COMPLETE!** *v1.2.2*
 
-### **NPCs & Combat (v1.4.0)**
+### **NPCs & Combat (v1.4.0 - v1.5.0)**
 - [x] **Basic NPC conversations** - Complete NPC conversation system with talk/ask/greet/say commands, dialogue trees, NPCManager, sample NPCs (Hermit, Oracle), integrated debug mode (`debug npc` command), and comprehensive file organization in `/tests` directory ✅ **COMPLETE!** *v1.4.0*
-- [ ] Thief, Troll, and all other canonical characters  
-- [ ] Simple combat system
+- [x] **Combat system foundation** - Complete combat framework with CombatManager, CombatStats, attack/defend/flee commands, weapon system, health mechanics, NPC combat integration, debug combat testing, and comprehensive test suite ✅ **COMPLETE!** *Phase 1 v1.5.0-dev*
+- [x] **Canonical NPCs Phase 1 & 2** - Phase 1 (Combat Foundation) and Phase 2 (Thief NPC) complete with authentic Thief implementation, theft mechanics, combat integration, movement behavior, and comprehensive testing ✅ **COMPLETE!** *v1.5.1-dev*
+- [ ] **Canonical NPCs Phase 3-6** - Remaining NPCs: Troll, Cyclops, Master, Woodsman, Sailor 🚧 **NEXT: Phase 3 Troll NPC** *v1.6.0*
 - [ ] NPC movement and behaviors
+- [ ] Advanced NPC AI and interactions
 
 ### **Game State (v1.5.0)**
 - [x] **Save/load functionality** - Complete JSON-based save/load system with timestamp tracking, version compatibility, and comprehensive state persistence (player, world, score, combinations) ✅ **COMPLETE!** *v1.2.1*
