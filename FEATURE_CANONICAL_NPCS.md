@@ -141,4 +141,4 @@ Implement all canonical Non-Player Characters from original Zork I with authenti
 
 ---
 
-**Next Steps**: Begin with Phase 1 - Combat Foundation implementation.
+**Current Status**: Phase 1 (Combat Foundation) and Phase 2 (Thief NPC) are complete. Phase 3 (Troll NPC) is ready to begin.

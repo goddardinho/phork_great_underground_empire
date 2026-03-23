@@ -2290,6 +2290,14 @@ Revision 88 / Serial number 840726
             }
         )
         self.npc_manager.add_npc(oracle)
+        
+        # Create the canonical Thief NPC (Phase 2 of Canonical NPCs feature)
+        from .entities.thief import create_canonical_thief, integrate_thief_behaviors
+        thief = create_canonical_thief(self.npc_manager, starting_room="WHOUS")
+        self.npc_manager.add_npc(thief)
+        
+        # Integrate Thief behaviors into game engine
+        integrate_thief_behaviors(self)
     
     # ===== COMBAT SYSTEM HANDLERS =====
     
@@ -2347,8 +2355,24 @@ Revision 88 / Serial number 840726
             self.combat_manager.end_combat(self.player.current_room, winner="player")
             print(f"\nThe {target_npc.name} has been defeated!")
             
-            # TODO: Handle NPC death rewards/consequences
-            # For now, remove NPC from room
+            # Handle Thief loot dropping
+            if (target_npc.id == "THIEF" and hasattr(target_npc, 'thief_behavior')):
+                behavior = target_npc.thief_behavior
+                loot = behavior.drop_loot_on_death()
+                
+                if loot:
+                    current_room = self.world.get_room(self.player.current_room)
+                    print("\nThe thief's possessions scatter as he falls:")
+                    
+                    for item_id in loot:
+                        obj = self.object_manager.get_object(item_id)
+                        if obj and current_room:
+                            current_room.add_item(item_id)
+                            print(f"  A {obj.name} clatters to the ground.")
+                else:
+                    print("The thief had no stolen goods on him.")
+            
+            # Remove NPC from room (or mark as defeated)
             self.npc_manager.move_npc(target_npc.id, "DEFEATED")
             return
         
