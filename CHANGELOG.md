@@ -1,5 +1,33 @@
 # Changelog
 
+## v1.5.0-dev (2026-03-23) ⚔️ **Combat Foundation - Phase 1** ⚔️
+
+- **NEW FEATURE:** Complete combat system foundation
+  - **CombatManager**: Full combat orchestration with turn-based mechanics
+  - **CombatStats**: Health, attack power, defense, accuracy, dodge, block, and critical hit stats
+  - **Combat commands**: `attack <target>`, `defend`, `flee` with full NPC integration
+  - **Weapon system**: WeaponType enum and weapon effectiveness calculations
+  - **Combat actions**: Detailed action logging with hit/miss/dodge/block/critical results
+  - **Player combat stats**: 100 health, enhanced starting combat abilities
+  - **NPC combat integration**: All NPCs now have combat stats and can fight
+  - **Combat state management**: Room-based combat tracking with participant management
+  - **Death mechanics**: Player and NPC death handling with proper game-over states
+  - **Flee system**: Escape mechanics with success/failure and room movement
+- **DEBUG MODE ENHANCEMENTS:**
+  - **Combat debugging**: `debug combat` command for comprehensive combat testing
+  - **Combat stats display**: Real-time health, damage, and combat status monitoring
+  - **Combat history**: Action logging and recent combat events tracking
+  - **Debug healing**: Automatic health restoration for testing purposes
+- **TESTING & VALIDATION:**
+  - **Comprehensive test suite**: `tests/test_combat_system.py` with unit and integration tests
+  - **Command parser integration**: All combat commands properly routed through parser
+  - **Game integration testing**: Full combat system validation with existing NPCs
+  - **Debug functionality validation**: Combat debug commands fully operational
+- **TECHNICAL FOUNDATION:**
+  - Phase 1 of 6-phase canonical NPCs implementation plan
+  - Modular combat system ready for Thief, Troll, and other canonical NPCs
+  - Authentic Zork combat mechanics with damage calculation and status effects
+
 ## v1.4.0 (2026-03-23) 🗣️ **NPC Conversation System & Debug Integration** 🗣️
 
 - **NEW FEATURE:** Complete NPC conversation system with interactive NPCs

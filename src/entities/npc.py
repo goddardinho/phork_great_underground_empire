@@ -2,6 +2,7 @@
 
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
+from .combat import CombatStats
 
 
 @dataclass
@@ -36,6 +37,18 @@ class NPC:
     state: Dict[str, Any] = field(default_factory=dict)  # NPC internal state
     aliases: List[str] = field(default_factory=list)  # Alternative names
     attributes: Dict[str, Any] = field(default_factory=dict)  # NPC properties
+    
+    # Combat stats - default to moderate NPC stats
+    combat_stats: CombatStats = field(default_factory=lambda: CombatStats(
+        max_health=80,
+        current_health=80,
+        attack_power=12,
+        defense=5,
+        accuracy=75,
+        dodge_chance=15,
+        block_chance=10,  
+        critical_chance=5
+    ))
     
     def get_attribute(self, name: str, default: Any = None) -> Any:
         """Get an attribute value with optional default."""

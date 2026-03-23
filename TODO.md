@@ -68,9 +68,10 @@
 
 ### **NPCs & Combat (v1.4.0 - v1.5.0)**
 - [x] **Basic NPC conversations** - Complete NPC conversation system with talk/ask/greet/say commands, dialogue trees, NPCManager, sample NPCs (Hermit, Oracle), integrated debug mode (`debug npc` command), and comprehensive file organization in `/tests` directory ✅ **COMPLETE!** *v1.4.0*
-- [ ] **Thief, Troll, and all other canonical characters** - Implementation in progress on `feature/canonical-npcs` branch 🚧 **IN PROGRESS** *v1.5.0*
-- [ ] Simple combat system
+- [x] **Combat system foundation** - Complete combat framework with CombatManager, CombatStats, attack/defend/flee commands, weapon system, health mechanics, NPC combat integration, debug combat testing, and comprehensive test suite ✅ **COMPLETE!** *Phase 1 v1.5.0-dev*
+- [ ] **Canonical NPCs** - Implementation in progress on `feature/canonical-npcs` branch: Phase 1 (Combat Foundation) ✅ complete, Phase 2 (Thief NPC) starting next 🚧 **IN PROGRESS** *v1.5.0*
 - [ ] NPC movement and behaviors
+- [ ] Advanced NPC AI and interactions
 
 ### **Game State (v1.5.0)**
 - [x] **Save/load functionality** - Complete JSON-based save/load system with timestamp tracking, version compatibility, and comprehensive state persistence (player, world, score, combinations) ✅ **COMPLETE!** *v1.2.1*

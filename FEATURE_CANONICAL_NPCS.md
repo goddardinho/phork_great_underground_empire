@@ -57,10 +57,10 @@ Implement all canonical Non-Player Characters from original Zork I with authenti
 ## 📝 **Implementation Plan**
 
 ### **Phase 1: Combat Foundation**
-- [ ] Design combat mechanics (health, weapons, damage)
-- [ ] Implement CombatManager class
-- [ ] Add combat commands (attack, defend, flee)
-- [ ] Create basic combat testing framework
+- [x] Design combat mechanics (health, weapons, damage)
+- [x] Implement CombatManager class
+- [x] Add combat commands (attack, defend, flee)
+- [x] Create basic combat testing framework
 
 ### **Phase 2: Thief Implementation**
 - [ ] Create Thief NPC with theft behaviors

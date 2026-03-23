@@ -15,6 +15,7 @@ from .entities.objects import GameObject
 from .entities.object_manager import ObjectManager
 from .entities.object_loader import ZorkObjectLoader
 from .entities.npc_manager import NPCManager
+from .entities.combat import CombatManager
 from .parser.command_parser import CommandParser, Command
 from .responses import ZorkResponses
 from .puzzles import integrate_puzzles_into_game
@@ -32,6 +33,7 @@ class GameEngine:
         self.responses = ZorkResponses()
         self.object_manager = ObjectManager()  # Central object registry
         self.npc_manager = NPCManager()  # Central NPC registry
+        self.combat_manager = CombatManager()  # Combat and fighting system
         
         # Initialize with some test NPCs
         self._create_initial_npcs()
@@ -64,6 +66,7 @@ class GameEngine:
             print("="*50)
             print("Extra commands available:")
             print("  debug npc - Test NPC system")
+            print("  debug combat - Test combat system")
             print("  debug menu - Show debug menu")
             print("="*50)
         self._show_welcome()
@@ -184,6 +187,12 @@ class GameEngine:
             self._handle_greet(command)
         elif verb == "say":
             self._handle_say(command, user_input)
+        elif verb == "attack":
+            self._handle_attack(command)
+        elif verb == "defend":
+            self._handle_defend(command)
+        elif verb == "flee":
+            self._handle_flee(command)
         elif verb == "debug" and self.debug_mode:
             self._handle_debug_command(command)
         else:
@@ -2282,6 +2291,187 @@ Revision 88 / Serial number 840726
         )
         self.npc_manager.add_npc(oracle)
     
+    # ===== COMBAT SYSTEM HANDLERS =====
+    
+    def _handle_attack(self, command: Command) -> None:
+        """Handle attack or fight commands."""
+        if not command.noun:
+            print("Attack what?")
+            return
+        
+        # Find target
+        target_name = command.noun.lower()
+        
+        # Check for NPCs in the current room
+        npcs_here = self.npc_manager.get_npcs_in_room(self.player.current_room)
+        target_npc = None
+        
+        for npc in npcs_here:
+            if (target_name in npc.name.lower() or 
+                target_name in [alias.lower() for alias in npc.aliases]):
+                target_npc = npc
+                break
+        
+        if not target_npc:
+            print(f"There is no {command.noun} here to attack.")
+            return
+        
+        # Check if already in combat
+        if self.combat_manager.is_in_combat(self.player.current_room):
+            print("You are already engaged in combat!")
+            return
+        
+        # Start combat
+        success = self.combat_manager.start_combat(
+            "player", 
+            target_npc.id, 
+            self.player.current_room
+        )
+        
+        if not success:
+            print("Unable to start combat at this time.")
+            return
+        
+        # Execute the first attack
+        action = self.combat_manager.execute_attack(
+            self.player.combat_stats,
+            target_npc.combat_stats, 
+            "You",
+            target_npc.name
+        )
+        
+        print(action.description)
+        
+        # Check if NPC was defeated
+        if not target_npc.combat_stats.is_alive():
+            self.combat_manager.end_combat(self.player.current_room, winner="player")
+            print(f"\nThe {target_npc.name} has been defeated!")
+            
+            # TODO: Handle NPC death rewards/consequences
+            # For now, remove NPC from room
+            self.npc_manager.move_npc(target_npc.id, "DEFEATED")
+            return
+        
+        # NPC counterattack if still alive
+        counter_action = self.combat_manager.execute_attack(
+            target_npc.combat_stats,
+            self.player.combat_stats,
+            target_npc.name,
+            "You"
+        )
+        
+        print(counter_action.description)
+        
+        # Check if player was defeated
+        if not self.player.combat_stats.is_alive():
+            self.combat_manager.end_combat(self.player.current_room, winner=target_npc.id)
+            print("\nYou have been defeated! Game over.")
+            self.running = False
+            return
+        
+        print(f"\nYour health: {self.player.combat_stats.current_health}/{self.player.combat_stats.max_health}")
+        print(f"{target_npc.name}'s health: {target_npc.combat_stats.current_health}/{target_npc.combat_stats.max_health}")
+    
+    def _handle_defend(self, command: Command) -> None:
+        """Handle defend command."""
+        if not self.combat_manager.is_in_combat(self.player.current_room):
+            print("You are not in combat.")
+            return
+        
+        # Defending gives temporary bonuses for the next attack
+        self.player.combat_stats.block_chance += 20
+        self.player.combat_stats.dodge_chance += 15
+        
+        print("You take a defensive stance, improving your ability to block and dodge attacks.")
+        
+        # Find the NPC we're fighting
+        participants = self.combat_manager.get_combat_participants(self.player.current_room)
+        npc_id = None
+        for p in participants:
+            if p != "player":
+                npc_id = p
+                break
+        
+        if not npc_id:
+            print("No opponent found.")
+            return
+        
+        target_npc = self.npc_manager.get_npc(npc_id)
+        if not target_npc:
+            print("Your opponent has vanished.")
+            return
+        
+        # NPC attacks the defending player
+        action = self.combat_manager.execute_attack(
+            target_npc.combat_stats,
+            self.player.combat_stats,
+            target_npc.name,
+            "You"
+        )
+        
+        print(action.description)
+        
+        # Reset defensive bonuses after the attack
+        self.player.combat_stats.block_chance = max(0, self.player.combat_stats.block_chance - 20)
+        self.player.combat_stats.dodge_chance = max(0, self.player.combat_stats.dodge_chance - 15)
+        
+        # Check if player was defeated
+        if not self.player.combat_stats.is_alive():
+            self.combat_manager.end_combat(self.player.current_room, winner=target_npc.id)
+            print("\nYou have been defeated! Game over.")
+            self.running = False
+            return
+        
+        print(f"\nYour health: {self.player.combat_stats.current_health}/{self.player.combat_stats.max_health}")
+        print(f"{target_npc.name}'s health: {target_npc.combat_stats.current_health}/{target_npc.combat_stats.max_health}")
+    
+    def _handle_flee(self, command: Command) -> None:
+        """Handle flee command."""
+        if not self.combat_manager.is_in_combat(self.player.current_room):
+            print("You are not in combat.")
+            return
+        
+        success = self.combat_manager.attempt_flee("player", self.player.current_room)
+        
+        if success:
+            print("You successfully flee from combat!")
+            
+            # Try to move to a random adjacent room
+            current_room = self.world.get_room(self.player.current_room)
+            if current_room and current_room.exits:
+                import random
+                exit_dir = random.choice(list(current_room.exits.keys()))
+                self._handle_movement(exit_dir)
+            else:
+                print("But you have nowhere to flee to! You remain in place.")
+        else:
+            print("You attempt to flee but cannot escape!")
+            
+            # Find the NPC we're fighting and let them attack
+            participants = self.combat_manager.get_combat_participants(self.player.current_room)
+            npc_id = None
+            for p in participants:
+                if p != "player":
+                    npc_id = p
+                    break
+            
+            if npc_id:
+                target_npc = self.npc_manager.get_npc(npc_id)
+                if target_npc:
+                    action = self.combat_manager.execute_attack(
+                        target_npc.combat_stats,
+                        self.player.combat_stats,
+                        target_npc.name,
+                        "You"
+                    )
+                    print(action.description)
+                    
+                    # Check if player was defeated
+                    if not self.player.combat_stats.is_alive():
+                        self.combat_manager.end_combat(self.player.current_room, winner=target_npc.id)
+                        print("\nYou have been defeated! Game over.")
+                        self.running = False
+
     def _handle_debug_command(self, command: Command) -> None:
         """Handle debug commands available only in debug mode."""
         if not command.noun:
@@ -2294,6 +2484,8 @@ Revision 88 / Serial number 840726
             self._show_debug_menu()
         elif debug_action == "npc":
             self._debug_npc_system()
+        elif debug_action == "combat":
+            self._debug_combat_system()
         elif debug_action == "world":
             self._debug_world_info()
         elif debug_action == "objects":
@@ -2309,6 +2501,7 @@ Revision 88 / Serial number 840726
         print("="*50)
         print("Available debug commands:")
         print("  debug npc     - Test NPC conversation system")
+        print("  debug combat  - Test combat system")
         print("  debug world   - Show world/room information")
         print("  debug objects - Show object information")
         print("  debug menu    - Show this menu")
@@ -2441,3 +2634,67 @@ Revision 88 / Serial number 840726
             print("\nNo objects in inventory.")
         
         print(f"\nTotal objects loaded: {len(self.object_manager.objects)}")
+    
+    def _debug_combat_system(self) -> None:
+        """Comprehensive combat system testing and demonstration."""
+        print("\n" + "="*50)
+        print("COMBAT SYSTEM DEBUG TEST")
+        print("="*50)
+        
+        # Show current combat status
+        print("\n1. Current Combat Status:")
+        if self.combat_manager.is_in_combat(self.player.current_room):
+            status = self.combat_manager.get_combat_status(self.player.current_room)
+            print(f"   Combat active in room: {self.player.current_room}")
+            print(f"   Participants: {', '.join(status['participants'])}")
+            print(f"   Round: {status['round_number']}")
+        else:
+            print("   No active combat.")
+        
+        # Show player combat stats
+        print("\n2. Player Combat Stats:")
+        stats = self.player.combat_stats
+        print(f"   Health: {stats.current_health}/{stats.max_health}")
+        print(f"   Attack Power: {stats.attack_power}")
+        print(f"   Defense: {stats.defense}")
+        print(f"   Accuracy: {stats.accuracy}%")
+        print(f"   Dodge: {stats.dodge_chance}%")
+        print(f"   Block: {stats.block_chance}%")
+        print(f"   Critical: {stats.critical_chance}%")
+        print(f"   Weapon: {stats.weapon.name if stats.weapon else 'None'}")
+        
+        # Show NPCs and their combat stats
+        print("\n3. NPCs in current room and their combat stats:")
+        npcs_here = self.npc_manager.get_npcs_in_room(self.player.current_room)
+        if npcs_here:
+            for npc in npcs_here:
+                print(f"   {npc.name}:")
+                print(f"     Health: {npc.combat_stats.current_health}/{npc.combat_stats.max_health}")
+                print(f"     Attack: {npc.combat_stats.attack_power}, Defense: {npc.combat_stats.defense}")
+                print(f"     Accuracy: {npc.combat_stats.accuracy}%, Dodge: {npc.combat_stats.dodge_chance}%")
+        else:
+            print("   No NPCs in current room.")
+        
+        # Show recent combat actions
+        print("\n4. Recent Combat Actions:")
+        recent_actions = self.combat_manager.get_recent_actions(3)
+        if recent_actions:
+            for action in recent_actions:
+                print(f"   - {action.description}")
+        else:
+            print("   No recent combat actions.")
+        
+        # Combat testing options
+        print("\n5. Combat Testing:")
+        print("   Use 'attack <npc>' to start combat with an NPC")
+        print("   Use 'defend' while in combat to take defensive stance")
+        print("   Use 'flee' to attempt to escape from combat")
+        
+        # Healing option for testing
+        if self.player.combat_stats.current_health < self.player.combat_stats.max_health:
+            print("\n6. Debug Healing:")
+            restored = self.player.combat_stats.heal(self.player.combat_stats.max_health)
+            if restored > 0:
+                print(f"   Player healed for {restored} health (debug mode).")
+        
+        print("="*50)

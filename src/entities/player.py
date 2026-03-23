@@ -2,6 +2,7 @@
 
 from typing import List, Optional
 from .objects import GameObject
+from .combat import CombatStats
 
 
 class Player:
@@ -13,6 +14,18 @@ class Player:
         self.score: int = 0
         self.max_inventory_size: int = 10
         self.brief_mode: bool = False  # Whether to show brief room descriptions
+        
+        # Combat system
+        self.combat_stats = CombatStats(
+            max_health=100,
+            current_health=100,
+            attack_power=15,
+            defense=8,
+            accuracy=85,
+            dodge_chance=20,
+            block_chance=15,
+            critical_chance=8
+        )
         
         # Disambiguation state
         self.awaiting_disambiguation: bool = False
