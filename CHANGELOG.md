@@ -1,5 +1,27 @@
 # Changelog
 
+## v1.4.0 (2026-03-23) 🗣️ **NPC Conversation System & Debug Integration** 🗣️
+
+- **NEW FEATURE:** Complete NPC conversation system with interactive NPCs
+  - **Four NPC commands**: `talk <npc>`, `ask <npc> about <topic>`, `greet <npc>`, `say "<text>"`
+  - **Dialogue trees**: Complex branching conversations with multiple response options
+  - **NPC entity system**: DialogueNode and DialogueResponse classes for rich interactions
+  - **NPCManager**: Centralized registry for NPC conversations and state management
+  - **Sample NPCs**: Hermit (simple) and Oracle (complex dialogue tree) in West of House
+  - **Room integration**: NPCs appear in room descriptions and respond to location-based commands
+  - **Topic responses**: NPCs respond to questions about treasure, grues, locations, and more
+  - **Speech system**: Say things aloud for all NPCs in room to hear and respond
+- **DEBUG MODE ENHANCEMENTS:**
+  - **Integrated NPC debugging**: `debug npc` command for comprehensive NPC system testing
+  - **Debug menu system**: `debug menu` shows all available debug commands
+  - **World debugging**: `debug world` and `debug objects` for system information  
+  - **Test script organization**: Consolidated all NPC tests in `/tests/` directory
+  - **Documentation updates**: README enhanced with debug mode usage instructions
+- **ENHANCEMENTS:**
+  - GameEngine integration with proper command routing for all NPC interactions
+  - Location-based NPC finding and interaction constraints
+  - Conversation state management for complex dialogue progression
+
 ## v1.3.12 (Unreleased) 🥚 **Egg Lock Canonical Fix** 🥚
 
 - **BUGFIX:** Jewel-encrusted egg can be opened too early. The egg should not be openable until the correct event or item is used, matching canonical Zork progression. (See BUG_EGG_OPENABLE_TOO_EARLY.md)

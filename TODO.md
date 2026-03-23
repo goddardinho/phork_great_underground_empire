@@ -67,8 +67,8 @@
 - [x] **Canonical Room Descriptions** - Enhanced EHOUS (Behind House) and other key rooms with authentic descriptions matching original Zork specifications ✅ **COMPLETE!** *v1.2.2*
 
 ### **NPCs & Combat (v1.4.0)**
-- [ ] Basic NPC conversations
-- [ ] Thief, Troll, and other iconic characters  
+- [x] **Basic NPC conversations** - Complete NPC conversation system with talk/ask/greet/say commands, dialogue trees, NPCManager, sample NPCs (Hermit, Oracle), integrated debug mode (`debug npc` command), and comprehensive file organization in `/tests` directory ✅ **COMPLETE!** *v1.4.0*
+- [ ] Thief, Troll, and all other canonical characters  
 - [ ] Simple combat system
 - [ ] NPC movement and behaviors
 
@@ -78,6 +78,7 @@
 - [ ] Death and restart mechanics  
 - [ ] Inventory size limits and object weight
 - [ ] Time-based events
+- [ ] **Cleanup** - Validate file structure and usage.  Clean up any unused or unneeded scripts or files.
 - [ ] **User Acceptance** - Complete run through of the game by user(s) and acceptance
 
 ## Long-term Vision (v2.0+)
