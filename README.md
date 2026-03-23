@@ -2,7 +2,7 @@
 
 Phork is a clean-room Python reimplementation of the classic Zork I, inspired by the original MDL source code. This project aims for feature parity and map fidelity with Zork I, using only the original source files in `zork_mtl_source` as reference.
 
-**🎉 v1.5.1 Enhanced!** - **Canonical Thief NPC Complete** - Phase 2 of Canonical NPCs feature complete with authentic Thief implementation featuring theft mechanics, combat integration, and behavioral AI.
+**🎉 v1.5.3 Enhanced!** - **Canonical Cyclops NPC Complete** - Phase 4 of Canonical NPCs feature complete with authentic Cyclops implementation featuring sleep/wake states, food interactions, drink-induced sleep, staircase blocking, and extremely powerful combat stats.
 
 ## Features
 
@@ -48,6 +48,7 @@ When running with `--debug`, additional commands become available:
 - `debug npc` - Comprehensive NPC system testing and interaction
 - `debug combat` - Complete combat system testing and validation
 - `debug thief` - Thief NPC behavior debugging and live stats
+- `debug cyclops` - Cyclops NPC state debugging and interaction testing
 - `debug menu` - Show all available debug commands  
 - `debug world` - Display world and room information
 - `debug objects` - Show object information and locations

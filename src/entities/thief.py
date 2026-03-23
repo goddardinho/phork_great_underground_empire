@@ -15,8 +15,8 @@ from dataclasses import dataclass
 import random
 import time
 
-from src.entities.npc import NPC, DialogueNode, DialogueResponse
-from src.entities.combat import CombatStats
+from .npc import NPC, DialogueNode, DialogueResponse
+from .combat import CombatStats
 
 
 class ThiefBehavior:
@@ -270,7 +270,7 @@ def _handle_thief_behaviors(game_engine, thief: NPC):
         item_name = obj.name if obj else "something"
         
         print(f"\\nThe thief quickly snatches your {item_name} and grins wickedly!")
-        print("\"Thank you for the donation!\" the thief laughs.")
+        print("\"Thank you for the donation!\" The thief laughs.")
 
 
 def _handle_thief_movement(game_engine, thief: NPC):

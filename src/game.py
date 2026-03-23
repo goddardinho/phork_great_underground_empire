@@ -2216,88 +2216,32 @@ Revision 88 / Serial number 840726
             # Note: NPCs may choose not to respond, which is fine
     
     def _create_initial_npcs(self) -> None:
-        """Create initial NPCs for demonstration and testing."""
-        from .entities.npc import DialogueNode, DialogueResponse
-        
-        # Create a simple hermit NPC
-        hermit = self.npc_manager.create_simple_npc(
-            npc_id="HERMIT",
-            name="hermit",
-            description="An old hermit sits here, studying an ancient tome.",
-            location="WHOUS",  # West of House
-            greeting_text="The hermit looks up from his book and nods quietly. \"Greetings, traveler.\"",
-            aliases=["old hermit", "old man", "scholar"]
-        )
-        
-        # Create a more complex Oracle NPC with dialogue tree
-        oracle_greeting = DialogueNode(
-            id="greeting",
-            text="The Oracle's eyes gleam with ancient wisdom. \"Welcome, seeker. What knowledge do you desire?\"",
-            responses=[
-                DialogueResponse(
-                    id="resp_treasure",
-                    text="I seek treasure",
-                    next_node="treasure_advice"
-                ),
-                DialogueResponse(
-                    id="resp_grue",
-                    text="Tell me about the grue",
-                    next_node="grue_warning"
-                ),
-                DialogueResponse(
-                    id="resp_place",
-                    text="What is this place?",
-                    next_node="place_info"
-                )
-            ]
-        )
-        
-        treasure_node = DialogueNode(
-            id="treasure_advice",
-            text="\"Treasure, you say? The Great Underground Empire holds many riches. Seek first the brass lantern - light conquers darkness, and in light you shall find safety to explore further.\"",
-            end_conversation=True
-        )
-        
-        grue_node = DialogueNode(
-            id="grue_warning", 
-            text="\"Ah, the grues! Ancient creatures of absolute darkness. They cannot abide even the faintest light. Carry illumination always, and they can never harm you. But in pitch blackness... none who meet them live to tell the tale.\"",
-            end_conversation=True
-        )
-        
-        place_node = DialogueNode(
-            id="place_info",
-            text="\"This is the threshold of the Great Underground Empire, built by the Implementers in ages past. Below lie endless passages filled with wonders and terrors, treasures and traps. Many enter; few return unchanged.\"",
-            end_conversation=True
-        )
-        
-        from .entities.npc import NPC
-        oracle = NPC(
-            id="ORACLE",
-            name="oracle",
-            description="A mysterious Oracle sits here, surrounded by swirling mists and ancient power.",
-            location="WHOUS",
-            dialogue_tree={
-                "greeting": oracle_greeting,
-                "treasure_advice": treasure_node,
-                "grue_warning": grue_node,
-                "place_info": place_node
-            },
-            aliases=["wise oracle", "mysterious oracle", "seer"],
-            attributes={
-                "moveable": False,
-                "friendly": True,
-                "wise": True
-            }
-        )
-        self.npc_manager.add_npc(oracle)
+        """Create canonical NPCs for the game."""
         
         # Create the canonical Thief NPC (Phase 2 of Canonical NPCs feature)
+        # Start thief in a different location - let it roam to find the player
         from .entities.thief import create_canonical_thief, integrate_thief_behaviors
-        thief = create_canonical_thief(self.npc_manager, starting_room="WHOUS")
+        thief = create_canonical_thief(self.npc_manager, starting_room="NHOUS")  # North of House
         self.npc_manager.add_npc(thief)
         
         # Integrate Thief behaviors into game engine
         integrate_thief_behaviors(self)
+        
+        # Create the canonical Troll NPC (Phase 3 of Canonical NPCs feature)
+        from .entities.troll import create_canonical_troll, integrate_troll_behaviors
+        troll = create_canonical_troll(self.npc_manager, starting_room="MTROL")  # Troll Room
+        self.npc_manager.add_npc(troll)
+        
+        # Integrate Troll behaviors into game engine
+        integrate_troll_behaviors(self)
+        
+        # Create the canonical Cyclops NPC (Phase 4 of Canonical NPCs feature)
+        from .entities.cyclops import create_canonical_cyclops, integrate_cyclops_behaviors
+        cyclops = create_canonical_cyclops()  # Located in CYCLO room
+        self.npc_manager.add_npc(cyclops)
+        
+        # Integrate Cyclops behaviors into game engine
+        integrate_cyclops_behaviors(self, self.npc_manager)
     
     # ===== COMBAT SYSTEM HANDLERS =====
     

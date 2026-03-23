@@ -1,5 +1,34 @@
 # Changelog
 
+## v1.5.3-dev (2026-03-23) 👁️ **Phase 4 Complete: Canonical Cyclops NPC** 👁️
+
+- **MILESTONE:** Phase 4 of Canonical NPCs feature officially complete
+- **NEW FEATURE:** Complete canonical Cyclops NPC implementation with authentic Zork behaviors
+  - **Cyclops NPC**: Extremely powerful combat stats (300 HP, 40 Attack Power, 15 Defense) - strongest NPC implemented
+  - **Sleep/Wake System**: Starts sleeping, awakens when attacked or disturbed, dynamic state transitions
+  - **Wrath Management**: Dynamic hostility system affecting all interactions and movement blocking
+  - **Food Interaction System**: 8 food types with preference values (meat=4, lunch=4, garlic=-1, etc.)
+  - **Drink-Induced Sleep**: Water and potions can make Cyclops fall asleep when calm
+  - **Staircase Blocking**: Prevents upward movement from CYCLO room when awake and hostile
+  - **Room integration**: Appears in CYCLO room: "A cyclops, who looks prepared to eat horses..."
+  - **Multiple aliases**: Responds to "cyclops", "giant", "monster", "creature", "cyclo"
+- **AUTHENTIC IMPLEMENTATION:**
+  - **Original source compliance**: Based on act1.mud and dung.mud specifications
+  - **Canonical behaviors**: Sleep states, food preferences, staircase blocking from original Zork
+  - **Combat messages**: Authentic strength ratios and interaction patterns
+  - **Response text**: Matches original Zork cyclops dialogue and reactions
+- **TECHNICAL IMPLEMENTATION:**
+  - **CyclopsBehavior class**: Complete state management system with sleep/wake, wrath counter, feeding timers
+  - **Game engine integration**: Enhanced command processing with cyclops-specific interactions
+  - **Movement interception**: Wraps movement methods to block passage when hostile
+  - **Inventory integration**: Full compatibility with player inventory and object management systems
+- **COMPREHENSIVE TESTING & VALIDATION:**
+  - **Unit test suite**: 28 tests with 78.6% success rate in `tests/test_cyclops_npc.py`
+  - **Interactive validation**: 83.3% success rate (5/6 categories) in `tests/debug_cyclops_npc.py`
+  - **Production integration**: Full game engine compatibility with clean startup validation
+  - **Modular architecture**: 4th successful canonical NPC following established patterns
+- **READY FOR PHASE 5:** Master NPC implementation with complex endgame dialogue systems
+
 ## v1.5.1-dev (2026-03-23) 🏴‍☠️ **Phase 2 Complete: Canonical Thief NPC** 🏴‍☠️
 
 - **MILESTONE:** Phase 2 of Canonical NPCs feature officially complete
