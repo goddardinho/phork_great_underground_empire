@@ -66,9 +66,9 @@
 - [x] **Test Suite Compatibility** - Fixed all failing tests by updating Room constructor compatibility, GameEngine object manager integration, and disambiguation test stability ✅ **COMPLETE!** *v1.2.2*
 - [x] **Canonical Room Descriptions** - Enhanced EHOUS (Behind House) and other key rooms with authentic descriptions matching original Zork specifications ✅ **COMPLETE!** *v1.2.2*
 
-### **NPCs & Combat (v1.4.0)**
+### **NPCs & Combat (v1.4.0 - v1.5.0)**
 - [x] **Basic NPC conversations** - Complete NPC conversation system with talk/ask/greet/say commands, dialogue trees, NPCManager, sample NPCs (Hermit, Oracle), integrated debug mode (`debug npc` command), and comprehensive file organization in `/tests` directory ✅ **COMPLETE!** *v1.4.0*
-- [ ] Thief, Troll, and all other canonical characters  
+- [ ] **Thief, Troll, and all other canonical characters** - Implementation in progress on `feature/canonical-npcs` branch 🚧 **IN PROGRESS** *v1.5.0*
 - [ ] Simple combat system
 - [ ] NPC movement and behaviors
 
