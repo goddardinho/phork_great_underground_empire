@@ -1,0 +1,42 @@
+feat: Integrate NPC debugging into game's debug mode system
+
+INTEGRATION: NPC Debug Mode (v1.3.13 Enhancement)
+
+Core Changes:
+- Moved NPC testing from standalone scripts into main game debug mode
+- Added comprehensive debug command system accessible with `--debug` flag
+- Integrated NPC testing into streamlined debug workflow
+
+Debug Commands Added:
+• debug menu - Show all available debug commands
+• debug npc - Comprehensive NPC system testing and demonstration
+• debug world - Display world, room, and player information  
+• debug objects - Show object system details and current state
+
+Enhanced User Experience:
+- Debug mode startup shows available commands and usage
+- NPC debug testing now integrated into main game experience
+- No need for separate test scripts during development
+- Seamless switching between regular gameplay and debug testing
+
+File Organization:
+- Moved test_npc_system.py and test_npc_integration.py to tests/ directory
+- Enhanced tests/README.md with comprehensive documentation
+- Updated main README.md with debug mode usage instructions
+- Enhanced CHANGELOG and TODO tracking
+
+Debug Functionality:
+- Real-time NPC testing within game environment
+- Interactive testing of all four NPC commands (talk, ask, greet, say)
+- Topic response validation and dialogue tree testing
+- Complete system state inspection and validation
+
+Integration Benefits:
+- Single entry point for all debugging needs
+- Context-aware testing within actual game world
+- Live interaction with NPCs during development
+- Streamlined developer workflow
+
+Ready for Development: All NPC debug functionality now accessible via `python3 main.py --debug` followed by debug commands.
+
+This completes the integration of NPC debugging into the main game's debug infrastructure.

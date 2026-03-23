@@ -14,6 +14,7 @@ from .entities.player import Player
 from .entities.objects import GameObject
 from .entities.object_manager import ObjectManager
 from .entities.object_loader import ZorkObjectLoader
+from .entities.npc_manager import NPCManager
 from .parser.command_parser import CommandParser, Command
 from .responses import ZorkResponses
 from .puzzles import integrate_puzzles_into_game
@@ -30,6 +31,10 @@ class GameEngine:
         self.parser = CommandParser()
         self.responses = ZorkResponses()
         self.object_manager = ObjectManager()  # Central object registry
+        self.npc_manager = NPCManager()  # Central NPC registry
+        
+        # Initialize with some test NPCs
+        self._create_initial_npcs()
         self.running = True
         self.debug_mode = debug_mode  # Store debug mode setting
         self.puzzle_manager = None  # Will be initialized after world creation
@@ -53,6 +58,14 @@ class GameEngine:
         # Add completion message for loading process
         if not self.debug_mode:
             print("Everything is ready. The grue is hungry...\n")
+        else:
+            print("\n" + "="*50)
+            print("DEBUG MODE ENABLED")
+            print("="*50)
+            print("Extra commands available:")
+            print("  debug npc - Test NPC system")
+            print("  debug menu - Show debug menu")
+            print("="*50)
         self._show_welcome()
         self._look_around()
         
@@ -163,6 +176,16 @@ class GameEngine:
             self._handle_save(command)
         elif verb == "restore" or verb == "load":
             self._handle_restore(command)
+        elif verb == "talk":
+            self._handle_talk(command)
+        elif verb == "ask":
+            self._handle_ask(command)
+        elif verb == "greet":
+            self._handle_greet(command)
+        elif verb == "say":
+            self._handle_say(command, user_input)
+        elif verb == "debug" and self.debug_mode:
+            self._handle_debug_command(command)
         else:
             # Check for special Easter egg commands first
             if self.responses.is_special_command(verb):
@@ -963,12 +986,12 @@ Use 'restore' without a filename to see available saves.
     
     def _handle_combine(self, command: Command) -> None:
         """Handle combine command for object combinations."""
-        if not command.noun or not command.preposition_object:
+        if not command.noun or not command.noun2:
             print("Combine what with what?")
             return
             
         obj1 = self._find_object(command.noun)
-        obj2 = self._find_object(command.preposition_object)
+        obj2 = self._find_object(command.noun2)
         
         if not obj1 or not obj2:
             print("I can't find those objects.")
@@ -986,12 +1009,12 @@ Use 'restore' without a filename to see available saves.
     
     def _handle_break_with(self, command: Command) -> None:
         """Handle break X with Y command."""
-        if not command.noun or not command.preposition_object:
+        if not command.noun or not command.noun2:
             print("Break what with what?") 
             return
             
         target_obj = self._find_object(command.noun)
-        tool_obj = self._find_object(command.preposition_object)
+        tool_obj = self._find_object(command.noun2)
         
         if not target_obj or not tool_obj:
             print("I can't find those objects.")
@@ -1009,12 +1032,12 @@ Use 'restore' without a filename to see available saves.
     
     def _handle_pour_on(self, command: Command) -> None:
         """Handle pour X on Y command."""
-        if not command.noun or not command.preposition_object:
+        if not command.noun or not command.noun2:
             print("Pour what on what?")
             return
             
         liquid_obj = self._find_object(command.noun)
-        target_obj = self._find_object(command.preposition_object)
+        target_obj = self._find_object(command.noun2)
         
         if not liquid_obj or not target_obj:
             print("I can't find those objects.")
@@ -1029,12 +1052,12 @@ Use 'restore' without a filename to see available saves.
     
     def _handle_use_tool(self, command: Command) -> None:
         """Handle use/apply X on Y command."""
-        if not command.noun or not command.preposition_object:
+        if not command.noun or not command.noun2:
             print("Use what on what?")
             return
             
         tool_obj = self._find_object(command.noun)  
-        target_obj = self._find_object(command.preposition_object)
+        target_obj = self._find_object(command.noun2)
         
         if not tool_obj or not target_obj:
             print("I can't find those objects.")
@@ -1381,6 +1404,12 @@ Use 'restore' without a filename to see available saves.
                 print(f"There is a {items_here[0]} here.")
             else:
                 print(f"There are {', '.join(items_here)} here.")
+        
+        # Show NPCs in room
+        npcs_here = self.npc_manager.get_npcs_in_room(current_room.id)
+        if npcs_here:
+            for npc in npcs_here:
+                print(npc.description)
         
         # Show available exits
         if current_room.exits:
@@ -2067,3 +2096,348 @@ Revision 88 / Serial number 840726
         success = self.load_game(filename)
         if success:
             self._look_around()  # Show current location after loading
+    
+    # ========== NPC Command Handlers ==========
+    
+    def _handle_talk(self, command: Command) -> None:
+        """Handle talk command."""
+        if not command.noun:
+            print("Talk to whom?")
+            return
+        
+        npc = self.npc_manager.find_npc_by_name(command.noun, self.player.current_room)
+        if not npc:
+            print(f"I don't see {command.noun} here.")
+            return
+        
+        dialogue_text = self.npc_manager.start_conversation(npc.id)
+        if dialogue_text:
+            print(dialogue_text)
+        else:
+            print(f"{npc.name} doesn't seem to want to talk right now.")
+    
+    def _handle_ask(self, command: Command) -> None:
+        """Handle ask command (ask <npc> about <topic>)."""
+        if not command.noun:
+            print("Ask whom?")
+            return
+        
+        if not command.noun2:
+            print(f"Ask {command.noun} about what?")
+            return
+        
+        npc = self.npc_manager.find_npc_by_name(command.noun, self.player.current_room)
+        if not npc:
+            print(f"I don't see {command.noun} here.")
+            return
+        
+        topic = command.noun2
+        response = self.npc_manager.ask_about_topic(npc.id, topic)
+        
+        if response:
+            print(f"{npc.name}: \"{response}\"")
+        else:
+            print(f"{npc.name} doesn't know anything about that.")
+    
+    def _handle_greet(self, command: Command) -> None:
+        """Handle greet command."""
+        if not command.noun:
+            # Greet all NPCs in room
+            current_room = self.world.get_room(self.player.current_room)
+            if not current_room:
+                print("You are in an unknown location.")
+                return
+            
+            npcs_here = self.npc_manager.get_npcs_in_room(self.player.current_room)
+            if not npcs_here:
+                print("There's no one here to greet.")
+                return
+            
+            for npc in npcs_here:
+                greeting = self.npc_manager.greet_npc(npc.id)
+                if greeting:
+                    print(f"You greet {npc.name}. {greeting}")
+            return
+        
+        npc = self.npc_manager.find_npc_by_name(command.noun, self.player.current_room)
+        if not npc:
+            print(f"I don't see {command.noun} here.")
+            return
+        
+        greeting = self.npc_manager.greet_npc(npc.id)
+        if greeting:
+            print(f"You greet {npc.name}. {greeting}")
+        else:
+            print(f"{npc.name} acknowledges your greeting.")
+    
+    def _handle_say(self, command: Command, user_input: str) -> None:
+        """Handle say command (say "<text>")."""
+        if not user_input or len(user_input.strip()) == 0:
+            print("Say what?")
+            return
+        
+        # Extract quoted text from user input
+        say_match = re.search(r'say\s+"([^"]*)"', user_input.lower())
+        if not say_match:
+            # Try without quotes
+            say_match = re.search(r'say\s+(.+)', user_input, re.IGNORECASE)
+        
+        if not say_match:
+            print("Say what?")
+            return
+        
+        text_to_say = say_match.group(1).strip()
+        if not text_to_say:
+            print("Say what?")
+            return
+        
+        # Check if there are any NPCs in the room
+        npcs_here = self.npc_manager.get_npcs_in_room(self.player.current_room)
+        if not npcs_here:
+            print(f"You say \"{text_to_say}\" to the empty air.")
+            return
+        
+        print(f"You say \"{text_to_say}\"")
+        
+        # Let each NPC respond to what was said
+        for npc in npcs_here:
+            response = self.npc_manager.respond_to_speech(npc.id, text_to_say)
+            if response:
+                print(f"{npc.name}: \"{response}\"")
+            # Note: NPCs may choose not to respond, which is fine
+    
+    def _create_initial_npcs(self) -> None:
+        """Create initial NPCs for demonstration and testing."""
+        from .entities.npc import DialogueNode, DialogueResponse
+        
+        # Create a simple hermit NPC
+        hermit = self.npc_manager.create_simple_npc(
+            npc_id="HERMIT",
+            name="hermit",
+            description="An old hermit sits here, studying an ancient tome.",
+            location="WHOUS",  # West of House
+            greeting_text="The hermit looks up from his book and nods quietly. \"Greetings, traveler.\"",
+            aliases=["old hermit", "old man", "scholar"]
+        )
+        
+        # Create a more complex Oracle NPC with dialogue tree
+        oracle_greeting = DialogueNode(
+            id="greeting",
+            text="The Oracle's eyes gleam with ancient wisdom. \"Welcome, seeker. What knowledge do you desire?\"",
+            responses=[
+                DialogueResponse(
+                    id="resp_treasure",
+                    text="I seek treasure",
+                    next_node="treasure_advice"
+                ),
+                DialogueResponse(
+                    id="resp_grue",
+                    text="Tell me about the grue",
+                    next_node="grue_warning"
+                ),
+                DialogueResponse(
+                    id="resp_place",
+                    text="What is this place?",
+                    next_node="place_info"
+                )
+            ]
+        )
+        
+        treasure_node = DialogueNode(
+            id="treasure_advice",
+            text="\"Treasure, you say? The Great Underground Empire holds many riches. Seek first the brass lantern - light conquers darkness, and in light you shall find safety to explore further.\"",
+            end_conversation=True
+        )
+        
+        grue_node = DialogueNode(
+            id="grue_warning", 
+            text="\"Ah, the grues! Ancient creatures of absolute darkness. They cannot abide even the faintest light. Carry illumination always, and they can never harm you. But in pitch blackness... none who meet them live to tell the tale.\"",
+            end_conversation=True
+        )
+        
+        place_node = DialogueNode(
+            id="place_info",
+            text="\"This is the threshold of the Great Underground Empire, built by the Implementers in ages past. Below lie endless passages filled with wonders and terrors, treasures and traps. Many enter; few return unchanged.\"",
+            end_conversation=True
+        )
+        
+        from .entities.npc import NPC
+        oracle = NPC(
+            id="ORACLE",
+            name="oracle",
+            description="A mysterious Oracle sits here, surrounded by swirling mists and ancient power.",
+            location="WHOUS",
+            dialogue_tree={
+                "greeting": oracle_greeting,
+                "treasure_advice": treasure_node,
+                "grue_warning": grue_node,
+                "place_info": place_node
+            },
+            aliases=["wise oracle", "mysterious oracle", "seer"],
+            attributes={
+                "moveable": False,
+                "friendly": True,
+                "wise": True
+            }
+        )
+        self.npc_manager.add_npc(oracle)
+    
+    def _handle_debug_command(self, command: Command) -> None:
+        """Handle debug commands available only in debug mode."""
+        if not command.noun:
+            self._show_debug_menu()
+            return
+        
+        debug_action = command.noun.lower()
+        
+        if debug_action == "menu":
+            self._show_debug_menu()
+        elif debug_action == "npc":
+            self._debug_npc_system()
+        elif debug_action == "world":
+            self._debug_world_info()
+        elif debug_action == "objects":
+            self._debug_object_info()
+        else:
+            print(f"Unknown debug command: {debug_action}")
+            print("Try 'debug menu' for available options.")
+    
+    def _show_debug_menu(self) -> None:
+        """Show available debug commands."""
+        print("\n" + "="*50)
+        print("DEBUG MENU")
+        print("="*50)
+        print("Available debug commands:")
+        print("  debug npc     - Test NPC conversation system")
+        print("  debug world   - Show world/room information")
+        print("  debug objects - Show object information")
+        print("  debug menu    - Show this menu")
+        print("="*50)
+    
+    def _debug_npc_system(self) -> None:
+        """Comprehensive NPC system testing and demonstration."""
+        print("\n" + "="*50)
+        print("NPC SYSTEM DEBUG TEST")
+        print("="*50)
+        
+        # Show NPCs in current room
+        print("\n1. NPCs in current room:")
+        npcs_here = self.npc_manager.get_npcs_in_room(self.player.current_room)
+        if npcs_here:
+            for npc in npcs_here:
+                print(f"   - {npc.name}: {npc.description}")
+        else:
+            print("   No NPCs in current room.")
+        
+        # Show all NPCs in game
+        print("\n2. All NPCs in game:")
+        for npc_id, npc in self.npc_manager.npcs.items():
+            room_name = "Unknown"
+            room = self.world.get_room(npc.location)
+            if room:
+                room_name = room.name
+            print(f"   - {npc.name} ({npc_id}) in {room_name}")
+        
+        # Test NPC interactions if NPCs are present
+        if npcs_here:
+            print("\n3. Testing NPC interactions:")
+            
+            # Test greeting
+            test_npc = npcs_here[0]
+            print(f"\n   Testing greet with {test_npc.name}:")
+            greeting = self.npc_manager.greet_npc(test_npc.id)
+            print(f"   Result: {greeting}")
+            
+            # Test conversation start
+            print(f"\n   Testing conversation with {test_npc.name}:")
+            conversation = self.npc_manager.start_conversation(test_npc.id)
+            if conversation:
+                print(f"   {test_npc.name}: \"{conversation}\"")
+            else:
+                print(f"   {test_npc.name} doesn't want to talk.")
+                
+            # Test topic questions
+            print(f"\n   Testing topic questions with {test_npc.name}:")
+            topics = ["treasure", "grue", "help", "zork"]
+            for topic in topics:
+                response = self.npc_manager.ask_about_topic(test_npc.id, topic)
+                if response:
+                    print(f"   Ask about {topic}: \"{response}\"")
+                else:
+                    print(f"   Ask about {topic}: No response")
+            
+            # Test speech responses
+            print(f"\n   Testing speech responses:")
+            test_phrases = ["hello", "help me", "treasure hunting"]
+            for phrase in test_phrases:
+                response = self.npc_manager.respond_to_speech(test_npc.id, phrase)
+                if response:
+                    print(f"   Say \"{phrase}\": {test_npc.name} responds \"{response}\"")
+                else:
+                    print(f"   Say \"{phrase}\": No response")
+        
+        print("\n" + "="*50)
+        print("NPC DEBUG TEST COMPLETE")
+        print("="*50)
+        print("Try these commands in the game:")
+        if npcs_here:
+            npc_name = npcs_here[0].name
+            print(f"  talk {npc_name}")
+            print(f"  ask {npc_name} about treasure")
+            print(f"  greet {npc_name}")
+            print(f"  say \"hello everyone\"")
+        else:
+            print("  (No NPCs in current room - try 'go' to find them)")
+    
+    def _debug_world_info(self) -> None:
+        """Show world and room debug information."""
+        print("\n" + "="*50)
+        print("WORLD DEBUG INFO")
+        print("="*50)
+        
+        current_room = self.world.get_room(self.player.current_room)
+        if current_room:
+            print(f"Current Room: {current_room.name} ({current_room.id})")
+            print(f"Description: {current_room.description}")
+            print(f"Exits: {list(current_room.exits.keys())}")
+            print(f"Items: {current_room.items}")
+            print(f"Visited: {current_room.visited}")
+            print(f"Flags: {current_room.flags}")
+        
+        print(f"\nTotal Rooms: {len(self.world.rooms)}")
+        print(f"Total Objects: {len(self.object_manager.objects)}")
+        print(f"Total NPCs: {len(self.npc_manager.npcs)}")
+        
+        print("\nPlayer Info:")
+        print(f"  Inventory: {self.player.inventory}")
+        print(f"  Score: {self.player.score}")
+        print(f"  Brief Mode: {self.player.brief_mode}")
+    
+    def _debug_object_info(self) -> None:
+        """Show object debug information."""
+        print("\n" + "="*50)
+        print("OBJECT DEBUG INFO")
+        print("="*50)
+        
+        # Objects in current room
+        current_room = self.world.get_room(self.player.current_room)
+        if current_room and current_room.items:
+            print("\nObjects in current room:")
+            for item_id in current_room.items:
+                obj = self.object_manager.get_object(item_id)
+                if obj:
+                    print(f"  - {obj.name} ({item_id}): {obj.description}")
+        else:
+            print("\nNo objects in current room.")
+        
+        # Objects in inventory
+        if self.player.inventory:
+            print("\nObjects in inventory:")
+            for item_id in self.player.inventory:
+                obj = self.object_manager.get_object(item_id)
+                if obj:
+                    print(f"  - {obj.name} ({item_id}): {obj.description}")
+        else:
+            print("\nNo objects in inventory.")
+        
+        print(f"\nTotal objects loaded: {len(self.object_manager.objects)}")

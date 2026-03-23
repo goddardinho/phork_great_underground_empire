@@ -36,9 +36,19 @@ python3 main.py
 # Use simple test world for development
 python3 main.py --test
 
+# Enable debug mode with detailed information
+python3 main.py --debug
+
 # Run disambiguation demo
 python3 main.py --demo-disambiguation
 ```
+
+### Debug Mode Features
+When running with `--debug`, additional commands become available:
+- `debug npc` - Comprehensive NPC system testing and interaction
+- `debug menu` - Show all available debug commands  
+- `debug world` - Display world and room information
+- `debug objects` - Show object system details
 
 ### New to Text Adventures?
 📖 **[Read the Player's Guide](PLAYER_GUIDE.md)** for complete gameplay instructions, command reference, tips, and strategies.
