@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.3.12 (Unreleased) 🥚 **Egg Lock Canonical Fix** 🥚
+
+- **BUGFIX:** Jewel-encrusted egg can be opened too early. The egg should not be openable until the correct event or item is used, matching canonical Zork progression. (See BUG_EGG_OPENABLE_TOO_EARLY.md)
+- Adds lock/condition to egg object and updates interaction logic for authentic puzzle gating.
+
 ## v1.3.11 (2026-03-20) 📚 **Documentation Completion** 📚
 
 - **✅ COMPREHENSIVE DOCUMENTATION OVERHAUL:**
